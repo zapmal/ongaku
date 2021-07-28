@@ -92,10 +92,10 @@ export const { styled, css, global, keyframes, getCssString, theme } =
     utils: {},
   });
 
-export const globalStyles = global({
-  body: {
-    margin: 0,
-    padding: 0,
-    fontFamily: '$main, $secondary, $fallback',
-  },
-});
+// export const globalStyles = global({
+//   body: {
+//     margin: 0,
+//     padding: 0,
+//     fontFamily: '$main, $secondary, $fallback',
+//   },
+// });

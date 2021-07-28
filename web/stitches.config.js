@@ -13,9 +13,8 @@ export const { styled, css, global, keyframes, getCssString, theme } =
         // secondaryDark: '$violet7',
       },
       fonts: {
-        main: 'Poppins',
-        fallback: 'Roboto',
-        generic: 'Segoe UI',
+        main: 'Segoe UI',
+        fallback: 'Helvetica',
       },
       fontSizes: {
         tiny: '0.625rem',
@@ -91,11 +90,3 @@ export const { styled, css, global, keyframes, getCssString, theme } =
     media: {},
     utils: {},
   });
-
-// export const globalStyles = global({
-//   body: {
-//     margin: 0,
-//     padding: 0,
-//     fontFamily: '$main, $secondary, $fallback',
-//   },
-// });

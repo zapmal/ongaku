@@ -1,10 +1,17 @@
 import { createCss } from '@stitches/react';
-// import { gray, violetDark } from '@radix-ui/colors';
+import {
+  gray,
+  crimson,
+  crimsonDark,
+} from '@radix-ui/colors';
 
 export const { styled, css, global, keyframes, getCssString, theme } =
   createCss({
     theme: {
       colors: {
+        ...gray,
+        ...crimsonDark,
+        // ...red,
         // ...gray,
         // ...violetDark,
         // primary: '$gray1',
@@ -85,6 +92,11 @@ export const { styled, css, global, keyframes, getCssString, theme } =
       },
       shadows: {
         underlineShadow: '0 4px 0 -2px',
+        shadow1: '0 1px 3px hsla(0, 0%, .2)',
+        shadow2: '0 4px 6px hsla(0, 0%, .2)',
+        shadow3: '0 5px 15px hsla(0, 0%, .2)',
+        shadow4: '0 10px 24px hsla(0, 0%, .2)',
+        shadow5: '0 15px 35px hsla(0, 0%, .2)',
       },
     },
     media: {},

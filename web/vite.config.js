@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [reactRefresh()],
   resolve: {
     alias: {
-      '@example': path.resolve(__dirname, './src/example'),
+      '@example': path.resolve(__dirname, 'src/example'),
     }
   }
 });

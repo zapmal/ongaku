@@ -1,8 +1,7 @@
+import { ChakraProvider } from '@chakra-ui/react';
 import React from 'react';
 
 import { styled } from '../stitches.config';
-
-import { ChakraProvider } from '@chakra-ui/react';
 
 const Button = styled('button', {
   margin: '$3',
@@ -26,21 +25,21 @@ const Button = styled('button', {
         backgroundColor: '$accentSolid',
       },
       info: {
-        backgroundColor: '$infoSolid'
-      }
-    }
-  }
+        backgroundColor: '$infoSolid',
+      },
+    },
+  },
 });
 
 function App() {
   return (
     <ChakraProvider>
-      <Button type='success'>Success</Button>
-      <Button type='danger'>Danger</Button>
-      <Button type='warning'>Warning</Button>
-      <Button type='base'>Base</Button>
-      <Button type='accent'>Accent</Button>
-      <Button type='info'>Info</Button>
+      <Button type="success">Success</Button>
+      <Button type="danger">Danger</Button>
+      <Button type="warning">Warning</Button>
+      <Button type="base">Base</Button>
+      <Button type="accent">Accent</Button>
+      <Button type="info">Info</Button>
     </ChakraProvider>
   );
 }

@@ -1,0 +1,6 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# This should lint + run tests
+cd web
+yarn lint:fix

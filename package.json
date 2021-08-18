@@ -1,0 +1,14 @@
+{
+  "name": "ongaku",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/zapmal/ongaku.git",
+  "author": "Zapmal <mzxgd16@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "husky": "^7.0.0"
+  },
+  "scripts": {
+    "prepare": "husky install"
+  }
+}

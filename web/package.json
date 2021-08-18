@@ -5,7 +5,9 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "lint:fix": "eslint --fix --ext .js src/**/* --ignore-path .gitignore"
+    "lint": "eslint --ext .js src/**/** --ignore-path .gitignore",
+    "lint:fix": "eslint --fix --ext .js src/**/* --ignore-path .gitignore",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.6.5",
@@ -32,6 +34,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-testing-library": "^4.11.0",
     "prettier": "^2.3.2",
-    "vite": "^2.4.3"
+    "vite": "^2.4.3",
+    "husky": "^7.0.0"
   }
 }

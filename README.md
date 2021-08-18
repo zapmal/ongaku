@@ -1,11 +1,5 @@
 <div align="center">
-  <img src="https://i.ibb.co/FKCpHmD/logo-alter-icon-1.png" alt="Logo" />
-</div>
-
-<br>
-
-<div align="center">
-  <img src="https://i.ibb.co/Fh1TyJs/Ongaku.png"  alt="Ongaku" />
+  <img src="https://i.ibb.co/yXGBDSR/Group-1-2.png" alt="Logo" />
 </div>
 
 ## Setup

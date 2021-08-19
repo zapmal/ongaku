@@ -3,14 +3,15 @@ module.exports = {
   env: {
     node: true,
     es6: true,
+    jest: true,
   },
   parserOptions: {
     ecmaVersion: 8,
     sourceType: 'module',
-    requireConfigFile: false,
-    babelOptions: {
-      presets: ['@babel/preset-react'],
-    },
+    // requireConfigFile: false,
+    // babelOptions: {
+    //   presets: ['@babel/preset-react'],
+    // },
   },
   ignorePatterns: ['node_modules/*'],
   extends: ['eslint:recommended'],

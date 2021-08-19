@@ -4,5 +4,6 @@
       "directory": "web",
       "changeProcessCWD": true
     }
-  ]
+  ],
+  "typescript.validate.enable": false
 }

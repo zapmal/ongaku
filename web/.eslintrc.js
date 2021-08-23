@@ -8,10 +8,6 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 8,
     sourceType: 'module',
-    // requireConfigFile: false,
-    // babelOptions: {
-    //   presets: ['@babel/preset-react'],
-    // },
   },
   ignorePatterns: ['node_modules/*'],
   extends: ['eslint:recommended'],
@@ -43,7 +39,7 @@ module.exports = {
         'no-restricted-imports': [
           'error',
           {
-            patterns: ['@/features/*/*'],
+            patterns: ['@features/*/*'],
           },
         ],
         'linebreak-style': ['error', 'unix'],
@@ -57,6 +53,7 @@ module.exports = {
             alphabetize: { order: 'asc', caseInsensitive: true },
           },
         ],
+        'import/no-unresolved': ['off', { caseSensitive: false }],
         'import/default': 'off',
         'import/no-named-as-default-member': 'off',
         'import/no-named-as-default': 'off',

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Spinner } from '@chakra-ui/react';
 import React from 'react';
 import { initReactQueryAuth } from 'react-query-auth';

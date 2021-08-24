@@ -5,9 +5,9 @@ import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter as Router } from 'react-router-dom';
 
+import { Notifications } from '@/components/Notifications';
 import { AuthProvider } from '@/context/auth';
 import { queryClient } from '@/lib/react-query';
-import { Notifications } from '@/components/Notifications';
 
 /**
  * Button needs to be custom (not Chakra) and

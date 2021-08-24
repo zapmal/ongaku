@@ -9,7 +9,7 @@ export function Notifications() {
   const { notifications, dismissNotification } = useNotificationStore();
 
   return (
-    <div>
+    <>
       {notifications.map((notification) => {
         toast.dark(notification.message, {
           toastId: notification.id,
@@ -18,6 +18,6 @@ export function Notifications() {
         });
       })}
       <Toast />
-    </div>
+    </>
   );
 }

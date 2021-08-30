@@ -1,7 +1,7 @@
 import { teal, amber, red, indigo, mauveDark, crimsonDark } from '@radix-ui/colors';
-import { createCss } from '@stitches/react';
+import { createStitches } from '@stitches/react';
 
-export const { styled, css, global, keyframes, getCssString, theme } = createCss({
+export const { styled, css, global, keyframes, getCssString, theme } = createStitches({
   theme: {
     colors: {
       ...teal,

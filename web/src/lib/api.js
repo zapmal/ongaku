@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-import { useNotificationStore } from '@/hooks/useNotificationStore';
+import { useNotificationStore } from '@/stores/useNotificationStore';
 
 export const apiClient = axios.create({
-  baseURL: 'http://localhost:4000/api',
+  baseURL: 'http://localhost:3000/api',
 });
 
 axios.interceptors.response.use(

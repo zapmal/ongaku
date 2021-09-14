@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { AppProvider } from '@/context';
+import { AppProvider } from '@/providers';
 import { AppRoutes } from '@/routes';
 
 import 'react-toastify/dist/ReactToastify.css';

@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 
 import { Toast } from './styles';
 
-import { useNotificationStore } from '@/hooks/useNotificationStore';
+import { useNotificationStore } from '@/stores/useNotificationStore';
 
 export function Notifications() {
   const { notifications, dismissNotification } = useNotificationStore();
@@ -13,7 +13,6 @@ export function Notifications() {
       {notifications.map((notification) => {
         toast.dark(notification.message, {
           toastId: notification.id,
-          onOpen: () => console.log('opened'),
           onClose: () => dismissNotification(notification.id),
         });
       })}

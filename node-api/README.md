@@ -1,4 +1,4 @@
 
 <p align="center">
-     <img src="/nest-js.png">
+     <img src="./nest-js.png">
 </p>

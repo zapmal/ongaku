@@ -24,7 +24,6 @@
     "react-query": "3.21.1",
     "react-query-auth": "^1.1.0",
     "react-router-dom": "5.2.1",
-    "react-toastify": "8.0.2",
     "zustand": "3.5.10"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-import { Button, Spinner, ChakraProvider } from '@chakra-ui/react';
+import { Button, Spinner, ChakraProvider, extendTheme } from '@chakra-ui/react';
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { QueryClientProvider } from 'react-query';
@@ -10,18 +10,27 @@ import { queryClient } from '@/lib/react-query';
 import { AuthProvider } from '@/providers/auth';
 
 /**
- * Button needs to be custom (not Chakra) and
- * divs, h2, etcs. need to be styled.
+ * Button needs to be custom (stitches) because this is
+ * not rendered under chakra's provider.
  */
 const ErrorFallback = () => {
   return (
     <div role="alert">
-      <h2>Ooops, something went wrong :( </h2>
-      {/* This needs to be a custom (stitches) button. */}
+      <h2>Ooops, something went wrong.</h2>
       <Button onClick={() => window.location.assign(window.location.origin)}>Refresh</Button>
     </div>
   );
 };
+
+const chakraTheme = extendTheme({
+  styles: {
+    global: {
+      'html, body': {
+        color: '#ffffff',
+      },
+    },
+  },
+});
 
 export const AppProvider = ({ children }) => {
   return (
@@ -35,10 +44,12 @@ export const AppProvider = ({ children }) => {
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <QueryClientProvider client={queryClient}>
           {process.env.NODE_ENV !== 'test' && <ReactQueryDevtools />}
-          <Notifications />
           <AuthProvider>
             <Router>
-              <ChakraProvider>{children}</ChakraProvider>
+              <ChakraProvider theme={chakraTheme}>
+                <Notifications />
+                {children}
+              </ChakraProvider>
             </Router>
           </AuthProvider>
         </QueryClientProvider>

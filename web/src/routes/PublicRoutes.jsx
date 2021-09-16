@@ -1,6 +1,11 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
+import { Landing } from '@/features/misc';
+
+/**
+ * No 404 for now, although it can be changed later.
+ */
 export function PublicRoutes() {
   return (
     <Switch>
@@ -8,8 +13,4 @@ export function PublicRoutes() {
       <Route path="*" render={() => <Redirect to="/" />} />
     </Switch>
   );
-}
-
-function Landing() {
-  return <h1>welcome!</h1>;
 }

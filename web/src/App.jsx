@@ -1,9 +1,7 @@
 import React from 'react';
 
-import { AppProvider } from '@/providers';
+import { AppProvider } from '@/providers/app';
 import { AppRoutes } from '@/routes';
-
-import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (

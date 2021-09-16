@@ -14,9 +14,10 @@ axios.interceptors.response.use(
     const message = error.response.data.message || error.message;
 
     useNotificationStore.getState().addNotification({
+      title: 'Network Error',
       message,
+      status: 'error',
     });
-
     return Promise.reject(error);
   }
 );

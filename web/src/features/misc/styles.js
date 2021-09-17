@@ -6,14 +6,25 @@ export const Background = styled('div', {
 
 export const ArtistImage = styled('img', {
   height: '100vh',
+  width: '100%',
 });
 
 export const NavigationBar = styled('nav', {
   width: '100%',
-  paddingTop: '$4',
-  textAlign: 'center',
+  display: 'flex',
+  justifyContent: 'space-between',
 
-  '& *': {
-    fontSize: '$sm',
+  '& div': {
+    paddingTop: '$3',
+    verticalAlign: 'center',
+  },
+
+  '& div:last-child': {
+    paddingRight: '$3',
+  },
+
+  '& img': {
+    width: '150px',
+    display: 'inline',
   },
 });

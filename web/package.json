@@ -6,7 +6,7 @@
     "build": "vite build",
     "serve": "vite preview",
     "lint": "eslint --ext .js src/**/** --ignore-path .gitignore",
-    "lint:fix": "eslint --fix --ext .js src/**/* --ignore-path .gitignore"
+    "lint:fix": "eslint --fix --ext .js --ext .jsx src/**/* --ignore-path .gitignore"
   },
   "dependencies": {
     "@chakra-ui/react": "1.6.7",

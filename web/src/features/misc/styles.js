@@ -1,15 +1,17 @@
+import { Image } from '@chakra-ui/react';
+
 import { styled } from '@/stitches.config.js';
 
 export const Background = styled('div', {
   backgroundColor: '$primaryBase',
 });
 
-export const ArtistImage = styled('img', {
+export const ArtistImage = styled(Image, {
   height: '100vh',
   width: '100%',
 });
 
-export const NavigationBar = styled('nav', {
+export const HeaderContainer = styled('header', {
   width: '100%',
   display: 'flex',
   justifyContent: 'space-between',

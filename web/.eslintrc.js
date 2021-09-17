@@ -3,7 +3,6 @@ module.exports = {
   env: {
     node: true,
     es6: true,
-    jest: true,
   },
   parserOptions: {
     ecmaVersion: 8,
@@ -32,8 +31,6 @@ module.exports = {
         'plugin:react-hooks/recommended',
         'plugin:jsx-a11y/recommended',
         'plugin:prettier/recommended',
-        'plugin:testing-library/react',
-        'plugin:jest-dom/recommended',
       ],
       rules: {
         'no-restricted-imports': [

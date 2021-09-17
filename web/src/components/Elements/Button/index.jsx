@@ -7,10 +7,12 @@ const variants = {
   primary: {
     backgroundColor: theme.colors.primaryBg.value,
     hover: theme.colors.primaryBgHover.value,
+    active: theme.colors.primaryBgActive.value,
   },
   accent: {
     backgroundColor: theme.colors.accentSolid.value,
     hover: theme.colors.accentSolidHover.value,
+    active: theme.colors.accentSolidActive.value,
   },
   text: theme.colors.primaryTextContrast,
 };
@@ -32,6 +34,9 @@ export function Button({
         color={variants.text}
         _hover={{
           bg: variants[variant].hover,
+        }}
+        _active={{
+          bg: variants[variant].active,
         }}
       >
         {children}

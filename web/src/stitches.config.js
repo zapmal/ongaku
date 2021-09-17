@@ -34,6 +34,7 @@ export const { styled, css, global, keyframes, getCssString, theme } = createSti
       accentBorderHover: '$crimson8',
       accentSolid: '$crimson9',
       accentSolidHover: '$crimson10',
+      accentSolidActive: '$crimson11',
       accentText: '$crimson11',
       accentTextContrast: '$crimson12',
 

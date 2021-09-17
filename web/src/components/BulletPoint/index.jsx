@@ -4,15 +4,15 @@ import React from 'react';
 import { Icon as IconWrapper } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 
-export function BulletPoint({ Icon, title, content, extraStyles }) {
+export function BulletPoint({ Icon, title, content, variant = 'primary', extraStyles }) {
   return (
     <Flex {...extraStyles}>
-      <IconWrapper wrapped={true} size={50}>
+      <IconWrapper wrapped={true} size={50} variant={variant}>
         <Icon />
       </IconWrapper>
       <Box width="70%">
         <Text
-          fontSize="xl"
+          fontSize="lg"
           color={theme.colors.accentSolid.value}
           fontWeight="bold"
           paddingLeft="15px"

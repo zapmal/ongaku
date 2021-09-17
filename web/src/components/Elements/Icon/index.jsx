@@ -6,15 +6,24 @@ const IconWrapper = styled('div', {
   padding: '$4',
   borderRadius: '20px',
   width: '13%',
+  transition: '200ms ease-in',
 
   '& *': {
     margin: '0 auto',
   },
 
+  '&:hover': {
+    backgroundColor: '$accentSolidHover',
+  },
+
   variants: {
     backgroundColor: {
-      primary: { backgroundColor: '$primaryBg' },
-      accent: { backgroundColor: '$accentSolid' },
+      primary: {
+        backgroundColor: '$primaryBg',
+      },
+      accent: {
+        backgroundColor: '$accentSolid',
+      },
     },
   },
 

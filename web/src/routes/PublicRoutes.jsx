@@ -9,7 +9,8 @@ import { Landing } from '@/features/misc';
 export function PublicRoutes() {
   return (
     <Switch>
-      <Route path="/" component={Landing} />
+      <Route path="/" component={Landing} exact={true} />
+      {/* <Route path="/login" component={Epa} /> */}
       <Route path="*" render={() => <Redirect to="/" />} />
     </Switch>
   );

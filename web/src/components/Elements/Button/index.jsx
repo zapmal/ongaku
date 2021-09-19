@@ -22,13 +22,17 @@ export function Button({
   label = '',
   position = 'top',
   isFullWidth = true,
+  onClick,
+  align,
+  extraProps,
   children,
 }) {
   return (
-    <Box textAlign="center">
+    <Box textAlign={align}>
       {label && position === 'top' && <Label text={label} position="top" />}
 
       <ChakraButton
+        onClick={onClick}
         isFullWidth={isFullWidth}
         backgroundColor={variants[variant].backgroundColor}
         color={variants.text}
@@ -38,6 +42,7 @@ export function Button({
         _active={{
           bg: variants[variant].active,
         }}
+        {...extraProps}
       >
         {children}
       </ChakraButton>

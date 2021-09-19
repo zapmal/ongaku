@@ -32,13 +32,13 @@ export function Landing() {
 
           <Box textAlign="center">
             <Heading paddingTop="3" size="2xl">
-              Ongaku - <Highlight tone="accent">Music at {"it's"} best</Highlight>
+              Ongaku - <Highlight variant="accent">Music at {"it's"} best</Highlight>
             </Heading>
             <Text padding="5" fontSize="md" lineHeight="2">
-              <Highlight tone="accent">Ongaku</Highlight> is a music streaming platform inspired by
-              the likes of <Highlight tone="accent">iTunes, Spotify and YouTube Music</Highlight>{' '}
+              <Highlight variant="accent">Ongaku</Highlight> is a music streaming platform inspired by
+              the likes of <Highlight variant="accent">iTunes, Spotify and YouTube Music</Highlight>{' '}
               that is focused on delivering a comfortable and blazing-fast streaming experience to
-              the <Highlight tone="accent">user</Highlight> regardless of their zone, so that they
+              the <Highlight variant="accent">user</Highlight> regardless of their zone, so that they
               can listen their favorite artists even on poor or unstable connections.
             </Text>
           </Box>
@@ -65,10 +65,10 @@ function Header() {
     <HeaderContainer>
       <Image src="/assets/images/logo-transparent.png" alt="Ongaku Logo" />
       <ButtonGroup spacing="6">
-        <Button label={<Highlight tone="accent">Existing user?</Highlight>}>
+        <Button label={<Highlight variant="accent">Existing user?</Highlight>} align="center">
           <Link to="/login">Login</Link>
         </Button>
-        <Button label={<Highlight tone="accent">New user?</Highlight>}>
+        <Button label={<Highlight variant="accent">New user?</Highlight>} align="center">
           <Link to="/register">Register</Link>
         </Button>
 
@@ -76,7 +76,7 @@ function Header() {
           <Divider orientation="vertical" borderColor="white.Alpha.500" height="40px" />
         </Center>
 
-        <Button label={<Highlight>Lost account?</Highlight>} variant="accent">
+        <Button label={<Highlight>Lost account?</Highlight>} variant="accent" align="center">
           <Link to="/account-recovery">Recover it</Link>
         </Button>
       </ButtonGroup>
@@ -107,7 +107,7 @@ function BulletList() {
       Icon={bulletPoint.icon}
       title={bulletPoint.title}
       content={bulletPoint.content}
-      extraStyles={{ marginBottom: 30, paddingLeft: 30 }}
+      extraProps={{ marginBottom: 30, paddingLeft: 30 }}
     />
   ));
 }

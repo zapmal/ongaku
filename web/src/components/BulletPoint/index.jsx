@@ -4,9 +4,9 @@ import React from 'react';
 import { Icon as IconWrapper } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 
-export function BulletPoint({ Icon, title, content, variant = 'primary', extraStyles }) {
+export function BulletPoint({ Icon, title, content, variant = 'primary', extraProps }) {
   return (
-    <Flex {...extraStyles}>
+    <Flex {...extraProps}>
       <IconWrapper wrapped={true} size={50} variant={variant}>
         <Icon />
       </IconWrapper>

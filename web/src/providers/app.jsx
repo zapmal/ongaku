@@ -1,24 +1,52 @@
-import { Button, Spinner, ChakraProvider, extendTheme } from '@chakra-ui/react';
+import { Spinner, ChakraProvider, extendTheme, Box, Heading, Text, Image } from '@chakra-ui/react';
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import { MdCached } from 'react-icons/md';
 import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter as Router } from 'react-router-dom';
 
+import { Button, Highlight } from '@/components/Elements';
 import { Notifications } from '@/components/Notifications';
 import { queryClient } from '@/lib/react-query';
 import { AuthProvider } from '@/providers/auth';
+import { theme } from '@/stitches.config.js';
 
 /**
- * Button needs to be custom (stitches) because this is
- * not rendered under chakra's provider.
+ * This should be on @/features/misc along side 404.
  */
 const ErrorFallback = () => {
   return (
-    <div role="alert">
-      <h2>Ooops, something went wrong.</h2>
-      <Button onClick={() => window.location.assign(window.location.origin)}>Refresh</Button>
-    </div>
+    <Box align="center" marginTop="10px">
+      <Heading size="lg">
+        Oops, <Highlight variant="accent">something went wrong</Highlight>
+      </Heading>
+      <Text
+        textAlign="center"
+        color={theme.colors.primaryTextContrast.value}
+        padding="5"
+        fontSize="lg"
+      >
+        Why {"don't"} we give it another chance?
+      </Text>
+      <Button
+        onClick={() => window.location.assign(window.location.origin)}
+        variant="accent"
+        isFullWidth={false}
+        extraProps={{ margin: '20px', rightIcon: <MdCached /> }}
+      >
+        Refresh
+      </Button>
+      <Image src="/assets/svgs/undraw-lost.svg" width="400px" />
+      <Text
+        textAlign="center"
+        color={theme.colors.primaryTextContrast.value}
+        padding="5"
+        fontWeight="bold"
+      >
+        Ongaku - 2021
+      </Text>
+    </Box>
   );
 };
 
@@ -26,6 +54,7 @@ const chakraTheme = extendTheme({
   styles: {
     global: {
       'html, body': {
+        backgroundColor: theme.colors.primaryBg.value,
         color: '#ffffff',
       },
     },
@@ -34,26 +63,26 @@ const chakraTheme = extendTheme({
 
 export const AppProvider = ({ children }) => {
   return (
-    <React.Suspense
-      fallback={
-        <div>
-          <Spinner />
-        </div>
-      }
-    >
-      <ErrorBoundary FallbackComponent={ErrorFallback}>
-        <QueryClientProvider client={queryClient}>
-          {process.env.NODE_ENV !== 'test' && <ReactQueryDevtools />}
-          <AuthProvider>
-            <Router>
-              <ChakraProvider theme={chakraTheme}>
+    <ChakraProvider theme={chakraTheme}>
+      <React.Suspense
+        fallback={
+          <Box textAlign="center">
+            <Spinner size="xl" />
+          </Box>
+        }
+      >
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <QueryClientProvider client={queryClient}>
+            {process.env.NODE_ENV !== 'test' && <ReactQueryDevtools />}
+            <AuthProvider>
+              <Router>
                 <Notifications />
                 {children}
-              </ChakraProvider>
-            </Router>
-          </AuthProvider>
-        </QueryClientProvider>
-      </ErrorBoundary>
-    </React.Suspense>
+              </Router>
+            </AuthProvider>
+          </QueryClientProvider>
+        </ErrorBoundary>
+      </React.Suspense>
+    </ChakraProvider>
   );
 };

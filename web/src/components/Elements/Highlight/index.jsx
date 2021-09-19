@@ -4,7 +4,7 @@ import { styled } from '@/stitches.config.js';
 
 const StyledHighlight = styled('strong', {
   variants: {
-    tone: {
+    variant: {
       primary: {
         color: '$primaryTextContrast',
       },
@@ -15,6 +15,6 @@ const StyledHighlight = styled('strong', {
   },
 });
 
-export function Highlight({ tone = 'primary', children }) {
-  return <StyledHighlight tone={tone}>{children}</StyledHighlight>;
+export function Highlight({ variant = 'primary', children }) {
+  return <StyledHighlight variant={variant}>{children}</StyledHighlight>;
 }

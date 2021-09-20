@@ -53,5 +53,9 @@ run the `updateSchemas.sh` script:
 
 - `./updateSchemas.sh`
 
-If there's a problem with the script then you can add the model manually in 
-`/prisma/schema.prisma`.
+In order for the script to work there needs to be a `/prisma/schemas` directory
+and a `/prisma/base.prisma`, both are already on the repository so don't delete
+them.
+
+If there's a problem with the script then you can still do it manually, adding the models
+on `/prisma/schema.prisma`.

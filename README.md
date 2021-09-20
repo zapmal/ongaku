@@ -13,7 +13,8 @@ Run:
 - `yarn` or `yarn install`
 - `cp .env.example .env`
 - `yarn dev`
-- Ready to go.
+
+Ready to go.
 
 ---
 
@@ -37,8 +38,9 @@ JWT_EXPIRY_TIME="90d"
 COOKIE_SECRET="Cookie secret"
 ```
 
+- Create the database by using pgAdmin or the shell.
 - `yarn` or `yarn install`
-- `npx prisma migrate dev --name init` 
+- `npx prisma migrate dev --name init`
 
 Regarding prisma, some extra scripts are available:
 

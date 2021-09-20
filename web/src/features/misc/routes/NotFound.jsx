@@ -16,7 +16,7 @@ export function NotFound() {
   return (
     <Box align="center" paddingTop="10">
       <Heading size="xl">
-        Are you <Highlight>lost?</Highlight>
+        Got <Highlight>lost?</Highlight>
       </Heading>
 
       <Text

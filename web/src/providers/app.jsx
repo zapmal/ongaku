@@ -16,7 +16,7 @@ const chakraTheme = extendTheme({
   styles: {
     global: {
       'html, body': {
-        backgroundColor: theme.colors.primaryBg.value,
+        backgroundColor: theme.colors.primaryBase.value,
         color: '#ffffff',
       },
     },

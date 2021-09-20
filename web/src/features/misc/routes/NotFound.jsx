@@ -9,7 +9,7 @@ import { theme } from '@/stitches.config.js';
 export function NotFound() {
   const history = useHistory();
 
-  const redirect = () => {
+  const handleRedirect = () => {
     history.push('/');
   };
 
@@ -33,7 +33,7 @@ export function NotFound() {
       <Image src="/assets/svgs/undraw-moving.svg" width="400px" margin="5" />
 
       <Button
-        onClick={redirect}
+        onClick={handleRedirect}
         variant="accent"
         extraProps={{ margin: '20px', rightIcon: <MdHome /> }}
       >

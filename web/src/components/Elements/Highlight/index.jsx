@@ -15,6 +15,6 @@ const StyledHighlight = styled('strong', {
   },
 });
 
-export function Highlight({ variant = 'primary', children }) {
+export function Highlight({ variant = 'accent', children }) {
   return <StyledHighlight variant={variant}>{children}</StyledHighlight>;
 }

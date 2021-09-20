@@ -6,7 +6,6 @@ const { PublicRoutes } = lazyImport(() => import('./PublicRoutes'), 'PublicRoute
 const { ProtectedRoutes } = lazyImport(() => import('./ProtectedRoutes'), 'ProtectedRoutes');
 
 export function AppRoutes() {
-  // throw 'heh';
   const isLoggedIn = true;
   // const isLoggedIn = useAuth(); gives access to .user, etc.
   return isLoggedIn ? <PublicRoutes /> : <ProtectedRoutes />;

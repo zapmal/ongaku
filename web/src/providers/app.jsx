@@ -12,44 +12,6 @@ import { queryClient } from '@/lib/react-query';
 import { AuthProvider } from '@/providers/auth';
 import { theme } from '@/stitches.config.js';
 
-/**
- * This should be on @/features/misc along side 404.
- */
-const ErrorFallback = () => {
-  return (
-    <Box align="center" marginTop="10px">
-      <Heading size="lg">
-        Oops, <Highlight variant="accent">something went wrong</Highlight>
-      </Heading>
-      <Text
-        textAlign="center"
-        color={theme.colors.primaryTextContrast.value}
-        padding="5"
-        fontSize="lg"
-      >
-        Why {"don't"} we give it another chance?
-      </Text>
-      <Button
-        onClick={() => window.location.assign(window.location.origin)}
-        variant="accent"
-        isFullWidth={false}
-        extraProps={{ margin: '20px', rightIcon: <MdCached /> }}
-      >
-        Refresh
-      </Button>
-      <Image src="/assets/svgs/undraw-lost.svg" width="400px" />
-      <Text
-        textAlign="center"
-        color={theme.colors.primaryTextContrast.value}
-        padding="5"
-        fontWeight="bold"
-      >
-        Ongaku - 2021
-      </Text>
-    </Box>
-  );
-};
-
 const chakraTheme = extendTheme({
   styles: {
     global: {
@@ -64,13 +26,7 @@ const chakraTheme = extendTheme({
 export const AppProvider = ({ children }) => {
   return (
     <ChakraProvider theme={chakraTheme}>
-      <React.Suspense
-        fallback={
-          <Box textAlign="center">
-            <Spinner size="xl" />
-          </Box>
-        }
-      >
+      <React.Suspense fallback={LoadingFallback}>
         <ErrorBoundary FallbackComponent={ErrorFallback}>
           <QueryClientProvider client={queryClient}>
             {process.env.NODE_ENV !== 'test' && <ReactQueryDevtools />}
@@ -86,3 +42,41 @@ export const AppProvider = ({ children }) => {
     </ChakraProvider>
   );
 };
+
+function LoadingFallback() {
+  return (
+    <Box textAlign="center" paddingTop="200px">
+      <Spinner size="xl" />
+    </Box>
+  );
+}
+
+function ErrorFallback() {
+  return (
+    <Box align="center" paddingTop="8">
+      <Heading size="xl">
+        Oops, <Highlight>something went wrong</Highlight>
+      </Heading>
+      <Text
+        textAlign="center"
+        color={theme.colors.primaryTextContrast.value}
+        padding="5"
+        fontSize="lg"
+      >
+        But {"don't"} fret — {"it's"} not your fault. Why {"don't"} we give it{' '}
+        <Highlight>another chance?</Highlight>
+      </Text>
+
+      <Image src="/assets/svgs/undraw-lost.svg" width="400px" margin="5" />
+
+      <Button
+        onClick={() => window.location.assign(window.location.origin)}
+        variant="accent"
+        isFullWidth={false}
+        extraProps={{ margin: '20px', rightIcon: <MdCached /> }}
+      >
+        Refresh
+      </Button>
+    </Box>
+  );
+}

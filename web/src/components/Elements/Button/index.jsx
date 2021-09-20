@@ -21,7 +21,7 @@ export function Button({
   variant = 'primary',
   label = '',
   position = 'top',
-  isFullWidth = true,
+  isFullWidth = false,
   onClick,
   align,
   extraProps,

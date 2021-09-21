@@ -10,9 +10,9 @@ This assumes that you're in the directory that's `highlighted`.
 
 Run:
 
-- `yarn` or `yarn install`
+- `npm install`
 - `cp .env.example .env`
-- `yarn dev`
+- `npm run dev`
 
 Ready to go.
 
@@ -39,7 +39,7 @@ COOKIE_SECRET="Cookie secret"
 ```
 
 - Create the database by using pgAdmin or the shell.
-- `yarn` or `yarn install`
+- `npm install`
 - `npx prisma migrate dev --name init`
 
 Regarding prisma, some extra scripts are available:

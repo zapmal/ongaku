@@ -1,10 +1,6 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
-import { useForm } from 'react-hook-form';
 import { Route, Switch } from 'react-router-dom';
-import * as yup from 'yup';
 
-import { Field } from '@/components/Elements';
 import { Landing, NotFound } from '@/features/misc';
 
 export function PublicRoutes() {

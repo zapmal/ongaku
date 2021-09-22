@@ -41,6 +41,7 @@ COOKIE_SECRET="Cookie secret"
 - Create the database by using pgAdmin or the shell.
 - `npm install`
 - `npx prisma migrate dev --name init`
+- `npm run start:dev`
 
 Regarding prisma, some extra scripts are available:
 

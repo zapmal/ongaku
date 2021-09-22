@@ -1,43 +1,37 @@
-import { Input as ChakraInput, Text } from '@chakra-ui/react';
+import { FormControl, Text, FormHelperText, FormLabel, Input } from '@chakra-ui/react';
 import React from 'react';
 
 import { theme } from '@/stitches.config.js';
 
-export function Field({ label, type, name, value, placeholder, error, onChange }) {
+export function Field(props) {
+  const isRequired = props.isNotRequired ? false : true;
+
   return (
-    <div>
-      {label && (
-        <Text color={theme.colors.primaryTextContrast.value} padding={2} fontWeight="bold">
-          {label}
-        </Text>
+    <FormControl isRequired={isRequired}>
+      {props.label && (
+        <FormLabel
+          color={theme.colors.primaryTextContrast.value}
+          htmlFor={props.name}
+          padding={1}
+          fontWeight="bold"
+        >
+          {props.label}
+        </FormLabel>
       )}
       <Input
-        type={type}
-        name={name}
-        value={value}
-        placeholder={placeholder}
-        error={error}
-        onChange={onChange}
+        type={props.type}
+        id={props.name}
+        placeholder={props.placeholder}
+        isInvalid={!!props.error}
+        focusBorderColor={'#E93D82'}
+        {...props.register(props.name)}
       />
-      {error && <Text>{error}</Text>}
-    </div>
-  );
-}
-
-/**
- * For some reason the input doesn't accept Stitches colors so
- * I had to use plain hex.
- */
-function Input({ type, name, value, placeholder, error, onChange }) {
-  return (
-    <ChakraInput
-      isInvalid={!!error}
-      type={type}
-      name={name}
-      value={value}
-      placeholder={placeholder}
-      onChange={onChange}
-      focusBorderColor={'#E93D82'}
-    />
+      {props.error && (
+        <Text color={theme.colors.dangerSolid.value} padding={1}>
+          {props.error.message}
+        </Text>
+      )}
+      {props.helperText && <FormHelperText padding={1}>{props.helperText}</FormHelperText>}
+    </FormControl>
   );
 }

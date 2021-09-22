@@ -53,14 +53,14 @@ function LoadingFallback() {
 
 function ErrorFallback() {
   return (
-    <Box align="center" paddingTop="8">
+    <Box align="center" paddingTop={8}>
       <Heading size="xl">
         Oops, <Highlight>something went wrong</Highlight>
       </Heading>
       <Text
         textAlign="center"
         color={theme.colors.primaryTextContrast.value}
-        padding="5"
+        padding={5}
         fontSize="lg"
       >
         But {"don't"} fret — {"it's"} not your fault. Why {"don't"} we give it{' '}

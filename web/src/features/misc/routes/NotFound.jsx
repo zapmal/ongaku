@@ -14,7 +14,7 @@ export function NotFound() {
   };
 
   return (
-    <Box align="center" paddingTop="10">
+    <Box align="center" paddingTop={10}>
       <Heading size="xl">
         Got <Highlight>lost?</Highlight>
       </Heading>
@@ -22,7 +22,7 @@ export function NotFound() {
       <Text
         textAlign="center"
         color={theme.colors.primaryTextContrast.value}
-        padding="5"
+        padding={5}
         fontSize="lg"
         width="50%"
       >
@@ -30,7 +30,7 @@ export function NotFound() {
         <Highlight>deleted or renamed</Highlight>, go home and try again.
       </Text>
 
-      <Image src="/assets/svgs/undraw-moving.svg" width="400px" margin="5" />
+      <Image src="/assets/svgs/undraw-moving.svg" width="400px" margin={5} />
 
       <Button
         onClick={handleRedirect}

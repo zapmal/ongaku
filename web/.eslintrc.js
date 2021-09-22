@@ -36,7 +36,7 @@ module.exports = {
         'no-restricted-imports': [
           'error',
           {
-            patterns: ['@features/*/*'],
+            patterns: ['@/features/*/*'],
           },
         ],
         'linebreak-style': ['error', 'unix'],

@@ -1,4 +1,13 @@
-import { Spinner, ChakraProvider, extendTheme, Box, Heading, Text, Image } from '@chakra-ui/react';
+import {
+  Spinner,
+  ChakraProvider,
+  extendTheme,
+  Box,
+  Heading,
+  Text,
+  Image,
+  CSSReset,
+} from '@chakra-ui/react';
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { MdCached } from 'react-icons/md';
@@ -26,6 +35,7 @@ const chakraTheme = extendTheme({
 export const AppProvider = ({ children }) => {
   return (
     <ChakraProvider theme={chakraTheme}>
+      <CSSReset />
       <React.Suspense fallback={LoadingFallback}>
         <ErrorBoundary FallbackComponent={ErrorFallback}>
           <QueryClientProvider client={queryClient}>

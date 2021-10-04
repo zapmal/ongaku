@@ -23,6 +23,7 @@ export function Field(props) {
         id={props.name}
         placeholder={props.placeholder}
         isInvalid={!!props.error}
+        css={props.css}
         focusBorderColor={'#E93D82'}
         {...props.register(props.name)}
       />

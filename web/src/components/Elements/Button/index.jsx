@@ -24,6 +24,7 @@ export function Button({
   isFullWidth = false,
   onClick,
   align,
+  type,
   extraProps,
   children,
 }) {
@@ -42,6 +43,7 @@ export function Button({
         _active={{
           bg: variants[variant].active,
         }}
+        type={type}
         {...extraProps}
       >
         {children}

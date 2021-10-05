@@ -1,4 +1,5 @@
 import {
+  useMediaQuery,
   Box,
   ButtonGroup,
   Heading,
@@ -12,21 +13,26 @@ import React from 'react';
 import { MdAlbum, MdPersonAdd } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
-import { Background, HeaderContainer, ArtistImage } from '../styles';
+import { Background, HeaderContainer } from '../styles';
 
 import { BulletPoint } from '@/components/BulletPoint';
 import { Button, Highlight } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 
 export function Landing() {
+  const [isDesktop] = useMediaQuery(['(min-width: 1280px)']);
+
   return (
     <Background>
-      <SimpleGrid columns={2}>
-        <ArtistImage
-          src="/assets/images/landing.webp"
-          alt="Korean group TWICE photoshoot for Perfect World song"
-          fallbackSrc="https://via.placeholder.com/1080"
-        />
+      <SimpleGrid columns={isDesktop ? 2 : 1}>
+        {isDesktop && (
+          <Image
+            src="/assets/images/landing.webp"
+            alt="Korean group TWICE photoshoot for Perfect World song"
+            height="100vh"
+            fallbackSrc="https://via.placeholder.com/1080"
+          />
+        )}
         <div>
           <Header />
 

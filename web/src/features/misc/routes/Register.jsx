@@ -4,12 +4,12 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
-import { Background, ArtistImage, HeaderContainer } from '../styles';
+import { Background, HeaderContainer } from '../styles';
 
 import { Link, Field, Button } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 
-const schema = yup.object().shape({
+const schema = yup.object({
   fullname: yup.string().required('This field is required.'),
   password: yup
     .string()
@@ -24,7 +24,7 @@ const schema = yup.object().shape({
   birthday: yup.string().required('This field is required.'),
 });
 
-export function SignUp() {
+export function Register() {
   const {
     register,
     handleSubmit,
@@ -32,12 +32,13 @@ export function SignUp() {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      fullname: null,
-      password: null,
-      passwordConfirmation: null,
-      email: null,
-      username: null,
-      birthday: null,
+      fullname: '',
+      password: '',
+      passwordConfirmation: '',
+      email: '',
+      username: '',
+      birthday: '',
+      avatar: '',
     },
   });
 
@@ -58,7 +59,7 @@ export function SignUp() {
             <Heading>Almost there</Heading>
             <Text
               color={theme.colors.accentSolid.value}
-              paddingTop={4}
+              paddingTop={2}
               fontSize="xl"
               fontWeight="bold"
             >
@@ -79,18 +80,6 @@ export function SignUp() {
                     />
                   </Center>
                 </WrapItem>
-                <WrapItem paddingLeft="90px">
-                  <Center>
-                    <Field
-                      type="password"
-                      name="password"
-                      label="Password"
-                      placeholder="*********"
-                      error={errors.password}
-                      register={register}
-                    />
-                  </Center>
-                </WrapItem>
                 <WrapItem paddingLeft="80px">
                   <Center>
                     <Field
@@ -103,7 +92,20 @@ export function SignUp() {
                     />
                   </Center>
                 </WrapItem>
-                <WrapItem paddingLeft="90px">
+
+                <WrapItem paddingLeft="80px">
+                  <Center>
+                    <Field
+                      type="password"
+                      name="password"
+                      label="Password"
+                      placeholder="*********"
+                      error={errors.password}
+                      register={register}
+                    />
+                  </Center>
+                </WrapItem>
+                <WrapItem paddingLeft="80px">
                   <Center>
                     <Field
                       type="password"
@@ -127,7 +129,7 @@ export function SignUp() {
                     />
                   </Center>
                 </WrapItem>
-                <WrapItem paddingLeft="90px">
+                <WrapItem paddingLeft="80px">
                   <Center>
                     <Field
                       type="date"
@@ -143,17 +145,28 @@ export function SignUp() {
                     />
                   </Center>
                 </WrapItem>
+                <WrapItem paddingLeft="80px">
+                  <Center>
+                    <Field
+                      type="file"
+                      name="avatar"
+                      label="Avatar"
+                      error={errors.avatar}
+                      register={register}
+                    />
+                  </Center>
+                </WrapItem>
               </Wrap>
 
               <Center paddingTop="40px">
                 <Button type="submit" align="center" variant="accent" isFullWidth={true}>
-                  Upload
+                  Submit
                 </Button>
                 <Text color={theme.colors.primaryText.value} padding="0 10px">
                   or
                 </Text>
-                <Link to="/" variant="gray">
-                  Sign In
+                <Link to="/login" variant="gray">
+                  Login
                 </Link>
               </Center>
 
@@ -166,9 +179,10 @@ export function SignUp() {
           </Box>
         </div>
 
-        <ArtistImage
-          src="/assets/images/half-background.jpg"
+        <Image
+          src="/assets/images/jennie-blackpink.webp"
           alt="Jennie, member of korean group Blackpink"
+          height="100%"
           fallbackSrc="https://via.placeholder.com/1080"
         />
       </SimpleGrid>

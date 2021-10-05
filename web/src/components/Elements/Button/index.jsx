@@ -25,7 +25,7 @@ export function Button({
   onClick,
   align,
   type,
-  extraProps,
+  props,
   children,
 }) {
   return (
@@ -44,7 +44,7 @@ export function Button({
           bg: variants[variant].active,
         }}
         type={type}
-        {...extraProps}
+        {...props}
       >
         {children}
       </ChakraButton>

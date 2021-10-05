@@ -12,7 +12,7 @@ export function Field(props) {
         <FormLabel
           color={theme.colors.primaryTextContrast.value}
           htmlFor={props.name}
-          padding={1}
+          padding="5px"
           fontWeight="bold"
         >
           {props.label}
@@ -24,7 +24,7 @@ export function Field(props) {
           accept={'image/**'}
           register={props.register(props.name, { validate: validateFileInput })}
         >
-          <Button props={{ leftIcon: <MdFileUpload /> }}>Upload</Button>
+          <Button leftIcon={<MdFileUpload />}>Upload</Button>
         </FileInput>
       ) : (
         <Input
@@ -38,11 +38,11 @@ export function Field(props) {
         />
       )}
       {props.error && (
-        <Text color={theme.colors.dangerSolid.value} paddingTop={1}>
+        <Text color={theme.colors.dangerSolid.value} paddingTop="5px" textAlign="left">
           {props.error.message}
         </Text>
       )}
-      {props.helperText && <FormHelperText padding={1}>{props.helperText}</FormHelperText>}
+      {props.helperText && <FormHelperText paddingTop="5px">{props.helperText}</FormHelperText>}
     </FormControl>
   );
 }

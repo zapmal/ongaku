@@ -30,7 +30,7 @@ export const AppProvider = ({ children }) => {
   return (
     <ChakraProvider theme={chakraTheme}>
       <React.Suspense fallback={<LoadingFallback />}>
-        <ErrorBoundary FallbackComponent={<ErrorFallback />}>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
           <QueryClientProvider client={queryClient}>
             {process.env.NODE_ENV !== 'test' && <ReactQueryDevtools />}
             <AuthProvider>
@@ -56,27 +56,28 @@ function LoadingFallback() {
 
 function ErrorFallback() {
   return (
-    <Box align="center" paddingTop={8}>
+    <Box align="center" paddingTop="20px">
       <Heading size="xl">
         Oops, <Highlight>something went wrong</Highlight>
       </Heading>
       <Text
         textAlign="center"
         color={theme.colors.primaryTextContrast.value}
-        padding={5}
+        padding="20px"
         fontSize="lg"
       >
         But {"don't"} fret — {"it's"} not your fault. Why {"don't"} we give it{' '}
         <Highlight>another chance?</Highlight>
       </Text>
 
-      <Image src="/assets/svgs/undraw-lost.svg" width="400px" margin="5" />
+      <Image src="/assets/svgs/undraw-lost.svg" width="400px" margin="15px" />
 
       <Button
         onClick={() => window.location.assign(window.location.origin)}
         variant="accent"
         isFullWidth={false}
-        extraProps={{ margin: '20px', rightIcon: <MdCached /> }}
+        margin="20px"
+        rightIcon={<MdCached />}
       >
         Refresh
       </Button>

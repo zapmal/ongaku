@@ -25,8 +25,8 @@ export function Button({
   onClick,
   align,
   type,
-  props,
   children,
+  ...extraProps
 }) {
   return (
     <Box textAlign={align}>
@@ -44,7 +44,7 @@ export function Button({
           bg: variants[variant].active,
         }}
         type={type}
-        {...props}
+        {...extraProps}
       >
         {children}
       </ChakraButton>
@@ -55,7 +55,7 @@ export function Button({
 }
 
 function Label({ text, position }) {
-  const margin = position === 'top' ? { marginBottom: '2' } : { marginTop: '2' };
+  const margin = position === 'top' ? { marginBottom: '8px' } : { marginTop: '8px' };
 
   return (
     <Text fontSize="sm" {...margin} fontWeight="bold" color={variants.text}>

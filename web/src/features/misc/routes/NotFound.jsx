@@ -14,7 +14,7 @@ export function NotFound() {
   };
 
   return (
-    <Box align="center" paddingTop={10}>
+    <Box align="center" paddingTop="20px">
       <Heading size="xl">
         Got <Highlight>lost?</Highlight>
       </Heading>
@@ -22,7 +22,7 @@ export function NotFound() {
       <Text
         textAlign="center"
         color={theme.colors.primaryTextContrast.value}
-        padding={5}
+        padding="15px"
         fontSize="lg"
         width="50%"
       >
@@ -32,11 +32,7 @@ export function NotFound() {
 
       <Image src="/assets/svgs/undraw-moving.svg" width="400px" margin={5} />
 
-      <Button
-        onClick={handleRedirect}
-        variant="accent"
-        extraProps={{ margin: '20px', rightIcon: <MdHome /> }}
-      >
+      <Button onClick={handleRedirect} variant="accent" margin="20px" rightIcon={<MdHome />}>
         Home
       </Button>
     </Box>

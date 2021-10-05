@@ -13,7 +13,7 @@ import React from 'react';
 import { MdAlbum, MdPersonAdd } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
-import { Background, HeaderContainer } from '../styles';
+import { Header as HeaderContainer } from '../styles';
 
 import { BulletPoint } from '@/components/BulletPoint';
 import { Button, Highlight } from '@/components/Elements';
@@ -23,46 +23,43 @@ export function Landing() {
   const [isDesktop] = useMediaQuery(['(min-width: 1280px)']);
 
   return (
-    <Background>
-      <SimpleGrid columns={isDesktop ? 2 : 1}>
-        {isDesktop && (
-          <Image
-            src="/assets/images/landing.webp"
-            alt="Korean group TWICE photoshoot for Perfect World song"
-            height="100vh"
-            fallbackSrc="https://via.placeholder.com/1080"
-          />
-        )}
-        <div>
-          <Header />
+    <SimpleGrid columns={isDesktop ? 2 : 1}>
+      {isDesktop && (
+        <Image
+          src="/assets/images/landing.webp"
+          alt="Korean group TWICE photoshoot for Perfect World song"
+          height="100vh"
+          fallbackSrc="https://via.placeholder.com/1080"
+        />
+      )}
+      <div>
+        <Header />
 
-          <Box textAlign="center">
-            <Heading paddingTop={3} size="2xl">
-              Ongaku - <Highlight>Music at {"it's"} best</Highlight>
-            </Heading>
-            <Text padding={5} fontSize="md" lineHeight={2}>
-              <Highlight>Ongaku</Highlight> is a music streaming platform inspired by the likes of{' '}
-              <Highlight>iTunes, Spotify and YouTube Music</Highlight> that is focused on delivering
-              a comfortable and blazing-fast streaming experience to the <Highlight>user</Highlight>{' '}
-              regardless of their zone, so that they can listen their favorite artists even on poor
-              or unstable connections.
-            </Text>
-          </Box>
-
-          <BulletList />
-
-          <Text
-            textAlign="center"
-            color={theme.colors.primaryTextContrast.value}
-            paddingTop={2}
-            fontSize="sm"
-          >
-            All rights belong to their respective owners, this project was made for learning
-            purposes.
+        <Box textAlign="center">
+          <Heading paddingTop="20px" size="2xl">
+            Ongaku - <Highlight>Music at {"it's"} best</Highlight>
+          </Heading>
+          <Text padding="20px" fontSize="md" lineHeight={2}>
+            <Highlight>Ongaku</Highlight> is a music streaming platform inspired by the likes of{' '}
+            <Highlight>iTunes, Spotify and YouTube Music</Highlight> that is focused on delivering a
+            comfortable and blazing-fast streaming experience to the <Highlight>user</Highlight>{' '}
+            regardless of their zone, so that they can listen their favorite artists even on poor or
+            unstable connections.
           </Text>
-        </div>
-      </SimpleGrid>
-    </Background>
+        </Box>
+
+        <BulletList />
+
+        <Text
+          textAlign="center"
+          color={theme.colors.primaryTextContrast.value}
+          paddingTop="10px"
+          fontSize="sm"
+        >
+          All rights belong to their respective owners, this project was made for learning purposes.
+        </Text>
+      </div>
+    </SimpleGrid>
   );
 }
 
@@ -117,7 +114,8 @@ function BulletList() {
       Icon={bulletPoint.icon}
       title={bulletPoint.title}
       content={bulletPoint.content}
-      extraProps={{ marginBottom: 30, paddingLeft: 30 }}
+      marginBottom="30px"
+      paddingLeft="30px"
     />
   ));
 }

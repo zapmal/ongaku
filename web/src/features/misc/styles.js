@@ -1,10 +1,6 @@
 import { styled } from '@/stitches.config.js';
 
-export const Background = styled('div', {
-  backgroundColor: '$primaryBase',
-});
-
-export const HeaderContainer = styled('header', {
+export const Header = styled('header', {
   width: '100%',
   display: 'flex',
   justifyContent: 'space-between',

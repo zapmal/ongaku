@@ -10,10 +10,10 @@ const variants = {
   gray: theme.colors.primaryText.value,
 };
 
-export function Link({ to, variant = 'primary', underline = true, children, ...props }) {
+export function Link({ to, variant = 'primary', underline = true, children, ...extraProps }) {
   const hasUnderline = underline ? { textDecoration: 'underline' } : null;
   return (
-    <ChakraLink as={RouterLink} to={to} color={variants[variant]} {...hasUnderline} {...props}>
+    <ChakraLink as={RouterLink} to={to} color={variants[variant]} {...hasUnderline} {...extraProps}>
       {children}
     </ChakraLink>
   );

@@ -38,7 +38,7 @@ export function Field(props) {
         />
       )}
       {props.error && (
-        <Text color={theme.colors.dangerSolid.value} padding={1}>
+        <Text color={theme.colors.dangerSolid.value} paddingTop={1}>
           {props.error.message}
         </Text>
       )}

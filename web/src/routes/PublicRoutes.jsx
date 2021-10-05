@@ -1,7 +1,8 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import { Landing, NotFound, Register } from '@/features/misc';
+import { Register } from '@/features/auth';
+import { Landing, NotFound } from '@/features/misc';
 
 export function PublicRoutes() {
   return (

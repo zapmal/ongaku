@@ -27,6 +27,12 @@ const IconWrapper = styled('div', {
     },
   },
 
+  '@sm': {
+    padding: '$2',
+    width: '20%',
+    height: '60%',
+  },
+
   defaultVariants: {
     backgroundColor: 'primary',
   },

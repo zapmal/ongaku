@@ -14,7 +14,7 @@ export function NotFound() {
   };
 
   return (
-    <Box align="center" paddingTop="20px">
+    <Box align="center" paddingTop={['40px', '20px']}>
       <Heading size="xl">
         Got <Highlight>lost?</Highlight>
       </Heading>
@@ -24,13 +24,13 @@ export function NotFound() {
         color={theme.colors.primaryTextContrast.value}
         padding="15px"
         fontSize="lg"
-        width="50%"
+        width={['70%', '50%']}
       >
         The page you tried to access {"doesn't"} exist. It maybe got{' '}
         <Highlight>deleted or renamed</Highlight>, go home and try again.
       </Text>
 
-      <Image src="/assets/svgs/undraw-moving.svg" width="400px" margin={5} />
+      <Image src="/assets/svgs/undraw-moving.svg" width={['300px', '400px']} margin="15px" />
 
       <Button onClick={handleRedirect} variant="accent" margin="20px" rightIcon={<MdHome />}>
         Home

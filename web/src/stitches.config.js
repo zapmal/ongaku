@@ -170,6 +170,10 @@ export const { styled, css, global, keyframes, getCssString, theme } = createSti
       shadow5: '0 15px 35px hsla(0, 0%, .2)',
     },
   },
-  media: {},
+  media: {
+    sm: '(max-width: 30em)',
+    md: '(max-width: 48em)',
+    // lg: '(max-width: 62em)',
+  },
   utils: {},
 });

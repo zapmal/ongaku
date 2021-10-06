@@ -58,7 +58,7 @@ function Label({ text, position }) {
   const margin = position === 'top' ? { marginBottom: '8px' } : { marginTop: '8px' };
 
   return (
-    <Text fontSize="sm" {...margin} fontWeight="bold" color={variants.text}>
+    <Text fontSize={['xs', 'sm']} {...margin} fontWeight="bold" color={variants.text}>
       {text}
     </Text>
   );

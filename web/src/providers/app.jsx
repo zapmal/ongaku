@@ -18,6 +18,7 @@ const chakraTheme = extendTheme({
       'html, body': {
         backgroundColor: theme.colors.primaryBase.value,
         color: '#ffffff',
+        overflowX: 'hidden',
       },
       img: {
         width: '100%',
@@ -56,7 +57,7 @@ function LoadingFallback() {
 
 function ErrorFallback() {
   return (
-    <Box align="center" paddingTop="20px">
+    <Box align="center" paddingTop={['40px', '20px']}>
       <Heading size="xl">
         Oops, <Highlight>something went wrong</Highlight>
       </Heading>
@@ -70,7 +71,7 @@ function ErrorFallback() {
         <Highlight>another chance?</Highlight>
       </Text>
 
-      <Image src="/assets/svgs/undraw-lost.svg" width="400px" margin="15px" />
+      <Image src="/assets/svgs/undraw-lost.svg" width={['300px', '400px']} margin="15px" />
 
       <Button
         onClick={() => window.location.assign(window.location.origin)}

@@ -44,11 +44,11 @@ export function Register() {
   const onSubmit = (data) => console.log(data);
 
   return (
-    <SimpleGrid columns={2}>
+    <SimpleGrid columns={[1, 2]}>
       <div>
         <Header>
           <Image src="/assets/images/logo-transparent.png" alt="Ongaku Logo" />
-          <Link to="/" variant="gray" marginTop="50px" marginRight="50px">
+          <Link to="/" variant="gray" margin="50px 50px 0 0">
             Go Back
           </Link>
         </Header>
@@ -66,7 +66,7 @@ export function Register() {
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <Wrap paddingTop="20px">
-              <WrapItem paddingLeft="80px">
+              <WrapItem paddingLeft={['20%', '80px']}>
                 <Field
                   type="text"
                   name="fullname"
@@ -76,7 +76,7 @@ export function Register() {
                   register={register}
                 />
               </WrapItem>
-              <WrapItem paddingLeft="80px">
+              <WrapItem paddingLeft={['20%', '80px']}>
                 <Field
                   type="text"
                   name="email"
@@ -86,7 +86,7 @@ export function Register() {
                   register={register}
                 />
               </WrapItem>
-              <WrapItem paddingLeft="80px">
+              <WrapItem paddingLeft={['20%', '80px']}>
                 <Field
                   type="password"
                   name="password"
@@ -96,7 +96,7 @@ export function Register() {
                   register={register}
                 />
               </WrapItem>
-              <WrapItem paddingLeft="80px">
+              <WrapItem paddingLeft={['20%', '80px']}>
                 <Field
                   type="password"
                   name="passwordConfirmation"
@@ -106,7 +106,7 @@ export function Register() {
                   register={register}
                 />
               </WrapItem>
-              <WrapItem paddingLeft="80px">
+              <WrapItem paddingLeft={['20%', '80px']}>
                 <Field
                   type="text"
                   name="username"
@@ -116,7 +116,7 @@ export function Register() {
                   register={register}
                 />
               </WrapItem>
-              <WrapItem paddingLeft="80px">
+              <WrapItem paddingLeft={['20%', '80px']}>
                 <Field
                   type="date"
                   name="birthdate"
@@ -143,13 +143,13 @@ export function Register() {
             </Link>
 
             <Center paddingTop="30px" paddingBottom="5px">
-              <Text color={theme.colors.primaryText.value} maxW="500px">
+              <Text color={theme.colors.primaryText.value} maxW={['300px', '500px']}>
                 By using our application you agree to the usage of cookies, which are needed to make
                 the application work correctly. We also store your IP address and registration date
                 for security purposes.
               </Text>
             </Center>
-            <Center paddingBottom="10px">
+            <Center paddingBottom={['30px', '10px']}>
               <Text fontWeight="bold">All rights belong to their respective owners.</Text>
             </Center>
           </form>
@@ -160,6 +160,7 @@ export function Register() {
         src="/assets/images/jennie-blackpink.webp"
         alt="Jennie, member of korean group Blackpink"
         height="100%"
+        display={['none', 'inline']}
         fallbackSrc="https://via.placeholder.com/1080"
       />
     </SimpleGrid>

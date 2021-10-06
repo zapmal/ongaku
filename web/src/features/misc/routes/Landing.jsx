@@ -1,5 +1,4 @@
 import {
-  useMediaQuery,
   Box,
   ButtonGroup,
   Heading,
@@ -20,26 +19,23 @@ import { Button, Highlight } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 
 export function Landing() {
-  const [isDesktop] = useMediaQuery(['(min-width: 1280px)']);
-
   return (
-    <SimpleGrid columns={isDesktop ? 2 : 1}>
-      {isDesktop && (
-        <Image
-          src="/assets/images/landing.webp"
-          alt="Korean group TWICE photoshoot for Perfect World song"
-          height="100vh"
-          fallbackSrc="https://via.placeholder.com/1080"
-        />
-      )}
+    <SimpleGrid columns={[1, 2]}>
+      <Image
+        src="/assets/images/landing.webp"
+        alt="Korean group TWICE photoshoot for Perfect World song"
+        height="100vh"
+        display={['none', 'inline']}
+        fallbackSrc="https://via.placeholder.com/1080"
+      />
       <div>
         <Header />
 
         <Box textAlign="center">
-          <Heading paddingTop="20px" size="2xl">
+          <Heading paddingTop="20px" fontSize={['2xl', '4xl']}>
             Ongaku - <Highlight>Music at {"it's"} best</Highlight>
           </Heading>
-          <Text padding="20px" fontSize="md" lineHeight={2}>
+          <Text padding="20px" fontSize={['sm', 'md']} lineHeight={2}>
             <Highlight>Ongaku</Highlight> is a music streaming platform inspired by the likes of{' '}
             <Highlight>iTunes, Spotify and YouTube Music</Highlight> that is focused on delivering a
             comfortable and blazing-fast streaming experience to the <Highlight>user</Highlight>{' '}
@@ -53,7 +49,7 @@ export function Landing() {
         <Text
           textAlign="center"
           color={theme.colors.primaryTextContrast.value}
-          paddingTop="10px"
+          padding={['10px 30px 0 30px', '10px 0 0 0']}
           fontSize="sm"
         >
           All rights belong to their respective owners, this project was made for learning purposes.
@@ -67,7 +63,7 @@ function Header() {
   return (
     <HeaderContainer>
       <Image src="/assets/images/logo-transparent.png" alt="Ongaku Logo" />
-      <ButtonGroup spacing={6}>
+      <ButtonGroup spacing={[3, 6]}>
         <Button label={<Highlight>Existing user?</Highlight>} align="center" isFullWidth={true}>
           <Link to="/login">Login</Link>
         </Button>

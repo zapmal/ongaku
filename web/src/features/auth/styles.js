@@ -7,4 +7,11 @@ export const Header = styled('header', {
   '& img': {
     width: '150px',
   },
+
+  '@sm': {
+    // justifyContent: 'center',
+    // '& img': {
+    //   display: 'none',
+    // },
+  },
 });

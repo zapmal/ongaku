@@ -18,4 +18,14 @@ export const Header = styled('header', {
     width: '150px',
     display: 'inline',
   },
+
+  '@sm': {
+    justifyContent: 'center',
+    '& div:last-child': {
+      paddingRight: '0',
+    },
+    '& img': {
+      display: 'none',
+    },
+  },
 });

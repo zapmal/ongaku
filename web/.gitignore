@@ -6,4 +6,4 @@ dist-ssr
 .env
 yarn-error.log
 
-constants.js
+constants.general.js

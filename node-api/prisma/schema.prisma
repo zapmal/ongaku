@@ -20,6 +20,8 @@ model User {
   userMetrics  UserMetrics?
   interaction  Interaction[]
   userPlaylist UserPlaylist[]
+  
+  @@map("user")
 }
 
 enum Role {
@@ -92,6 +94,8 @@ model Artist {
   album             Album[]
   song              Song[]
   interaction       Interaction[]
+  
+  @@map("artist")
 }
 
 model Band {
@@ -99,6 +103,8 @@ model Band {
   name    String
   members String[]
   artist  Artist[]
+  
+  @@map("band")
 }
 
 model ArtistInformation {
@@ -135,6 +141,8 @@ model Album {
 
   artist Artist @relation(fields: [artistId], references: [id])
   song   Song[]
+  
+  @@map("album")
 }
 
 model Song {
@@ -152,6 +160,8 @@ model Song {
   songMetrics     SongMetrics?
   interaction     Interaction[]
   songsInPlaylist SongsInPlaylist[]
+  
+  @@map("song")
 }
 
 model SongMetadata {
@@ -166,6 +176,8 @@ model SongMetadata {
   songId      Int      @unique @map("song_id")
 
   song Song @relation(fields: [songId], references: [id])
+  
+  @@map("song_metadata")
 }
 
 model SongMetrics {
@@ -177,6 +189,8 @@ model SongMetrics {
   songId               Int    @unique @map("song_id")
 
   song Song @relation(fields: [songId], references: [id])
+  
+  @@map("song_metrics")
 }
 
 model Interaction {
@@ -194,6 +208,8 @@ model Interaction {
   user         User         @relation(fields: [userId], references: [id])
   song         Song         @relation(fields: [songId], references: [id])
   userPlaylist UserPlaylist @relation(fields: [userPlaylistId], references: [id])
+  
+  @@map("interaction")
 }
 
 // Many-to-many table
@@ -205,4 +221,5 @@ model SongsInPlaylist {
   userPlaylist UserPlaylist @relation(fields: [userPlaylistId], references: [id])
 
   @@id([songId, userPlaylistId])
+  @@map("songs_in_playlist")
 }

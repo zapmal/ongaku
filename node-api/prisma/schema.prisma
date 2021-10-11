@@ -1,15 +1,208 @@
 datasource db {
   provider = "postgresql"
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 generator client {
   provider = "prisma-client-js"
 }
 
-model Users {
-  id Int @default(autoincrement()) @id
-  email String @unique @db.VarChar(125)
-  name String? @db.VarChar(125)
-  password String @db.VarChar(255)
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique @db.VarChar(125)
+  fullName  String   @map("full_name") @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  avatar    String? // TODO: Default avatar.
+  birthdate DateTime @db.Date
+  role      Role     @default(USER)
+
+  userMetadata UserMetadata?
+  userMetrics  UserMetrics?
+  interaction  Interaction[]
+  userPlaylist UserPlaylist[]
+}
+
+enum Role {
+  ADMIN
+  MODERATOR
+  MANAGER
+  USER
+}
+
+model UserPlaylist {
+  id          Int      @id @default(autoincrement())
+  name        String?  @default("My Playlist") @db.VarChar(125)
+  image       String?
+  description String?  @db.VarChar(255)
+  likes       Float?   @default(0)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Date
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Date
+  userId      Int      @map("user_id")
+
+  user            User              @relation(fields: [userId], references: [id])
+  interaction     Interaction[]
+  songsInPlaylist SongsInPlaylist[]
+
+  @@map("user_playlist")
+}
+
+model UserMetadata {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at") @db.Date
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Date
+  active    Boolean  @default(true)
+  ipAddress String   @map("ip_address") @db.VarChar(50)
+  userId    Int      @unique @map("user_id")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("user_metadata")
+}
+
+model UserMetrics {
+  id                   Int     @id @default(autoincrement())
+  mostListenedArtist   String? @map("most_listened_artist") @db.VarChar(50)
+  mostListenedGenre    String? @map("most_listened_genre") @db.VarChar(25)
+  totalListeningHours  Float?  @default(0) @map("total_listening_hours")
+  averageListeningTime Float?  @default(0) @map("average_listening_time")
+  favoriteArtists      Json?   @map("favorite_artists")
+  userId               Int     @unique @map("user_id")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("user_metrics")
+}
+
+model Artist {
+  id           Int      @id @default(autoincrement())
+  country      String   @db.VarChar(50)
+  genres       String[]
+  // This can be calculated with AGE(now(), yearsActive)
+  yearsActive  DateTime @map("years_active") @db.Date
+  artisticName String   @map("artistic_name") @db.VarChar(125)
+  labels       String[]
+  avatar       String?
+  email        String   @unique @db.VarChar(125)
+  password     String   @db.VarChar(255)
+  bandId       Int?     @map("band_id")
+
+  band              Band?              @relation(fields: [bandId], references: [id])
+  artistMetrics     ArtistMetrics?
+  artistInformation ArtistInformation?
+  album             Album[]
+  song              Song[]
+  interaction       Interaction[]
+}
+
+model Band {
+  id      Int      @id @default(autoincrement())
+  name    String
+  members String[]
+  artist  Artist[]
+}
+
+model ArtistInformation {
+  id              Int      @id @default(autoincrement())
+  biography       String?
+  officialWebsite String?  @map("official_website") @db.VarChar(50)
+  coverImage      String?  @map("cover_image")
+  biographyImages String[] @map("biography_images")
+  artistId        Int      @unique @map("artist_id")
+
+  artist Artist? @relation(fields: [artistId], references: [id])
+
+  @@map("artist_information")
+}
+
+model ArtistMetrics {
+  id               Int    @id @default(autoincrement())
+  monthlyListeners Float? @map("monthly_listeners")
+  followers        Float? @default(0)
+  artistId         Int    @unique @map("artist_id")
+
+  artist Artist? @relation(fields: [artistId], references: [id])
+
+  @@map("artist_metrics")
+}
+
+model Album {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(50)
+  year        DateTime @db.Date
+  releaseType String   @map("release_type") @db.VarChar(50)
+  cover       String
+  artistId    Int      @map("artist_id")
+
+  artist Artist @relation(fields: [artistId], references: [id])
+  song   Song[]
+}
+
+model Song {
+  id         Int     @id @default(autoincrement())
+  name       String  @db.VarChar(125)
+  length     Float
+  isExplicit Boolean @default(false) @map("is_explicit")
+  path       String
+  albumId    Int     @map("album_id")
+  artistId   Int     @map("artist_id")
+
+  album           Album             @relation(fields: [albumId], references: [id])
+  artist          Artist[]          @relation(fields: [artistId], references: [id])
+  songMetadata    SongMetadata?
+  songMetrics     SongMetrics?
+  interaction     Interaction[]
+  songsInPlaylist SongsInPlaylist[]
+}
+
+model SongMetadata {
+  id          Int      @id @default(autoincrement())
+  format      String?  @db.VarChar(25)
+  bitrate     String?  @db.VarChar(25)
+  performedBy String[] @map("performed_by")
+  writtenBy   String[] @map("written_by")
+  producedBy  String[] @map("produced_by")
+  language    String?  @db.VarChar(25)
+  uploadedAt  DateTime @default(now()) @map("uploaded_at") @db.Date
+  songId      Int      @unique @map("song_id")
+
+  song Song @relation(fields: [songId], references: [id])
+}
+
+model SongMetrics {
+  id                   Int    @id @default(autoincrement())
+  playCount            Float? @default(0) @map("play_count")
+  averageListeningTime Float? @default(0) @map("average_listening_time")
+  likes                Float? @default(0)
+  streams              Float? @default(0)
+  songId               Int    @unique @map("song_id")
+
+  song Song @relation(fields: [songId], references: [id])
+}
+
+model Interaction {
+  id             Int      @id @default(autoincrement())
+  likedSong      Boolean? @map("liked_song")
+  likedAlbum     Boolean? @map("liked_album")
+  likedPlaylist  Boolean? @map("liked_playlist")
+  followedArtist Boolean? @map("followed_artist")
+  artistId       Int      @map("artist_id")
+  userId         Int      @map("user_id")
+  songId         Int      @map("song_id")
+  userPlaylistId Int      @map("user_playlist_id")
+
+  artist       Artist       @relation(fields: [artistId], references: [id])
+  user         User         @relation(fields: [userId], references: [id])
+  song         Song         @relation(fields: [songId], references: [id])
+  userPlaylist UserPlaylist @relation(fields: [userPlaylistId], references: [id])
+}
+
+// Many-to-many table
+model SongsInPlaylist {
+  songId         Int @map("song_id")
+  userPlaylistId Int @map("user_playlist_id")
+
+  song         Song         @relation(fields: [songId], references: [id])
+  userPlaylist UserPlaylist @relation(fields: [userPlaylistId], references: [id])
+
+  @@id([songId, userPlaylistId])
 }

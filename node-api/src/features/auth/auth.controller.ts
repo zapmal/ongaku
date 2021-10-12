@@ -15,13 +15,13 @@ import { compare, hash } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 import { Request, Response } from 'express';
 
-import { JoiValidationPipe } from 'src/utils/joi.pipe';
+import { JoiValidationPipe } from '@common/pipes/joi.pipe';
+import { AuthGuard } from '@common/guards';
+import { cookieOptions } from '@utils/cookie';
+
 import { SigninDTO, SignupDTO } from './auth.dto';
 import { signinSchema, signupSchema } from './auth.schemas';
-
 import { AuthService } from './auth.service';
-import { AuthGuard } from 'src/utils/auth.guard';
-import { cookieOptions } from 'src/utils/cookie';
 
 @Controller()
 export class AuthController {
@@ -30,15 +30,16 @@ export class AuthController {
   @Post('signup')
   @UsePipes(new JoiValidationPipe(signupSchema))
   async signup(
-    @Body() { name, password, email }: SignupDTO,
+    @Body() { fullName, password, email }: SignupDTO,
     @Res({ passthrough: true }) response: Response,
   ) {
     const hashedPassword = await hash(password, 10);
 
     const user = await this.authService.signup({
-      name,
+      fullName,
       password: hashedPassword,
       email,
+      birthdate: new Date(), // Temporary fix.
     });
 
     if (!user) {
@@ -58,7 +59,7 @@ export class AuthController {
       user: {
         id: user.id,
         email: user.email,
-        name: user.name,
+        fullName: user.fullName,
       },
     };
   }
@@ -85,7 +86,7 @@ export class AuthController {
     }
 
     const token = sign(
-      { id: user.id, email: user.email, name: user.name },
+      { id: user.id, email: user.email, fullName: user.fullName },
       process.env.JWT_SECRET,
       {
         expiresIn: process.env.JWT_EXPIRY_TIME,
@@ -99,7 +100,7 @@ export class AuthController {
       user: {
         id: user.id,
         email: user.email,
-        name: user.name,
+        fullName: user.fullName,
       },
     };
   }

@@ -1,7 +1,0 @@
-
-model Users {
-  id Int @default(autoincrement()) @id
-  email String @unique @db.VarChar(125)
-  name String? @db.VarChar(125)
-  password String @db.VarChar(255)
-}

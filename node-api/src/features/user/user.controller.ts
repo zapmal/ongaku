@@ -15,8 +15,8 @@ import { UserService } from './user.service';
 import { UpdateUserDTO } from './user.dto';
 import { updateUserSchema } from './user.schemas';
 
-import { JoiValidationPipe } from 'src/utils/joi.pipe';
-import { AuthGuard } from 'src/utils/auth.guard';
+import { JoiValidationPipe } from '@common/pipes';
+import { AuthGuard } from '@common/guards';
 
 @Controller('users')
 export class UserController {

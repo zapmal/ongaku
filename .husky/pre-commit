@@ -1,6 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-# This should lint + run tests, ideally on github ci
-cd web
-yarn lint:fix
+./check-web-changes.sh || (cd web && yarn lint:fix)

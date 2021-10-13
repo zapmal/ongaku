@@ -14,32 +14,34 @@ import {
 import { compare, hash } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 import { Request, Response } from 'express';
+import * as dayjs from 'dayjs';
 
 import { JoiValidationPipe } from '@common/pipes/joi.pipe';
 import { AuthGuard } from '@common/guards';
 import { cookieOptions } from '@utils/cookie';
 
-import { SigninDTO, SignupDTO } from './auth.dto';
-import { signinSchema, signupSchema } from './auth.schemas';
+import { LoginDTO, RegisterDTO } from './auth.dto';
+import { loginSchema, registerSchema } from './auth.schemas';
 import { AuthService } from './auth.service';
 
 @Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('signup')
-  @UsePipes(new JoiValidationPipe(signupSchema))
-  async signup(
-    @Body() { fullName, password, email }: SignupDTO,
+  @Post('register')
+  @UsePipes(new JoiValidationPipe(registerSchema))
+  async register(
+    @Body() newUserData: RegisterDTO,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const hashedPassword = await hash(password, 10);
+    const hashedPassword = await hash(newUserData.password, 10);
 
-    const user = await this.authService.signup({
-      fullName,
+    const user = await this.authService.register({
+      username: newUserData.username,
+      fullName: newUserData.fullName,
       password: hashedPassword,
-      email,
-      birthdate: new Date(), // Temporary fix.
+      email: newUserData.email,
+      birthdate: dayjs(newUserData.birthdate).toDate(),
     });
 
     if (!user) {
@@ -64,10 +66,10 @@ export class AuthController {
     };
   }
 
-  @Post('signin')
-  @UsePipes(new JoiValidationPipe(signinSchema))
-  async signin(
-    @Body() userCredentials: SigninDTO,
+  @Post('login')
+  @UsePipes(new JoiValidationPipe(loginSchema))
+  async login(
+    @Body() userCredentials: LoginDTO,
     @Res({ passthrough: true }) response: Response,
   ) {
     const user = await this.authService.getUserByEmail(userCredentials.email);
@@ -96,7 +98,7 @@ export class AuthController {
     response.cookie('token', token, cookieOptions);
 
     return {
-      message: 'Signed in successfully.',
+      message: 'Logged in successfully.',
       user: {
         id: user.id,
         email: user.email,

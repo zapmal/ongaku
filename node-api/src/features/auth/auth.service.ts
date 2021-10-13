@@ -7,7 +7,7 @@ import { PrismaService } from '@common/services';
 export class AuthService {
   constructor(private prisma: PrismaService) {}
 
-  signup(userData: Prisma.UserCreateInput): Promise<User> {
+  register(userData: Prisma.UserCreateInput): Promise<User> {
     return this.prisma.user.create({ data: userData });
   }
 

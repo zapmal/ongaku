@@ -10,6 +10,7 @@ generator client {
 model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique @db.VarChar(125)
+  username  String   @unique @db.VarChar(125)
   fullName  String   @map("full_name") @db.VarChar(255)
   password  String   @db.VarChar(255)
   avatar    String? // TODO: Default avatar.
@@ -18,16 +19,16 @@ model User {
 
   userMetadata UserMetadata?
   userMetrics  UserMetrics?
+  manager      Manager?
   interaction  Interaction[]
   userPlaylist UserPlaylist[]
-  
+
   @@map("user")
 }
 
 enum Role {
   ADMIN
   MODERATOR
-  MANAGER
   USER
 }
 
@@ -81,7 +82,7 @@ model Artist {
   genres       String[]
   // This can be calculated with AGE(now(), yearsActive)
   yearsActive  DateTime @map("years_active") @db.Date
-  artisticName String   @map("artistic_name") @db.VarChar(125)
+  artisticName String?  @map("artistic_name") @db.VarChar(125)
   labels       String[]
   avatar       String?
   email        String   @unique @db.VarChar(125)
@@ -91,10 +92,11 @@ model Artist {
   band              Band?              @relation(fields: [bandId], references: [id])
   artistMetrics     ArtistMetrics?
   artistInformation ArtistInformation?
+  manager           Manager?
   album             Album[]
   song              Song[]
   interaction       Interaction[]
-  
+
   @@map("artist")
 }
 
@@ -103,8 +105,20 @@ model Band {
   name    String
   members String[]
   artist  Artist[]
-  
+
   @@map("band")
+}
+
+model Manager {
+  id       Int  @id @default(autoincrement())
+  userId   Int? @unique @map("user_id")
+  artistId Int? @unique @map("artist_id")
+
+  artist            Artist?             @relation(fields: [artistId], references: [id])
+  user              User?               @relation(fields: [userId], references: [id])
+  artistInformation ArtistInformation?
+  
+  @@map("manager")
 }
 
 model ArtistInformation {
@@ -114,8 +128,10 @@ model ArtistInformation {
   coverImage      String?  @map("cover_image")
   biographyImages String[] @map("biography_images")
   artistId        Int      @unique @map("artist_id")
+  managerId       Int?     @unique @map("manager_id")
 
-  artist Artist? @relation(fields: [artistId], references: [id])
+  manager Manager? @relation(fields: [managerId], references: [id])
+  artist  Artist?  @relation(fields: [artistId], references: [id])
 
   @@map("artist_information")
 }
@@ -141,7 +157,7 @@ model Album {
 
   artist Artist @relation(fields: [artistId], references: [id])
   song   Song[]
-  
+
   @@map("album")
 }
 
@@ -160,7 +176,7 @@ model Song {
   songMetrics     SongMetrics?
   interaction     Interaction[]
   songsInPlaylist SongsInPlaylist[]
-  
+
   @@map("song")
 }
 
@@ -176,7 +192,7 @@ model SongMetadata {
   songId      Int      @unique @map("song_id")
 
   song Song @relation(fields: [songId], references: [id])
-  
+
   @@map("song_metadata")
 }
 
@@ -189,7 +205,7 @@ model SongMetrics {
   songId               Int    @unique @map("song_id")
 
   song Song @relation(fields: [songId], references: [id])
-  
+
   @@map("song_metrics")
 }
 
@@ -208,7 +224,7 @@ model Interaction {
   user         User         @relation(fields: [userId], references: [id])
   song         Song         @relation(fields: [songId], references: [id])
   userPlaylist UserPlaylist @relation(fields: [userPlaylistId], references: [id])
-  
+
   @@map("interaction")
 }
 

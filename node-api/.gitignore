@@ -3,4 +3,4 @@ REFERENCES.md
 yarn-error.log
 
 .env
-/config/seeders/user.ts
+src/config/seeders/user.ts

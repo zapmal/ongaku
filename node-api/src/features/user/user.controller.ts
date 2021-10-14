@@ -9,6 +9,8 @@ import {
   UsePipes,
   Put,
   UseGuards,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
@@ -18,11 +20,15 @@ import { updateUserSchema } from './user.schemas';
 import { JoiValidationPipe } from '@common/pipes';
 import { AuthGuard } from '@common/guards';
 
-@Controller('users')
+@Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get()
+  /**
+   * This route at the moment is used only for
+   * testing.
+   */
+  @Get('all')
   async getAllUsers() {
     const users = await this.userService.getAllUsers();
 
@@ -46,6 +52,7 @@ export class UserController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   async deleteUser(@Param('id', ParseIntPipe) id: number) {
     const userExists = await this.userService.getUser(id);
 
@@ -59,6 +66,7 @@ export class UserController {
   }
 
   @Put(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   @UsePipes(new JoiValidationPipe(updateUserSchema))
   async updateUser(
     @Param('id', ParseIntPipe) id: number,

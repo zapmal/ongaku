@@ -5,7 +5,7 @@ export class RegisterDTO {
   password: string;
   birthdate: Date;
   avatar?: string;
-  role: 'ADMIN' | 'MODERATOR' | 'USER';
+  role: 'ADMIN' | 'MODERATOR' | 'MANAGER' | 'USER';
 }
 
 export class LoginDTO {

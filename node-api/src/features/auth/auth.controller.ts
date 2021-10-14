@@ -10,6 +10,8 @@ import {
   Get,
   UseGuards,
   Req,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
@@ -114,11 +116,12 @@ export class AuthController {
 
   @Get('whoami')
   @UseGuards(AuthGuard)
-  test(@Req() request: Request & { user: Record<string, unknown> }) {
+  whoAmI(@Req() request: Request & { user: Record<string, unknown> }) {
     return { user: request.user };
   }
 
   @Get('/logout')
+  @HttpCode(HttpStatus.RESET_CONTENT)
   logout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('token');
 

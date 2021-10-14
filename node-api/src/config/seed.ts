@@ -76,7 +76,13 @@ async function main() {
 
   const manager = await prisma.manager.upsert({
     where: { userId: bob.id },
-    update: {},
+    update: {
+      user: {
+        update: {
+          role: 'MANAGER',
+        },
+      },
+    },
     create: {
       artistId: iverson.id,
       userId: bob.id,

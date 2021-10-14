@@ -69,6 +69,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @HttpCode(HttpStatus.OK)
   @UsePipes(new JoiValidationPipe(loginSchema))
   async login(
     @Body() userCredentials: LoginDTO,

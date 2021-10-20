@@ -1,12 +1,15 @@
 import React from 'react';
+import { useRoutes } from 'react-router-dom';
 
-import { lazyImport } from '@/utils/lazyImport';
-
-const { PublicRoutes } = lazyImport(() => import('./PublicRoutes'), 'PublicRoutes');
-const { ProtectedRoutes } = lazyImport(() => import('./ProtectedRoutes'), 'ProtectedRoutes');
+import { protectedRoutes } from './protected';
+import { publicRoutes, sharedRoutes } from './public';
 
 export function AppRoutes() {
-  const isLoggedIn = true;
   // const isLoggedIn = useAuth(); gives access to .user, etc.
-  return isLoggedIn ? <PublicRoutes /> : <ProtectedRoutes />;
+  const isLoggedIn = true;
+  const routes = isLoggedIn ? protectedRoutes : publicRoutes;
+
+  const element = useRoutes([...sharedRoutes, ...routes]);
+
+  return <>{element}</>;
 }

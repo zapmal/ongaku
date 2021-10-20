@@ -1,16 +1,16 @@
 import { Box, Heading, Text, Image } from '@chakra-ui/react';
 import React from 'react';
 import { MdHome } from 'react-icons/md';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Button, Highlight } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 
 export function NotFound() {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleRedirect = () => {
-    history.push('/');
+    navigate('/');
   };
 
   return (

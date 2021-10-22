@@ -49,7 +49,7 @@ export const AppProvider = ({ children }) => {
 
 function LoadingFallback() {
   return (
-    <Box textAlign="center" paddingTop="200px">
+    <Box textAlign="center" paddingTop="200px" overflow="hidden">
       <Spinner size="xl" />
     </Box>
   );

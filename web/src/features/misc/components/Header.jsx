@@ -1,0 +1,98 @@
+import { Image, ButtonGroup, Divider, Center } from '@chakra-ui/react';
+import React from 'react';
+import { FiLogOut } from 'react-icons/fi';
+import { MdHome } from 'react-icons/md';
+import { Link } from 'react-router-dom';
+
+import { Highlight, Button } from '@/components/Elements';
+import { styled } from '@/stitches.config.js';
+
+const Container = styled('header', {
+  width: '100%',
+  display: 'flex',
+  justifyContent: 'space-between',
+
+  '& div': {
+    paddingTop: '$3',
+    verticalAlign: 'center',
+  },
+
+  '& div:last-child': {
+    paddingRight: '$3',
+  },
+
+  '& img': {
+    width: '150px',
+    display: 'inline',
+  },
+
+  '@sm': {
+    justifyContent: 'center',
+    '& div:last-child': {
+      paddingRight: '0',
+    },
+    '& img': {
+      display: 'none',
+    },
+  },
+
+  variants: {
+    alignCenter: {
+      true: {
+        alignItems: 'center',
+      },
+    },
+  },
+});
+
+// Welcome as default because we use it twice.
+export function Header({ page = 'welcome' }) {
+  return (
+    <Container alignCenter={page === 'welcome'}>
+      <Image src="/assets/images/logo-transparent.png" alt="Ongaku Logo" />
+      <ButtonGroup spacing={[3, 4]}>
+        {page === 'landing' ? (
+          <>
+            <Button label={<Highlight>Existing user?</Highlight>} align="center" isFullWidth={true}>
+              <Link to="/login">Login</Link>
+            </Button>
+            <Button label={<Highlight>New user?</Highlight>} align="center" isFullWidth={true}>
+              <Link to="/register">Register</Link>
+            </Button>
+
+            <Center>
+              <Divider orientation="vertical" borderColor="white.Alpha.500" height="40px" />
+            </Center>
+
+            <Button
+              label={<Highlight variant="primary">Lost account?</Highlight>}
+              variant="accent"
+              align="center"
+            >
+              <Link to="/account-recovery">Recover it</Link>
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button size="lg" rightIcon={<MdHome size={20} />}>
+              <Link to="/home">Home</Link>
+            </Button>
+
+            <Center>
+              <Divider orientation="vertical" borderColor="white.Alpha.500" height="40px" />
+            </Center>
+
+            <Button
+              onClick={() => console.log('logged out!')}
+              variant="accent"
+              size="lg"
+              rightIcon={<FiLogOut size={20} />}
+            >
+              <span>Logout</span>
+            </Button>
+          </>
+        )}
+      </ButtonGroup>
+    </Container>
+  );
+}

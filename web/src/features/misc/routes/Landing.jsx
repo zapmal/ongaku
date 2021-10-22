@@ -1,21 +1,11 @@
-import {
-  Box,
-  ButtonGroup,
-  Heading,
-  SimpleGrid,
-  Text,
-  Image,
-  Divider,
-  Center,
-} from '@chakra-ui/react';
+import { Box, Heading, SimpleGrid, Text, Image } from '@chakra-ui/react';
 import React from 'react';
 import { MdAlbum, MdPersonAdd } from 'react-icons/md';
-import { Link } from 'react-router-dom';
 
-import { Header as HeaderContainer } from '../styles';
+import { Header } from '../components';
 
 import { BulletPoint } from '@/components/BulletPoint';
-import { Button, Highlight } from '@/components/Elements';
+import { Highlight } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 
 export function Landing() {
@@ -29,7 +19,7 @@ export function Landing() {
         fallbackSrc="https://via.placeholder.com/1080"
       />
       <div>
-        <Header />
+        <Header page="landing" />
 
         <Box textAlign="center">
           <Heading paddingTop="20px" fontSize={['2xl', '4xl']}>
@@ -56,34 +46,6 @@ export function Landing() {
         </Text>
       </div>
     </SimpleGrid>
-  );
-}
-
-function Header() {
-  return (
-    <HeaderContainer>
-      <Image src="/assets/images/logo-transparent.png" alt="Ongaku Logo" />
-      <ButtonGroup spacing={[3, 6]}>
-        <Button label={<Highlight>Existing user?</Highlight>} align="center" isFullWidth={true}>
-          <Link to="/login">Login</Link>
-        </Button>
-        <Button label={<Highlight>New user?</Highlight>} align="center" isFullWidth={true}>
-          <Link to="/register">Register</Link>
-        </Button>
-
-        <Center>
-          <Divider orientation="vertical" borderColor="white.Alpha.500" height="40px" />
-        </Center>
-
-        <Button
-          label={<Highlight variant="primary">Lost account?</Highlight>}
-          variant="accent"
-          align="center"
-        >
-          <Link to="/account-recovery">Recover it</Link>
-        </Button>
-      </ButtonGroup>
-    </HeaderContainer>
   );
 }
 

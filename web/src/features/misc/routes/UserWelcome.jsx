@@ -1,5 +1,12 @@
 import React from 'react';
 
+import { Header } from '../components';
+
 export function UserWelcome() {
-  return <h1>hey</h1>;
+  return (
+    <>
+      <Header />
+      <p>hey man</p>
+    </>
+  );
 }

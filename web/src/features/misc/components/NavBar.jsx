@@ -37,9 +37,10 @@ const Container = styled('header', {
   },
 
   variants: {
-    alignCenter: {
+    isWelcome: {
       true: {
         alignItems: 'center',
+        height: '80px',
       },
     },
   },
@@ -48,7 +49,7 @@ const Container = styled('header', {
 // Welcome as default because we use it twice.
 export function NavigationBar({ page = 'welcome' }) {
   return (
-    <Container alignCenter={page === 'welcome'}>
+    <Container isWelcome={page === 'welcome'}>
       <Image src="/assets/images/logo-transparent.png" alt="Ongaku Logo" />
       <ButtonGroup spacing={[3, 4]}>
         {page === 'landing' ? (

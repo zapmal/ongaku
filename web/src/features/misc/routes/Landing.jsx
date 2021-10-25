@@ -49,6 +49,19 @@ export function Landing() {
   );
 }
 
+function BulletList() {
+  return bulletPoints.map((bulletPoint, index) => (
+    <BulletPoint
+      key={index}
+      Icon={bulletPoint.icon}
+      title={bulletPoint.title}
+      content={bulletPoint.content}
+      marginBottom="30px"
+      paddingLeft="30px"
+    />
+  ));
+}
+
 const bulletPoints = [
   {
     title: 'Listen to whatever you want, even with friends',
@@ -64,16 +77,3 @@ const bulletPoints = [
     icon: MdAlbum,
   },
 ];
-
-function BulletList() {
-  return bulletPoints.map((bulletPoint, index) => (
-    <BulletPoint
-      key={index}
-      Icon={bulletPoint.icon}
-      title={bulletPoint.title}
-      content={bulletPoint.content}
-      marginBottom="30px"
-      paddingLeft="30px"
-    />
-  ));
-}

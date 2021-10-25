@@ -46,7 +46,7 @@ const Container = styled('header', {
 });
 
 // Welcome as default because we use it twice.
-export function Header({ page = 'welcome' }) {
+export function NavigationBar({ page = 'welcome' }) {
   return (
     <Container alignCenter={page === 'welcome'}>
       <Image src="/assets/images/logo-transparent.png" alt="Ongaku Logo" />
@@ -74,8 +74,8 @@ export function Header({ page = 'welcome' }) {
           </>
         ) : (
           <>
-            <Button size="lg" rightIcon={<MdHome size={20} />}>
-              <Link to="/home">Home</Link>
+            <Button size="lg" rightIcon={<MdHome size={20} />} as={Link} to="/home">
+              Home
             </Button>
 
             <Center>
@@ -88,7 +88,7 @@ export function Header({ page = 'welcome' }) {
               size="lg"
               rightIcon={<FiLogOut size={20} />}
             >
-              <span>Logout</span>
+              Logout
             </Button>
           </>
         )}

@@ -4,7 +4,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
-import { Header } from '../styles';
+import { NavigationBar } from '../styles';
 
 import { Link, Field, Button } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
@@ -46,12 +46,12 @@ export function Register() {
   return (
     <SimpleGrid columns={[1, 2]}>
       <div>
-        <Header>
+        <NavigationBar>
           <Image src="/assets/images/logo-transparent.png" alt="Ongaku Logo" />
           <Link to="/" variant="gray" margin="50px 50px 0 0">
             Go Back
           </Link>
-        </Header>
+        </NavigationBar>
 
         <Box textAlign="center">
           <Heading>Almost there</Heading>

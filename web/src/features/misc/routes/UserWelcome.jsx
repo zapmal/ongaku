@@ -1,11 +1,17 @@
 import React from 'react';
 
-import { Header } from '../components';
+import { NavigationBar } from '../components';
 
+/**
+ * ArtistCard (static data)
+ * Header
+ * Footer
+ * Rename Header to Navbar
+ */
 export function UserWelcome() {
   return (
     <>
-      <Header />
+      <NavigationBar />
       <p>hey man</p>
     </>
   );

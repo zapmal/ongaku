@@ -2,7 +2,7 @@ import { Box, Heading, SimpleGrid, Text, Image } from '@chakra-ui/react';
 import React from 'react';
 import { MdAlbum, MdPersonAdd } from 'react-icons/md';
 
-import { Header } from '../components';
+import { NavigationBar } from '../components';
 
 import { BulletPoint } from '@/components/BulletPoint';
 import { Highlight } from '@/components/Elements';
@@ -19,7 +19,7 @@ export function Landing() {
         fallbackSrc="https://via.placeholder.com/1080"
       />
       <div>
-        <Header page="landing" />
+        <NavigationBar page="landing" />
 
         <Box textAlign="center">
           <Heading paddingTop="20px" fontSize={['2xl', '4xl']}>

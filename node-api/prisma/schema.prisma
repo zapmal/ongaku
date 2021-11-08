@@ -166,6 +166,7 @@ model Song {
   id         Int     @id @default(autoincrement())
   name       String  @db.VarChar(125)
   length     Float
+  lyrics     String?
   isExplicit Boolean @default(false) @map("is_explicit")
   path       String
   albumId    Int     @map("album_id")

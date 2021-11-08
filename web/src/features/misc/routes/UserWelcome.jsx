@@ -30,7 +30,7 @@ export function UserWelcome() {
       </Box>
 
       <Box textAlign="center" padding="20px">
-        <Link to="home" variant="gray">
+        <Link to="/home" variant="gray">
           Skip
         </Link>
       </Box>

@@ -2,5 +2,7 @@ dist
 REFERENCES.md
 yarn-error.log
 
-.env
+.env.dev
+.env.prod
+
 src/config/seeders/user.ts

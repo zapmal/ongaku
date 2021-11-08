@@ -1,10 +1,13 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Observable } from 'rxjs';
 import { verify } from 'jsonwebtoken';
 import { Request } from 'express';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
+  constructor(private configService: ConfigService) {}
+
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
@@ -15,7 +18,7 @@ export class AuthGuard implements CanActivate {
 
   validate(request: Request & { user: Record<string, unknown> }) {
     const token = request.cookies['token'];
-    const SECRET = process.env.JWT_SECRET;
+    const SECRET = this.configService.get('JWT_SECRET');
 
     if (!token) return false;
 

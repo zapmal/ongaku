@@ -26,7 +26,7 @@ For `node-api`
 
 Run:
 
-- `cp .env.example .env`
+- `cp .env.example .env.development`
 - Fill the env vars:
 
 ```
@@ -36,14 +36,18 @@ JWT_SECRET="Secret"
 JWT_EXPIRY_TIME="90d"
 
 COOKIE_SECRET="Cookie secret"
+
+...
 ```
 
 - Create the database by using pgAdmin or the shell.
 - `npm install`
-- `npx prisma migrate dev --name init`
+- `npm run migrate`
 - `npm run start:dev`
 
 Regarding prisma, some extra scripts are available:
+
+> Prepend `dotenv -e .env.dev --` or create an .env file to run these.
 
 - To apply migrations: `npx prisma migrate dev`
 - For further migrations: `npx prisma migrate dev --name <change-made>`

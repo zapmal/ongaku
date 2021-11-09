@@ -26,7 +26,7 @@ For `node-api`
 
 Run:
 
-- `cp .env.example .env.development`
+- `cp .env.example .env.dev`
 - Fill the env vars:
 
 ```
@@ -40,7 +40,8 @@ COOKIE_SECRET="Cookie secret"
 ...
 ```
 
-- Create the database by using pgAdmin or the shell.
+Create the database (`ongaku`) by using pgAdmin or the shell, then:
+
 - `npm install`
 - `npm run migrate`
 - `npm run start:dev`

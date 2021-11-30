@@ -12,7 +12,7 @@ import {
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { Header } from '../styles';
+import { NavigationBar } from '../styles';
 
 import { Button, Highlight, Card } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
@@ -20,19 +20,21 @@ import { theme } from '@/stitches.config.js';
 export function ChooseUserType() {
   return (
     <SimpleGrid backgroundImage="/assets/svgs/random-lines.svg">
-      <Header>
+      <NavigationBar>
         <Image src="/assets/images/logo-transparent.png" alt="Ongaku Logo" />
 
-        <Link to="/">
+        <Box margin="30px 30px 0 0">
           <Button
             label={<Highlight variant="gray">Already have an account?</Highlight>}
             align="center"
             padding="20px 30px"
+            as={Link}
+            to={'/login'}
           >
             Login
           </Button>
-        </Link>
-      </Header>
+        </Box>
+      </NavigationBar>
 
       <Box textAlign="center">
         <Heading fontSize={['2xl', '3xl', '4xl', '5xl']} marginTop="20px">

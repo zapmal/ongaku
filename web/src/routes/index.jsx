@@ -6,7 +6,7 @@ import { publicRoutes, sharedRoutes } from './public';
 
 export function AppRoutes() {
   // const isLoggedIn = useAuth(); gives access to .user, etc.
-  const isLoggedIn = true;
+  const isLoggedIn = false;
   const routes = isLoggedIn ? protectedRoutes : publicRoutes;
 
   const element = useRoutes([...sharedRoutes, ...routes]);

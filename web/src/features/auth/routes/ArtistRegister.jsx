@@ -17,7 +17,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 import { MUSIC_GENRES } from '../constants';
-import { Header } from '../styles';
+import { NavigationBar } from '../styles';
 
 import { Link, Field, Button } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
@@ -150,12 +150,12 @@ export function ArtistRegister() {
   return (
     <SimpleGrid columns={[1, 1, 1, 1, 2]}>
       <div>
-        <Header>
+        <NavigationBar>
           <Image src="/assets/images/logo-transparent.png" alt="Ongaku Logo" />
-          <Link to="/" variant="gray" margin="50px 50px 0 0">
+          <Link to="/register" variant="gray" margin="50px 50px 0 0">
             Go Back
           </Link>
-        </Header>
+        </NavigationBar>
         <Box textAlign="center" align="center">
           <Heading>You&apos;re almost part of our team</Heading>
           <Text color={theme.colors.accentSolid.value} paddingTop="10px" fontSize="xl">

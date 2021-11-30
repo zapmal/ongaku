@@ -8,6 +8,15 @@ export const Header = styled('header', {
     width: '150px',
   },
 
+  '& div': {
+    marginTop: '30px',
+    verticalAlign: 'center',
+  },
+
+  '& div:last-child': {
+    paddingRight: '$5',
+  },
+
   '@sm': {
     // justifyContent: 'center',
     // '& img': {

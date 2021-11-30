@@ -64,24 +64,30 @@ function Header() {
     <HeaderContainer>
       <Image src="/assets/images/logo-transparent.png" alt="Ongaku Logo" />
       <ButtonGroup spacing={[3, 6]}>
-        <Button label={<Highlight>Existing user?</Highlight>} align="center" isFullWidth={true}>
-          <Link to="/login">Login</Link>
-        </Button>
-        <Button label={<Highlight>New user?</Highlight>} align="center" isFullWidth={true}>
-          <Link to="/register">Register</Link>
-        </Button>
+        <Link to="/login">
+          <Button label={<Highlight>Existing user?</Highlight>} align="center" isFullWidth={true}>
+            Login
+          </Button>
+        </Link>
+        <Link to="/register">
+          <Button label={<Highlight>New user?</Highlight>} align="center" isFullWidth={true}>
+            Register
+          </Button>
+        </Link>
 
         <Center>
           <Divider orientation="vertical" borderColor="white.Alpha.500" height="40px" />
         </Center>
 
-        <Button
-          label={<Highlight variant="primary">Lost account?</Highlight>}
-          variant="accent"
-          align="center"
-        >
-          <Link to="/account-recovery">Recover it</Link>
-        </Button>
+        <Link to="/account-recovery">
+          <Button
+            label={<Highlight variant="primary">Lost account?</Highlight>}
+            variant="accent"
+            align="center"
+          >
+            Recover it
+          </Button>
+        </Link>
       </ButtonGroup>
     </HeaderContainer>
   );

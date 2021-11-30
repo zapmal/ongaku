@@ -11,6 +11,9 @@ const StyledHighlight = styled('strong', {
       accent: {
         color: '$accentSolid',
       },
+      gray: {
+        color: '$primaryText',
+      },
     },
   },
 });

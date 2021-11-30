@@ -35,6 +35,7 @@ export function Field(props) {
           css={props.css}
           focusBorderColor={'#E93D82'}
           {...props.register(props.name)}
+          onChange={props.onChange}
         />
       )}
       {props.error && (

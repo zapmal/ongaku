@@ -172,7 +172,7 @@ export const { styled, css, global, keyframes, getCssString, theme } = createSti
   },
   media: {
     sm: '(max-width: 30em)',
-    md: '(max-width: 48em)',
+    md: '(min-width: 48em)',
     // lg: '(max-width: 62em)',
   },
   utils: {},

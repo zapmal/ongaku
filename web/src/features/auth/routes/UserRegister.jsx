@@ -24,7 +24,7 @@ const schema = yup.object({
   birthdate: yup.string().required('This field is required.'),
 });
 
-export function Register() {
+export function UserRegister() {
   const {
     register,
     handleSubmit,
@@ -41,10 +41,12 @@ export function Register() {
     },
   });
 
+  const responsivePaddings = ['25%', '32%', '15%', '20%', '11%'];
+
   const onSubmit = (data) => console.log(data);
 
   return (
-    <SimpleGrid columns={[1, 2]}>
+    <SimpleGrid columns={[1, 1, 1, 1, 2]}>
       <div>
         <NavigationBar>
           <Image src="/assets/images/logo-transparent.png" alt="Ongaku Logo" />
@@ -53,20 +55,15 @@ export function Register() {
           </Link>
         </NavigationBar>
 
-        <Box textAlign="center">
+        <Box textAlign="center" align="center">
           <Heading>Almost there</Heading>
-          <Text
-            color={theme.colors.accentSolid.value}
-            paddingTop="10px"
-            fontSize="xl"
-            fontWeight="bold"
-          >
+          <Text color={theme.colors.accentSolid.value} paddingTop="10px" fontSize="xl">
             Tell us about you.
           </Text>
 
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Wrap paddingTop="20px">
-              <WrapItem paddingLeft={['20%', '80px']}>
+            <Wrap paddingTop="20px" align="center">
+              <WrapItem paddingLeft={responsivePaddings}>
                 <Field
                   type="text"
                   name="fullname"
@@ -76,7 +73,7 @@ export function Register() {
                   register={register}
                 />
               </WrapItem>
-              <WrapItem paddingLeft={['20%', '80px']}>
+              <WrapItem paddingLeft={responsivePaddings}>
                 <Field
                   type="text"
                   name="email"
@@ -86,7 +83,7 @@ export function Register() {
                   register={register}
                 />
               </WrapItem>
-              <WrapItem paddingLeft={['20%', '80px']}>
+              <WrapItem paddingLeft={responsivePaddings}>
                 <Field
                   type="password"
                   name="password"
@@ -96,7 +93,7 @@ export function Register() {
                   register={register}
                 />
               </WrapItem>
-              <WrapItem paddingLeft={['20%', '80px']}>
+              <WrapItem paddingLeft={responsivePaddings}>
                 <Field
                   type="password"
                   name="passwordConfirmation"
@@ -106,7 +103,7 @@ export function Register() {
                   register={register}
                 />
               </WrapItem>
-              <WrapItem paddingLeft={['20%', '80px']}>
+              <WrapItem paddingLeft={responsivePaddings}>
                 <Field
                   type="text"
                   name="username"
@@ -116,7 +113,7 @@ export function Register() {
                   register={register}
                 />
               </WrapItem>
-              <WrapItem paddingLeft={['20%', '80px']}>
+              <WrapItem paddingLeft={responsivePaddings}>
                 <Field
                   type="date"
                   name="birthdate"
@@ -143,7 +140,10 @@ export function Register() {
             </Link>
 
             <Center paddingTop="30px" paddingBottom="5px">
-              <Text color={theme.colors.primaryText.value} maxW={['300px', '500px']}>
+              <Text
+                color={theme.colors.primaryText.value}
+                maxW={['300px', '450px', '500px', '600px']}
+              >
                 By using our application you agree to the usage of cookies, which are needed to make
                 the application work correctly. We also store your IP address and registration date
                 for security purposes.
@@ -160,7 +160,7 @@ export function Register() {
         src="/assets/images/jennie-blackpink.webp"
         alt="Jennie, member of korean group Blackpink"
         height="100%"
-        display={['none', 'inline']}
+        display={['none', 'none', 'none', 'none', 'inline']}
         fallbackSrc="https://via.placeholder.com/1080"
       />
     </SimpleGrid>

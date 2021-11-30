@@ -1,4 +1,5 @@
 import { Spinner, ChakraProvider, extendTheme, Box, Heading, Text, Image } from '@chakra-ui/react';
+import { StepsStyleConfig as Steps } from 'chakra-ui-steps';
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { MdCached } from 'react-icons/md';
@@ -24,6 +25,9 @@ const chakraTheme = extendTheme({
         width: '100%',
       },
     },
+  },
+  components: {
+    Steps,
   },
 });
 

@@ -1,151 +1,26 @@
-import {
-  SimpleGrid,
-  Image,
-  Center,
-  Wrap,
-  WrapItem,
-  Box,
-  Text,
-  Heading,
-  VStack,
-  Select,
-} from '@chakra-ui/react';
+import { SimpleGrid, Image, Center, Wrap, WrapItem, Box, Text, Heading } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
-import { MUSIC_GENRES } from '../constants';
+import { MUSIC_GENRES, COUNTRIES } from '../constants';
 import { NavigationBar } from '../styles';
 
-import { Link, Field, Button } from '@/components/Elements';
+import { Link, Field, Button, Select } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 
-const schema = yup.object({
-  fullname: yup.array().required('This field is required.'),
-});
+const labels = ['Basic Information', 'Artist Information', 'End'];
+const responsivePaddings = ['25%', '30%', '15%', '20%', '11%'];
 
 export function ArtistRegister() {
-  const [artistInfo, setArtistInfo] = useState({
-    email: '',
-    birthdate: '',
-    password: '',
-    passwordConfirmation: '',
-  });
-  const [validationErrors, setValidationErrors] = useState({
-    email: '',
-    birthdate: '',
-    password: '',
-    passwordConfirmation: '',
-  });
   const [stepState, setStepState] = useState(undefined);
 
-  const { nextStep, prevStep, reset, activeStep } = useSteps({
-    initialStep: 0,
+  // eslint-disable-next-line no-unused-vars
+  const { nextStep, prevStep, _, activeStep } = useSteps({
+    initialStep: 1,
   });
-
-  const labels = ['Account Information', 'Artist Information'];
-
-  const responsivePaddings = ['25%', '30%', '15%', '20%', '11%'];
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      fullname: [],
-    },
-  });
-
-  const onSubmit = (data) => {
-    console.log('a', artistInfo, data);
-    if (!Object.values(validationErrors).every((prop) => prop === null)) {
-      alert('cachuo');
-    }
-  };
-
-  const validateEmail = (email) => {
-    const emailValidationRegex =
-      /[a-z0-9!#$%&'*+/=?^_‘{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_‘{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-    return emailValidationRegex.test(email);
-  };
-
-  const validateFields = () => {
-    const isValidEmail = validateEmail(artistInfo.email);
-
-    if (isValidEmail) {
-      setValidationErrors((prevState) => ({
-        ...prevState,
-        email: null,
-      }));
-    } else {
-      setValidationErrors((prevState) => ({
-        ...prevState,
-        email: 'You must enter a valid email',
-      }));
-    }
-
-    if (artistInfo.birthdate) {
-      setValidationErrors((prevState) => ({
-        ...prevState,
-        birthdate: null,
-      }));
-    } else {
-      setValidationErrors((prevState) => ({
-        ...prevState,
-        birthdate: 'This field is required',
-      }));
-    }
-
-    if (artistInfo.password && artistInfo.password.length < 8) {
-      setValidationErrors((prevState) => ({
-        ...prevState,
-        password: 'Minimum eight (8) characters.',
-      }));
-    } else if (!artistInfo.password) {
-      setValidationErrors((prevState) => ({
-        ...prevState,
-        password: 'This field is required',
-      }));
-    } else {
-      setValidationErrors((prevState) => ({
-        ...prevState,
-        password: null,
-      }));
-    }
-
-    if (!artistInfo.passwordConfirmation) {
-      setValidationErrors((prevState) => ({
-        ...prevState,
-        passwordConfirmation: 'This field is required',
-      }));
-    } else if (artistInfo.password === artistInfo.passwordConfirmation) {
-      setValidationErrors((prevState) => ({
-        ...prevState,
-        passwordConfirmation: null,
-      }));
-    } else {
-      setValidationErrors((prevState) => ({
-        ...prevState,
-        passwordConfirmation: 'Both passwords must match',
-      }));
-    }
-
-    if (Object.values(validationErrors).every((prop) => prop === null)) {
-      nextStep();
-    }
-    //console.log(validationErrors, artistInfo, Object.values(validationErrors));
-
-    //nextStep();
-  };
-
-  const sendData = (e) => {
-    e.preventDefault();
-    console.log(artistInfo);
-  };
 
   return (
     <SimpleGrid columns={[1, 1, 1, 1, 2]}>
@@ -156,145 +31,32 @@ export function ArtistRegister() {
             Go Back
           </Link>
         </NavigationBar>
+
         <Box textAlign="center" align="center">
-          <Heading>You&apos;re almost part of our team</Heading>
+          <Heading paddingTop="10px">You&apos;re almost part of our team</Heading>
           <Text color={theme.colors.accentSolid.value} paddingTop="10px" fontSize="xl">
             Tell us about you.
           </Text>
         </Box>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Steps
-            state={stepState}
-            activeStep={activeStep}
-            colorScheme="pink"
-            padding="30px 40px"
-            responsive={false}
-          >
-            <Step key={labels[0]}>
-              <Wrap textAlign="left">
-                <WrapItem paddingLeft={responsivePaddings}>
-                  <Box>
-                    <Field
-                      type="text"
-                      name="email"
-                      value={artistInfo.email}
-                      label="Email"
-                      placeholder="joemama@gmail.com"
-                      error={validationErrors.email}
-                      register={register}
-                      onChange={(e) => {
-                        console.log('antes', artistInfo);
-                        setArtistInfo((prevState) => ({ ...prevState, email: e.target.value }));
-                        console.log('despues', artistInfo);
-                      }}
-                    />
-                    {validationErrors.email ? (
-                      <Text color={theme.colors.dangerSolid.value}>{validationErrors.email}</Text>
-                    ) : null}
-                  </Box>
-                </WrapItem>
-                <WrapItem paddingLeft={responsivePaddings}>
-                  <Box>
-                    <Field
-                      type="date"
-                      name="birthdate"
-                      label="Birthdate"
-                      css={`
-                        ::-webkit-calendar-picker-indicator {
-                          filter: invert(1);
-                        }
-                      `}
-                      error={validationErrors.birthdate}
-                      register={register}
-                      onChange={(e) => {
-                        setArtistInfo((prevState) => ({ ...prevState, birthdate: e.target.value }));
-                        forceUpdate();
-                      }}
-                    />
-                    {validationErrors.birthdate ? (
-                      <Text color={theme.colors.dangerSolid.value}>
-                        {validationErrors.birthdate}
-                      </Text>
-                    ) : null}
-                  </Box>
-                </WrapItem>
-                <WrapItem paddingLeft={responsivePaddings}>
-                  <Box>
-                    <Field
-                      type="password"
-                      name="password"
-                      label="Password"
-                      placeholder="********"
-                      error={validationErrors.password}
-                      register={register}
-                      onChange={(e) => {
-                        setArtistInfo((prevState) => ({ ...prevState, password: e.target.value }));
-                        forceUpdate();
-                      }}
-                    />
-                    {validationErrors.password ? (
-                      <Text color={theme.colors.dangerSolid.value}>
-                        {validationErrors.password}
-                      </Text>
-                    ) : null}
-                  </Box>
-                </WrapItem>
-                <WrapItem paddingLeft={responsivePaddings}>
-                  <Box>
-                    <Field
-                      type="password"
-                      name="passwordConfirmation"
-                      label="Password Confirmation"
-                      placeholder="********"
-                      error={validationErrors.passwordConfirmation}
-                      register={register}
-                      onChange={(e) => {
-                        setArtistInfo((prevState) => ({
-                          ...prevState,
-                          passwordConfirmation: e.target.value,
-                        }));
-                        forceUpdate();
-                      }}
-                    />
-                    {validationErrors.passwordConfirmation ? (
-                      <Text color={theme.colors.dangerSolid.value}>
-                        {validationErrors.passwordConfirmation}
-                      </Text>
-                    ) : null}
-                  </Box>
-                </WrapItem>
-              </Wrap>
-              <Center>
-                <Button onClick={validateFields} variant="accent" margin="40px 0">
-                  Next
-                </Button>
-              </Center>
-            </Step>
-            <Step key={labels[1]}>
-              <Wrap>
-                <WrapItem paddingLeft={responsivePaddings}>
-                  <Box>
-                    <Select onChange={() => console.log('culo')} {...register('fullname')}>
-                      <option value="option1">Option 1</option>
-                      <option value="option2">Option 2</option>
-                      <option value="option3">Option 3</option>
-                    </Select>
-                  </Box>
-                </WrapItem>
-              </Wrap>
-              <Center>
-                <Button type="submit" align="center" variant="accent" marginTop="40px">
-                  Submit
-                </Button>
-                <Button onClick={prevStep}>a</Button>
-              </Center>
-            </Step>
-            <Step>
-              <p>culo</p>
-            </Step>
-          </Steps>
-        </form>
+        <Steps
+          state={stepState}
+          activeStep={activeStep}
+          colorScheme="pink"
+          padding="30px 40px"
+          orientation="vertical"
+          responsive={false}
+        >
+          <Step key={labels[0]} label={labels[0]}>
+            <FirstStep nextStep={nextStep} setStepState={setStepState} />
+          </Step>
+          <Step key={labels[1]} label={labels[1]}>
+            <SecondStep nextStep={nextStep} prevStep={prevStep} setStepState={setStepState} />
+          </Step>
+          <Step key={labels[2]} label={labels[2]}>
+            <p>culo</p>
+          </Step>
+        </Steps>
       </div>
 
       <Image
@@ -307,3 +69,193 @@ export function ArtistRegister() {
     </SimpleGrid>
   );
 }
+
+const firstStepSchema = yup.object({
+  email: yup.string().email('You must enter a valid email.').required('This field is required.'),
+  birthdate: yup.string().required('This field is required.'),
+  password: yup
+    .string()
+    .min(8, 'Minimum eight (8) characters.')
+    .required('This field is required.'),
+  passwordConfirmation: yup
+    .string()
+    .required('This field is required.')
+    .oneOf([yup.ref('password'), null], 'Both passwords must match.'),
+});
+
+function FirstStep({ nextStep, setStepState }) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(firstStepSchema),
+    defaultValues: {
+      email: '',
+      birthdate: '',
+      password: '',
+      passwordConfirmation: '',
+    },
+  });
+
+  useEffect(() => {
+    if (errors && Object.keys(errors).length !== 0) {
+      setStepState('error');
+    } else {
+      setStepState(undefined);
+    }
+  }, [errors, setStepState]);
+
+  /**
+   * Here, not only the nextStep() can be executed, the form data
+   * can be persisted on a store through Zustand hooks in case of need.
+   */
+  const onSubmit = (data) => {
+    nextStep();
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Wrap textAlign="left">
+        <WrapItem paddingLeft={responsivePaddings}>
+          <Box>
+            <Field
+              type="email"
+              name="email"
+              label="Email"
+              placeholder="joemama@gmail.com"
+              error={errors.email}
+              register={register}
+            />
+          </Box>
+        </WrapItem>
+        <WrapItem paddingLeft={responsivePaddings}>
+          <Box>
+            <Field
+              type="date"
+              name="birthdate"
+              label="Birthdate"
+              css={`
+                ::-webkit-calendar-picker-indicator {
+                  filter: invert(1);
+                }
+              `}
+              error={errors.birthdate}
+              register={register}
+            />
+          </Box>
+        </WrapItem>
+        <WrapItem paddingLeft={responsivePaddings}>
+          <Box>
+            <Field
+              type="password"
+              name="password"
+              label="Password"
+              placeholder="********"
+              error={errors.password}
+              register={register}
+            />
+          </Box>
+        </WrapItem>
+        <WrapItem paddingLeft={responsivePaddings}>
+          <Box>
+            <Field
+              type="password"
+              name="passwordConfirmation"
+              label="Password Confirmation"
+              placeholder="********"
+              error={errors.passwordConfirmation}
+              register={register}
+            />
+          </Box>
+        </WrapItem>
+      </Wrap>
+      <Center>
+        <Button type="submit" variant="accent" margin="40px 0">
+          Next
+        </Button>
+      </Center>
+    </form>
+  );
+}
+
+const secondStepSchema = yup.object({
+  country: yup.string().required('This field is required.'),
+  musicGenres: yup
+    .array()
+    .min(1, 'You must select at least one genre.')
+    .required('This field is required.'),
+});
+
+const SecondStep = ({ nextStep, prevStep, setStepState }) => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(secondStepSchema),
+  });
+
+  const onSubmit = (data) => {
+    console.log('data', data);
+    nextStep();
+  };
+
+  useEffect(() => {
+    if (errors && Object.keys(errors).length !== 0) {
+      setStepState('error');
+    } else {
+      setStepState(undefined);
+    }
+  }, [errors, setStepState]);
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Wrap>
+        <WrapItem>
+          <Box width="200px">
+            <Select
+              control={control}
+              options={[...COUNTRIES]}
+              name="country"
+              placeholder="Select a country"
+              error={errors.country}
+              onChangeCallback={(value) => value.value}
+            />
+            {errors.country && (
+              <Text color={theme.colors.dangerSolid.value} paddingTop="5px" textAlign="left">
+                {errors.country.message}
+              </Text>
+            )}
+          </Box>
+        </WrapItem>
+      </Wrap>
+      <Wrap>
+        <WrapItem>
+          <Box width="200px" maxWidth="300px">
+            <Select
+              control={control}
+              options={[...MUSIC_GENRES]}
+              name="musicGenres"
+              placeholder="Select genres"
+              error={errors.musicGenres}
+              onChangeCallback={(value) => value.map((v) => v.value)}
+              isMulti
+            />
+            {errors.musicGenres && (
+              <Text color={theme.colors.dangerSolid.value} paddingTop="5px" textAlign="left">
+                {errors.musicGenres.message}
+              </Text>
+            )}
+          </Box>
+        </WrapItem>
+      </Wrap>
+      <Center>
+        <Button type="submit" align="center" variant="accent" marginTop="40px">
+          Submit
+        </Button>
+        <Button onClick={prevStep}>Go Back</Button>
+      </Center>
+    </form>
+  );
+};

@@ -1,5 +1,5 @@
 import { Spinner, ChakraProvider, extendTheme, Box, Heading, Text, Image } from '@chakra-ui/react';
-import { StepsStyleConfig as Steps } from 'chakra-ui-steps';
+import { StepsStyleConfig } from 'chakra-ui-steps';
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { MdCached } from 'react-icons/md';
@@ -12,6 +12,21 @@ import { Notifications } from '@/components/Notifications';
 import { queryClient } from '@/lib/react-query';
 import { AuthProvider } from '@/providers/auth';
 import { theme } from '@/stitches.config.js';
+
+// Parts that can be customized: https://github.com/jeanverster/chakra-ui-steps/blob/a11db0a42001ffb6ce39612880a2f6df168621bc/src/theme/index.ts#L9-L19
+// Example of how to use it: https://github.com/jeanverster/chakra-ui-steps/issues/27
+const CustomizedSteps = {
+  ...StepsStyleConfig,
+  baseStyle: {
+    stepIconContainer: {
+      bg: 'pink.500',
+      borderColor: 'pink.500',
+    },
+    label: {
+      color: 'white',
+    },
+  },
+};
 
 const chakraTheme = extendTheme({
   styles: {
@@ -27,7 +42,7 @@ const chakraTheme = extendTheme({
     },
   },
   components: {
-    Steps,
+    Steps: CustomizedSteps,
   },
 });
 

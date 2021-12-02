@@ -23,7 +23,7 @@ export function ChooseUserType() {
       <NavigationBar>
         <Image src="/assets/images/logo-transparent.png" alt="Ongaku Logo" />
 
-        <Box margin="30px 30px 0 0">
+        <Box margin="20px 20px 0 0">
           <Button
             label={<Highlight variant="gray">Already have an account?</Highlight>}
             align="center"
@@ -37,9 +37,7 @@ export function ChooseUserType() {
       </NavigationBar>
 
       <Box textAlign="center">
-        <Heading fontSize={['2xl', '3xl', '4xl', '5xl']} marginTop="20px">
-          We&apos;re ready to let you in
-        </Heading>
+        <Heading fontSize={['2xl', '3xl', '4xl', '5xl']}>We&apos;re ready to let you in</Heading>
         <Text paddingTop="15px" fontSize="xl">
           But first, <Highlight>what are you?</Highlight>
         </Text>
@@ -88,7 +86,7 @@ export function ChooseUserType() {
         </Wrap>
       </Center>
 
-      <Center marginTop="50px" marginBottom="20px">
+      <Center>
         <Text color={theme.colors.primaryText.value}>
           This decision cannot be changed later on.
         </Text>

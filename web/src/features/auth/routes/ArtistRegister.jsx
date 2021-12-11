@@ -8,38 +8,32 @@ import {
   Text,
   Heading,
   Checkbox,
+  Divider,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
 import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
+import { Link as RouterLink } from 'react-router-dom';
 import * as yup from 'yup';
 
+import { Footer } from '../components/Footer';
 import { MUSIC_GENRES, COUNTRIES } from '../constants';
 import { NavigationBar } from '../styles';
 
-import { useArtistStore } from '@/stores/useArtistStore';
-import { Link, Field, Button, Select } from '@/components/Elements';
+import { Link, Field, Button, Select, Highlight } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
+import { useArtistStore } from '@/stores/useArtistStore';
 
 const labels = ['Basic Information', 'Artist Information', 'End'];
-const responsivePaddings = ['25%', '30%', '15%', '20%', '11%'];
+const responsivePaddings = ['25%', '30%', '15%', '20%', '9%'];
 
 export function ArtistRegister() {
-  const information = useArtistStore(s => s.information);
-  const setBasicInformation = useArtistStore(s => s.setBasicInformation);
-  const setArtisticInformation = useArtistStore(s => s.setArtisticInformation);
-
   const [stepState, setStepState] = useState(undefined);
-  const [bandFlag, setBandFlag] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const { nextStep, prevStep, _, activeStep } = useSteps({
-    initialStep: 1,
+    initialStep: 2,
   });
-
-  const culo = () => {
-    console.log(information);
-  }
 
   return (
     <SimpleGrid columns={[1, 1, 1, 1, 2]}>
@@ -67,28 +61,17 @@ export function ArtistRegister() {
           responsive={false}
         >
           <Step key={labels[0]} label={labels[0]}>
-            <FirstStep 
-              nextStep={nextStep} 
-              setStepState={setStepState} 
-              setBasicInformation={setBasicInformation} 
-              information={information}
-            />
+            <FirstStep nextStep={nextStep} setStepState={setStepState} />
           </Step>
           <Step key={labels[1]} label={labels[1]}>
-            <SecondStep 
-              nextStep={nextStep} 
-              prevStep={prevStep} 
-              setStepState={setStepState} 
-              bandFlag={bandFlag} 
-              setBandFlag={setBandFlag} 
-              setArtisticInformation={setArtisticInformation} 
-              information={information} 
-            />
+            <SecondStep nextStep={nextStep} prevStep={prevStep} setStepState={setStepState} />
           </Step>
           <Step key={labels[2]} label={labels[2]}>
-            <button onClick={culo}>a</button>
+            <ThirdStep />
           </Step>
         </Steps>
+
+        <Footer />
       </div>
 
       <Image
@@ -102,20 +85,7 @@ export function ArtistRegister() {
   );
 }
 
-const firstStepSchema = yup.object({
-  email: yup.string().email('You must enter a valid email.').required('This field is required.'),
-  birthdate: yup.string().required('This field is required.'),
-  password: yup
-    .string()
-    .min(8, 'Minimum eight (8) characters.')
-    .required('This field is required.'),
-  passwordConfirmation: yup
-    .string()
-    .required('This field is required.')
-    .oneOf([yup.ref('password'), null], 'Both passwords must match.'),
-});
-
-function FirstStep({ nextStep, setStepState, setBasicInformation, information }) {
+function FirstStep({ nextStep, setStepState }) {
   const {
     register,
     handleSubmit,
@@ -129,6 +99,7 @@ function FirstStep({ nextStep, setStepState, setBasicInformation, information })
       passwordConfirmation: '',
     },
   });
+  const setBasicInformation = useArtistStore((s) => s.setBasicInformation);
 
   useEffect(() => {
     if (errors && Object.keys(errors).length !== 0) {
@@ -138,14 +109,9 @@ function FirstStep({ nextStep, setStepState, setBasicInformation, information })
     }
   }, [errors, setStepState]);
 
-  /**
-   * Here, not only the nextStep() can be executed, the form data
-   * can be persisted on a store through Zustand hooks in case of need.
-   */
   const onSubmit = (data) => {
     console.log(data);
     setBasicInformation(data);
-    console.log(information);
     nextStep();
   };
 
@@ -172,7 +138,8 @@ function FirstStep({ nextStep, setStepState, setBasicInformation, information })
               label="Birthdate"
               css={`
                 ::-webkit-calendar-picker-indicator {
-                  background: url(https://cdn3.iconfinder.com/data/icons/linecons-free-vector-icons-pack/32/calendar-16.png) center/80% no-repeat;
+                  background: url(https://cdn3.iconfinder.com/data/icons/linecons-free-vector-icons-pack/32/calendar-16.png)
+                    center/80% no-repeat;
                   filter: invert(1);
                 }
               `}
@@ -215,28 +182,25 @@ function FirstStep({ nextStep, setStepState, setBasicInformation, information })
   );
 }
 
-const secondStepSchema = yup.object({
-  country: yup.string().required('This field is required.'),
-  musicGenres: yup
-    .array()
-    .min(1, 'You must select at least one genre.')
+const firstStepSchema = yup.object({
+  email: yup.string().email('You must enter a valid email.').required('This field is required.'),
+  birthdate: yup.string().required('This field is required.'),
+  password: yup
+    .string()
+    .min(8, 'Minimum eight (8) characters.')
     .required('This field is required.'),
-  labels: yup.string().required('This field is required.'),
-  yearsActive: yup
-    .number()
-    .required("This field is required.")
-    .positive("You must enter a positive number.")
-    .integer("You must enter a whole number."),
-  artisticName: yup.string().required('This field is required.'),
-  bandName: yup.string().required('This field is required.'),
-  members: yup.string().required('This field is required.'),
+  passwordConfirmation: yup
+    .string()
+    .required('This field is required.')
+    .oneOf([yup.ref('password'), null], 'Both passwords must match.'),
 });
 
-const SecondStep = ({ nextStep, prevStep, setStepState, bandFlag, setBandFlag, setArtisticInformation }) => {
+const SecondStep = ({ nextStep, prevStep, setStepState }) => {
   const {
     register,
     control,
     handleSubmit,
+    resetField,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(secondStepSchema),
@@ -244,23 +208,33 @@ const SecondStep = ({ nextStep, prevStep, setStepState, bandFlag, setBandFlag, s
       country: '',
       musicGenres: [],
       labels: '',
-      yearsActive: '',
+      yearsActive: 0,
+      bandFlag: false,
       artisticName: '',
       bandName: '',
       members: '',
     },
   });
+  const [bandFlag, setBandFlag] = useState(false);
+  const setArtisticInformation = useArtistStore((s) => s.setArtisticInformation);
 
+  // Do the request here.
   const onSubmit = (data) => {
     console.log('data', data);
     setArtisticInformation(data);
-    console.log(information);
+    nextStep();
   };
 
-  const culo = () => {
+  const handleBandFlagChange = () => {
+    if (bandFlag) {
+      resetField('members');
+      resetField('bandName');
+    } else {
+      resetField('artisticName');
+    }
+
     setBandFlag(!bandFlag);
-    console.log(bandFlag);
-  }
+  };
 
   useEffect(() => {
     if (errors && Object.keys(errors).length !== 0) {
@@ -275,7 +249,15 @@ const SecondStep = ({ nextStep, prevStep, setStepState, bandFlag, setBandFlag, s
       <Wrap>
         <WrapItem paddingLeft={responsivePaddings}>
           <Box width="200px" marginRight="5px">
-            <Text textAlign="left" marginTop="10px" paddingBottom="10px" paddingLeft="5px">Genres</Text>
+            <Text
+              textAlign="left"
+              marginTop="10px"
+              paddingBottom="10px"
+              paddingLeft="5px"
+              fontWeight="bold"
+            >
+              Genres
+            </Text>
             <Select
               control={control}
               options={[...MUSIC_GENRES]}
@@ -318,19 +300,38 @@ const SecondStep = ({ nextStep, prevStep, setStepState, bandFlag, setBandFlag, s
         </WrapItem>
         <WrapItem paddingLeft={responsivePaddings}>
           <Box>
-            <Field
-              type="text"
-              name={!bandFlag ? "artisticName" : "bandName"}
-              label={!bandFlag ? "Artistic Name" : "Band Name"}
-              placeholder={!bandFlag ? "xxxjoemama" : "Joe and the Mamas"}
-              error={errors.labels}
-              register={register}
-            />
+            {bandFlag ? (
+              <Field
+                type="text"
+                name="bandName"
+                label="Band Name"
+                placeholder="Joe n' the Mamas"
+                error={errors.bandName}
+                register={register}
+              />
+            ) : (
+              <Field
+                type="text"
+                name="artisticName"
+                label="Artistic Name"
+                placeholder="Lil xxxJoemama"
+                error={errors.artisticName}
+                register={register}
+              />
+            )}
           </Box>
         </WrapItem>
         <WrapItem paddingLeft={responsivePaddings}>
           <Box width="200px" maxWidth="300px" marginRight="5px">
-            <Text textAlign="left" marginTop="10px" paddingBottom="10px" paddingLeft="5px">Country</Text>
+            <Text
+              textAlign="left"
+              marginTop="10px"
+              paddingBottom="10px"
+              paddingLeft="5px"
+              fontWeight="bold"
+            >
+              Country
+            </Text>
             <Select
               control={control}
               options={[...COUNTRIES]}
@@ -360,15 +361,29 @@ const SecondStep = ({ nextStep, prevStep, setStepState, bandFlag, setBandFlag, s
           </Box>
         </WrapItem>
       </Wrap>
-      <Checkbox
-        onChange={culo}
-        colorScheme="pink"
-        size="lg"
-        marginTop="30px" marginLeft="30px">
-        Is it a band?
-      </Checkbox>
+      <Controller
+        control={control}
+        name="bandFlag"
+        render={({ field }) => (
+          <Checkbox
+            onChange={(v) => {
+              field.onChange(v);
+              handleBandFlagChange();
+            }}
+            checked={bandFlag}
+            colorScheme="pink"
+            size="lg"
+            marginTop="30px"
+            marginLeft="30px"
+          >
+            Is it a band?
+          </Checkbox>
+        )}
+      />
       <Center marginTop="40px">
-        <Button onClick={prevStep} margin="0 30px">Go Back</Button>
+        <Button onClick={prevStep} margin="0 30px">
+          Go Back
+        </Button>
         <Button type="submit" align="center" variant="accent">
           Submit
         </Button>
@@ -380,5 +395,53 @@ const SecondStep = ({ nextStep, prevStep, setStepState, bandFlag, setBandFlag, s
         Login
       </Link>
     </form>
+  );
+};
+
+const secondStepSchema = yup.object({
+  country: yup.string().required('This field is required.'),
+  musicGenres: yup
+    .array()
+    .min(1, 'You must select at least one genre.')
+    .required('This field is required.'),
+  labels: yup.string().required('This field is required.'),
+  yearsActive: yup
+    .number()
+    .required('This field is required.')
+    .positive('You must enter a positive number.')
+    .integer('You must enter a whole number.'),
+  bandFlag: yup.boolean(),
+  artisticName: yup.string().when('bandFlag', {
+    is: false,
+    then: yup.string().required('This field is required.'),
+  }),
+  bandName: yup.string().when('bandFlag', {
+    is: true,
+    then: yup.string().required('This field is required.'),
+  }),
+  members: yup.string().when('bandFlag', {
+    is: true,
+    then: yup.string().required('This field is required.'),
+  }),
+});
+
+const ThirdStep = () => {
+  return (
+    <div>
+      <Box textAlign="left">
+        <Heading size="lg" paddingTop="10px">
+          Registration finished!
+        </Heading>
+        <Text padding="20px">
+          You should check your <Highlight>email inbox</Highlight> and complete the final step, the
+          confirmation, so that {"you'll"} be able to start publishing and managing your work here
+          on Ongaku!
+        </Text>
+        <Button marginLeft="20px" as={RouterLink} to={'/home'}>
+          Go Home
+        </Button>
+      </Box>
+      <Divider padding="10px" width="90%" />
+    </div>
   );
 };

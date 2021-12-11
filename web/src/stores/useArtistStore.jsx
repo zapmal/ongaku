@@ -3,14 +3,14 @@ import create from 'zustand';
 export const useArtistStore = create((set) => ({
   information: {
     basic: {},
-    artistic: {}
+    artistic: {},
   },
   setBasicInformation: (basicInfo) => {
     set((state) => ({
       information: {
         ...state.information,
         basic: basicInfo,
-      }
+      },
     }));
   },
   setArtisticInformation: (artisticInfo) => {
@@ -18,7 +18,7 @@ export const useArtistStore = create((set) => ({
       information: {
         ...state.information,
         artistic: artisticInfo,
-      }
+      },
     }));
   },
   removeInformation: () => {

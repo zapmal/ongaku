@@ -19,7 +19,7 @@ import { theme } from '@/stitches.config.js';
 
 export function ChooseUserType() {
   return (
-    <SimpleGrid backgroundImage="/assets/svgs/random-lines.svg">
+    <SimpleGrid backgroundImage="/assets/svgs/random-lines.svg" height="100vh">
       <NavigationBar>
         <Image src="/assets/images/app-icon-transparent.png" alt="Ongaku Logo" />
 

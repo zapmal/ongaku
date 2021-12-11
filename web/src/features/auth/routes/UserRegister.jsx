@@ -1,28 +1,16 @@
-import { SimpleGrid, Image, Center, Wrap, WrapItem, Box, Text, Heading } from '@chakra-ui/react';
+import { SimpleGrid, Image, Wrap, WrapItem, Box, Text, Heading } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
+import { Footer } from '../components/Footer';
 import { NavigationBar } from '../styles';
 
 import { Link, Field, Button } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 
-const schema = yup.object({
-  fullname: yup.string().required('This field is required.'),
-  password: yup
-    .string()
-    .min(8, 'Minimum eight (8) characters.')
-    .required('This field is required.'),
-  passwordConfirmation: yup
-    .string()
-    .required('This field is required.')
-    .oneOf([yup.ref('password'), null], 'Both passwords must match.'),
-  email: yup.string().email('You must enter a valid email.').required('This field is required.'),
-  username: yup.string().required('This field is required.'),
-  birthdate: yup.string().required('This field is required.'),
-});
+const responsivePaddings = ['25%', '32%', '15%', '20%', '12%'];
 
 export function UserRegister() {
   const {
@@ -40,8 +28,6 @@ export function UserRegister() {
       birthdate: '',
     },
   });
-
-  const responsivePaddings = ['25%', '32%', '15%', '20%', '11%'];
 
   const onSubmit = (data) => console.log(data);
 
@@ -139,19 +125,7 @@ export function UserRegister() {
               Login
             </Link>
 
-            <Center paddingTop="30px" paddingBottom="5px">
-              <Text
-                color={theme.colors.primaryText.value}
-                maxW={['300px', '450px', '500px', '600px']}
-              >
-                By using our application you agree to the usage of cookies, which are needed to make
-                the application work correctly. We also store your IP address and registration date
-                for security purposes.
-              </Text>
-            </Center>
-            <Center paddingBottom={['30px', '10px']}>
-              <Text fontWeight="bold">All rights belong to their respective owners.</Text>
-            </Center>
+            <Footer paddingTop="30px" />
           </form>
         </Box>
       </div>
@@ -166,3 +140,18 @@ export function UserRegister() {
     </SimpleGrid>
   );
 }
+
+const schema = yup.object({
+  fullname: yup.string().required('This field is required.'),
+  password: yup
+    .string()
+    .min(8, 'Minimum eight (8) characters.')
+    .required('This field is required.'),
+  passwordConfirmation: yup
+    .string()
+    .required('This field is required.')
+    .oneOf([yup.ref('password'), null], 'Both passwords must match.'),
+  email: yup.string().email('You must enter a valid email.').required('This field is required.'),
+  username: yup.string().required('This field is required.'),
+  birthdate: yup.string().required('This field is required.'),
+});

@@ -49,7 +49,7 @@ export function UserRegister() {
     <SimpleGrid columns={[1, 1, 1, 1, 2]}>
       <div>
         <NavigationBar>
-          <Image src="/assets/images/logo-transparent.png" alt="Ongaku Logo" />
+          <Image src="/assets/images/app-icon-transparent.png" alt="Ongaku Logo" />
           <Link to="/register" variant="gray" margin="50px 50px 0 0">
             Go Back
           </Link>

@@ -32,9 +32,12 @@ export function Field(props) {
           id={props.name}
           placeholder={props.placeholder}
           isInvalid={!!props.error}
+          isDisabled={!!props.isDisabled}
           css={props.css}
           focusBorderColor={'#E93D82'}
-          {...props.register(props.name)}
+          {...props.register(props.name, {
+            disabled: props.isDisabled,
+          })}
           onChange={props.onChange}
         />
       )}

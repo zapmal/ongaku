@@ -1,4 +1,14 @@
-import { SimpleGrid, Image, Center, Wrap, WrapItem, Box, Text, Heading } from '@chakra-ui/react';
+import {
+  SimpleGrid,
+  Image,
+  Center,
+  Wrap,
+  WrapItem,
+  Box,
+  Text,
+  Heading,
+  Checkbox,
+} from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
 import React, { useState, useEffect } from 'react';
@@ -8,6 +18,7 @@ import * as yup from 'yup';
 import { MUSIC_GENRES, COUNTRIES } from '../constants';
 import { NavigationBar } from '../styles';
 
+import { useArtistStore } from '@/stores/useArtistStore';
 import { Link, Field, Button, Select } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 
@@ -15,18 +26,26 @@ const labels = ['Basic Information', 'Artist Information', 'End'];
 const responsivePaddings = ['25%', '30%', '15%', '20%', '11%'];
 
 export function ArtistRegister() {
-  const [stepState, setStepState] = useState(undefined);
+  const information = useArtistStore(s => s.information);
+  const setBasicInformation = useArtistStore(s => s.setBasicInformation);
+  const setArtisticInformation = useArtistStore(s => s.setArtisticInformation);
 
+  const [stepState, setStepState] = useState(undefined);
+  const [bandFlag, setBandFlag] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const { nextStep, prevStep, _, activeStep } = useSteps({
     initialStep: 1,
   });
 
+  const culo = () => {
+    console.log(information);
+  }
+
   return (
     <SimpleGrid columns={[1, 1, 1, 1, 2]}>
       <div>
         <NavigationBar>
-          <Image src="/assets/images/logo-transparent.png" alt="Ongaku Logo" />
+          <Image src="/assets/images/app-icon-transparent.png" alt="Ongaku Logo" />
           <Link to="/register" variant="gray" margin="50px 50px 0 0">
             Go Back
           </Link>
@@ -48,13 +67,26 @@ export function ArtistRegister() {
           responsive={false}
         >
           <Step key={labels[0]} label={labels[0]}>
-            <FirstStep nextStep={nextStep} setStepState={setStepState} />
+            <FirstStep 
+              nextStep={nextStep} 
+              setStepState={setStepState} 
+              setBasicInformation={setBasicInformation} 
+              information={information}
+            />
           </Step>
           <Step key={labels[1]} label={labels[1]}>
-            <SecondStep nextStep={nextStep} prevStep={prevStep} setStepState={setStepState} />
+            <SecondStep 
+              nextStep={nextStep} 
+              prevStep={prevStep} 
+              setStepState={setStepState} 
+              bandFlag={bandFlag} 
+              setBandFlag={setBandFlag} 
+              setArtisticInformation={setArtisticInformation} 
+              information={information} 
+            />
           </Step>
           <Step key={labels[2]} label={labels[2]}>
-            <p>culo</p>
+            <button onClick={culo}>a</button>
           </Step>
         </Steps>
       </div>
@@ -83,7 +115,7 @@ const firstStepSchema = yup.object({
     .oneOf([yup.ref('password'), null], 'Both passwords must match.'),
 });
 
-function FirstStep({ nextStep, setStepState }) {
+function FirstStep({ nextStep, setStepState, setBasicInformation, information }) {
   const {
     register,
     handleSubmit,
@@ -111,6 +143,9 @@ function FirstStep({ nextStep, setStepState }) {
    * can be persisted on a store through Zustand hooks in case of need.
    */
   const onSubmit = (data) => {
+    console.log(data);
+    setBasicInformation(data);
+    console.log(information);
     nextStep();
   };
 
@@ -137,6 +172,7 @@ function FirstStep({ nextStep, setStepState }) {
               label="Birthdate"
               css={`
                 ::-webkit-calendar-picker-indicator {
+                  background: url(https://cdn3.iconfinder.com/data/icons/linecons-free-vector-icons-pack/32/calendar-16.png) center/80% no-repeat;
                   filter: invert(1);
                 }
               `}
@@ -185,21 +221,46 @@ const secondStepSchema = yup.object({
     .array()
     .min(1, 'You must select at least one genre.')
     .required('This field is required.'),
+  labels: yup.string().required('This field is required.'),
+  yearsActive: yup
+    .number()
+    .required("This field is required.")
+    .positive("You must enter a positive number.")
+    .integer("You must enter a whole number."),
+  artisticName: yup.string().required('This field is required.'),
+  bandName: yup.string().required('This field is required.'),
+  members: yup.string().required('This field is required.'),
 });
 
-const SecondStep = ({ nextStep, prevStep, setStepState }) => {
+const SecondStep = ({ nextStep, prevStep, setStepState, bandFlag, setBandFlag, setArtisticInformation }) => {
   const {
+    register,
     control,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(secondStepSchema),
+    defaultValues: {
+      country: '',
+      musicGenres: [],
+      labels: '',
+      yearsActive: '',
+      artisticName: '',
+      bandName: '',
+      members: '',
+    },
   });
 
   const onSubmit = (data) => {
     console.log('data', data);
-    nextStep();
+    setArtisticInformation(data);
+    console.log(information);
   };
+
+  const culo = () => {
+    setBandFlag(!bandFlag);
+    console.log(bandFlag);
+  }
 
   useEffect(() => {
     if (errors && Object.keys(errors).length !== 0) {
@@ -212,27 +273,9 @@ const SecondStep = ({ nextStep, prevStep, setStepState }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Wrap>
-        <WrapItem>
-          <Box width="200px">
-            <Select
-              control={control}
-              options={[...COUNTRIES]}
-              name="country"
-              placeholder="Select a country"
-              error={errors.country}
-              onChangeCallback={(value) => value.value}
-            />
-            {errors.country && (
-              <Text color={theme.colors.dangerSolid.value} paddingTop="5px" textAlign="left">
-                {errors.country.message}
-              </Text>
-            )}
-          </Box>
-        </WrapItem>
-      </Wrap>
-      <Wrap>
-        <WrapItem>
-          <Box width="200px" maxWidth="300px">
+        <WrapItem paddingLeft={responsivePaddings}>
+          <Box width="200px" marginRight="5px">
+            <Text textAlign="left" marginTop="10px" paddingBottom="10px" paddingLeft="5px">Genres</Text>
             <Select
               control={control}
               options={[...MUSIC_GENRES]}
@@ -249,13 +292,93 @@ const SecondStep = ({ nextStep, prevStep, setStepState }) => {
             )}
           </Box>
         </WrapItem>
+        <WrapItem paddingLeft={responsivePaddings}>
+          <Box>
+            <Field
+              type="text"
+              name="labels"
+              label="Label(s)"
+              placeholder="Joe Mama Records"
+              error={errors.labels}
+              register={register}
+            />
+          </Box>
+        </WrapItem>
+        <WrapItem paddingLeft={responsivePaddings}>
+          <Box maxWidth="205px">
+            <Field
+              type="number"
+              name="yearsActive"
+              label="Years Active"
+              placeholder="13"
+              error={errors.yearsActive}
+              register={register}
+            />
+          </Box>
+        </WrapItem>
+        <WrapItem paddingLeft={responsivePaddings}>
+          <Box>
+            <Field
+              type="text"
+              name={!bandFlag ? "artisticName" : "bandName"}
+              label={!bandFlag ? "Artistic Name" : "Band Name"}
+              placeholder={!bandFlag ? "xxxjoemama" : "Joe and the Mamas"}
+              error={errors.labels}
+              register={register}
+            />
+          </Box>
+        </WrapItem>
+        <WrapItem paddingLeft={responsivePaddings}>
+          <Box width="200px" maxWidth="300px" marginRight="5px">
+            <Text textAlign="left" marginTop="10px" paddingBottom="10px" paddingLeft="5px">Country</Text>
+            <Select
+              control={control}
+              options={[...COUNTRIES]}
+              name="country"
+              placeholder="Select a country"
+              error={errors.country}
+              onChangeCallback={(value) => value.value}
+            />
+            {errors.country && (
+              <Text color={theme.colors.dangerSolid.value} paddingTop="5px" textAlign="left">
+                {errors.country.message}
+              </Text>
+            )}
+          </Box>
+        </WrapItem>
+        <WrapItem paddingLeft={responsivePaddings}>
+          <Box>
+            <Field
+              type="text"
+              name="members"
+              label="Members"
+              placeholder="Joe Mama, Carl Johnson"
+              error={errors.members}
+              isDisabled={!bandFlag}
+              register={register}
+            />
+          </Box>
+        </WrapItem>
       </Wrap>
-      <Center>
-        <Button type="submit" align="center" variant="accent" marginTop="40px">
+      <Checkbox
+        onChange={culo}
+        colorScheme="pink"
+        size="lg"
+        marginTop="30px" marginLeft="30px">
+        Is it a band?
+      </Checkbox>
+      <Center marginTop="40px">
+        <Button onClick={prevStep} margin="0 30px">Go Back</Button>
+        <Button type="submit" align="center" variant="accent">
           Submit
         </Button>
-        <Button onClick={prevStep}>Go Back</Button>
       </Center>
+      <Text color={theme.colors.primaryText.value} padding="5px" marginLeft="30px">
+        or
+      </Text>
+      <Link to="/login" variant="gray" marginLeft="30px">
+        Login
+      </Link>
     </form>
   );
 };

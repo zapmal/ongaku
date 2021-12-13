@@ -5,7 +5,10 @@ import { useNotificationStore } from '@/stores/useNotificationStore';
 
 export function Notifications() {
   const toast = useToast();
-  const { notifications, dismissNotification } = useNotificationStore();
+  const [notifications, dismissNotification] = useNotificationStore((s) => [
+    s.notifications,
+    s.dismissNotification,
+  ]);
 
   useEffect(() => {
     notifications.map((notification) => {

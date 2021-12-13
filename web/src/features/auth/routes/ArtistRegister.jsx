@@ -25,14 +25,14 @@ import { Link, Field, Button, Select, Highlight } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 import { useArtistStore } from '@/stores/useArtistStore';
 
-const labels = ['Basic Information', 'Artist Information', 'End'];
+const labels = ['Basic Information', 'Artistic Information', 'End'];
 const responsivePaddings = ['25%', '30%', '15%', '20%', '9%'];
 
 export function ArtistRegister() {
   const [stepState, setStepState] = useState(undefined);
   // eslint-disable-next-line no-unused-vars
   const { nextStep, prevStep, _, activeStep } = useSteps({
-    initialStep: 2,
+    initialStep: 1,
   });
 
   return (
@@ -219,6 +219,8 @@ const SecondStep = ({ nextStep, prevStep, setStepState }) => {
   const setArtisticInformation = useArtistStore((s) => s.setArtisticInformation);
 
   // Do the request here.
+  // We need extra validation for the multi-value fields, if we don't detect comma-separated
+  // or space separated values then we'll thrown an error and explain it throughly.
   const onSubmit = (data) => {
     console.log('data', data);
     setArtisticInformation(data);
@@ -280,7 +282,7 @@ const SecondStep = ({ nextStep, prevStep, setStepState }) => {
               type="text"
               name="labels"
               label="Label(s)"
-              placeholder="Joe Mama Records"
+              placeholder="JM Records, Hybe"
               error={errors.labels}
               register={register}
             />

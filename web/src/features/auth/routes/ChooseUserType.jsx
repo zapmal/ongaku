@@ -28,8 +28,8 @@ export function ChooseUserType() {
             label={<Highlight variant="gray">Already have an account?</Highlight>}
             align="center"
             padding="20px 30px"
-            as={Link}
-            to={'/login'}
+            // as={Link}
+            // to={'/login'}
           >
             Login
           </Button>

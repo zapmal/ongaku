@@ -7,7 +7,8 @@ import * as yup from 'yup';
 import { Footer } from '../components/Footer';
 import { NavigationBar } from '../styles';
 
-import { Link, Field, Button } from '@/components/Elements';
+import { Link, Button } from '@/components/Elements';
+import { Field } from '@/components/Form';
 import { theme } from '@/stitches.config.js';
 
 const responsivePaddings = ['25%', '32%', '15%', '20%', '12%'];

@@ -21,7 +21,8 @@ import { Footer } from '../components/Footer';
 import { MUSIC_GENRES, COUNTRIES } from '../constants';
 import { NavigationBar } from '../styles';
 
-import { Link, Field, Button, Select, Highlight } from '@/components/Elements';
+import { Link, Button, Highlight } from '@/components/Elements';
+import { Field, Select } from '@/components/Form';
 import { theme } from '@/stitches.config.js';
 import { useArtistStore } from '@/stores/useArtistStore';
 

@@ -21,7 +21,9 @@ export function ChooseUserType() {
   return (
     <SimpleGrid backgroundImage="/assets/svgs/random-lines.svg" height="100vh">
       <NavigationBar>
-        <Image src="/assets/images/app-icon-transparent.png" alt="Ongaku Logo" />
+        <Link to="/">
+          <Image src="/assets/images/app-icon-transparent.png" alt="Ongaku Logo" />
+        </Link>
 
         <Box margin="20px 20px 0 0">
           <Button

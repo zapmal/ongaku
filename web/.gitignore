@@ -9,3 +9,5 @@ yarn.lock
 package-lock.json
 
 constants.general.js
+.env.prod
+.env.dev

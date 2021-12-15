@@ -2,8 +2,8 @@
   "name": "web",
   "version": "1.0.0",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "vite --mode dev",
+    "build": "vite --mode prod",
     "serve": "vite preview",
     "lint": "eslint --ext .js src/**/** --ignore-path .gitignore",
     "lint:fix": "eslint --fix --ext .js --ext .jsx src/**/* --ignore-path .gitignore"

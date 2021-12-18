@@ -23,8 +23,8 @@ import { JoiValidationPipe } from '@common/pipes/joi.pipe';
 import { AuthGuard } from '@common/guards';
 import { cookieOptions } from '@utils/cookie';
 
-import { LoginDTO, RegisterDTO } from './auth.dto';
-import { loginSchema, registerSchema } from './auth.schemas';
+import { LoginDTO, UserRegisterDTO } from './auth.dto';
+import { loginSchema, userRegisterSchema } from './auth.schemas';
 import { AuthService } from './auth.service';
 import { MailService } from '../mail/mail.service';
 
@@ -36,20 +36,21 @@ export class AuthController {
     private configService: ConfigService,
   ) {}
 
-  @Post('register')
-  @UsePipes(new JoiValidationPipe(registerSchema))
-  async register(
-    @Body() newUserData: RegisterDTO,
+  @Post('register/user')
+  @UsePipes(new JoiValidationPipe(userRegisterSchema))
+  async userRegister(
+    @Body() newUser: UserRegisterDTO,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const hashedPassword = await hash(newUserData.password, 10);
+    const hashedPassword = await hash(newUser.password, 10);
 
     const user = await this.authService.register({
-      username: newUserData.username,
-      fullName: newUserData.fullName,
+      fullName: newUser.fullName,
+      username: newUser.username,
+      email: newUser.email,
       password: hashedPassword,
-      email: newUserData.email,
-      birthdate: dayjs(newUserData.birthdate).toDate(),
+      birthdate: dayjs(newUser.birthdate).toDate(),
+      role: newUser.role,
     });
 
     if (!user) {
@@ -62,7 +63,7 @@ export class AuthController {
       expiresIn: this.configService.get('JWT_EXPIRY_TIME'),
     });
 
-    response.cookie('token', token, cookieOptions);
+    response.cookie('token', token, { ...cookieOptions });
 
     return {
       message: 'Account created successfully.',
@@ -104,7 +105,7 @@ export class AuthController {
       },
     );
 
-    response.cookie('token', token, cookieOptions);
+    response.cookie('token', token, { ...cookieOptions });
 
     return {
       message: 'Logged in successfully.',

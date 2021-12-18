@@ -115,10 +115,10 @@ model Manager {
   userId   Int? @unique @map("user_id")
   artistId Int? @unique @map("artist_id")
 
-  artist            Artist?             @relation(fields: [artistId], references: [id])
-  user              User?               @relation(fields: [userId], references: [id])
+  artist            Artist?            @relation(fields: [artistId], references: [id])
+  user              User?              @relation(fields: [userId], references: [id])
   artistInformation ArtistInformation?
-  
+
   @@map("manager")
 }
 

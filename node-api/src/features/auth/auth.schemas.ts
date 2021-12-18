@@ -5,15 +5,14 @@ import * as Joi from 'joi';
  */
 export const loginSchema = Joi.object({
   email: Joi.string().email().required(),
-  password: Joi.string().required(),
+  password: Joi.string().min(8).required(),
 });
 
-export const registerSchema = Joi.object({
+export const userRegisterSchema = Joi.object({
   fullName: Joi.string().required(),
-  username: Joi.string().required(),
+  password: Joi.string().min(8).required(),
   email: Joi.string().email().required(),
-  password: Joi.string().min(8),
-  avatar: Joi.string(),
+  username: Joi.string().required(),
   birthdate: Joi.date().required(),
   role: Joi.string(),
 });

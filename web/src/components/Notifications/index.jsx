@@ -17,7 +17,7 @@ export function Notifications() {
           id: notification.id,
           title: notification.title,
           description: notification.message,
-          duration: 7000,
+          duration: 6000,
           isClosable: true,
           status: notification.status,
           onCloseComplete: () => dismissNotification(notification.id),

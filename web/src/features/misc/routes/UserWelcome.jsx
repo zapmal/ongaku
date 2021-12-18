@@ -4,7 +4,8 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import { NavigationBar } from '../components';
 
-import { Highlight, Link } from '@/components/Elements';
+import { Link } from '@/components/Elements';
+import { Highlight } from '@/components/Utils';
 import { theme, styled } from '@/stitches.config.js';
 
 export function UserWelcome() {

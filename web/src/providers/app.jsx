@@ -10,7 +10,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { Button, Highlight } from '@/components/Elements';
 import { Notifications } from '@/components/Notifications';
 import { queryClient } from '@/lib/react-query';
-import { AuthProvider } from '@/providers/auth';
 import { theme } from '@/stitches.config.js';
 
 // Parts that can be customized: https://github.com/jeanverster/chakra-ui-steps/blob/a11db0a42001ffb6ce39612880a2f6df168621bc/src/theme/index.ts#L9-L19
@@ -53,12 +52,12 @@ export const AppProvider = ({ children }) => {
         <ErrorBoundary FallbackComponent={ErrorFallback}>
           <QueryClientProvider client={queryClient}>
             {process.env.NODE_ENV !== 'test' && <ReactQueryDevtools />}
-            <AuthProvider>
-              <Router>
-                <Notifications />
-                {children}
-              </Router>
-            </AuthProvider>
+            {/* <AuthProvider> */}
+            <Router>
+              <Notifications />
+              {children}
+            </Router>
+            {/* </AuthProvider> */}
           </QueryClientProvider>
         </ErrorBoundary>
       </React.Suspense>

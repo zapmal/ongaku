@@ -1,15 +1,19 @@
-import { SimpleGrid, Image, Wrap, WrapItem, Box, Text, Heading } from '@chakra-ui/react';
+import { SimpleGrid, Image, Wrap, WrapItem, Box, Text, Heading, Spinner } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
+import { registerUser } from '../api/register';
 import { Footer } from '../components/Footer';
 import { NavigationBar } from '../styles';
 
 import { Link, Button } from '@/components/Elements';
 import { Field } from '@/components/Form';
 import { theme } from '@/stitches.config.js';
+import { useAuthStore } from '@/stores/useAuthStore';
+import { useNotificationStore } from '@/stores/useNotificationStore';
 
 const responsivePaddings = ['25%', '32%', '15%', '20%', '12%'];
 
@@ -21,7 +25,7 @@ export function UserRegister() {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      fullname: '',
+      fullName: '',
       password: '',
       passwordConfirmation: '',
       email: '',
@@ -29,8 +33,52 @@ export function UserRegister() {
       birthdate: '',
     },
   });
+  const [requestStatus, setRequestStatus] = useState({
+    status: '',
+    isSubmitting: false,
+  });
+  const setUser = useAuthStore((s) => s.setUser);
+  const addNotification = useNotificationStore((s) => s.addNotification);
+  const navigate = useNavigate();
 
-  const onSubmit = (data) => console.log(data);
+  useEffect(() => {
+    const requestStatusCleanup = setTimeout(() => {
+      if (requestStatus.status !== 'success') {
+        setRequestStatus((prevRequestStatus) => ({ ...prevRequestStatus, status: '' }));
+      }
+    }, 7000);
+
+    return () => clearInterval(requestStatusCleanup);
+  }, [requestStatus.status]);
+
+  const onSubmit = async (data) => {
+    try {
+      setRequestStatus((prevRequestStatus) => ({ ...prevRequestStatus, isSubmitting: true }));
+
+      const response = await registerUser(data);
+
+      setRequestStatus({ status: 'success', isSubmitting: false });
+      setUser(response.user);
+
+      addNotification({
+        title: 'Success!',
+        message: `We'll redirect you to the home page shortly.`,
+        status: 'success',
+      });
+
+      setTimeout(() => navigate('/'), 8000);
+    } catch (error) {
+      setRequestStatus({
+        status: 'error',
+        isSubmitting: false,
+      });
+      addNotification({
+        title: 'Error',
+        message: error,
+        status: 'error',
+      });
+    }
+  };
 
   return (
     <SimpleGrid columns={[1, 1, 1, 1, 2]}>
@@ -53,10 +101,11 @@ export function UserRegister() {
               <WrapItem paddingLeft={responsivePaddings}>
                 <Field
                   type="text"
-                  name="fullname"
+                  name="fullName"
                   label="Full Name"
                   placeholder="Joe Mama"
                   error={errors.fullname}
+                  isDisabled={requestStatus.status !== ''}
                   register={register}
                 />
               </WrapItem>
@@ -66,6 +115,7 @@ export function UserRegister() {
                   name="email"
                   label="Email"
                   placeholder="joemama@gmail.com"
+                  isDisabled={requestStatus.status !== ''}
                   error={errors.email}
                   register={register}
                 />
@@ -77,6 +127,7 @@ export function UserRegister() {
                   label="Password"
                   placeholder="*********"
                   error={errors.password}
+                  isDisabled={requestStatus.status !== ''}
                   register={register}
                 />
               </WrapItem>
@@ -87,6 +138,7 @@ export function UserRegister() {
                   label="Password Confirmation"
                   placeholder="*********"
                   error={errors.passwordConfirmation}
+                  isDisabled={requestStatus.status !== ''}
                   register={register}
                 />
               </WrapItem>
@@ -97,6 +149,7 @@ export function UserRegister() {
                   label="Username"
                   placeholder="xXJoeMama777Xx"
                   error={errors.username}
+                  isDisabled={requestStatus.status !== ''}
                   register={register}
                 />
               </WrapItem>
@@ -111,20 +164,33 @@ export function UserRegister() {
                     }
                   `}
                   error={errors.birthdate}
+                  isDisabled={requestStatus.status !== ''}
                   register={register}
                 />
               </WrapItem>
             </Wrap>
 
-            <Button type="submit" align="center" variant="accent" marginTop="40px">
-              Submit
-            </Button>
-            <Text color={theme.colors.primaryText.value} padding="5px">
-              or
-            </Text>
-            <Link to="/login" variant="gray">
-              Login
-            </Link>
+            {requestStatus.isSubmitting ? (
+              <Spinner size="lg" marginTop="20px" />
+            ) : (
+              <>
+                <Button
+                  type="submit"
+                  align="center"
+                  variant="accent"
+                  marginTop="30px"
+                  isDisabled={requestStatus.status !== ''}
+                >
+                  Submit
+                </Button>
+                <Text color={theme.colors.primaryText.value} padding="5px">
+                  or
+                </Text>
+                <Link to="/login" variant="gray">
+                  Login
+                </Link>
+              </>
+            )}
 
             <Footer paddingTop="30px" />
           </form>
@@ -143,7 +209,7 @@ export function UserRegister() {
 }
 
 const schema = yup.object({
-  fullname: yup.string().required('This field is required.'),
+  fullName: yup.string().required('This field is required.'),
   password: yup
     .string()
     .min(8, 'Minimum eight (8) characters.')

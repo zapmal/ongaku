@@ -7,8 +7,9 @@ import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import { Button, Highlight } from '@/components/Elements';
+import { Button } from '@/components/Elements';
 import { Notifications } from '@/components/Notifications';
+import { Highlight } from '@/components/Utils';
 import { queryClient } from '@/lib/react-query';
 import { theme } from '@/stitches.config.js';
 

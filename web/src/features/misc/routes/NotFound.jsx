@@ -3,7 +3,8 @@ import React from 'react';
 import { MdHome } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
-import { Button, Highlight } from '@/components/Elements';
+import { Button } from '@/components/Elements';
+import { Highlight } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
 
 export function NotFound() {

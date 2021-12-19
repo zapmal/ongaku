@@ -14,7 +14,8 @@ import { Link } from 'react-router-dom';
 
 import { NavigationBar } from '../styles';
 
-import { Button, Highlight, Card } from '@/components/Elements';
+import { Button, Card } from '@/components/Elements';
+import { Highlight } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
 
 export function ChooseUserType() {
@@ -25,7 +26,7 @@ export function ChooseUserType() {
           <Image src="/assets/images/app-icon-transparent.png" alt="Ongaku Logo" />
         </Link>
 
-        <Box margin="20px 20px 0 0">
+        <Box margin="20px 30px 0 0">
           <Button
             label={<Highlight variant="gray">Already have an account?</Highlight>}
             align="center"

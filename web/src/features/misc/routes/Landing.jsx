@@ -4,8 +4,7 @@ import { MdAlbum, MdPersonAdd } from 'react-icons/md';
 
 import { NavigationBar } from '../components';
 
-import { Highlight } from '@/components/Elements';
-import { BulletPoint } from '@/components/Utils';
+import { BulletPoint, Highlight } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
 
 export function Landing() {

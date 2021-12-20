@@ -14,5 +14,30 @@ export const userRegisterSchema = Joi.object({
   email: Joi.string().email().required(),
   username: Joi.string().required(),
   birthdate: Joi.date().required(),
-  role: Joi.string(),
+  role: Joi.string().valid('USER').required(),
+});
+
+/**
+ * Customize error messages for YA, MG, etc..
+ */
+export const artistRegisterSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+  country: Joi.string().max(2).min(2).required(),
+  genres: Joi.array().min(1).required(),
+  labels: Joi.string().required(),
+  yearsActive: Joi.number().positive().integer().required(),
+  isBand: Joi.boolean().required(),
+  artisticName: Joi.string().when('isBand', {
+    is: false,
+    then: Joi.string().required(),
+  }),
+  bandName: Joi.string().when('isBand', {
+    is: true,
+    then: Joi.string().required(),
+  }),
+  members: Joi.string().when('isBand', {
+    is: true,
+    then: Joi.string().required(),
+  }),
 });

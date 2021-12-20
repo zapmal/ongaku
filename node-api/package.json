@@ -15,7 +15,7 @@
     "start:prod": "NODE_ENV=prod dotenv -e .env.production -- node dist/main",
     "migrate": "dotenv -e .env.dev -- npx prisma migrate dev --name postgres-init",
     "seed": "ts-node src/config/seed.ts",
-    "studio": "npx prisma studio",
+    "studio": "dotenv -e .env.dev -- npx prisma studio",
     "lint": "eslint \"{src}/**/*.ts\" --fix"
   },
   "dependencies": {

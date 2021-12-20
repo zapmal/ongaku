@@ -6,7 +6,7 @@ import * as helmet from 'helmet';
 
 import { AppModule } from '@/app.module';
 import { cookieOptions } from '@utils/cookie';
-import { PrismaService } from '@common/services';
+import { PrismaService } from '@/internal/services';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

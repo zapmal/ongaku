@@ -13,7 +13,7 @@
       "paths": {
          "@/*": ["src/*"],
          "@features/*": ["src/features/*"],
-         "@common/*": ["src/common/*"],
+         "@internal/*": ["src/internal/*"],
          "@utils/*": ["src/utils/*"]
       },
     "incremental": true,

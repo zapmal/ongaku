@@ -15,7 +15,7 @@ export class ArtistRegisterDTO {
   genres: Array<string>;
   labels: string; // should be Array<string>
   yearsActive: number;
-  bandFlag: boolean;
+  isBand: boolean;
   artisticName?: string;
   bandName?: string;
   members?: string; // should be Array<string>

@@ -9,6 +9,7 @@ import {
   Heading,
   Checkbox,
   Divider,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
@@ -17,7 +18,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { Link as RouterLink } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { Footer } from '../components/Footer';
+import { Footer, Login } from '../';
 import { MUSIC_GENRES, COUNTRIES } from '../constants';
 import { NavigationBar } from '../styles';
 
@@ -26,29 +27,33 @@ import { theme } from '@/stitches.config.js';
 import { useArtistStore } from '@/stores/useArtistStore';
 
 const labels = ['Basic Information', 'Artistic Information', 'End'];
-const responsivePaddings = ['25%', '30%', '15%', '20%', '9%'];
+const responsivePaddings = ['15%', '27%', '15%', '20%', '9%'];
 
 export function ArtistRegister() {
   const [stepState, setStepState] = useState(undefined);
   // eslint-disable-next-line no-unused-vars
   const { nextStep, prevStep, _, activeStep } = useSteps({
-    initialStep: 1,
+    initialStep: 0,
   });
 
   return (
     <SimpleGrid columns={[1, 1, 1, 1, 2]}>
       <div>
         <NavigationBar>
-          <Image src="/assets/images/app-icon-transparent.png" alt="Ongaku Logo" />
-          <Link to="/register" variant="gray" margin="50px 50px 0 0">
+          <RouterLink to="/">
+            <Image src="/assets/images/app-icon-transparent.png" alt="Ongaku Logo" />
+          </RouterLink>
+          <Box margin="40px 50px 0 0">
+          <Link to="/register" variant="gray">
             Go Back
           </Link>
+          </Box>
         </NavigationBar>
 
         <Box textAlign="center" align="center">
           <Heading paddingTop="10px">You&apos;re almost part of our team</Heading>
-          <Text color={theme.colors.accentSolid.value} paddingTop="10px" fontSize="xl">
-            Tell us about you.
+          <Text paddingTop="10px" fontSize="xl">
+            <Highlight>Tell us about you.</Highlight>
           </Text>
         </Box>
 
@@ -138,8 +143,6 @@ function FirstStep({ nextStep, setStepState }) {
               label="Birthdate"
               css={`
                 ::-webkit-calendar-picker-indicator {
-                  background: url(https://cdn3.iconfinder.com/data/icons/linecons-free-vector-icons-pack/32/calendar-16.png)
-                    center/80% no-repeat;
                   filter: invert(1);
                 }
               `}
@@ -217,6 +220,7 @@ const SecondStep = ({ nextStep, prevStep, setStepState }) => {
   });
   const [bandFlag, setBandFlag] = useState(false);
   const setArtisticInformation = useArtistStore((s) => s.setArtisticInformation);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   // Do the request here.
   // We need extra validation for the multi-value fields, if we don't detect comma-separated
@@ -247,156 +251,161 @@ const SecondStep = ({ nextStep, prevStep, setStepState }) => {
   }, [errors, setStepState]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Wrap>
-        <WrapItem paddingLeft={responsivePaddings}>
-          <Box width="200px" marginRight="5px">
-            <Text
-              textAlign="left"
-              marginTop="10px"
-              paddingBottom="10px"
-              paddingLeft="5px"
-              fontWeight="bold"
-            >
-              Genres
-            </Text>
-            <Select
-              control={control}
-              options={[...MUSIC_GENRES]}
-              name="musicGenres"
-              placeholder="Select genres"
-              error={errors.musicGenres}
-              onChangeCallback={(value) => value.map((v) => v.value)}
-              isMulti
-            />
-            {errors.musicGenres && (
-              <Text color={theme.colors.dangerSolid.value} paddingTop="5px" textAlign="left">
-                {errors.musicGenres.message}
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Wrap>
+          <WrapItem paddingLeft={responsivePaddings}>
+            <Box width="200px" marginRight="5px">
+              <Text
+                textAlign="left"
+                marginTop="10px"
+                paddingBottom="10px"
+                paddingLeft="5px"
+                fontWeight="bold"
+              >
+                Genres
               </Text>
-            )}
-          </Box>
-        </WrapItem>
-        <WrapItem paddingLeft={responsivePaddings}>
-          <Box>
-            <Field
-              type="text"
-              name="labels"
-              label="Label(s)"
-              placeholder="JM Records, Hybe"
-              error={errors.labels}
-              register={register}
-            />
-          </Box>
-        </WrapItem>
-        <WrapItem paddingLeft={responsivePaddings}>
-          <Box maxWidth="205px">
-            <Field
-              type="number"
-              name="yearsActive"
-              label="Years Active"
-              placeholder="13"
-              error={errors.yearsActive}
-              register={register}
-            />
-          </Box>
-        </WrapItem>
-        <WrapItem paddingLeft={responsivePaddings}>
-          <Box>
-            {bandFlag ? (
+              <Select
+                control={control}
+                options={[...MUSIC_GENRES]}
+                name="musicGenres"
+                placeholder="Select genres"
+                error={errors.musicGenres}
+                onChangeCallback={(value) => value.map((v) => v.value)}
+                isMulti
+              />
+              {errors.musicGenres && (
+                <Text color={theme.colors.dangerSolid.value} paddingTop="5px" textAlign="left">
+                  {errors.musicGenres.message}
+                </Text>
+              )}
+            </Box>
+          </WrapItem>
+          <WrapItem paddingLeft={responsivePaddings}>
+            <Box>
               <Field
                 type="text"
-                name="bandName"
-                label="Band Name"
-                placeholder="Joe n' the Mamas"
-                error={errors.bandName}
+                name="labels"
+                label="Label(s)"
+                placeholder="JM Records, Hybe"
+                error={errors.labels}
                 register={register}
               />
-            ) : (
+            </Box>
+          </WrapItem>
+          <WrapItem paddingLeft={responsivePaddings}>
+            <Box maxWidth="205px">
+              <Field
+                type="number"
+                name="yearsActive"
+                label="Years Active"
+                placeholder="13"
+                error={errors.yearsActive}
+                register={register}
+              />
+            </Box>
+          </WrapItem>
+          <WrapItem paddingLeft={responsivePaddings}>
+            <Box>
+              {bandFlag ? (
+                <Field
+                  type="text"
+                  name="bandName"
+                  label="Band Name"
+                  placeholder="Joe n' the Mamas"
+                  error={errors.bandName}
+                  register={register}
+                />
+              ) : (
+                <Field
+                  type="text"
+                  name="artisticName"
+                  label="Artistic Name"
+                  placeholder="Lil xxxJoemama"
+                  error={errors.artisticName}
+                  register={register}
+                />
+              )}
+            </Box>
+          </WrapItem>
+          <WrapItem paddingLeft={responsivePaddings}>
+            <Box width="200px" maxWidth="300px" marginRight="5px">
+              <Text
+                textAlign="left"
+                marginTop="10px"
+                paddingBottom="10px"
+                paddingLeft="5px"
+                fontWeight="bold"
+              >
+                Country
+              </Text>
+              <Select
+                control={control}
+                options={[...COUNTRIES]}
+                name="country"
+                placeholder="Select a country"
+                error={errors.country}
+                onChangeCallback={(value) => value.value}
+              />
+              {errors.country && (
+                <Text color={theme.colors.dangerSolid.value} paddingTop="5px" textAlign="left">
+                  {errors.country.message}
+                </Text>
+              )}
+            </Box>
+          </WrapItem>
+          <WrapItem paddingLeft={responsivePaddings}>
+            <Box>
               <Field
                 type="text"
-                name="artisticName"
-                label="Artistic Name"
-                placeholder="Lil xxxJoemama"
-                error={errors.artisticName}
+                name="members"
+                label="Members"
+                placeholder="Joe Mama, Carl Johnson"
+                error={errors.members}
+                isDisabled={!bandFlag}
                 register={register}
               />
-            )}
-          </Box>
-        </WrapItem>
-        <WrapItem paddingLeft={responsivePaddings}>
-          <Box width="200px" maxWidth="300px" marginRight="5px">
-            <Text
-              textAlign="left"
-              marginTop="10px"
-              paddingBottom="10px"
-              paddingLeft="5px"
-              fontWeight="bold"
+            </Box>
+          </WrapItem>
+        </Wrap>
+        <Controller
+          control={control}
+          name="bandFlag"
+          render={({ field }) => (
+            <Checkbox
+              onChange={(v) => {
+                field.onChange(v);
+                handleBandFlagChange();
+              }}
+              checked={bandFlag}
+              colorScheme="pink"
+              size="lg"
+              marginTop="30px"
+              marginLeft="30px"
             >
-              Country
-            </Text>
-            <Select
-              control={control}
-              options={[...COUNTRIES]}
-              name="country"
-              placeholder="Select a country"
-              error={errors.country}
-              onChangeCallback={(value) => value.value}
-            />
-            {errors.country && (
-              <Text color={theme.colors.dangerSolid.value} paddingTop="5px" textAlign="left">
-                {errors.country.message}
-              </Text>
-            )}
-          </Box>
-        </WrapItem>
-        <WrapItem paddingLeft={responsivePaddings}>
-          <Box>
-            <Field
-              type="text"
-              name="members"
-              label="Members"
-              placeholder="Joe Mama, Carl Johnson"
-              error={errors.members}
-              isDisabled={!bandFlag}
-              register={register}
-            />
-          </Box>
-        </WrapItem>
-      </Wrap>
-      <Controller
-        control={control}
-        name="bandFlag"
-        render={({ field }) => (
-          <Checkbox
-            onChange={(v) => {
-              field.onChange(v);
-              handleBandFlagChange();
-            }}
-            checked={bandFlag}
-            colorScheme="pink"
-            size="lg"
-            marginTop="30px"
-            marginLeft="30px"
-          >
-            Is it a band?
-          </Checkbox>
-        )}
-      />
-      <Center marginTop="40px">
-        <Button onClick={prevStep} margin="0 30px">
-          Go Back
+              Is it a band?
+            </Checkbox>
+          )}
+        />
+        <Center marginTop="40px">
+          <Button onClick={prevStep} margin="0 30px">
+            Go Back
+          </Button>
+          <Button type="submit" align="center" variant="accent">
+            Submit
+          </Button>
+        </Center>
+        <Text color={theme.colors.primaryText.value} padding="5px" marginLeft="30px">
+          or
+        </Text>
+        <Box paddingLeft="30px">
+        <Button variant="link" onClick={onOpen}>
+          Login
         </Button>
-        <Button type="submit" align="center" variant="accent">
-          Submit
-        </Button>
-      </Center>
-      <Text color={theme.colors.primaryText.value} padding="5px" marginLeft="30px">
-        or
-      </Text>
-      <Link to="/login" variant="gray" marginLeft="30px">
-        Login
-      </Link>
-    </form>
+        </Box>
+      </form>
+      <Login isOpen={isOpen} onClose={onClose} />
+    </>
   );
 };
 

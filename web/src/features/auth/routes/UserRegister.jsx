@@ -1,13 +1,14 @@
-import { SimpleGrid, Image, Wrap, WrapItem, Box, Text, Heading } from '@chakra-ui/react';
+import { SimpleGrid, Image, Wrap, WrapItem, Box, Text, Heading, useDisclosure } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { Link as RouterLink } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { Footer } from '../components/Footer';
+import { Footer, Login } from '../';
 import { NavigationBar } from '../styles';
 
-import { Link, Field, Button } from '@/components/Elements';
+import { Link, Field, Button, Highlight } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 
 const responsivePaddings = ['25%', '32%', '15%', '20%', '12%'];
@@ -28,6 +29,7 @@ export function UserRegister() {
       birthdate: '',
     },
   });
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const onSubmit = (data) => console.log(data);
 
@@ -35,16 +37,20 @@ export function UserRegister() {
     <SimpleGrid columns={[1, 1, 1, 1, 2]}>
       <div>
         <NavigationBar>
-          <Image src="/assets/images/app-icon-transparent.png" alt="Ongaku Logo" />
-          <Link to="/register" variant="gray" margin="50px 50px 0 0">
+          <RouterLink to="/">
+            <Image src="/assets/images/app-icon-transparent.png" alt="Ongaku Logo" />
+          </RouterLink>
+          <Box margin="40px 50px 0 0">
+          <Link to="/register" variant="gray">
             Go Back
           </Link>
+          </Box>
         </NavigationBar>
 
         <Box textAlign="center" align="center">
           <Heading>Almost there</Heading>
-          <Text color={theme.colors.accentSolid.value} paddingTop="10px" fontSize="xl">
-            Tell us about you.
+          <Text paddingTop="10px" fontSize="xl">
+            <Highlight>Tell us about you.</Highlight>
           </Text>
 
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -115,17 +121,17 @@ export function UserRegister() {
               </WrapItem>
             </Wrap>
 
-            <Button type="submit" align="center" variant="accent" marginTop="40px">
+            <Button type="submit" align="center" variant="accent" marginTop="50px">
               Submit
             </Button>
-            <Text color={theme.colors.primaryText.value} padding="5px">
+            <Text color={theme.colors.primaryText.value} paddingTop="10px">
               or
             </Text>
-            <Link to="/login" variant="gray">
+            <Button variant="link" onClick={onOpen}>
               Login
-            </Link>
+            </Button>
 
-            <Footer paddingTop="30px" />
+            <Footer paddingTop="35px" />
           </form>
         </Box>
       </div>
@@ -137,6 +143,7 @@ export function UserRegister() {
         display={['none', 'none', 'none', 'none', 'inline']}
         fallbackSrc="https://via.placeholder.com/1080"
       />
+      <Login isOpen={isOpen} onClose={onClose} />
     </SimpleGrid>
   );
 }

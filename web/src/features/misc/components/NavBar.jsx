@@ -1,10 +1,11 @@
-import { Image, ButtonGroup, Divider, Center } from '@chakra-ui/react';
+import { Image, ButtonGroup, Divider, Center, useDisclosure } from '@chakra-ui/react';
 import React from 'react';
 import { FiLogOut } from 'react-icons/fi';
 import { MdHome } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
 import { Highlight, Button } from '@/components/Elements';
+import { Login } from '@/features/auth';
 import { styled } from '@/stitches.config.js';
 
 const Container = styled('header', {
@@ -48,17 +49,18 @@ const Container = styled('header', {
 
 // Welcome as default because we use it twice.
 export function NavigationBar({ page = 'welcome' }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Container isWelcome={page === 'welcome'}>
       <Image src="/assets/images/logo-transparent.png" alt="Ongaku Logo" />
       <ButtonGroup spacing={[3, 4]}>
         {page === 'landing' ? (
           <>
-            <Button label={<Highlight>Existing user?</Highlight>} align="center" isFullWidth={true}>
-              <Link to="/login">Login</Link>
+            <Button label={<Highlight>Existing user?</Highlight>} align="center" isFullWidth={true} onClick={onOpen}>
+              Login
             </Button>
-            <Button label={<Highlight>New user?</Highlight>} align="center" isFullWidth={true}>
-              <Link to="/register">Register</Link>
+            <Button label={<Highlight>New user?</Highlight>} as={Link} to="/register" align="center" isFullWidth={true}>
+              Register
             </Button>
 
             <Center>
@@ -94,6 +96,7 @@ export function NavigationBar({ page = 'welcome' }) {
           </>
         )}
       </ButtonGroup>
+      <Login isOpen={isOpen} onClose={onClose} />
     </Container>
   );
 }

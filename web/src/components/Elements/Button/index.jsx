@@ -8,13 +8,25 @@ const variants = {
     backgroundColor: theme.colors.primaryBg.value,
     hover: theme.colors.primaryBgHover.value,
     active: theme.colors.primaryBgActive.value,
+    text: theme.colors.primaryTextContrast,
   },
   accent: {
     backgroundColor: theme.colors.accentSolid.value,
     hover: theme.colors.accentSolidHover.value,
     active: theme.colors.accentSolidActive.value,
+    text: theme.colors.primaryTextContrast,
   },
-  text: theme.colors.primaryTextContrast,
+  link: {
+    backgroundColor: "transparent",
+    text: theme.colors.primaryText.value,
+    padding: "0",
+    underline: "underline",
+  },
+  transparent: {
+    backgroundColor: "transparent",
+    text: theme.colors.primaryText.value,
+    padding: "0",
+  }
 };
 
 export function Button({
@@ -36,7 +48,9 @@ export function Button({
         onClick={onClick}
         isFullWidth={isFullWidth}
         backgroundColor={variants[variant].backgroundColor}
-        color={variants.text}
+        color={variants[variant].text}
+        textDecoration={variants[variant].underline}
+        padding={variants[variant].padding}
         _hover={{
           bg: variants[variant].hover,
         }}

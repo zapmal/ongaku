@@ -21,16 +21,16 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
     resolver: yupResolver(secondStepSchema),
     defaultValues: {
       country: '',
-      musicGenres: [],
+      genres: [],
       labels: '',
       yearsActive: 0,
-      bandFlag: false,
+      isBand: false,
       artisticName: '',
       bandName: '',
       members: '',
     },
   });
-  const [bandFlag, setBandFlag] = useState(false);
+  const [isBand, setIsBand] = useState(false);
 
   // Do the request here.
   // We need extra validation for the multi-value fields, if we don't detect comma-separated
@@ -42,18 +42,18 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
     };
 
     console.log(allData);
-    nextStep();
+    // nextStep();
   };
 
-  const handleBandFlagChange = () => {
-    if (bandFlag) {
+  const handleIsBand = () => {
+    if (isBand) {
       resetField('members');
       resetField('bandName');
     } else {
       resetField('artisticName');
     }
 
-    setBandFlag(!bandFlag);
+    setIsBand(!isBand);
   };
 
   useEffect(() => {
@@ -81,15 +81,15 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
             <Select
               control={control}
               options={[...MUSIC_GENRES]}
-              name="musicGenres"
+              name="genres"
               placeholder="Select genres"
-              error={errors.musicGenres}
+              error={errors.genres}
               onChangeCallback={(value) => value.map((v) => v.value)}
               isMulti
             />
-            {errors.musicGenres && (
+            {errors.genres && (
               <Text color={theme.colors.dangerSolid.value} paddingTop="5px" textAlign="left">
-                {errors.musicGenres.message}
+                {errors.genres.message}
               </Text>
             )}
           </Box>
@@ -120,7 +120,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
         </WrapItem>
         <WrapItem paddingLeft={responsivePaddings}>
           <Box>
-            {bandFlag ? (
+            {isBand ? (
               <Field
                 type="text"
                 name="bandName"
@@ -175,7 +175,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
               label="Members"
               placeholder="Joe Mama, Carl Johnson"
               error={errors.members}
-              isDisabled={!bandFlag}
+              isDisabled={!isBand}
               register={register}
             />
           </Box>
@@ -183,14 +183,14 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
       </Wrap>
       <Controller
         control={control}
-        name="bandFlag"
+        name="isBand"
         render={({ field }) => (
           <Checkbox
             onChange={(v) => {
               field.onChange(v);
-              handleBandFlagChange();
+              handleIsBand();
             }}
-            checked={bandFlag}
+            checked={isBand}
             colorScheme="pink"
             size="lg"
             marginTop="30px"
@@ -220,7 +220,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
 
 const secondStepSchema = yup.object({
   country: yup.string().required('This field is required.'),
-  musicGenres: yup
+  genres: yup
     .array()
     .min(1, 'You must select at least one genre.')
     .required('This field is required.'),
@@ -230,16 +230,16 @@ const secondStepSchema = yup.object({
     .required('This field is required.')
     .positive('You must enter a positive number.')
     .integer('You must enter a whole number.'),
-  bandFlag: yup.boolean(),
-  artisticName: yup.string().when('bandFlag', {
+  isBand: yup.boolean(),
+  artisticName: yup.string().when('isBand', {
     is: false,
     then: yup.string().required('This field is required.'),
   }),
-  bandName: yup.string().when('bandFlag', {
+  bandName: yup.string().when('isBand', {
     is: true,
     then: yup.string().required('This field is required.'),
   }),
-  members: yup.string().when('bandFlag', {
+  members: yup.string().when('isBand', {
     is: true,
     then: yup.string().required('This field is required.'),
   }),

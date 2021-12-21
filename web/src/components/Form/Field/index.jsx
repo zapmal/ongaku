@@ -1,4 +1,13 @@
-import { FormControl, Text, FormHelperText, FormLabel, Input, InputGroup } from '@chakra-ui/react';
+/* eslint-disable react/no-children-prop */
+import {
+  FormControl,
+  Text,
+  FormHelperText,
+  FormLabel,
+  Input,
+  InputGroup,
+  InputRightElement,
+} from '@chakra-ui/react';
 import React, { useRef } from 'react';
 import { MdFileUpload } from 'react-icons/md';
 
@@ -27,19 +36,22 @@ export function Field(props) {
           <Button leftIcon={<MdFileUpload />}>Upload</Button>
         </FileInput>
       ) : (
-        <Input
-          type={props.type}
-          id={props.name}
-          placeholder={props.placeholder}
-          isInvalid={!!props.error}
-          isDisabled={!!props.isDisabled}
-          css={props.css}
-          focusBorderColor={'#E93D82'}
-          {...props.register(props.name, {
-            disabled: props.isDisabled,
-          })}
-          onChange={props.onChange}
-        />
+        <InputGroup>
+          <Input
+            type={props.type}
+            id={props.name}
+            placeholder={props.placeholder}
+            isInvalid={!!props.error}
+            isDisabled={!!props.isDisabled}
+            css={props.css}
+            focusBorderColor={'#E93D82'}
+            {...props.register(props.name, {
+              disabled: props.isDisabled,
+            })}
+            onChange={props.onChange}
+          />
+          {props.rightIcon && <InputRightElement children={props.rightIcon} pointerEvents="none" />}
+        </InputGroup>
       )}
       {props.error && (
         <Text color={theme.colors.dangerSolid.value} paddingTop="5px" textAlign="left">

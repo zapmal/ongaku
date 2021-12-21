@@ -2,6 +2,7 @@ import { SimpleGrid, Image, Wrap, WrapItem, Box, Text, Heading, Spinner } from '
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { MdDateRange } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
@@ -57,6 +58,8 @@ export function UserRegister() {
 
       const response = await registerUser(data);
 
+      console.log(response);
+
       setRequestStatus({ status: 'success', isSubmitting: false });
       setUser(response.user);
 
@@ -72,11 +75,20 @@ export function UserRegister() {
         status: 'error',
         isSubmitting: false,
       });
-      addNotification({
-        title: 'Error',
-        message: error,
-        status: 'error',
-      });
+
+      if (error.message === 'canceled') {
+        addNotification({
+          title: 'Error',
+          message: 'We could not process this request, try again later.',
+          status: 'error',
+        });
+      } else {
+        addNotification({
+          title: 'Error',
+          message: error,
+          status: 'error',
+        });
+      }
     }
   };
 
@@ -104,7 +116,7 @@ export function UserRegister() {
                   name="fullName"
                   label="Full Name"
                   placeholder="Joe Mama"
-                  error={errors.fullname}
+                  error={errors.fullName}
                   isDisabled={requestStatus.status !== ''}
                   register={register}
                 />
@@ -158,6 +170,12 @@ export function UserRegister() {
                   type="date"
                   name="birthdate"
                   label="Birthdate"
+                  rightIcon={
+                    // To display this icon ONLY on firefox (any version).
+                    navigator.userAgent.toLowerCase().indexOf('firefox') > -1 && (
+                      <MdDateRange size={20} />
+                    )
+                  }
                   css={`
                     ::-webkit-calendar-picker-indicator {
                       filter: invert(1);

@@ -2,7 +2,7 @@ import create from 'zustand';
 
 export const useAuthStore = create((set) => ({
   user: {},
-  csrfToken: null,
+  csrfToken: '',
 
   setUser: (user) => {
     set({ user });

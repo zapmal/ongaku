@@ -51,7 +51,7 @@ export function FirstStep({ nextStep, setStepState, setBasicData }) {
             />
           </Box>
         </WrapItem>
-        <WrapItem paddingLeft={[0, '5%']}>
+        <WrapItem paddingLeft={[0, 0, '10%', 0, '5%']}>
           <Box>
             <Field
               type="password"

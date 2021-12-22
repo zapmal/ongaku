@@ -16,14 +16,16 @@ export function ArtistRegister() {
   const [basicData, setBasicData] = useState({});
   // eslint-disable-next-line no-unused-vars
   const { nextStep, prevStep, _, activeStep } = useSteps({
-    initialStep: 0,
+    initialStep: 1,
   });
 
   return (
     <SimpleGrid columns={[1, 1, 1, 1, 2]}>
       <div>
         <NavigationBar>
-          <Image src="/assets/images/app-icon-transparent.png" alt="Ongaku Logo" />
+          <Link to="/">
+            <Image src="/assets/images/app-icon-transparent.png" alt="Ongaku Logo" />
+          </Link>
           <Link to="/register" variant="gray" margin="50px 50px 0 0">
             Go Back
           </Link>

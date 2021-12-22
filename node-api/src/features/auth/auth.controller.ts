@@ -12,7 +12,6 @@ import {
   Req,
   HttpCode,
   HttpStatus,
-  Ip,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { compare, hash } from 'bcrypt';
@@ -62,7 +61,9 @@ export class AuthController {
     );
 
     if (!user) {
-      throw new BadRequest('Something went wrong while trying to create the user, try again.');
+      throw new BadRequest(
+        'Something went wrong while trying to create the user, try again.',
+      );
     }
 
     const token = sign({ user }, this.configService.get('JWT_SECRET'), {
@@ -110,7 +111,9 @@ export class AuthController {
     }
 
     if (!artist) {
-      throw new BadRequest('Something went wrong while trying to create the artist, try again.');
+      throw new BadRequest(
+        'Something went wrong while trying to create the artist, try again.',
+      );
     }
 
     const token = sign({ artist }, this.configService.get('JWT_SECRET'), {
@@ -131,7 +134,10 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @UsePipes(new JoiValidationPipe(loginSchema))
-  async login(@Body() userCredentials: LoginDTO, @Res({ passthrough: true }) response: Response) {
+  async login(
+    @Body() userCredentials: LoginDTO,
+    @Res({ passthrough: true }) response: Response,
+  ) {
     const user = await this.authService.getUserByEmail(userCredentials.email);
 
     if (!user) {

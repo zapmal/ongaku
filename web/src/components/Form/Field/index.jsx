@@ -2,7 +2,7 @@
 import {
   FormControl,
   Text,
-  FormHelperText,
+  Tooltip,
   FormLabel,
   Input,
   InputGroup,
@@ -15,18 +15,35 @@ import { Button } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 
 export function Field(props) {
+  const label = (
+    <FormLabel
+      color={theme.colors.primaryTextContrast.value}
+      htmlFor={props.name}
+      padding="5px"
+      fontWeight="bold"
+      _hover={{
+        cursor: 'help',
+      }}
+    >
+      {props.label}
+    </FormLabel>
+  );
   return (
     <FormControl>
-      {props.label && (
-        <FormLabel
-          color={theme.colors.primaryTextContrast.value}
-          htmlFor={props.name}
-          padding="5px"
-          fontWeight="bold"
-        >
-          {props.label}
-        </FormLabel>
-      )}
+      {props.label &&
+        (props.helperText ? (
+          <Tooltip
+            label={props.helperText}
+            bg={theme.colors.primaryBgHover.value}
+            textAlign="center"
+            borderRadius="5px"
+            placement="top"
+          >
+            {label}
+          </Tooltip>
+        ) : (
+          label
+        ))}
       {props.type === 'file' ? (
         <FileInput
           id={props.name}
@@ -58,7 +75,6 @@ export function Field(props) {
           {props.error.message}
         </Text>
       )}
-      {props.helperText && <FormHelperText paddingTop="5px">{props.helperText}</FormHelperText>}
     </FormControl>
   );
 }

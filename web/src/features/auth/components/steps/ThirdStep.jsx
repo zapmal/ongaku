@@ -17,8 +17,8 @@ export function ThirdStep() {
           confirmation, so that {"you'll"} be able to start publishing and managing your work here
           on Ongaku!
         </Text>
-        <Button marginLeft="20px" as={Link} to={'/home'}>
-          Go Home
+        <Button marginLeft="20px" as={Link} to={'/welcome?type=artist'}>
+          Go to Ongaku
         </Button>
       </Box>
       <Divider padding="10px" width="90%" />

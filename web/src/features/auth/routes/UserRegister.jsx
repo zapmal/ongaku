@@ -1,6 +1,6 @@
 import { SimpleGrid, Image, Wrap, WrapItem, Box, Text, Heading, Spinner } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { MdDateRange } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +12,7 @@ import { NavigationBar } from '../styles';
 
 import { Link, Button } from '@/components/Elements';
 import { Field } from '@/components/Form';
+import { useSubmissionState } from '@/hooks/useSubmissionState';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useNotificationStore } from '@/stores/useNotificationStore';
@@ -34,34 +35,19 @@ export function UserRegister() {
       birthdate: '',
     },
   });
-  const [requestStatus, setRequestStatus] = useState({
-    status: '',
-    isSubmitting: false,
-  });
-  const setUser = useAuthStore((s) => s.setUser);
+  const [submission, setSubmissionState] = useSubmissionState();
+  const setEntity = useAuthStore((s) => s.setEntity);
   const addNotification = useNotificationStore((s) => s.addNotification);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const requestStatusCleanup = setTimeout(() => {
-      if (requestStatus.status !== 'success') {
-        setRequestStatus((prevRequestStatus) => ({ ...prevRequestStatus, status: '' }));
-      }
-    }, 7000);
-
-    return () => clearInterval(requestStatusCleanup);
-  }, [requestStatus.status]);
-
   const onSubmit = async (data) => {
     try {
-      setRequestStatus((prevRequestStatus) => ({ ...prevRequestStatus, isSubmitting: true }));
+      setSubmissionState((prevState) => ({ ...prevState, isSubmitting: true }));
 
       const response = await registerUser(data);
 
-      console.log(response);
-
-      setRequestStatus({ status: 'success', isSubmitting: false });
-      setUser(response.user);
+      setSubmissionState({ status: 'success', isSubmitting: false });
+      setEntity(response.user);
 
       addNotification({
         title: 'Success!',
@@ -71,7 +57,7 @@ export function UserRegister() {
 
       setTimeout(() => navigate('/'), 8000);
     } catch (error) {
-      setRequestStatus({
+      setSubmissionState({
         status: 'error',
         isSubmitting: false,
       });
@@ -79,7 +65,7 @@ export function UserRegister() {
       if (error.message === 'canceled') {
         addNotification({
           title: 'Error',
-          message: 'We could not process this request, try again later.',
+          message: 'We could not process your request, try again later.',
           status: 'error',
         });
       } else {
@@ -96,7 +82,9 @@ export function UserRegister() {
     <SimpleGrid columns={[1, 1, 1, 1, 2]}>
       <div>
         <NavigationBar>
-          <Image src="/assets/images/app-icon-transparent.png" alt="Ongaku Logo" />
+          <Link to="/">
+            <Image src="/assets/images/app-icon-transparent.png" alt="Ongaku Logo" />
+          </Link>
           <Link to="/register" variant="gray" margin="50px 50px 0 0">
             Go Back
           </Link>
@@ -117,7 +105,7 @@ export function UserRegister() {
                   label="Full Name"
                   placeholder="Joe Mama"
                   error={errors.fullName}
-                  isDisabled={requestStatus.status !== ''}
+                  isDisabled={submission.status !== ''}
                   register={register}
                 />
               </WrapItem>
@@ -127,7 +115,7 @@ export function UserRegister() {
                   name="email"
                   label="Email"
                   placeholder="joemama@gmail.com"
-                  isDisabled={requestStatus.status !== ''}
+                  isDisabled={submission.status !== ''}
                   error={errors.email}
                   register={register}
                 />
@@ -139,7 +127,7 @@ export function UserRegister() {
                   label="Password"
                   placeholder="*********"
                   error={errors.password}
-                  isDisabled={requestStatus.status !== ''}
+                  isDisabled={submission.status !== ''}
                   register={register}
                 />
               </WrapItem>
@@ -150,7 +138,7 @@ export function UserRegister() {
                   label="Password Confirmation"
                   placeholder="*********"
                   error={errors.passwordConfirmation}
-                  isDisabled={requestStatus.status !== ''}
+                  isDisabled={submission.status !== ''}
                   register={register}
                 />
               </WrapItem>
@@ -161,7 +149,7 @@ export function UserRegister() {
                   label="Username"
                   placeholder="xXJoeMama777Xx"
                   error={errors.username}
-                  isDisabled={requestStatus.status !== ''}
+                  isDisabled={submission.status !== ''}
                   register={register}
                 />
               </WrapItem>
@@ -182,13 +170,13 @@ export function UserRegister() {
                     }
                   `}
                   error={errors.birthdate}
-                  isDisabled={requestStatus.status !== ''}
+                  isDisabled={submission.status !== ''}
                   register={register}
                 />
               </WrapItem>
             </Wrap>
 
-            {requestStatus.isSubmitting ? (
+            {submission.isSubmitting ? (
               <Spinner size="lg" marginTop="20px" />
             ) : (
               <>
@@ -197,7 +185,7 @@ export function UserRegister() {
                   align="center"
                   variant="accent"
                   marginTop="30px"
-                  isDisabled={requestStatus.status !== ''}
+                  isDisabled={submission.status !== ''}
                 >
                   Submit
                 </Button>

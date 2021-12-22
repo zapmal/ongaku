@@ -1,7 +1,5 @@
 import axios from 'axios';
 
-// import { useNotificationStore } from '@/stores/useNotificationStore';
-
 export const apiClient = axios.create({
   baseURL: 'http://localhost:3000/api',
   withCredentials: true,
@@ -14,13 +12,13 @@ apiClient.interceptors.response.use(
     return response.data;
   },
   (error) => {
-    // const message = error.response.data.message || error.message;
+    let message = '';
+    if (error.response) {
+      message = error.response.data.message || error.message || error;
+    } else {
+      message = 'Unknown error, please try again later.';
+    }
 
-    // useNotificationStore.getState().addNotification({
-    //   title: 'Error',
-    //   message,
-    //   status: 'error',
-    // });
-    return Promise.reject(error);
+    return Promise.reject(message);
   }
 );

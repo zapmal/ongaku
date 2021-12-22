@@ -6,9 +6,9 @@ import { AppRoutes } from '@/routes';
 import { useAuthStore } from '@/stores/useAuthStore';
 
 function App() {
-  const [csrfToken, setUser, setCsrfToken] = useAuthStore((s) => [
+  const [csrfToken, setEntity, setCsrfToken] = useAuthStore((s) => [
     s.csrfToken,
-    s.setUser,
+    s.setEntity,
     s.setCsrfToken,
   ]);
 
@@ -26,12 +26,12 @@ function App() {
         setCsrfToken(requestedCsrf);
 
         const user = await apiClient.get('/whoami');
-        setUser(user);
+        setEntity(user);
       } catch (error) {
         console.log('An error occured in the CSRF request or in the Auto-Login request.', error);
       }
     }
-  }, [csrfToken, setCsrfToken, setUser]);
+  }, [csrfToken, setCsrfToken, setEntity]);
 
   useEffect(() => {
     handleNoCsrf();

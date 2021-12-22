@@ -1,11 +1,11 @@
 import create from 'zustand';
 
 export const useAuthStore = create((set) => ({
-  user: {},
+  entity: {},
   csrfToken: '',
 
-  setUser: (user) => {
-    set({ user });
+  setEntity: (entity) => {
+    set({ entity });
   },
   setCsrfToken: (csrfToken) => {
     set({ csrfToken });

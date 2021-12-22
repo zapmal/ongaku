@@ -19,9 +19,16 @@ const styles = {
   }),
   control: (provided, state) => ({
     ...provided,
-    backgroundColor: theme.colors.primaryBase.value,
+    backgroundColor: state.isDisabled
+      ? theme.colors.primaryBase.value
+      : theme.colors.primaryBase.value,
     boxShadow: 0,
-    borderColor: state.isFocused ? theme.colors.accentSolid.value : 'white',
+    borderRadius: '5px',
+    borderColor: state.isFocused
+      ? theme.colors.accentSolid.value
+      : state.isDisabled
+      ? theme.colors.primarySolid.value
+      : 'white',
     '&:hover': {
       borderColor: state.isFocused ? theme.colors.accentSolid.value : 'white',
     },
@@ -32,6 +39,7 @@ const styles = {
   }),
   multiValue: (provided) => ({
     ...provided,
+    cursor: 'help',
     backgroundColor: theme.colors.accentBg.value,
   }),
   multiValueLabel: (provided) => ({
@@ -44,9 +52,18 @@ const styles = {
       backgroundColor: theme.colors.accentBgHover.value,
     },
   }),
-  placeholder: (provided) => ({
+  placeholder: (provided, state) => ({
     ...provided,
     textAlign: 'left',
+    color: state.isDisabled ? theme.colors.primaryBorder.value : '#6f7276',
+  }),
+  indicatorSeparator: (provided, state) => ({
+    ...provided,
+    backgroundColor: state.isDisabled ? theme.colors.primaryBorder.value : 'white',
+  }),
+  dropdownIndicator: (provided, state) => ({
+    ...provided,
+    color: state.isDisabled ? theme.colors.primaryBorder.value : 'white',
   }),
 };
 
@@ -74,6 +91,7 @@ export function CustomSelect({
   placeholder,
   defaultValue = undefined,
   isMulti = false,
+  isDisabled,
 }) {
   return (
     <Controller
@@ -92,6 +110,7 @@ export function CustomSelect({
           isMulti={isMulti}
           styles={error ? errorStyles : styles}
           placeholder={placeholder}
+          isDisabled={isDisabled}
         />
       )}
     />

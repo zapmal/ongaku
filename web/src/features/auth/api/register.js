@@ -32,7 +32,7 @@ export const registerUser = (data) => {
   return apiClient.post('register/user', user, config);
 };
 
-export const artistRegister = (data) => {
+export const registerArtist = (data) => {
   const [artist, config] = prepareRegistrationRequest(data);
 
   if (config.signal) abortController.abort();

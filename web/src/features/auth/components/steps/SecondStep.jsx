@@ -1,14 +1,18 @@
-import { Wrap, WrapItem, Box, Text, Center, Checkbox } from '@chakra-ui/react';
+import { Wrap, WrapItem, Box, Text, Center, Checkbox, Spinner } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 
+import { registerArtist } from '../../api/register';
 import { responsivePaddings, MUSIC_GENRES, COUNTRIES } from '../../constants';
 
 import { Button, Link } from '@/components/Elements';
 import { Field, Select } from '@/components/Form';
+import { useSubmissionState } from '@/hooks/useSubmissionState';
 import { theme } from '@/stitches.config.js';
+import { useAuthStore } from '@/stores/useAuthStore';
+import { useNotificationStore } from '@/stores/useNotificationStore';
 
 export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
   const {
@@ -30,19 +34,64 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
       members: '',
     },
   });
+  const [submission, setSubmissionState] = useSubmissionState();
+  const setEntity = useAuthStore((s) => s.setEntity);
+  const addNotification = useNotificationStore((s) => s.addNotification);
   const [isBand, setIsBand] = useState(false);
 
-  // Do the request here.
-  // We need extra validation for the multi-value fields, if we don't detect comma-separated
-  // or space separated values then we'll thrown an error and explain it throughly.
-  const onSubmit = (data) => {
-    const allData = {
-      ...basicData,
-      ...data,
-    };
+  const onSubmit = async (data) => {
+    const { members, labels, isBand, bandName, ...artistData } = data;
+    const conditionalData = isBand
+      ? {
+          members: members.split(','),
+          labels: labels.split(','),
+          bandName,
+        }
+      : {
+          labels: labels.split(','),
+        };
 
-    console.log(allData);
-    // nextStep();
+    try {
+      setSubmissionState((prevState) => ({ ...prevState, isSubmitting: true }));
+      console.log({
+        ...artistData,
+        ...basicData,
+        ...conditionalData,
+        isBand,
+      });
+
+      const response = await registerArtist({
+        ...artistData,
+        ...basicData,
+        ...conditionalData,
+        isBand,
+      });
+
+      setSubmissionState({ status: 'success', isSubmitting: false });
+      setEntity(response.artist);
+
+      nextStep();
+    } catch (error) {
+      // An object is being rendered on error
+      setSubmissionState({
+        status: 'error',
+        isSubmitting: false,
+      });
+
+      if (error.message === 'canceled') {
+        addNotification({
+          title: 'Error',
+          message: 'We could not process your request, try again later.',
+          status: 'error',
+        });
+      } else {
+        addNotification({
+          title: 'Error',
+          message: error,
+          status: 'error',
+        });
+      }
+    }
   };
 
   const handleIsBand = () => {
@@ -86,6 +135,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
               error={errors.genres}
               onChangeCallback={(value) => value.map((v) => v.value)}
               isMulti
+              isDisabled={submission.status != ''}
             />
             {errors.genres && (
               <Text color={theme.colors.dangerSolid.value} paddingTop="5px" textAlign="left">
@@ -101,7 +151,9 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
               name="labels"
               label="Label(s)"
               placeholder="JM Records, Hybe"
+              helperText="Labels must be divided by commas."
               error={errors.labels}
+              isDisabled={submission.status != ''}
               register={register}
             />
           </Box>
@@ -114,6 +166,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
               label="Years Active"
               placeholder="13"
               error={errors.yearsActive}
+              isDisabled={submission.status != ''}
               register={register}
             />
           </Box>
@@ -127,6 +180,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
                 label="Band Name"
                 placeholder="Joe n' the Mamas"
                 error={errors.bandName}
+                isDisabled={submission.status != ''}
                 register={register}
               />
             ) : (
@@ -136,6 +190,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
                 label="Artistic Name"
                 placeholder="Lil xxxJoemama"
                 error={errors.artisticName}
+                isDisabled={submission.status != ''}
                 register={register}
               />
             )}
@@ -158,6 +213,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
               name="country"
               placeholder="Select a country"
               error={errors.country}
+              isDisabled={submission.status != ''}
               onChangeCallback={(value) => value.value}
             />
             {errors.country && (
@@ -173,9 +229,10 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
               type="text"
               name="members"
               label="Members"
+              helperText="Members must be divided by commas."
               placeholder="Joe Mama, Carl Johnson"
               error={errors.members}
-              isDisabled={!isBand}
+              isDisabled={!isBand || submission.status != ''}
               register={register}
             />
           </Box>
@@ -195,25 +252,39 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
             size="lg"
             marginTop="30px"
             marginLeft="30px"
+            isDisabled={submission.status != ''}
           >
             Is it a band?
           </Checkbox>
         )}
       />
-      <Center marginTop="40px">
-        <Button onClick={prevStep} margin="0 30px">
-          Go Back
-        </Button>
-        <Button type="submit" align="center" variant="accent">
-          Submit
-        </Button>
-      </Center>
-      <Text color={theme.colors.primaryText.value} padding="5px" marginLeft="30px">
-        or
-      </Text>
-      <Link to="/login" variant="gray" marginLeft="30px">
-        Login
-      </Link>
+      {submission.isSubmitting ? (
+        <Center marginTop="40px">
+          <Spinner size="lg" />
+        </Center>
+      ) : (
+        <>
+          <Center marginTop="40px">
+            <Button onClick={prevStep} margin="0 30px" isDisabled={submission.status != ''}>
+              Go Back
+            </Button>
+            <Button
+              type="submit"
+              align="center"
+              variant="accent"
+              isDisabled={submission.status != ''}
+            >
+              Submit
+            </Button>
+          </Center>
+          <Text color={theme.colors.primaryText.value} padding="5px" marginLeft="30px">
+            or
+          </Text>
+          <Link to="/login" variant="gray" marginLeft="30px">
+            Login
+          </Link>
+        </>
+      )}
     </form>
   );
 }
@@ -227,6 +298,7 @@ const secondStepSchema = yup.object({
   labels: yup.string().required('This field is required.'),
   yearsActive: yup
     .number()
+    .transform((parsedValue, originalValue) => (originalValue === '' ? undefined : parsedValue))
     .required('This field is required.')
     .positive('You must enter a positive number.')
     .integer('You must enter a whole number.'),

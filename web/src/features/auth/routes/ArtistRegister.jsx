@@ -16,7 +16,7 @@ export function ArtistRegister() {
   const [basicData, setBasicData] = useState({});
   // eslint-disable-next-line no-unused-vars
   const { nextStep, prevStep, _, activeStep } = useSteps({
-    initialStep: 1,
+    initialStep: 0,
   });
 
   return (

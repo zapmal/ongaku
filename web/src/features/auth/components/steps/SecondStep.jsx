@@ -53,12 +53,6 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
 
     try {
       setSubmissionState((prevState) => ({ ...prevState, isSubmitting: true }));
-      console.log({
-        ...artistData,
-        ...basicData,
-        ...conditionalData,
-        isBand,
-      });
 
       const response = await registerArtist({
         ...artistData,

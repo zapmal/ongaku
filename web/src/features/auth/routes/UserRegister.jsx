@@ -65,7 +65,7 @@ export function UserRegister() {
       if (error.message === 'canceled') {
         addNotification({
           title: 'Error',
-          message: 'We could not process your request, try again later.',
+          message: 'We could not process your request, try again later',
           status: 'error',
         });
       } else {

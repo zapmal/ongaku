@@ -11,9 +11,7 @@ export class UserService {
     return this.prisma.user.findMany();
   }
 
-  getUser(
-    id: number,
-  ): Promise<{ id: number; email: string; fullName: string }> {
+  getUser(id: number): Promise<{ id: number; email: string; fullName: string }> {
     return this.prisma.user.findUnique({
       where: { id },
       select: {
@@ -32,6 +30,12 @@ export class UserService {
     return this.prisma.user.update({
       where: { id },
       data: newUserData,
+    });
+  }
+
+  getUserByEmail(email: string): Promise<User> {
+    return this.prisma.user.findFirst({
+      where: { email: email },
     });
   }
 }

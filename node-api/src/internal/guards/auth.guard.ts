@@ -1,4 +1,10 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Observable } from 'rxjs';
 import { verify } from 'jsonwebtoken';
@@ -20,11 +26,21 @@ export class AuthGuard implements CanActivate {
     const token = request.cookies['token'];
     const SECRET = this.configService.get('JWT_SECRET');
 
-    if (!token) return false;
+    if (!token) {
+      throw new HttpException(
+        'You do not have permission to make this action',
+        HttpStatus.FORBIDDEN,
+      );
+    }
 
     const user = verify(token, SECRET) as Record<string, unknown>;
 
-    if (!user) return false;
+    if (!user) {
+      throw new HttpException(
+        'We could not process your request, try again later',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
 
     request.user = {
       id: user.id,

@@ -39,10 +39,4 @@ export class AuthService {
       },
     });
   }
-
-  getUserByEmail(email: string): Promise<User> {
-    return this.prisma.user.findFirst({
-      where: { email: email },
-    });
-  }
 }

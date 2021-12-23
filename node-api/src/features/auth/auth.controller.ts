@@ -20,7 +20,7 @@ import { Request, Response } from 'express';
 import * as dayjs from 'dayjs';
 
 import { JoiValidationPipe } from '@/internal/pipes';
-import { AuthGuard } from '@/internal/guards';
+import { AuthGuard, DuplicateArtistGuard, DuplicateUserGuard } from '@/internal/guards';
 import { cookieOptions } from '@utils/cookie';
 
 import { LoginDTO, UserRegisterDTO, ArtistRegisterDTO } from './auth.dto';
@@ -38,11 +38,13 @@ export class AuthController {
 
   @Post('register/user')
   @UsePipes(new JoiValidationPipe(userRegisterSchema))
+  @UseGuards(AuthGuard)
   async userRegister(
     @Body() newUser: UserRegisterDTO,
     @Res({ passthrough: true }) response: Response,
     @Req() request,
   ) {
+    return { newUser };
     const hashedPassword = await hash(newUser.password, 10);
     const ipAddress = request.headers['x-forwarded-for'] || request.ip;
 
@@ -84,6 +86,7 @@ export class AuthController {
 
   @Post('register/artist')
   @UsePipes(new JoiValidationPipe(artistRegisterSchema))
+  @UseGuards(DuplicateArtistGuard)
   async artistRegister(
     @Body() newArtist: ArtistRegisterDTO,
     @Res({ passthrough: true }) response: Response,
@@ -131,44 +134,44 @@ export class AuthController {
     };
   }
 
-  @Post('login')
-  @HttpCode(HttpStatus.OK)
-  @UsePipes(new JoiValidationPipe(loginSchema))
-  async login(
-    @Body() userCredentials: LoginDTO,
-    @Res({ passthrough: true }) response: Response,
-  ) {
-    const user = await this.authService.getUserByEmail(userCredentials.email);
+  // @Post('login')
+  // @HttpCode(HttpStatus.OK)
+  // @UsePipes(new JoiValidationPipe(loginSchema))
+  // async login(
+  //   @Body() userCredentials: LoginDTO,
+  //   @Res({ passthrough: true }) response: Response,
+  // ) {
+  //   const user = await this.userService.getUserByEmail(userCredentials.email);
 
-    if (!user) {
-      throw new NotFound('The user does not exist.');
-    }
+  //   if (!user) {
+  //     throw new NotFound('The user does not exist.');
+  //   }
 
-    const passwordsMatch = await compare(userCredentials.password, user.password);
+  //   const passwordsMatch = await compare(userCredentials.password, user.password);
 
-    if (!passwordsMatch) {
-      throw new Unauthorized('The password does not match.');
-    }
+  //   if (!passwordsMatch) {
+  //     throw new Unauthorized('The password does not match.');
+  //   }
 
-    const token = sign(
-      { id: user.id, email: user.email, fullName: user.fullName },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: process.env.JWT_EXPIRY_TIME,
-      },
-    );
+  //   const token = sign(
+  //     { id: user.id, email: user.email, fullName: user.fullName },
+  //     process.env.JWT_SECRET,
+  //     {
+  //       expiresIn: process.env.JWT_EXPIRY_TIME,
+  //     },
+  //   );
 
-    response.cookie('token', token, { ...cookieOptions });
+  //   response.cookie('token', token, { ...cookieOptions });
 
-    return {
-      message: 'Logged in successfully.',
-      user: {
-        id: user.id,
-        email: user.email,
-        fullName: user.fullName,
-      },
-    };
-  }
+  //   return {
+  //     message: 'Logged in successfully.',
+  //     user: {
+  //       id: user.id,
+  //       email: user.email,
+  //       fullName: user.fullName,
+  //     },
+  //   };
+  // }
 
   @Get('mail-test')
   async mailTest() {

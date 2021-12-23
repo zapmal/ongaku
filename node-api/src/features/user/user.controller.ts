@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  Req,
   Param,
   ParseIntPipe,
   UsePipes,
@@ -24,10 +25,6 @@ import { AuthGuard } from '@/internal/guards';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  /**
-   * This route at the moment is used only for
-   * testing.
-   */
   @Get('all')
   async getAllUsers() {
     const users = await this.userService.getAllUsers();

@@ -20,7 +20,7 @@ import { Request, Response } from 'express';
 import * as dayjs from 'dayjs';
 
 import { JoiValidationPipe } from '@/internal/pipes';
-import { AuthGuard, DuplicateArtistGuard, DuplicateUserGuard } from '@/internal/guards';
+import { AuthGuard, DuplicateEntityGuard } from '@/internal/guards';
 import { cookieOptions } from '@utils/cookie';
 
 import { LoginDTO, UserRegisterDTO, ArtistRegisterDTO } from './auth.dto';
@@ -31,14 +31,14 @@ import { MailService } from '../mail/mail.service';
 @Controller()
 export class AuthController {
   constructor(
-    private readonly authService: AuthService,
+    private authService: AuthService,
     private mailService: MailService,
     private configService: ConfigService,
   ) {}
 
   @Post('register/user')
   @UsePipes(new JoiValidationPipe(userRegisterSchema))
-  @UseGuards(AuthGuard)
+  @UseGuards(DuplicateEntityGuard)
   async userRegister(
     @Body() newUser: UserRegisterDTO,
     @Res({ passthrough: true }) response: Response,
@@ -86,7 +86,7 @@ export class AuthController {
 
   @Post('register/artist')
   @UsePipes(new JoiValidationPipe(artistRegisterSchema))
-  @UseGuards(DuplicateArtistGuard)
+  @UseGuards(DuplicateEntityGuard)
   async artistRegister(
     @Body() newArtist: ArtistRegisterDTO,
     @Res({ passthrough: true }) response: Response,
@@ -173,17 +173,10 @@ export class AuthController {
   //   };
   // }
 
-  @Get('mail-test')
-  async mailTest() {
-    const token = Math.floor(1000 + Math.random() * 9000).toString();
-    const user = {
-      email: '',
-      username: '',
-    };
-
-    await this.mailService.sendUserConfirmation(user, token);
-
-    return 'ay yo?';
+  @Get('whoami')
+  @UseGuards(AuthGuard)
+  whoAmI(@Req() request: Request & { entity: Record<string, unknown> }) {
+    return { entity: request.entity };
   }
 
   @Get('csrf')
@@ -191,13 +184,7 @@ export class AuthController {
     return { csrf: request.csrfToken() };
   }
 
-  @Get('whoami')
-  @UseGuards(AuthGuard)
-  whoAmI(@Req() request: Request & { user: Record<string, unknown> }) {
-    return { user: request.user };
-  }
-
-  @Get('/logout')
+  @Get('logout')
   @HttpCode(HttpStatus.RESET_CONTENT)
   logout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('token');

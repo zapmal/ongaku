@@ -22,11 +22,11 @@ function App() {
   const handleNoCsrf = useCallback(async () => {
     if (!csrfToken) {
       try {
-        const requestedCsrf = await apiClient.get('/csrf');
-        setCsrfToken(requestedCsrf);
+        const { csrf = '' } = await apiClient.get('/csrf');
+        setCsrfToken(csrf);
 
-        const user = await apiClient.get('/whoami');
-        setEntity(user);
+        const { entity = {} } = await apiClient.get('/whoami');
+        setEntity(entity);
       } catch (error) {
         console.log('An error occured in the CSRF request or in the Auto-Login request.', error);
       }

@@ -5,14 +5,16 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
+import { User, Artist } from '@prisma/client';
 import { Observable } from 'rxjs';
 import { Request } from 'express';
 
+import { ArtistService } from '@/features/artist/artist.service';
 import { UserService } from '@/features/user/user.service';
 
 @Injectable()
-export class DuplicateUserGuard implements CanActivate {
-  constructor(private userService: UserService) {}
+export class DuplicateEntityGuard implements CanActivate {
+  constructor(private artistService: ArtistService, private userService: UserService) {}
 
   canActivate(
     context: ExecutionContext,
@@ -23,7 +25,13 @@ export class DuplicateUserGuard implements CanActivate {
   }
 
   async checkDuplicate(request: Request) {
-    const isDuplicated = await this.userService.getUserByEmail(request.body.email);
+    let isDuplicated: User | Artist;
+
+    if (request.body.role === 'USER') {
+      isDuplicated = await this.userService.getUserByEmail(request.body.email);
+    } else {
+      isDuplicated = await this.artistService.getArtistByEmail(request.body.email);
+    }
 
     if (isDuplicated && isDuplicated.id) {
       throw new HttpException(

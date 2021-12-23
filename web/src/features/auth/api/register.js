@@ -4,7 +4,7 @@ import { useAuthStore } from '@/stores/useAuthStore';
 const abortController = new AbortController();
 
 const prepareRegistrationRequest = (data) => {
-  const { csrf } = useAuthStore.getState().csrfToken;
+  const csrf = useAuthStore.getState().csrfToken;
 
   const config = {
     headers: {

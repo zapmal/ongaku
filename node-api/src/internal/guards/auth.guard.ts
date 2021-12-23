@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
     return this.validate(request);
   }
 
-  validate(request: Request & { user: Record<string, unknown> }) {
+  validate(request: Request & { entity: Record<string, unknown> }) {
     const token = request.cookies['token'];
     const SECRET = this.configService.get('JWT_SECRET');
 
@@ -33,19 +33,18 @@ export class AuthGuard implements CanActivate {
       );
     }
 
-    const user = verify(token, SECRET) as Record<string, unknown>;
+    const entity = verify(token, SECRET) as Record<string, unknown>;
 
-    if (!user) {
+    if (!entity) {
       throw new HttpException(
         'We could not process your request, try again later',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
 
-    request.user = {
-      id: user.id,
-      email: user.email,
-      fullName: user.fullName,
+    request.entity = {
+      id: entity.id,
+      email: entity.email,
     };
 
     return true;

@@ -4,7 +4,7 @@ import { MailService } from './mail.service';
 
 @Controller()
 export class MailController {
-  constructor(private mailService: MailService) {}
+  constructor(private mail: MailService) {}
 
   @Get('verify-email')
   async sendVerificationEmail() {
@@ -14,7 +14,7 @@ export class MailController {
       username: '',
     };
 
-    await this.mailService.sendUserConfirmation(user, token);
+    await this.mail.sendUserConfirmation(user, token);
 
     return {
       message: 'This is still being tested!',

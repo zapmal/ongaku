@@ -45,7 +45,7 @@ export class AuthController {
     @Req() request,
   ) {
     const ipAddress = request.headers['x-forwarded-for'] || request.ip;
-    const { message, user, token } = await this.auth.createUser({
+    const { user, token } = await this.auth.createUser({
       ...newUser,
       ipAddress,
     });
@@ -53,7 +53,7 @@ export class AuthController {
     response.cookie('token', token, { ...cookieOptions });
 
     return {
-      message,
+      message: 'Account created successfully!',
       user,
     };
   }
@@ -65,46 +65,13 @@ export class AuthController {
     @Body() newArtist: ArtistRegisterDTO,
     @Res({ passthrough: true }) response: Response,
   ) {
-    let artist = {};
-    const { isBand, bandName, members, artisticName, ...artistData } = newArtist;
-    const hashedPassword = await hash(artistData.password, 10);
-
-    if (isBand) {
-      artist = await this.auth.createBand(
-        {
-          ...artistData,
-          password: hashedPassword,
-          verifiedEmail: false,
-        },
-        { name: bandName, members },
-      );
-    } else {
-      artist = await this.auth.createSoloArtist({
-        ...artistData,
-        password: hashedPassword,
-        verifiedEmail: false,
-        artisticName,
-      });
-    }
-
-    if (!artist) {
-      throw new BadRequest(
-        'Something went wrong while trying to create the artist, try again.',
-      );
-    }
-
-    const token = sign({ artist }, this.config.get('JWT_SECRET'), {
-      expiresIn: this.config.get('JWT_EXPIRY_TIME'),
-    });
+    const { artist, token } = await this.auth.createArtist(newArtist);
 
     response.cookie('token', token, { ...cookieOptions });
 
     return {
       message: 'Account created successfully.',
-      artist: {
-        email: artist['email'],
-        name: isBand ? artist['name'] : artist['artisticName'],
-      },
+      artist,
     };
   }
 

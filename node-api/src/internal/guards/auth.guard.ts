@@ -12,7 +12,7 @@ import { Request } from 'express';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private configService: ConfigService) {}
+  constructor(private config: ConfigService) {}
 
   canActivate(
     context: ExecutionContext,
@@ -24,7 +24,7 @@ export class AuthGuard implements CanActivate {
 
   validate(request: Request & { entity: Record<string, unknown> }) {
     const token = request.cookies['token'];
-    const SECRET = this.configService.get('JWT_SECRET');
+    const SECRET = this.config.get('JWT_SECRET');
 
     if (!token) {
       throw new HttpException(

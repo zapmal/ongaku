@@ -9,7 +9,13 @@ export class ArtistService {
 
   getByEmail(email: string): Promise<Artist> {
     return this.prisma.artist.findFirst({
-      where: { email: email },
+      where: { email },
+    });
+  }
+
+  getByArtisticName(artisticName: string): Promise<Artist> {
+    return this.prisma.artist.findFirst({
+      where: { artisticName },
     });
   }
 }

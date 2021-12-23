@@ -13,12 +13,12 @@ export class ArtistRegisterDTO {
   password: string;
   country: string;
   genres: Array<string>;
-  labels: string; // should be Array<string>
+  labels: Array<string>;
   yearsActive: number;
   isBand: boolean;
   artisticName?: string;
   bandName?: string;
-  members?: string; // should be Array<string>
+  members?: Array<string>;
 }
 
 export class LoginDTO {

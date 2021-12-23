@@ -6,12 +6,13 @@ import * as dayjs from 'dayjs';
 
 import { PrismaService } from '@/internal/services';
 import { ConfigService } from '@nestjs/config';
+import { ArtistRegisterDTO, UserRegisterDTO } from './auth.dto';
 
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService, private config: ConfigService) {}
 
-  async createUser(user: Prisma.UserCreateInput & { ipAddress: string }) {
+  async createUser(user: UserRegisterDTO & { ipAddress: string }) {
     const { ipAddress, password, birthdate, ...userData } = user;
     const hashedPassword = await hash(password, 10);
 
@@ -33,35 +34,68 @@ export class AuthService {
 
     if (!newUser) {
       throw new BadRequest(
-        'Something went wrong while trying to create the user, try again',
+        'Something went wrong while trying to create your account, try again.',
       );
     }
 
-    const token = sign({ user: newUser }, this.config.get('JWT_SECRET'), {
-      expiresIn: this.config.get('JWT_EXPIRY_TIME'),
-    });
+    const token = this.getJwt({ user: newUser });
 
     return {
-      message: 'Account created successfully!',
       token,
-      user: newUser,
+      user: { email: user.email },
     };
   }
 
-  createSoloArtist(artist: Prisma.ArtistCreateInput): Promise<Artist> {
-    return this.prisma.artist.create({ data: artist });
-  }
+  async createArtist(artist: ArtistRegisterDTO) {
+    let newArtist = {};
+    const { isBand, bandName, members, artisticName, ...artistData } = artist;
 
-  createBand(artist: Prisma.ArtistCreateInput, band: Prisma.BandCreateInput) {
-    return this.prisma.artist.create({
-      data: {
-        ...artist,
-        band: {
-          create: {
-            ...band,
+    const hashedPassword = await hash(artistData.password, 10);
+
+    if (isBand) {
+      newArtist = await this.prisma.artist.create({
+        data: {
+          ...artistData,
+          password: hashedPassword,
+          verifiedEmail: false,
+          band: {
+            create: {
+              name: bandName,
+              members,
+            },
           },
         },
+      });
+    } else {
+      newArtist = await this.prisma.artist.create({
+        data: {
+          ...artistData,
+          password: hashedPassword,
+          verifiedEmail: false,
+          artisticName,
+        },
+      });
+    }
+
+    if (!newArtist) {
+      throw new BadRequest(
+        'Something went wrong while trying to create your account, try again.',
+      );
+    }
+
+    const token = this.getJwt({ artist: newArtist });
+
+    return {
+      artist: {
+        email: artist.email,
       },
+      token,
+    };
+  }
+
+  private getJwt(payload: { user } | { artist }) {
+    return sign({ payload }, this.config.get('JWT_SECRET'), {
+      expiresIn: this.config.get('JWT_EXPIRY_TIME'),
     });
   }
 }

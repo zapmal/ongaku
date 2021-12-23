@@ -39,6 +39,17 @@ export class DuplicateEntityGuard implements CanActivate {
 
       emailIsDuplicated = await this.user.getByEmail(request.body.email);
     } else {
+      const artisticNameIsDuplicated = await this.artist.getByArtisticName(
+        request.body.artisticName,
+      );
+
+      if (artisticNameIsDuplicated) {
+        throw new HttpException(
+          'The supplied artistic name is already being used, please try again with a new one',
+          HttpStatus.CONFLICT,
+        );
+      }
+
       emailIsDuplicated = await this.artist.getByEmail(request.body.email);
     }
 

@@ -7,7 +7,7 @@ import { PrismaService } from '@/internal/services';
 export class ArtistService {
   constructor(private prisma: PrismaService) {}
 
-  getArtistByEmail(email: string): Promise<Artist> {
+  getByEmail(email: string): Promise<Artist> {
     return this.prisma.artist.findFirst({
       where: { email: email },
     });

@@ -14,7 +14,7 @@ import { UserService } from '@/features/user/user.service';
 
 @Injectable()
 export class DuplicateEntityGuard implements CanActivate {
-  constructor(private artistService: ArtistService, private userService: UserService) {}
+  constructor(private artist: ArtistService, private user: UserService) {}
 
   canActivate(
     context: ExecutionContext,
@@ -25,17 +25,26 @@ export class DuplicateEntityGuard implements CanActivate {
   }
 
   async checkDuplicate(request: Request) {
-    let isDuplicated: User | Artist;
+    let emailIsDuplicated: User | Artist;
 
     if (request.body.role === 'USER') {
-      isDuplicated = await this.userService.getUserByEmail(request.body.email);
+      const usernameIsDuplicated = await this.user.getByUsername(request.body.username);
+
+      if (usernameIsDuplicated) {
+        throw new HttpException(
+          'The supplied username is already being used, please try again with a new one',
+          HttpStatus.CONFLICT,
+        );
+      }
+
+      emailIsDuplicated = await this.user.getByEmail(request.body.email);
     } else {
-      isDuplicated = await this.artistService.getArtistByEmail(request.body.email);
+      emailIsDuplicated = await this.artist.getByEmail(request.body.email);
     }
 
-    if (isDuplicated && isDuplicated.id) {
+    if (emailIsDuplicated) {
       throw new HttpException(
-        'The supplied email is already being used, please try again with a new one.',
+        'The supplied email is already being used, please try again with a new one',
         HttpStatus.CONFLICT,
       );
     }

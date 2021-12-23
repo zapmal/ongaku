@@ -31,9 +31,9 @@ import { MailService } from '../mail/mail.service';
 @Controller()
 export class AuthController {
   constructor(
-    private authService: AuthService,
-    private mailService: MailService,
-    private configService: ConfigService,
+    private auth: AuthService,
+    private mail: MailService,
+    private config: ConfigService,
   ) {}
 
   @Post('register/user')
@@ -44,43 +44,17 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
     @Req() request,
   ) {
-    return { newUser };
-    const hashedPassword = await hash(newUser.password, 10);
     const ipAddress = request.headers['x-forwarded-for'] || request.ip;
-
-    const user = await this.authService.createUser(
-      {
-        ...newUser,
-        password: hashedPassword,
-        birthdate: dayjs(newUser.birthdate).toDate(),
-      },
-      {
-        ipAddress,
-        createdAt: dayjs(new Date()).toDate(),
-        verifiedEmail: false,
-        active: true,
-      },
-    );
-
-    if (!user) {
-      throw new BadRequest(
-        'Something went wrong while trying to create the user, try again.',
-      );
-    }
-
-    const token = sign({ user }, this.configService.get('JWT_SECRET'), {
-      expiresIn: this.configService.get('JWT_EXPIRY_TIME'),
+    const { message, user, token } = await this.auth.createUser({
+      ...newUser,
+      ipAddress,
     });
 
     response.cookie('token', token, { ...cookieOptions });
 
     return {
-      message: 'Account created successfully.',
-      user: {
-        id: user.id,
-        email: user.email,
-        fullName: user.fullName,
-      },
+      message,
+      user,
     };
   }
 
@@ -96,7 +70,7 @@ export class AuthController {
     const hashedPassword = await hash(artistData.password, 10);
 
     if (isBand) {
-      artist = await this.authService.createBand(
+      artist = await this.auth.createBand(
         {
           ...artistData,
           password: hashedPassword,
@@ -105,7 +79,7 @@ export class AuthController {
         { name: bandName, members },
       );
     } else {
-      artist = await this.authService.createSoloArtist({
+      artist = await this.auth.createSoloArtist({
         ...artistData,
         password: hashedPassword,
         verifiedEmail: false,
@@ -119,8 +93,8 @@ export class AuthController {
       );
     }
 
-    const token = sign({ artist }, this.configService.get('JWT_SECRET'), {
-      expiresIn: this.configService.get('JWT_EXPIRY_TIME'),
+    const token = sign({ artist }, this.config.get('JWT_SECRET'), {
+      expiresIn: this.config.get('JWT_EXPIRY_TIME'),
     });
 
     response.cookie('token', token, { ...cookieOptions });

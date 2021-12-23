@@ -5,10 +5,7 @@ import { User } from '@prisma/client';
 
 @Injectable()
 export class MailService {
-  constructor(
-    private mailerService: MailerService,
-    private configService: ConfigService,
-  ) {}
+  constructor(private mailer: MailerService, private config: ConfigService) {}
 
   /**
    * The token needs to be generated either on the frontend or the backend with
@@ -27,11 +24,11 @@ export class MailService {
    * to the user's mail, this would use the expiry time too.
    */
   async sendUserConfirmation(user: any, token: string) {
-    const frontendUrl = this.configService.get('FRONTEND_URL');
+    const frontendUrl = this.config.get('FRONTEND_URL');
     const url = `${frontendUrl}/auth/confirmation?token=${token}`;
     // const url = `${frontendUrl}/account-confirmation/${token}`;
 
-    await this.mailerService.sendMail({
+    await this.mailer.sendMail({
       to: user.email,
       subject: 'Welcome to Ongaku!',
       template: './confirmation',

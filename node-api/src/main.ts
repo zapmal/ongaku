@@ -5,7 +5,7 @@ import * as csurf from 'csurf';
 import * as helmet from 'helmet';
 
 import { AppModule } from '@/app.module';
-import { cookieOptions } from '@utils/cookie';
+import { cookieOptions } from '@/internal/helpers';
 import { PrismaService } from '@/internal/services';
 
 async function bootstrap() {

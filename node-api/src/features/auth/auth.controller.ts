@@ -21,7 +21,7 @@ import * as dayjs from 'dayjs';
 
 import { JoiValidationPipe } from '@/internal/pipes';
 import { AuthGuard, DuplicateEntityGuard } from '@/internal/guards';
-import { cookieOptions } from '@utils/cookie';
+import { cookieOptions } from '@/internal/helpers';
 
 import { LoginDTO, UserRegisterDTO, ArtistRegisterDTO } from './auth.dto';
 import { loginSchema, userRegisterSchema, artistRegisterSchema } from './auth.schemas';

@@ -35,6 +35,7 @@ export function UserRegister() {
       birthdate: '',
     },
   });
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [submission, setSubmissionState] = useSubmissionState();
   const setEntity = useAuthStore((s) => s.setEntity);
   const addNotification = useNotificationStore((s) => s.addNotification);
@@ -88,12 +89,13 @@ export function UserRegister() {
           <Link to="/register" variant="gray" margin="50px 50px 0 0">
             Go Back
           </Link>
+          </Box>
         </NavigationBar>
 
         <Box textAlign="center" align="center">
           <Heading>Almost there</Heading>
-          <Text color={theme.colors.accentSolid.value} paddingTop="10px" fontSize="xl">
-            Tell us about you.
+          <Text paddingTop="10px" fontSize="xl">
+            <Highlight>Tell us about you.</Highlight>
           </Text>
 
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -176,6 +178,7 @@ export function UserRegister() {
               </WrapItem>
             </Wrap>
 
+
             {submission.isSubmitting ? (
               <Spinner size="lg" marginTop="20px" />
             ) : (
@@ -192,13 +195,12 @@ export function UserRegister() {
                 <Text color={theme.colors.primaryText.value} padding="5px">
                   or
                 </Text>
-                <Link to="/login" variant="gray">
+                <Button variant="link" onClick={onOpen}>
                   Login
-                </Link>
+                </Button>
               </>
             )}
-
-            <Footer paddingTop="30px" />
+            <Footer paddingTop="35px" />
           </form>
         </Box>
       </div>
@@ -210,6 +212,7 @@ export function UserRegister() {
         display={['none', 'none', 'none', 'none', 'inline']}
         fallbackSrc="https://via.placeholder.com/1080"
       />
+      <Login isOpen={isOpen} onClose={onClose} />
     </SimpleGrid>
   );
 }

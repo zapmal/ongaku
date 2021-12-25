@@ -29,12 +29,13 @@ export function ArtistRegister() {
           <Link to="/register" variant="gray" margin="50px 50px 0 0">
             Go Back
           </Link>
+          </Box>
         </NavigationBar>
 
         <Box textAlign="center" align="center">
           <Heading paddingTop="10px">You&apos;re almost part of our team</Heading>
-          <Text color={theme.colors.accentSolid.value} paddingTop="10px" fontSize="xl">
-            Tell us about you.
+          <Text paddingTop="10px" fontSize="xl">
+            <Highlight>Tell us about you.</Highlight>
           </Text>
         </Box>
 

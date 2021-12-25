@@ -8,17 +8,20 @@ import {
   Box,
   Text,
   Heading,
+  useDisclosure,
 } from '@chakra-ui/react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { NavigationBar } from '../styles';
+import { Login } from '../';
 
 import { Button, Card } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
 
 export function ChooseUserType() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <SimpleGrid backgroundImage="/assets/svgs/random-lines.svg" height="100vh">
       <NavigationBar>
@@ -31,6 +34,7 @@ export function ChooseUserType() {
             label={<Highlight variant="gray">Already have an account?</Highlight>}
             align="center"
             padding="20px 30px"
+            onClick={onOpen}
           >
             Login
           </Button>
@@ -92,6 +96,7 @@ export function ChooseUserType() {
           This decision cannot be changed later on.
         </Text>
       </Center>
+      <Login isOpen={isOpen} onClose={onClose} />
     </SimpleGrid>
   );
 }

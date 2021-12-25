@@ -43,6 +43,13 @@ const chakraTheme = extendTheme({
   },
   components: {
     Steps: CustomizedSteps,
+    Modal: {
+      baseStyle: {
+        dialog: {
+          bg: theme.colors.primaryBase.value,
+        },
+      },
+    },
   },
 });
 

@@ -22,7 +22,7 @@ export function Field(props) {
       padding="5px"
       fontWeight="bold"
       _hover={{
-        cursor: 'help',
+        cursor: props.helperText && 'help',
       }}
     >
       {props.label}

@@ -1,4 +1,13 @@
-import { Wrap, WrapItem, Box, Text, Center, Checkbox, Spinner } from '@chakra-ui/react';
+import {
+  useDisclosure,
+  Wrap,
+  WrapItem,
+  Box,
+  Text,
+  Center,
+  Checkbox,
+  Spinner,
+} from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
@@ -6,8 +15,9 @@ import * as yup from 'yup';
 
 import { registerArtist } from '../../api/register';
 import { responsivePaddings, MUSIC_GENRES, COUNTRIES } from '../../constants';
+import { Login } from '../Login';
 
-import { Button, Link } from '@/components/Elements';
+import { Button } from '@/components/Elements';
 import { Field, Select } from '@/components/Form';
 import { useSubmissionState } from '@/hooks/useSubmissionState';
 import { theme } from '@/stitches.config.js';
@@ -34,6 +44,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
       members: '',
     },
   });
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [submission, setSubmissionState] = useSubmissionState();
   const setEntity = useAuthStore((s) => s.setEntity);
   const addNotification = useNotificationStore((s) => s.addNotification);
@@ -66,7 +77,6 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
 
       nextStep();
     } catch (error) {
-      // An object is being rendered on error
       setSubmissionState({
         status: 'error',
         isSubmitting: false,
@@ -257,7 +267,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
           <Spinner size="lg" />
         </Center>
       ) : (
-        <>
+        <div>
           <Center marginTop="40px">
             <Button onClick={prevStep} margin="0 30px" isDisabled={submission.status != ''}>
               Go Back
@@ -271,14 +281,16 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
               Submit
             </Button>
           </Center>
-          <Text color={theme.colors.primaryText.value} padding="5px" marginLeft="30px">
-            or
-          </Text>
-          <Link to="/login" variant="gray" marginLeft="30px">
-            Login
-          </Link>
-        </>
+
+          <Box padding="10px 0 5px 0" marginLeft="35px">
+            <Text color={theme.colors.primaryText.value}>or</Text>
+            <Button variant="link" onClick={onOpen}>
+              Login
+            </Button>
+          </Box>
+        </div>
       )}
+      {isOpen && <Login isOpen={isOpen} onClose={onClose} />}
     </form>
   );
 }

@@ -11,21 +11,21 @@ import {
   Divider,
   VStack,
   Center,
-  Box,
   InputGroup,
   InputRightElement,
-  Image,
-} from '@chakra-ui/react'
+} from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { AiOutlineArrowRight } from 'react-icons/Ai';
+import { AiOutlineArrowRight } from 'react-icons/ai';
 import { FiEyeOff, FiEye } from 'react-icons/fi';
-
+import { useLocation } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { Link, Field, Button, Highlight } from '@/components/Elements';
-import { theme } from '@/stitches.config.js';
+import { Link, Button } from '@/components/Elements';
+import { Field } from '@/components/Form';
+import { Highlight } from '@/components/Utils';
+import { useNotificationStore } from '@/stores/useNotificationStore';
 
 export function Login(props) {
   const {
@@ -40,32 +40,43 @@ export function Login(props) {
     },
   });
   const [show, setShow] = React.useState(false);
+  // Easter egg.
+  const location = useLocation();
+  const addNotification = useNotificationStore((s) => s.addNotification);
 
-  const handleShow = () => setShow(!show);
+  const handleShow = () => {
+    console.log('click');
+    setShow(!show);
+  };
 
   const onSubmit = () => {
-    console.log("XD");
-  }
+    console.log('XD');
+  };
+
   return (
     <>
       <Modal
         isOpen={props.isOpen}
         onClose={props.onClose}
-        motionPreset='slideInBottom'
+        motionPreset="slideInBottom"
         preserveScrollBarGap={true}
         isCentered
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent width={['75%', '80%']}>
           <ModalHeader textAlign="center">
-            <Text fontSize="2xl"><Highlight>Welcome back</Highlight></Text>
-            <Heading fontSize="3xl" marginTop="5px">Log into your account</Heading>
-            <Divider orientation="horizontal" w="125px" p={3} marginLeft={["105px", "130px"]} />
+            <Text fontSize="2xl">
+              <Highlight>Welcome back</Highlight>
+            </Text>
+            <Heading fontSize="3xl" marginTop="5px">
+              Log into your account
+            </Heading>
+            <Divider orientation="horizontal" w="125px" p={3} marginLeft={['50px', '130px']} />
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <VStack maxWidth="300px" marginLeft={["30px", "50px"]}>
+              <VStack maxWidth="300px" marginLeft={['20px', '45px']}>
                 <Field
                   type="text"
                   name="email"
@@ -74,42 +85,76 @@ export function Login(props) {
                   error={errors.email}
                   register={register}
                 />
-                <InputGroup size='md'>
+                <InputGroup size="md">
                   <Field
                     type={show ? 'text' : 'password'}
                     name="password"
                     label="Password"
-                    placeholder='********'
+                    placeholder="********"
                     error={errors.password}
                     register={register}
                   />
-                  <InputRightElement width='4.5rem'>
-                    <Button h='1.75rem' position="absolute" marginTop="85px" onClick={handleShow} variant="transparent">
+                  <InputRightElement width="50px">
+                    <Button
+                      h="30px"
+                      position="absolute"
+                      marginTop="85px"
+                      onClick={handleShow}
+                      variant="transparent"
+                    >
                       {show ? <FiEyeOff /> : <FiEye />}
                     </Button>
-                <Link to="/account-recovery" variant="gray" underline={false} position="absolute" width="130px" marginBottom="5px" marginRight="45px">Forgot password?</Link>
+                    <Link
+                      to="/account-recovery"
+                      variant="gray"
+                      position="absolute"
+                      width="130px"
+                      marginBottom="5px"
+                      marginRight="70px"
+                    >
+                      Forgot password?
+                    </Link>
                   </InputRightElement>
-
-
                 </InputGroup>
-                <Button type="submit" variant="accent" rightIcon={<AiOutlineArrowRight />} marginTop="20px">
+                <Button
+                  type="submit"
+                  variant="accent"
+                  rightIcon={<AiOutlineArrowRight />}
+                  marginTop="20px"
+                >
                   Login
                 </Button>
               </VStack>
             </form>
           </ModalBody>
           <Center>
-            <ModalFooter>
-
+            <ModalFooter display="block" textAlign="center">
               <Text>Not registered yet?</Text>
-              <Link to="/register" variant="accent" marginLeft="5px">Register</Link>
-
+              {location.pathname === '/register' ? (
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    addNotification({
+                      title: 'Easter Egg',
+                      type: 'info',
+                      message: 'Congratulations! You played yourself. You are already here.',
+                    });
+                    props.onClose();
+                  }}
+                >
+                  Register
+                </Button>
+              ) : (
+                <Link to="/register" variant="accent" marginLeft="5px">
+                  Register
+                </Link>
+              )}
             </ModalFooter>
           </Center>
         </ModalContent>
       </Modal>
     </>
-  )
+  );
 }
 
 const schema = yup.object({

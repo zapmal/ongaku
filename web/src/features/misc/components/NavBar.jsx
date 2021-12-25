@@ -4,9 +4,9 @@ import { FiLogOut } from 'react-icons/fi';
 import { MdHome } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
-import { Login } from '@/features/auth';
 import { Button } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
+import { Login } from '@/features/auth';
 import { styled } from '@/stitches.config.js';
 
 const Container = styled('header', {
@@ -57,10 +57,21 @@ export function NavigationBar({ page = 'welcome' }) {
       <ButtonGroup spacing={[3, 4]}>
         {page === 'landing' ? (
           <>
-            <Button label={<Highlight>Existing user?</Highlight>} align="center" isFullWidth={true} onClick={onOpen}>
+            <Button
+              label={<Highlight>Existing user?</Highlight>}
+              align="center"
+              isFullWidth={true}
+              onClick={onOpen}
+            >
               Login
             </Button>
-            <Button label={<Highlight>New user?</Highlight>} as={Link} to="/register" align="center" isFullWidth={true}>
+            <Button
+              label={<Highlight>New user?</Highlight>}
+              as={Link}
+              to="/register"
+              align="center"
+              isFullWidth={true}
+            >
               Register
             </Button>
 
@@ -97,7 +108,7 @@ export function NavigationBar({ page = 'welcome' }) {
           </>
         )}
       </ButtonGroup>
-      <Login isOpen={isOpen} onClose={onClose} />
+      {isOpen && <Login isOpen={isOpen} onClose={onClose} />}
     </Container>
   );
 }

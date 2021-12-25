@@ -13,8 +13,8 @@ import {
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import { Login } from '../components/Login';
 import { NavigationBar } from '../styles';
-import { Login } from '../';
 
 import { Button, Card } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
@@ -96,7 +96,7 @@ export function ChooseUserType() {
           This decision cannot be changed later on.
         </Text>
       </Center>
-      <Login isOpen={isOpen} onClose={onClose} />
+      {isOpen && <Login isOpen={isOpen} onClose={onClose} />}
     </SimpleGrid>
   );
 }

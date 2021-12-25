@@ -7,7 +7,7 @@ import { FirstStep, SecondStep, ThirdStep } from '../components/steps';
 import { NavigationBar } from '../styles';
 
 import { Link } from '@/components/Elements';
-import { theme } from '@/stitches.config.js';
+import { Highlight } from '@/components/Utils';
 
 const labels = ['Basic Information', 'Artistic Information', 'End'];
 
@@ -29,7 +29,6 @@ export function ArtistRegister() {
           <Link to="/register" variant="gray" margin="50px 50px 0 0">
             Go Back
           </Link>
-          </Box>
         </NavigationBar>
 
         <Box textAlign="center" align="center">

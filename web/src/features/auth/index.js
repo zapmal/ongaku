@@ -1,5 +1,4 @@
 export * from './routes';
 
-export { Login } from './components/Login';
-
-export { Footer } from './components/Footer';
+export * from './components/Login';
+export * from './components/Footer';

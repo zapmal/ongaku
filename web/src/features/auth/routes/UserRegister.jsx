@@ -1,4 +1,14 @@
-import { SimpleGrid, Image, Wrap, WrapItem, Box, Text, Heading, Spinner } from '@chakra-ui/react';
+import {
+  useDisclosure,
+  SimpleGrid,
+  Image,
+  Wrap,
+  WrapItem,
+  Box,
+  Text,
+  Heading,
+  Spinner,
+} from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -6,12 +16,13 @@ import { MdDateRange } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
+import { Footer, Login } from '../';
 import { registerUser } from '../api/register';
-import { Footer } from '../components/Footer';
 import { NavigationBar } from '../styles';
 
 import { Link, Button } from '@/components/Elements';
 import { Field } from '@/components/Form';
+import { Highlight } from '@/components/Utils';
 import { useSubmissionState } from '@/hooks/useSubmissionState';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
@@ -89,7 +100,6 @@ export function UserRegister() {
           <Link to="/register" variant="gray" margin="50px 50px 0 0">
             Go Back
           </Link>
-          </Box>
         </NavigationBar>
 
         <Box textAlign="center" align="center">
@@ -178,14 +188,12 @@ export function UserRegister() {
               </WrapItem>
             </Wrap>
 
-
             {submission.isSubmitting ? (
               <Spinner size="lg" marginTop="20px" />
             ) : (
-              <>
+              <Box textAlign="center" marginLeft="35px">
                 <Button
                   type="submit"
-                  align="center"
                   variant="accent"
                   marginTop="30px"
                   isDisabled={submission.status !== ''}
@@ -198,7 +206,7 @@ export function UserRegister() {
                 <Button variant="link" onClick={onOpen}>
                   Login
                 </Button>
-              </>
+              </Box>
             )}
             <Footer paddingTop="35px" />
           </form>
@@ -212,7 +220,8 @@ export function UserRegister() {
         display={['none', 'none', 'none', 'none', 'inline']}
         fallbackSrc="https://via.placeholder.com/1080"
       />
-      <Login isOpen={isOpen} onClose={onClose} />
+
+      {isOpen && <Login isOpen={isOpen} onClose={onClose} />}
     </SimpleGrid>
   );
 }

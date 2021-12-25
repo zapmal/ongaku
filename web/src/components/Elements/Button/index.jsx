@@ -17,16 +17,17 @@ const variants = {
     text: theme.colors.primaryTextContrast,
   },
   link: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     text: theme.colors.primaryText.value,
-    padding: "0",
-    underline: "underline",
+    padding: 0,
+    underline: 'underline',
+    fontWeight: 'normal',
   },
   transparent: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     text: theme.colors.primaryText.value,
-    padding: "0",
-  }
+    padding: 0,
+  },
 };
 
 export function Button({
@@ -51,6 +52,7 @@ export function Button({
         color={variants[variant].text}
         textDecoration={variants[variant].underline}
         padding={variants[variant].padding}
+        fontWeight={variants[variant].fontWeight}
         _hover={{
           bg: variants[variant].hover,
         }}

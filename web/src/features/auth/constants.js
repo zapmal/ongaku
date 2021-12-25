@@ -272,3 +272,5 @@ export const MUSIC_GENRES = [
   { label: 'Polka', value: 'polka' },
   { label: 'Religious', value: 'religious' },
 ];
+
+export const responsivePaddings = ['25%', '30%', '15%', '20%', '9%'];

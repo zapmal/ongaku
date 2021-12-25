@@ -1,15 +1,21 @@
-import { SimpleGrid, Image, Wrap, WrapItem, Box, Text, Heading, useDisclosure } from '@chakra-ui/react';
+import { SimpleGrid, Image, Wrap, WrapItem, Box, Text, Heading, Spinner } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Link as RouterLink } from 'react-router-dom';
+import { MdDateRange } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { Footer, Login } from '../';
+import { registerUser } from '../api/register';
+import { Footer } from '../components/Footer';
 import { NavigationBar } from '../styles';
 
-import { Link, Field, Button, Highlight } from '@/components/Elements';
+import { Link, Button } from '@/components/Elements';
+import { Field } from '@/components/Form';
+import { useSubmissionState } from '@/hooks/useSubmissionState';
 import { theme } from '@/stitches.config.js';
+import { useAuthStore } from '@/stores/useAuthStore';
+import { useNotificationStore } from '@/stores/useNotificationStore';
 
 const responsivePaddings = ['25%', '32%', '15%', '20%', '12%'];
 
@@ -21,7 +27,7 @@ export function UserRegister() {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      fullname: '',
+      fullName: '',
       password: '',
       passwordConfirmation: '',
       email: '',
@@ -30,18 +36,57 @@ export function UserRegister() {
     },
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [submission, setSubmissionState] = useSubmissionState();
+  const setEntity = useAuthStore((s) => s.setEntity);
+  const addNotification = useNotificationStore((s) => s.addNotification);
+  const navigate = useNavigate();
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      setSubmissionState((prevState) => ({ ...prevState, isSubmitting: true }));
+
+      const response = await registerUser(data);
+
+      setSubmissionState({ status: 'success', isSubmitting: false });
+      setEntity(response.user);
+
+      addNotification({
+        title: 'Success!',
+        message: `We'll redirect you to the home page shortly.`,
+        status: 'success',
+      });
+
+      setTimeout(() => navigate('/'), 8000);
+    } catch (error) {
+      setSubmissionState({
+        status: 'error',
+        isSubmitting: false,
+      });
+
+      if (error.message === 'canceled') {
+        addNotification({
+          title: 'Error',
+          message: 'We could not process your request, try again later',
+          status: 'error',
+        });
+      } else {
+        addNotification({
+          title: 'Error',
+          message: error,
+          status: 'error',
+        });
+      }
+    }
+  };
 
   return (
     <SimpleGrid columns={[1, 1, 1, 1, 2]}>
       <div>
         <NavigationBar>
-          <RouterLink to="/">
+          <Link to="/">
             <Image src="/assets/images/app-icon-transparent.png" alt="Ongaku Logo" />
-          </RouterLink>
-          <Box margin="40px 50px 0 0">
-          <Link to="/register" variant="gray">
+          </Link>
+          <Link to="/register" variant="gray" margin="50px 50px 0 0">
             Go Back
           </Link>
           </Box>
@@ -58,10 +103,11 @@ export function UserRegister() {
               <WrapItem paddingLeft={responsivePaddings}>
                 <Field
                   type="text"
-                  name="fullname"
+                  name="fullName"
                   label="Full Name"
                   placeholder="Joe Mama"
-                  error={errors.fullname}
+                  error={errors.fullName}
+                  isDisabled={submission.status !== ''}
                   register={register}
                 />
               </WrapItem>
@@ -71,6 +117,7 @@ export function UserRegister() {
                   name="email"
                   label="Email"
                   placeholder="joemama@gmail.com"
+                  isDisabled={submission.status !== ''}
                   error={errors.email}
                   register={register}
                 />
@@ -82,6 +129,7 @@ export function UserRegister() {
                   label="Password"
                   placeholder="*********"
                   error={errors.password}
+                  isDisabled={submission.status !== ''}
                   register={register}
                 />
               </WrapItem>
@@ -92,6 +140,7 @@ export function UserRegister() {
                   label="Password Confirmation"
                   placeholder="*********"
                   error={errors.passwordConfirmation}
+                  isDisabled={submission.status !== ''}
                   register={register}
                 />
               </WrapItem>
@@ -102,6 +151,7 @@ export function UserRegister() {
                   label="Username"
                   placeholder="xXJoeMama777Xx"
                   error={errors.username}
+                  isDisabled={submission.status !== ''}
                   register={register}
                 />
               </WrapItem>
@@ -110,27 +160,46 @@ export function UserRegister() {
                   type="date"
                   name="birthdate"
                   label="Birthdate"
+                  rightIcon={
+                    // To display this icon ONLY on firefox (any version).
+                    navigator.userAgent.toLowerCase().indexOf('firefox') > -1 && (
+                      <MdDateRange size={20} />
+                    )
+                  }
                   css={`
                     ::-webkit-calendar-picker-indicator {
                       filter: invert(1);
                     }
                   `}
                   error={errors.birthdate}
+                  isDisabled={submission.status !== ''}
                   register={register}
                 />
               </WrapItem>
             </Wrap>
 
-            <Button type="submit" align="center" variant="accent" marginTop="50px">
-              Submit
-            </Button>
-            <Text color={theme.colors.primaryText.value} paddingTop="10px">
-              or
-            </Text>
-            <Button variant="link" onClick={onOpen}>
-              Login
-            </Button>
 
+            {submission.isSubmitting ? (
+              <Spinner size="lg" marginTop="20px" />
+            ) : (
+              <>
+                <Button
+                  type="submit"
+                  align="center"
+                  variant="accent"
+                  marginTop="30px"
+                  isDisabled={submission.status !== ''}
+                >
+                  Submit
+                </Button>
+                <Text color={theme.colors.primaryText.value} padding="5px">
+                  or
+                </Text>
+                <Button variant="link" onClick={onOpen}>
+                  Login
+                </Button>
+              </>
+            )}
             <Footer paddingTop="35px" />
           </form>
         </Box>
@@ -149,7 +218,7 @@ export function UserRegister() {
 }
 
 const schema = yup.object({
-  fullname: yup.string().required('This field is required.'),
+  fullName: yup.string().required('This field is required.'),
   password: yup
     .string()
     .min(8, 'Minimum eight (8) characters.')

@@ -5,6 +5,8 @@ import { useAuth } from './auth';
 export const ROLES = {
   ADMIN: 'ADMIN',
   USER: 'USER',
+  MANAGER: 'MANAGER',
+  ARTIST: 'ARTIST',
 };
 
 export const POLICIES = {

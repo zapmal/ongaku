@@ -49,8 +49,9 @@ async function main() {
       country: 'Venezuela',
       artisticName: 'iverson',
       genres: ['rap', 'raro'],
-      yearsActive: new Date(),
+      yearsActive: 4,
       labels: ['Arrecho Records'],
+      verifiedEmail: true,
       password: await hash('password', 10),
     },
   });
@@ -64,7 +65,8 @@ async function main() {
       country: 'Korea',
       labels: ['BigHit'],
       genres: ['pop', 'rap'],
-      yearsActive: new Date(),
+      yearsActive: 2,
+      verifiedEmail: false,
       band: {
         create: {
           name: 'BTS',

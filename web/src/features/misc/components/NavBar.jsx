@@ -4,8 +4,9 @@ import { FiLogOut } from 'react-icons/fi';
 import { MdHome } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
-import { Highlight, Button } from '@/components/Elements';
 import { Login } from '@/features/auth';
+import { Button } from '@/components/Elements';
+import { Highlight } from '@/components/Utils';
 import { styled } from '@/stitches.config.js';
 
 const Container = styled('header', {

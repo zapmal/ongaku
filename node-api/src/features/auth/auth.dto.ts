@@ -1,11 +1,24 @@
-export class RegisterDTO {
+export class UserRegisterDTO {
   fullName: string;
-  username: string;
-  email: string;
   password: string;
+  email: string;
+  username: string;
   birthdate: Date;
-  avatar?: string;
   role: 'ADMIN' | 'MODERATOR' | 'MANAGER' | 'USER';
+}
+
+export class ArtistRegisterDTO {
+  email: string;
+  birthdate: Date;
+  password: string;
+  country: string;
+  genres: Array<string>;
+  labels: Array<string>;
+  yearsActive: number;
+  isBand: boolean;
+  artisticName?: string;
+  bandName?: string;
+  members?: Array<string>;
 }
 
 export class LoginDTO {

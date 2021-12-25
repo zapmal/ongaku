@@ -5,23 +5,23 @@ import * as csurf from 'csurf';
 import * as helmet from 'helmet';
 
 import { AppModule } from '@/app.module';
-import { cookieOptions } from '@utils/cookie';
-import { PrismaService } from '@common/services';
+import { cookieOptions } from '@/internal/helpers';
+import { PrismaService } from '@/internal/services';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const configService = app.get(ConfigService);
+  const config = app.get(ConfigService);
 
-  const PORT = configService.get<number>('PORT', 5000);
+  const PORT = config.get<number>('PORT', 5000);
 
-  const prismaService: PrismaService = app.get(PrismaService);
-  prismaService.enableShutdownHooks(app);
+  const prisma: PrismaService = app.get(PrismaService);
+  prisma.enableShutdownHooks(app);
 
   app.setGlobalPrefix('api');
 
   app.use(helmet());
   app.enableCors({
-    origin: configService.get('FRONTEND_URL'),
+    origin: config.get('FRONTEND_URL'),
     credentials: true,
   });
   app.use(cookieParser());

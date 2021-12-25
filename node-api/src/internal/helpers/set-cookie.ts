@@ -6,12 +6,7 @@ type CookieOptions = {
   httpOnly?: boolean;
 };
 
-const setCookie = (
-  response: Response,
-  value: string,
-  key: string,
-  secure = false,
-) => {
+const setCookie = (response: Response, value: string, key: string, secure = false) => {
   let options: CookieOptions = {
     maxAge: 1000 * 3600 * 24 * 30 * 2,
   };

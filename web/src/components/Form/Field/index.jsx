@@ -1,4 +1,13 @@
-import { FormControl, Text, FormHelperText, FormLabel, Input, InputGroup } from '@chakra-ui/react';
+/* eslint-disable react/no-children-prop */
+import {
+  FormControl,
+  Text,
+  Tooltip,
+  FormLabel,
+  Input,
+  InputGroup,
+  InputRightElement,
+} from '@chakra-ui/react';
 import React, { useRef } from 'react';
 import { MdFileUpload } from 'react-icons/md';
 
@@ -6,18 +15,35 @@ import { Button } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 
 export function Field(props) {
+  const label = (
+    <FormLabel
+      color={theme.colors.primaryTextContrast.value}
+      htmlFor={props.name}
+      padding="5px"
+      fontWeight="bold"
+      _hover={{
+        cursor: 'help',
+      }}
+    >
+      {props.label}
+    </FormLabel>
+  );
   return (
     <FormControl>
-      {props.label && (
-        <FormLabel
-          color={theme.colors.primaryTextContrast.value}
-          htmlFor={props.name}
-          padding="5px"
-          fontWeight="bold"
-        >
-          {props.label}
-        </FormLabel>
-      )}
+      {props.label &&
+        (props.helperText ? (
+          <Tooltip
+            label={props.helperText}
+            bg={theme.colors.primaryBgHover.value}
+            textAlign="center"
+            borderRadius="5px"
+            placement="top"
+          >
+            {label}
+          </Tooltip>
+        ) : (
+          label
+        ))}
       {props.type === 'file' ? (
         <FileInput
           id={props.name}
@@ -27,26 +53,28 @@ export function Field(props) {
           <Button leftIcon={<MdFileUpload />}>Upload</Button>
         </FileInput>
       ) : (
-        <Input
-          type={props.type}
-          id={props.name}
-          placeholder={props.placeholder}
-          isInvalid={!!props.error}
-          isDisabled={!!props.isDisabled}
-          css={props.css}
-          focusBorderColor={'#E93D82'}
-          {...props.register(props.name, {
-            disabled: props.isDisabled,
-          })}
-          onChange={props.onChange}
-        />
+        <InputGroup>
+          <Input
+            type={props.type}
+            id={props.name}
+            placeholder={props.placeholder}
+            isInvalid={!!props.error}
+            isDisabled={!!props.isDisabled}
+            css={props.css}
+            focusBorderColor={'#E93D82'}
+            {...props.register(props.name, {
+              disabled: props.isDisabled,
+            })}
+            onChange={props.onChange}
+          />
+          {props.rightIcon && <InputRightElement children={props.rightIcon} pointerEvents="none" />}
+        </InputGroup>
       )}
       {props.error && (
         <Text color={theme.colors.dangerSolid.value} paddingTop="5px" textAlign="left">
           {props.error.message}
         </Text>
       )}
-      {props.helperText && <FormHelperText paddingTop="5px">{props.helperText}</FormHelperText>}
     </FormControl>
   );
 }

@@ -1,24 +1,15 @@
-import {
-  useDisclosure,
-  Wrap,
-  WrapItem,
-  Box,
-  Text,
-  Center,
-  Checkbox,
-  Spinner,
-} from '@chakra-ui/react';
+import { useDisclosure, Wrap, WrapItem, Box, Text, Center, Spinner } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useState, useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
-import { registerArtist } from '../../api/register';
+import { registerArtist } from '../../api';
 import { responsivePaddings, MUSIC_GENRES, COUNTRIES } from '../../constants';
 import { Login } from '../Login';
 
 import { Button } from '@/components/Elements';
-import { Field, Select } from '@/components/Form';
+import { Field, Select, Checkbox } from '@/components/Form';
 import { useSubmissionState } from '@/hooks/useSubmissionState';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
@@ -242,26 +233,19 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
           </Box>
         </WrapItem>
       </Wrap>
-      <Controller
-        control={control}
+
+      <Checkbox
         name="isBand"
-        render={({ field }) => (
-          <Checkbox
-            onChange={(v) => {
-              field.onChange(v);
-              handleIsBand();
-            }}
-            checked={isBand}
-            colorScheme="pink"
-            size="lg"
-            marginTop="30px"
-            marginLeft="30px"
-            isDisabled={submission.status != ''}
-          >
-            Is it a band?
-          </Checkbox>
-        )}
+        text="Is it a band?"
+        control={control}
+        value={isBand}
+        onChangeHandler={handleIsBand}
+        isDisabled={submission.status != ''}
+        marginTop="30px"
+        marginLeft="30px"
+        size="lg"
       />
+
       {submission.isSubmitting ? (
         <Center marginTop="40px">
           <Spinner size="lg" />

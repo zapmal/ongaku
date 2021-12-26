@@ -1,16 +1,29 @@
-import { BadRequestException as BadRequest, Injectable } from '@nestjs/common';
-import { Prisma, User, Artist } from '@prisma/client';
-import { hash } from 'bcrypt';
+import {
+  BadRequestException as BadRequest,
+  UnauthorizedException as Unauthorized,
+  NotFoundException as NotFound,
+  Injectable,
+} from '@nestjs/common';
+import { compare, hash } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 import * as dayjs from 'dayjs';
 
 import { PrismaService } from '@/internal/services';
 import { ConfigService } from '@nestjs/config';
-import { ArtistRegisterDTO, UserRegisterDTO } from './auth.dto';
+import { UserService } from '../user/user.service';
+import { ArtistService } from '../artist/artist.service';
+
+import { ArtistRegisterDTO, LoginDTO, UserRegisterDTO } from './auth.dto';
+import { Artist, User } from '.prisma/client';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService, private config: ConfigService) {}
+  constructor(
+    private prisma: PrismaService,
+    private config: ConfigService,
+    private user: UserService,
+    private artist: ArtistService,
+  ) {}
 
   async createUser(user: UserRegisterDTO & { ipAddress: string }) {
     const { ipAddress, password, birthdate, ...userData } = user;
@@ -93,7 +106,36 @@ export class AuthService {
     };
   }
 
-  private getJwt(payload: { user } | { artist }) {
+  async login(credentials: LoginDTO) {
+    let entity: Artist | User;
+
+    if (credentials.isArtist) {
+      entity = await this.artist.getByEmail(credentials.email);
+    } else {
+      entity = await this.user.getByEmail(credentials.email);
+    }
+
+    if (!entity) {
+      throw new NotFound('That account does not exist');
+    }
+
+    const passwordsMatch = await compare(credentials.password, entity.password);
+
+    if (!passwordsMatch) {
+      throw new Unauthorized('Incorrect password');
+    }
+
+    const token = this.getJwt({ entity });
+
+    return {
+      token,
+      entity: {
+        email: entity.email,
+      },
+    };
+  }
+
+  getJwt(payload: { user } | { artist } | { entity }) {
     return sign({ payload }, this.config.get('JWT_SECRET'), {
       expiresIn: this.config.get('JWT_EXPIRY_TIME'),
     });

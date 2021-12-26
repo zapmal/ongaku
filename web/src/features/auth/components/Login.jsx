@@ -13,22 +13,28 @@ import {
   Center,
   InputGroup,
   InputRightElement,
+  Spinner,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { AiOutlineArrowRight } from 'react-icons/ai';
-import { FiEyeOff, FiEye } from 'react-icons/fi';
-import { useLocation } from 'react-router-dom';
+import { IoMdEyeOff, IoMdEye } from 'react-icons/io';
+import { MdArrowForward } from 'react-icons/md';
+import { useLocation, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
+import { login } from '../api';
+
 import { Link, Button } from '@/components/Elements';
-import { Field } from '@/components/Form';
+import { Field, Checkbox } from '@/components/Form';
 import { Highlight } from '@/components/Utils';
+import { useSubmissionState } from '@/hooks/useSubmissionState';
+import { useAuthStore } from '@/stores/useAuthStore';
 import { useNotificationStore } from '@/stores/useNotificationStore';
 
 export function Login(props) {
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
@@ -37,20 +43,59 @@ export function Login(props) {
     defaultValues: {
       email: '',
       password: '',
+      isArtist: false,
     },
   });
-  const [show, setShow] = React.useState(false);
-  // Easter egg.
-  const location = useLocation();
+  const [show, setShow] = useState(false);
+  const [isArtist, setIsArtist] = useState(false);
+  const [submission, setSubmissionState] = useSubmissionState();
+  const navigate = useNavigate();
+
+  const setEntity = useAuthStore((s) => s.setEntity);
   const addNotification = useNotificationStore((s) => s.addNotification);
 
-  const handleShow = () => {
-    console.log('click');
-    setShow(!show);
-  };
+  // Easter egg.
+  const location = useLocation();
 
-  const onSubmit = () => {
-    console.log('XD');
+  const handleShow = () => setShow(!show);
+  const handleIsArtist = () => setIsArtist(!isArtist);
+
+  const onSubmit = async (data) => {
+    try {
+      setSubmissionState((prevState) => ({ ...prevState, isSubmitting: true }));
+
+      const response = await login(data);
+
+      setSubmissionState({ status: 'success', isSubmitting: false });
+      setEntity(response.entity);
+
+      addNotification({
+        title: 'Success!',
+        message: 'You are being redirected, please wait patiently',
+        status: 'success',
+      });
+
+      setTimeout(() => navigate('/'), 8000);
+    } catch (error) {
+      setSubmissionState({
+        status: 'error',
+        isSubmitting: false,
+      });
+
+      if (error.message === 'canceled') {
+        addNotification({
+          title: 'Error',
+          message: 'We could not process your request, try again later',
+          status: 'error',
+        });
+      } else {
+        addNotification({
+          title: 'Error',
+          message: error,
+          status: 'error',
+        });
+      }
+    }
   };
 
   return (
@@ -83,6 +128,7 @@ export function Login(props) {
                   label="Email"
                   placeholder="JoeMama@gmail.com"
                   error={errors.email}
+                  isDisabled={submission.status != ''}
                   register={register}
                 />
                 <InputGroup size="md">
@@ -92,6 +138,7 @@ export function Login(props) {
                     label="Password"
                     placeholder="********"
                     error={errors.password}
+                    isDisabled={submission.status != ''}
                     register={register}
                   />
                   <InputRightElement width="50px">
@@ -102,7 +149,7 @@ export function Login(props) {
                       onClick={handleShow}
                       variant="transparent"
                     >
-                      {show ? <FiEyeOff /> : <FiEye />}
+                      {show ? <IoMdEyeOff /> : <IoMdEye />}
                     </Button>
                     <Link
                       to="/account-recovery"
@@ -116,14 +163,30 @@ export function Login(props) {
                     </Link>
                   </InputRightElement>
                 </InputGroup>
-                <Button
-                  type="submit"
-                  variant="accent"
-                  rightIcon={<AiOutlineArrowRight />}
-                  marginTop="20px"
-                >
-                  Login
-                </Button>
+                <Checkbox
+                  name="isArtist"
+                  text="Are you an artist?"
+                  control={control}
+                  onChangeHandler={handleIsArtist}
+                  value={isArtist}
+                  isDisabled={submission.status != ''}
+                  size="md"
+                  padding="5px 0"
+                />
+
+                {submission.isSubmitting ? (
+                  <Spinner size="lg" />
+                ) : (
+                  <Button
+                    type="submit"
+                    variant="accent"
+                    rightIcon={<MdArrowForward size={20} />}
+                    marginTop="5px"
+                    isDisabled={submission.status != ''}
+                  >
+                    Login
+                  </Button>
+                )}
               </VStack>
             </form>
           </ModalBody>
@@ -163,4 +226,5 @@ const schema = yup.object({
     .string()
     .min(8, 'Minimum eight (8) characters.')
     .required('This field is required.'),
+  isArtist: yup.boolean(),
 });

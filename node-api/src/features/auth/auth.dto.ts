@@ -24,4 +24,5 @@ export class ArtistRegisterDTO {
 export class LoginDTO {
   email: string;
   password: string;
+  isArtist: boolean;
 }

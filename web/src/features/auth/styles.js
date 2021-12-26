@@ -6,6 +6,6 @@ export const NavigationBar = styled('header', {
 
   '& img': {
     width: '150px',
-    maxHeight: "102px",
+    maxHeight: '100px',
   },
 });

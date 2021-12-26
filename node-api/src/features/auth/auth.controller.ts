@@ -2,9 +2,6 @@ import {
   Body,
   Controller,
   Post,
-  BadRequestException as BadRequest,
-  UnauthorizedException as Unauthorized,
-  NotFoundException as NotFound,
   UsePipes,
   Res,
   Get,
@@ -14,10 +11,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { compare, hash } from 'bcrypt';
-import { sign } from 'jsonwebtoken';
 import { Request, Response } from 'express';
-import * as dayjs from 'dayjs';
 
 import { JoiValidationPipe } from '@/internal/pipes';
 import { AuthGuard, DuplicateEntityGuard } from '@/internal/guards';
@@ -75,44 +69,23 @@ export class AuthController {
     };
   }
 
-  // @Post('login')
-  // @HttpCode(HttpStatus.OK)
-  // @UsePipes(new JoiValidationPipe(loginSchema))
-  // async login(
-  //   @Body() userCredentials: LoginDTO,
-  //   @Res({ passthrough: true }) response: Response,
-  // ) {
-  //   const user = await this.userService.getUserByEmail(userCredentials.email);
+  @Post('login')
+  @HttpCode(HttpStatus.OK)
+  @UsePipes(new JoiValidationPipe(loginSchema))
+  async login(
+    @Body() credentials: LoginDTO,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    console.log(credentials);
+    const { entity, token } = await this.auth.login(credentials);
 
-  //   if (!user) {
-  //     throw new NotFound('The user does not exist.');
-  //   }
+    response.cookie('token', token, { ...cookieOptions });
 
-  //   const passwordsMatch = await compare(userCredentials.password, user.password);
-
-  //   if (!passwordsMatch) {
-  //     throw new Unauthorized('The password does not match.');
-  //   }
-
-  //   const token = sign(
-  //     { id: user.id, email: user.email, fullName: user.fullName },
-  //     process.env.JWT_SECRET,
-  //     {
-  //       expiresIn: process.env.JWT_EXPIRY_TIME,
-  //     },
-  //   );
-
-  //   response.cookie('token', token, { ...cookieOptions });
-
-  //   return {
-  //     message: 'Logged in successfully.',
-  //     user: {
-  //       id: user.id,
-  //       email: user.email,
-  //       fullName: user.fullName,
-  //     },
-  //   };
-  // }
+    return {
+      message: 'Logged in successfully.',
+      entity,
+    };
+  }
 
   @Get('whoami')
   @UseGuards(AuthGuard)

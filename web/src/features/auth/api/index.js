@@ -3,7 +3,7 @@ import { useAuthStore } from '@/stores/useAuthStore';
 
 const abortController = new AbortController();
 
-const prepareRegistrationRequest = (data) => {
+const prepareRequest = (data) => {
   const csrf = useAuthStore.getState().csrfToken;
 
   const config = {
@@ -25,7 +25,7 @@ const prepareRegistrationRequest = (data) => {
 };
 
 export const registerUser = (data) => {
-  const [user, config] = prepareRegistrationRequest(data);
+  const [user, config] = prepareRequest(data);
 
   if (config.signal) abortController.abort();
 
@@ -33,9 +33,17 @@ export const registerUser = (data) => {
 };
 
 export const registerArtist = (data) => {
-  const [artist, config] = prepareRegistrationRequest(data);
+  const [artist, config] = prepareRequest(data);
 
   if (config.signal) abortController.abort();
 
   return apiClient.post('register/artist', artist, config);
+};
+
+export const login = (data) => {
+  const [entity, config] = prepareRequest(data);
+
+  if (config.signal) abortController.abort();
+
+  return apiClient.post('login', entity, config);
 };

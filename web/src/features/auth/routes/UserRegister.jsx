@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { Footer, Login } from '../';
-import { registerUser } from '../api/register';
+import { registerUser } from '../api';
 import { NavigationBar } from '../styles';
 
 import { Link, Button } from '@/components/Elements';

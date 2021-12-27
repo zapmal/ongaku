@@ -76,7 +76,6 @@ export class AuthController {
     @Body() credentials: LoginDTO,
     @Res({ passthrough: true }) response: Response,
   ) {
-    console.log(credentials);
     const { entity, token } = await this.auth.login(credentials);
 
     response.cookie('token', token, { ...cookieOptions });
@@ -85,6 +84,14 @@ export class AuthController {
       message: 'Logged in successfully.',
       entity,
     };
+  }
+
+  @Get('logout')
+  @HttpCode(HttpStatus.RESET_CONTENT)
+  logout(@Res({ passthrough: true }) response: Response) {
+    response.clearCookie('token');
+
+    return { message: 'Logged out successfully.' };
   }
 
   @Get('whoami')
@@ -96,13 +103,5 @@ export class AuthController {
   @Get('csrf')
   getCsrfToken(@Req() request: Request) {
     return { csrf: request.csrfToken() };
-  }
-
-  @Get('logout')
-  @HttpCode(HttpStatus.RESET_CONTENT)
-  logout(@Res({ passthrough: true }) response: Response) {
-    response.clearCookie('token');
-
-    return { message: 'Logged out successfully.' };
   }
 }

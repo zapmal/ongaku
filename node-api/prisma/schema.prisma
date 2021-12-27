@@ -31,6 +31,7 @@ enum Role {
   MODERATOR
   MANAGER
   USER
+  ARTIST
 }
 
 model UserPlaylist {
@@ -82,7 +83,6 @@ model Artist {
   id            Int      @id @default(autoincrement())
   country       String   @db.VarChar(50)
   genres        String[]
-  // This can be calculated with AGE(now(), yearsActive)
   yearsActive   Int      @map("years_active")
   artisticName  String?  @unique @map("artistic_name") @db.VarChar(125)
   labels        String[]
@@ -90,6 +90,7 @@ model Artist {
   email         String   @unique @db.VarChar(125)
   password      String   @db.VarChar(255)
   verifiedEmail Boolean  @map("verified_email")
+  role          Role     @default(ARTIST)
   bandId        Int?     @map("band_id")
 
   band              Band?              @relation(fields: [bandId], references: [id])

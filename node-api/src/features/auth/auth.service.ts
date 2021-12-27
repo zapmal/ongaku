@@ -4,17 +4,17 @@ import {
   NotFoundException as NotFound,
   Injectable,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Artist, User } from '@prisma/client';
 import { compare, hash } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 import * as dayjs from 'dayjs';
 
 import { PrismaService } from '@/internal/services';
-import { ConfigService } from '@nestjs/config';
 import { UserService } from '../user/user.service';
 import { ArtistService } from '../artist/artist.service';
 
 import { ArtistRegisterDTO, LoginDTO, UserRegisterDTO } from './auth.dto';
-import { Artist, User } from '.prisma/client';
 
 @Injectable()
 export class AuthService {

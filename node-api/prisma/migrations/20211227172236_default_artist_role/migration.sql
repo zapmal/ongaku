@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "artist" ALTER COLUMN "role" SET DEFAULT E'ARTIST';

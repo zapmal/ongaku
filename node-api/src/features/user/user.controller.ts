@@ -13,12 +13,12 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 
+import { JoiValidationPipe } from '@/internal/pipes';
+import { AuthGuard } from '@/internal/guards';
+
 import { UserService } from './user.service';
 import { UpdateUserDTO } from './user.dto';
 import { updateUserSchema } from './user.schemas';
-
-import { JoiValidationPipe } from '@/internal/pipes';
-import { AuthGuard } from '@/internal/guards';
 
 @Controller('user')
 export class UserController {

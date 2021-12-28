@@ -1,23 +1,18 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 
 import { MailService } from './mail.service';
+import { ResendVerificationMailDTO } from './mail.dto';
 
 @Controller()
 export class MailController {
   constructor(private mail: MailService) {}
 
-  @Get('verify-email')
-  async sendVerificationEmail() {
-    const token = Math.floor(1000 + Math.random() * 9000).toString();
-    const user = {
-      email: '',
-      username: '',
-    };
-
-    await this.mail.sendUserConfirmation(user, token);
+  @Post('/resend-verification')
+  async resendVerificationMail(@Body() { to }: ResendVerificationMailDTO) {
+    await this.mail.sendVerificationEmail(to);
 
     return {
-      message: 'This is still being tested!',
+      message: 'Email sent! Check your inbox',
     };
   }
 }

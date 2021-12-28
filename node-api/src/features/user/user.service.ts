@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
+import { Prisma, User, UserMetadata } from '@prisma/client';
 
 import { PrismaService } from '@/internal/services';
 
@@ -33,9 +33,26 @@ export class UserService {
     });
   }
 
+  updateMetadata(
+    id: number,
+    newMetadata: Prisma.UserMetadataUpdateInput,
+  ): Promise<UserMetadata> {
+    return this.prisma.userMetadata.update({
+      where: { id },
+      data: newMetadata,
+    });
+  }
+
   getByEmail(email: string): Promise<User> {
     return this.prisma.user.findFirst({
       where: { email: email },
+      include: {
+        userMetadata: {
+          select: {
+            verifiedEmail: true,
+          },
+        },
+      },
     });
   }
 

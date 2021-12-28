@@ -17,7 +17,7 @@ import { JoiValidationPipe } from '@/internal/pipes';
 import { AuthGuard, DuplicateEntityGuard } from '@/internal/guards';
 import { cookieOptions } from '@/internal/helpers';
 
-import { LoginDTO, UserRegisterDTO, ArtistRegisterDTO } from './auth.dto';
+import { LoginDTO, UserRegisterDTO, ArtistRegisterDTO, VerifyEmailDTO } from './auth.dto';
 import { loginSchema, userRegisterSchema, artistRegisterSchema } from './auth.schemas';
 import { AuthService } from './auth.service';
 import { MailService } from '../mail/mail.service';
@@ -44,7 +44,9 @@ export class AuthController {
       ipAddress,
     });
 
-    response.cookie('token', token, { ...cookieOptions });
+    response.cookie('token', token, cookieOptions);
+
+    await this.mail.sendVerificationEmail(user.email);
 
     return {
       message: 'Account created successfully!',
@@ -62,6 +64,8 @@ export class AuthController {
     const { artist, token } = await this.auth.createArtist(newArtist);
 
     response.cookie('token', token, { ...cookieOptions });
+
+    await this.mail.sendVerificationEmail(artist.email);
 
     return {
       message: 'Account created successfully.',
@@ -81,7 +85,7 @@ export class AuthController {
     response.cookie('token', token, { ...cookieOptions });
 
     return {
-      message: 'Logged in successfully.',
+      message: 'Logged in successfully',
       entity,
     };
   }
@@ -91,7 +95,19 @@ export class AuthController {
   logout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('token');
 
-    return { message: 'Logged out successfully.' };
+    return { message: 'Logged out successfully' };
+  }
+
+  @Post('verify')
+  @HttpCode(HttpStatus.ACCEPTED)
+  @UseGuards(AuthGuard)
+  async verifyEmail(@Body() data: VerifyEmailDTO) {
+    const { verifiedEmail } = await this.auth.verifyEmail(data);
+
+    return {
+      message: 'Email verified successfully!',
+      verifiedEmail,
+    };
   }
 
   @Get('whoami')

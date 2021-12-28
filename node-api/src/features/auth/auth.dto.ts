@@ -16,6 +16,7 @@ export class ArtistRegisterDTO {
   labels: Array<string>;
   yearsActive: number;
   isBand: boolean;
+  role: 'ARTIST';
   artisticName?: string;
   bandName?: string;
   members?: Array<string>;
@@ -25,4 +26,11 @@ export class LoginDTO {
   email: string;
   password: string;
   isArtist: boolean;
+}
+
+export class VerifyEmailDTO {
+  id: number;
+  hash: string;
+  email: string;
+  role: 'USER' | 'ARTIST';
 }

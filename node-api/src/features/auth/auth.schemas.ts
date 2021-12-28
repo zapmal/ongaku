@@ -26,6 +26,7 @@ export const artistRegisterSchema = Joi.object({
   labels: Joi.array().required(),
   yearsActive: Joi.number().positive().integer().required(),
   isBand: Joi.boolean().required(),
+  role: Joi.string().valid('ARTIST').required(),
   artisticName: Joi.string().when('isBand', {
     is: false,
     then: Joi.string().required(),

@@ -21,7 +21,7 @@ import { MailController } from './mail.controller';
           },
         },
         defaults: {
-          from: `"No Reply" <${config.get('MAIL_FROM')}>`,
+          from: `"Ongaku Team" <${config.get('MAIL_FROM')}>`,
         },
         template: {
           dir: join(__dirname, 'templates'),

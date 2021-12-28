@@ -5,16 +5,17 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Artist, User } from '@prisma/client';
+import { Artist, User, UserMetadata } from '@prisma/client';
 import { compare, hash } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 import * as dayjs from 'dayjs';
 
-import { PrismaService } from '@/internal/services';
 import { UserService } from '../user/user.service';
 import { ArtistService } from '../artist/artist.service';
+import { ArtistRegisterDTO, LoginDTO, UserRegisterDTO, VerifyEmailDTO } from './auth.dto';
 
-import { ArtistRegisterDTO, LoginDTO, UserRegisterDTO } from './auth.dto';
+import { PrismaService } from '@/internal/services';
+import { getHash } from '@/internal/helpers/hash';
 
 @Injectable()
 export class AuthService {
@@ -51,11 +52,16 @@ export class AuthService {
       );
     }
 
-    const token = this.getJwt({ user: newUser });
+    const token = this.getJwt({ ...newUser });
 
     return {
       token,
-      user: { email: user.email },
+      user: {
+        email: user.email,
+        username: user.username,
+        verifiedEmail: false,
+        role: 'USER',
+      },
     };
   }
 
@@ -92,27 +98,32 @@ export class AuthService {
 
     if (!newArtist) {
       throw new BadRequest(
-        'Something went wrong while trying to create your account, try again.',
+        'Something went wrong while trying to create your account, try again',
       );
     }
 
-    const token = this.getJwt({ artist: newArtist });
+    const token = this.getJwt({ ...newArtist });
 
     return {
       artist: {
         email: artist.email,
+        artisticName: artist.artisticName,
+        verifiedEmail: false,
+        role: 'ARTIST',
       },
       token,
     };
   }
 
   async login(credentials: LoginDTO) {
-    let entity: Artist | User;
+    let entity: Artist | (User & { verifiedEmail: boolean });
 
     if (credentials.isArtist) {
       entity = await this.artist.getByEmail(credentials.email);
     } else {
-      entity = await this.user.getByEmail(credentials.email);
+      entity = (await this.user.getByEmail(credentials.email)) as User & {
+        verifiedEmail: boolean;
+      };
     }
 
     if (!entity) {
@@ -125,18 +136,51 @@ export class AuthService {
       throw new Unauthorized('Incorrect password');
     }
 
-    const token = this.getJwt({ entity });
+    const verifiedEmail = credentials.isArtist
+      ? entity.verifiedEmail
+      : entity['userMetadata'].verifiedEmail;
+
+    const token = this.getJwt({ ...entity, verifiedEmail });
 
     return {
       token,
       entity: {
+        id: entity.id,
         email: entity.email,
+        role: entity.role,
+        verifiedEmail,
       },
     };
   }
 
-  getJwt(payload: { user } | { artist } | { entity }) {
-    return sign({ payload }, this.config.get('JWT_SECRET'), {
+  async verifyEmail(data: VerifyEmailDTO) {
+    let entity: Artist | UserMetadata;
+
+    if (data.hash === getHash(data.email)) {
+      if (data.role === 'USER') {
+        entity = await this.user.updateMetadata(data.id, { verifiedEmail: true });
+      } else if (data.role === 'ARTIST') {
+        entity = await this.artist.update(data.id, { verifiedEmail: true });
+      }
+    } else {
+      throw new BadRequest(
+        'The link does not correspond the account, please request a new one and try again',
+      );
+    }
+
+    if (!entity) {
+      throw new BadRequest(
+        'Something went wrong while trying to verify your account, try again',
+      );
+    }
+
+    return {
+      verifiedEmail: entity.verifiedEmail,
+    };
+  }
+
+  getJwt(payload: Record<string, unknown>) {
+    return sign(payload, this.config.get('JWT_SECRET'), {
       expiresIn: this.config.get('JWT_EXPIRY_TIME'),
     });
   }

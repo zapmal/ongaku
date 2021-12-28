@@ -7,8 +7,9 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Observable } from 'rxjs';
-import { verify } from 'jsonwebtoken';
+import { JwtPayload, verify } from 'jsonwebtoken';
 import { Request } from 'express';
+import { Artist, User } from '.prisma/client';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -33,7 +34,7 @@ export class AuthGuard implements CanActivate {
       );
     }
 
-    const entity = verify(token, SECRET) as Record<string, unknown>;
+    const entity = verify(token, SECRET) as JwtPayload & (User | Artist);
 
     if (!entity) {
       throw new HttpException(
@@ -45,6 +46,8 @@ export class AuthGuard implements CanActivate {
     request.entity = {
       id: entity.id,
       email: entity.email,
+      verifiedEmail: entity.verifiedEmail,
+      role: entity.role,
     };
 
     return true;

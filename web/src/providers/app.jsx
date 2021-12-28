@@ -97,17 +97,17 @@ function ErrorFallback() {
         <Highlight>another chance?</Highlight>
       </Text>
 
-      <Image src="/assets/svgs/undraw-lost.svg" width={['300px', '400px']} margin="15px" />
-
       <Button
         onClick={() => window.location.assign(window.location.origin)}
         variant="accent"
-        isFullWidth={false}
         margin="20px"
-        rightIcon={<MdCached />}
+        size="lg"
+        rightIcon={<MdCached size={25} />}
       >
         Refresh
       </Button>
+
+      <Image src="/assets/svgs/undraw-lost.svg" width={['300px', '400px']} margin="5px" />
     </Box>
   );
 }

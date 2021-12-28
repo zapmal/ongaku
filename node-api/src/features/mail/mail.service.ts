@@ -1,11 +1,27 @@
+import { getHash } from '@/internal/helpers/hash';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { User } from '@prisma/client';
 
 @Injectable()
 export class MailService {
   constructor(private mailer: MailerService, private config: ConfigService) {}
+
+  async sendVerificationEmail(to: string) {
+    const FRONTEND_URL = this.config.get('FRONTEND_URL');
+    const hash = getHash(to);
+
+    const url = `${FRONTEND_URL}/verify/${hash}`;
+
+    await this.mailer.sendMail({
+      to,
+      subject: 'Email Verification',
+      template: './verification',
+      context: {
+        url,
+      },
+    });
+  }
 
   /**
    * The token needs to be generated either on the frontend or the backend with
@@ -23,19 +39,4 @@ export class MailService {
    * Another simple and equally good approach is to use a popup + send a code
    * to the user's mail, this would use the expiry time too.
    */
-  async sendUserConfirmation(user: any, token: string) {
-    const frontendUrl = this.config.get('FRONTEND_URL');
-    const url = `${frontendUrl}/auth/confirmation?token=${token}`;
-    // const url = `${frontendUrl}/account-confirmation/${token}`;
-
-    await this.mailer.sendMail({
-      to: user.email,
-      subject: 'Welcome to Ongaku!',
-      template: './confirmation',
-      context: {
-        name: user.username,
-        url,
-      },
-    });
-  }
 }

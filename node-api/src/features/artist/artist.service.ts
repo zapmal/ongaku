@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Artist } from '@prisma/client';
+import { Prisma, Artist } from '@prisma/client';
 
 import { PrismaService } from '@/internal/services';
 
@@ -16,6 +16,13 @@ export class ArtistService {
   getByArtisticName(artisticName: string): Promise<Artist> {
     return this.prisma.artist.findFirst({
       where: { artisticName },
+    });
+  }
+
+  update(id: number, newArtistData: Prisma.ArtistUpdateInput): Promise<Artist> {
+    return this.prisma.artist.update({
+      where: { id },
+      data: newArtistData,
     });
   }
 }

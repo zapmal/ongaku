@@ -31,11 +31,17 @@ export function NotFound() {
         <Highlight>deleted or renamed</Highlight>, go home and try again.
       </Text>
 
-      <Image src="/assets/svgs/undraw-moving.svg" width={['300px', '400px']} margin="15px" />
-
-      <Button onClick={handleRedirect} variant="accent" margin="20px" rightIcon={<MdHome />}>
+      <Button
+        onClick={handleRedirect}
+        variant="accent"
+        margin="20px"
+        size="lg"
+        rightIcon={<MdHome size={25} />}
+      >
         Home
       </Button>
+
+      <Image src="/assets/svgs/undraw-moving.svg" width={['300px', '400px']} margin="5px" />
     </Box>
   );
 }

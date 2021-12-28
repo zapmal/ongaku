@@ -25,7 +25,14 @@ async function bootstrap() {
     credentials: true,
   });
   app.use(cookieParser());
-  app.use(csurf({ cookie: { ...cookieOptions } }));
+  app.use(
+    csurf({
+      cookie: {
+        ...cookieOptions,
+        maxAge: 86400 * 90,
+      },
+    }),
+  );
 
   await app.listen(PORT);
 }

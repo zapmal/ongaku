@@ -1,6 +1,6 @@
 import create from 'zustand';
 
-export const useAuthStore = create((set) => ({
+export const useAuthStore = create((set, get) => ({
   entity: {},
   csrfToken: '',
 
@@ -9,6 +9,11 @@ export const useAuthStore = create((set) => ({
   },
   setCsrfToken: (csrfToken) => {
     set({ csrfToken });
+  },
+  isLoggedIn: () => {
+    if (Object.keys(get().entity).length === 0) return false;
+
+    return true;
   },
   logout: () => {
     set({ user: {}, csrfToken: null });

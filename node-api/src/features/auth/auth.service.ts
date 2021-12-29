@@ -2,6 +2,7 @@ import {
   BadRequestException as BadRequest,
   UnauthorizedException as Unauthorized,
   NotFoundException as NotFound,
+  InternalServerErrorException as InternalServerError,
   Injectable,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -15,7 +16,7 @@ import { ArtistService } from '../artist/artist.service';
 import { ArtistRegisterDTO, LoginDTO, UserRegisterDTO, VerifyEmailDTO } from './auth.dto';
 
 import { PrismaService } from '@/internal/services';
-import { getHash } from '@/internal/helpers/hash';
+import { getHash } from '@/internal/helpers';
 
 @Injectable()
 export class AuthService {
@@ -47,15 +48,12 @@ export class AuthService {
     });
 
     if (!newUser) {
-      throw new BadRequest(
-        'Something went wrong while trying to create your account, try again.',
+      throw new InternalServerError(
+        'Something went wrong while trying to create your account, try again',
       );
     }
 
-    const token = this.getJwt({ ...newUser });
-
     return {
-      token,
       user: {
         email: user.email,
         username: user.username,
@@ -97,12 +95,10 @@ export class AuthService {
     }
 
     if (!newArtist) {
-      throw new BadRequest(
+      throw new InternalServerError(
         'Something went wrong while trying to create your account, try again',
       );
     }
-
-    const token = this.getJwt({ ...newArtist });
 
     return {
       artist: {
@@ -111,7 +107,6 @@ export class AuthService {
         verifiedEmail: false,
         role: 'ARTIST',
       },
-      token,
     };
   }
 
@@ -140,10 +135,7 @@ export class AuthService {
       ? entity.verifiedEmail
       : entity['userMetadata'].verifiedEmail;
 
-    const token = this.getJwt({ ...entity, verifiedEmail });
-
     return {
-      token,
       entity: {
         id: entity.id,
         email: entity.email,
@@ -169,7 +161,7 @@ export class AuthService {
     }
 
     if (!entity) {
-      throw new BadRequest(
+      throw new InternalServerError(
         'Something went wrong while trying to verify your account, try again',
       );
     }

@@ -11,6 +11,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { sign } from 'jsonwebtoken';
 import { Request, Response } from 'express';
 
 import { JoiValidationPipe } from '@/internal/pipes';
@@ -31,6 +32,7 @@ export class AuthController {
   ) {}
 
   @Post('register/user')
+  @HttpCode(HttpStatus.CREATED)
   @UsePipes(new JoiValidationPipe(userRegisterSchema))
   @UseGuards(DuplicateEntityGuard)
   async userRegister(
@@ -39,10 +41,8 @@ export class AuthController {
     @Req() request,
   ) {
     const ipAddress = request.headers['x-forwarded-for'] || request.ip;
-    const { user, token } = await this.auth.createUser({
-      ...newUser,
-      ipAddress,
-    });
+    const { user } = await this.auth.createUser({ ...newUser, ipAddress });
+    const token = this.getJwt({ ...user });
 
     response.cookie('token', token, cookieOptions);
 
@@ -55,13 +55,15 @@ export class AuthController {
   }
 
   @Post('register/artist')
+  @HttpCode(HttpStatus.CREATED)
   @UsePipes(new JoiValidationPipe(artistRegisterSchema))
   @UseGuards(DuplicateEntityGuard)
   async artistRegister(
     @Body() newArtist: ArtistRegisterDTO,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const { artist, token } = await this.auth.createArtist(newArtist);
+    const { artist } = await this.auth.createArtist(newArtist);
+    const token = this.getJwt({ ...artist });
 
     response.cookie('token', token, { ...cookieOptions });
 
@@ -80,7 +82,8 @@ export class AuthController {
     @Body() credentials: LoginDTO,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const { entity, token } = await this.auth.login(credentials);
+    const { entity } = await this.auth.login(credentials);
+    const token = this.getJwt({ ...entity });
 
     response.cookie('token', token, { ...cookieOptions });
 
@@ -119,5 +122,11 @@ export class AuthController {
   @Get('csrf')
   getCsrfToken(@Req() request: Request) {
     return { csrf: request.csrfToken() };
+  }
+
+  getJwt(payload: Record<string, unknown>) {
+    return sign(payload, this.config.get('JWT_SECRET'), {
+      expiresIn: this.config.get('JWT_EXPIRY_TIME'),
+    });
   }
 }

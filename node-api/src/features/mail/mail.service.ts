@@ -1,7 +1,8 @@
-import { getHash } from '@/internal/helpers/hash';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+
+import { getHash } from '@/internal/helpers';
 
 @Injectable()
 export class MailService {

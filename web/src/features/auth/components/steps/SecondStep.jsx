@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
-import { registerArtist } from '../../api';
+import { registerArtist } from '../../api/auth';
 import { responsivePaddings, MUSIC_GENRES, COUNTRIES } from '../../constants';
 import { Login } from '../Login';
 
@@ -73,19 +73,11 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
         isSubmitting: false,
       });
 
-      if (error.message === 'canceled') {
-        addNotification({
-          title: 'Error',
-          message: 'We could not process your request, try again later',
-          status: 'error',
-        });
-      } else {
-        addNotification({
-          title: 'Error',
-          message: error,
-          status: 'error',
-        });
-      }
+      addNotification({
+        title: 'Error',
+        message: error,
+        status: 'error',
+      });
     }
   };
 

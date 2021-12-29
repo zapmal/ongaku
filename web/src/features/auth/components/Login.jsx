@@ -23,7 +23,7 @@ import { MdArrowForward } from 'react-icons/md';
 import { useLocation, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { login } from '../api';
+import { login } from '../api/auth';
 
 import { Link, Button } from '@/components/Elements';
 import { Field, Checkbox } from '@/components/Form';
@@ -82,19 +82,11 @@ export function Login(props) {
         isSubmitting: false,
       });
 
-      if (error.message === 'canceled') {
-        addNotification({
-          title: 'Error',
-          message: 'We could not process your request, try again later',
-          status: 'error',
-        });
-      } else {
-        addNotification({
-          title: 'Error',
-          message: error,
-          status: 'error',
-        });
-      }
+      addNotification({
+        title: 'Error',
+        message: error,
+        status: 'error',
+      });
     }
   };
 

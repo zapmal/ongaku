@@ -14,7 +14,7 @@ import {
 import React from 'react';
 import { MdReplay } from 'react-icons/md';
 
-import { resendVerificationEmail } from '../api';
+import { resendVerificationEmail } from '../api/verification';
 
 import { Button } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
@@ -47,19 +47,11 @@ export function ResendVerificationEmail() {
         isSubmitting: false,
       });
 
-      if (error.message === 'canceled') {
-        addNotification({
-          title: 'Error',
-          message: 'We could not process your request, try again later',
-          status: 'error',
-        });
-      } else {
-        addNotification({
-          title: 'Error',
-          message: error,
-          status: 'error',
-        });
-      }
+      addNotification({
+        title: 'Error',
+        message: error,
+        status: 'error',
+      });
     }
   };
 

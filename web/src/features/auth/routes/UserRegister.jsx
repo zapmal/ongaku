@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { Footer, Login } from '../';
-import { registerUser } from '../api';
+import { registerUser } from '../api/auth';
 import { NavigationBar } from '../styles';
 
 import { Link, Button } from '@/components/Elements';
@@ -74,19 +74,11 @@ export function UserRegister() {
         isSubmitting: false,
       });
 
-      if (error.message === 'canceled') {
-        addNotification({
-          title: 'Error',
-          message: 'We could not process your request, try again later',
-          status: 'error',
-        });
-      } else {
-        addNotification({
-          title: 'Error',
-          message: error,
-          status: 'error',
-        });
-      }
+      addNotification({
+        title: 'Error',
+        message: error,
+        status: 'error',
+      });
     }
   };
 

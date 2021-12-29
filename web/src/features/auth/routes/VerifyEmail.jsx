@@ -3,7 +3,7 @@ import React from 'react';
 import { MdCheck } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 
-import { markAsVerified } from '../api';
+import { markEmailAsVerified } from '../api/verification';
 
 import { Button } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
@@ -23,7 +23,7 @@ export function VerifyEmail() {
     try {
       setSubmissionState((prevState) => ({ ...prevState, isSubmitting: true }));
 
-      const response = await markAsVerified({
+      const response = await markEmailAsVerified({
         id: entity.id,
         hash,
         email: entity.email,
@@ -44,19 +44,11 @@ export function VerifyEmail() {
         isSubmitting: false,
       });
 
-      if (error.message === 'canceled') {
-        addNotification({
-          title: 'Error',
-          message: 'We could not process your request, try again later',
-          status: 'error',
-        });
-      } else {
-        addNotification({
-          title: 'Error',
-          message: error,
-          status: 'error',
-        });
-      }
+      addNotification({
+        title: 'Error',
+        message: error,
+        status: 'error',
+      });
     }
   };
 

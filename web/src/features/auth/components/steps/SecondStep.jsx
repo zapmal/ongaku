@@ -13,7 +13,6 @@ import { Field, Select, Checkbox } from '@/components/Form';
 import { useSubmissionState } from '@/hooks/useSubmissionState';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
-import { useNotificationStore } from '@/stores/useNotificationStore';
 
 export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
   const {
@@ -38,7 +37,6 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [submission, setSubmissionState] = useSubmissionState();
   const setEntity = useAuthStore((s) => s.setEntity);
-  const addNotification = useNotificationStore((s) => s.addNotification);
   const [isBand, setIsBand] = useState(false);
 
   const onSubmit = async (data) => {
@@ -54,7 +52,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
         };
 
     try {
-      setSubmissionState((prevState) => ({ ...prevState, isSubmitting: true }));
+      setSubmissionState({ isSubmitting: true });
 
       const response = await registerArtist({
         ...artistData,
@@ -62,21 +60,20 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
         ...conditionalData,
         isBand,
       });
-
-      setSubmissionState({ status: 'success', isSubmitting: false });
       setEntity(response.artist);
+
+      setSubmissionState({
+        status: 'success',
+        isSubmitting: false,
+      });
 
       nextStep();
     } catch (error) {
       setSubmissionState({
         status: 'error',
         isSubmitting: false,
-      });
-
-      addNotification({
         title: 'Error',
         message: error,
-        status: 'error',
       });
     }
   };

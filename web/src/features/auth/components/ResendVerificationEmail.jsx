@@ -20,37 +20,30 @@ import { Button } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
 import { useSubmissionState } from '@/hooks/useSubmissionState';
 import { useAuthStore } from '@/stores/useAuthStore';
-import { useNotificationStore } from '@/stores/useNotificationStore';
 
 export function ResendVerificationEmail() {
   const entity = useAuthStore((s) => s.entity);
-  const addNotification = useNotificationStore((s) => s.addNotification);
   const [submission, setSubmissionState] = useSubmissionState();
 
   const handleResendClick = async () => {
     try {
-      setSubmissionState((prevState) => ({ ...prevState, isSubmitting: true }));
+      setSubmissionState({ isSubmitting: true });
 
       // eslint-disable-next-line no-unused-vars
       const _ = await resendVerificationEmail({ to: entity.email });
 
-      setSubmissionState({ status: 'success', isSubmitting: false });
-
-      addNotification({
-        title: 'Email sent!',
-        message: `Please check your inbox for more instructions, you can close this now.`,
+      setSubmissionState({
         status: 'success',
+        isSubmitting: false,
+        title: 'Email sent!',
+        message: 'Please check your inbox for more instructions, you can close this now',
       });
     } catch (error) {
       setSubmissionState({
         status: 'error',
         isSubmitting: false,
-      });
-
-      addNotification({
         title: 'Error',
         message: error,
-        status: 'error',
       });
     }
   };

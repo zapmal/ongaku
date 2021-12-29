@@ -11,17 +11,15 @@ import { NavigationBar } from '@/features/misc';
 import { useSubmissionState } from '@/hooks/useSubmissionState';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
-import { useNotificationStore } from '@/stores/useNotificationStore';
 
 export function VerifyEmail() {
   const [entity, setEntity] = useAuthStore((s) => [s.entity, s.setEntity]);
-  const addNotification = useNotificationStore((s) => s.addNotification);
   const [submission, setSubmissionState] = useSubmissionState();
   const { hash } = useParams();
 
   const handleVerifyClick = async () => {
     try {
-      setSubmissionState((prevState) => ({ ...prevState, isSubmitting: true }));
+      setSubmissionState({ isSubmitting: true });
 
       const response = await markEmailAsVerified({
         id: entity.id,
@@ -29,25 +27,20 @@ export function VerifyEmail() {
         email: entity.email,
         role: entity.role,
       });
-
-      setSubmissionState({ status: 'success', isSubmitting: false });
       setEntity({ ...entity, verifiedEmail: response.verifiedEmail });
 
-      addNotification({
+      setSubmissionState({
+        status: 'success',
+        isSubmitting: false,
         title: 'Success!',
         message: `We'll redirect you to the home page shortly.`,
-        status: 'success',
       });
     } catch (error) {
       setSubmissionState({
         status: 'error',
         isSubmitting: false,
-      });
-
-      addNotification({
         title: 'Error',
         message: error,
-        status: 'error',
       });
     }
   };

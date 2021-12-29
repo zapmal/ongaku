@@ -52,27 +52,26 @@ export function Login(props) {
   const navigate = useNavigate();
 
   const setEntity = useAuthStore((s) => s.setEntity);
-  const addNotification = useNotificationStore((s) => s.addNotification);
 
   // Easter egg.
   const location = useLocation();
+  const addNotification = useNotificationStore((s) => s.addNotification);
 
   const handleShow = () => setShow(!show);
   const handleIsArtist = () => setIsArtist(!isArtist);
 
   const onSubmit = async (data) => {
     try {
-      setSubmissionState((prevState) => ({ ...prevState, isSubmitting: true }));
+      setSubmissionState({ isSubmitting: true });
 
       const response = await login(data);
-
-      setSubmissionState({ status: 'success', isSubmitting: false });
       setEntity(response.entity);
 
-      addNotification({
+      setSubmissionState({
+        status: 'success',
+        isSubmitting: false,
         title: 'Success!',
         message: 'You are being redirected, please wait patiently',
-        status: 'success',
       });
 
       setTimeout(() => navigate('/'), 8000);
@@ -80,12 +79,8 @@ export function Login(props) {
       setSubmissionState({
         status: 'error',
         isSubmitting: false,
-      });
-
-      addNotification({
         title: 'Error',
         message: error,
-        status: 'error',
       });
     }
   };

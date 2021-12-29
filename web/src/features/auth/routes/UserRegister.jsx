@@ -26,7 +26,6 @@ import { Highlight } from '@/components/Utils';
 import { useSubmissionState } from '@/hooks/useSubmissionState';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
-import { useNotificationStore } from '@/stores/useNotificationStore';
 
 const responsivePaddings = ['25%', '32%', '15%', '20%', '12%'];
 
@@ -49,22 +48,20 @@ export function UserRegister() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [submission, setSubmissionState] = useSubmissionState();
   const setEntity = useAuthStore((s) => s.setEntity);
-  const addNotification = useNotificationStore((s) => s.addNotification);
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
-      setSubmissionState((prevState) => ({ ...prevState, isSubmitting: true }));
+      setSubmissionState({ isSubmitting: true });
 
       const response = await registerUser(data);
-
-      setSubmissionState({ status: 'success', isSubmitting: false });
       setEntity(response.user);
 
-      addNotification({
+      setSubmissionState({
+        status: 'success',
+        isSubmitting: false,
         title: 'Success!',
         message: `We'll redirect you to the home page shortly.`,
-        status: 'success',
       });
 
       setTimeout(() => navigate('/'), 8000);
@@ -72,12 +69,8 @@ export function UserRegister() {
       setSubmissionState({
         status: 'error',
         isSubmitting: false,
-      });
-
-      addNotification({
         title: 'Error',
         message: error,
-        status: 'error',
       });
     }
   };

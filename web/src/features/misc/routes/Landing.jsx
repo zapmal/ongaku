@@ -18,7 +18,7 @@ export function Landing() {
         fallbackSrc="https://via.placeholder.com/1080"
       />
       <div>
-        <NavigationBar page="landing" />
+        <NavigationBar />
 
         <Box textAlign="center">
           <Heading paddingTop="20px" fontSize={['2xl', '4xl']}>

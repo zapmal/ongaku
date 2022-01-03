@@ -11,6 +11,7 @@ const { ResendVerificationEmail } = lazyImport(
   () => import('@/features/auth'),
   'ResendVerificationEmail'
 );
+const { Home } = lazyImport(() => import('@/features/home'), 'Home');
 
 function Wrapper() {
   const entity = useAuthStore((s) => s.entity);
@@ -35,6 +36,10 @@ export const protectedRoutes = [
       {
         path: '/hehe',
         element: <h1>hellO!!!</h1>,
+      },
+      {
+        path: '/home',
+        element: <Home />,
       },
     ],
   },

@@ -98,7 +98,7 @@ export class AuthController {
   logout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('token');
 
-    return { message: 'Logged out successfully' };
+    return { message: 'Logged out successfully', status: 'success' };
   }
 
   @Post('verify')

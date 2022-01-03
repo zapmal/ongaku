@@ -29,14 +29,13 @@ export function ResendVerificationEmail() {
     try {
       setSubmissionState({ isSubmitting: true });
 
-      // eslint-disable-next-line no-unused-vars
-      const _ = await resendVerificationEmail({ to: entity.email });
+      const response = await resendVerificationEmail({ to: entity.email });
 
       setSubmissionState({
         status: 'success',
         isSubmitting: false,
         title: 'Email sent!',
-        message: 'Please check your inbox for more instructions, you can close this now',
+        message: response.message,
       });
     } catch (error) {
       setSubmissionState({

@@ -61,7 +61,7 @@ export function UserRegister() {
         status: 'success',
         isSubmitting: false,
         title: 'Success!',
-        message: `We'll redirect you to the home page shortly.`,
+        message: `${response.message}, we'll redirect you to the home page shortly`,
       });
 
       setTimeout(() => navigate('/'), 8000);

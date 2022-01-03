@@ -1,5 +1,8 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  ServiceUnavailableException as ServiceUnavailable,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { getHash } from '@/internal/helpers';
@@ -10,18 +13,29 @@ export class MailService {
 
   async sendVerificationEmail(to: string) {
     const FRONTEND_URL = this.config.get('FRONTEND_URL');
+    console.log(to);
     const hash = getHash(to);
 
     const url = `${FRONTEND_URL}/verify/${hash}`;
 
-    await this.mailer.sendMail({
-      to,
-      subject: 'Email Verification',
-      template: './verification',
-      context: {
-        url,
-      },
-    });
+    try {
+      await this.mailer.sendMail({
+        to,
+        subject: 'Email Verification',
+        template: './verification',
+        context: {
+          url,
+        },
+      });
+
+      return {
+        status: 'SENT',
+      };
+    } catch (error) {
+      throw new ServiceUnavailable(
+        'We could not send the email right now, please try again later',
+      );
+    }
   }
 
   /**

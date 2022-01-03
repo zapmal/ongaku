@@ -49,7 +49,7 @@ export class AuthController {
     await this.mail.sendVerificationEmail(user.email);
 
     return {
-      message: 'Account created successfully!',
+      message: 'Account created successfully',
       user,
     };
   }
@@ -70,7 +70,7 @@ export class AuthController {
     await this.mail.sendVerificationEmail(artist.email);
 
     return {
-      message: 'Account created successfully.',
+      message: 'Account created successfully',
       artist,
     };
   }
@@ -98,7 +98,7 @@ export class AuthController {
   logout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('token');
 
-    return { message: 'Logged out successfully', status: 'success' };
+    return { message: 'Logged out successfully', status: 'SUCCESS' };
   }
 
   @Post('verify')

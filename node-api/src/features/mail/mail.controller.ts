@@ -8,11 +8,12 @@ export class MailController {
   constructor(private mail: MailService) {}
 
   @Post('/resend-verification')
-  async resendVerificationMail(@Body() { to }: ResendVerificationMailDTO) {
-    await this.mail.sendVerificationEmail(to);
+  async resendVerificationMail(@Body() body: ResendVerificationMailDTO) {
+    const { status } = await this.mail.sendVerificationEmail(body.to);
 
     return {
-      message: 'Email sent! Check your inbox',
+      message: 'Success! Check your inbox for further instructions',
+      status,
     };
   }
 }

@@ -71,10 +71,10 @@ export function Login(props) {
         status: 'success',
         isSubmitting: false,
         title: 'Success!',
-        message: 'You are being redirected, please wait patiently',
+        message: `${response.message}, we'll redirect you shortly`,
       });
 
-      setTimeout(() => navigate('/'), 8000);
+      setTimeout(() => navigate('/home'), 8000);
     } catch (error) {
       setSubmissionState({
         status: 'error',

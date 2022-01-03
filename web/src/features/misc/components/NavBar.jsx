@@ -58,7 +58,7 @@ export function NavigationBar() {
 
   const handleLogout = () => {
     logout();
-    window.location.assign(window.location.origin);
+    window.location.assign('/');
     navigate('/');
   };
 

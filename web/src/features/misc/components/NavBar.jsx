@@ -43,7 +43,9 @@ const Container = styled('header', {
     isLoggedIn: {
       true: {
         alignItems: 'center',
-        height: '100px',
+        height: '80px',
+        marginTop: '$3',
+        marginBottom: '$5',
       },
     },
   },

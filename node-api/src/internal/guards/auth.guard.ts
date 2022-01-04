@@ -2,8 +2,8 @@ import {
   Injectable,
   CanActivate,
   ExecutionContext,
-  HttpException,
-  HttpStatus,
+  ForbiddenException as Forbidden,
+  InternalServerErrorException as InternalServerError,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Observable } from 'rxjs';
@@ -29,19 +29,13 @@ export class AuthGuard implements CanActivate {
     const SECRET = this.config.get('JWT_SECRET');
 
     if (!token) {
-      throw new HttpException(
-        'You do not have permission to make this action',
-        HttpStatus.FORBIDDEN,
-      );
+      throw new Forbidden('You do not have permission to make this action');
     }
 
     const entity = verify(token, SECRET) as JwtPayload & (User | Artist);
 
     if (!entity) {
-      throw new HttpException(
-        'We could not process your request, try again later',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new InternalServerError('We could not process your request, try again later');
     }
 
     request.entity = {

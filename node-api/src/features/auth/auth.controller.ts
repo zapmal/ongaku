@@ -15,7 +15,7 @@ import { sign } from 'jsonwebtoken';
 import { Request, Response } from 'express';
 
 import { JoiValidationPipe } from '@/internal/pipes';
-import { AuthGuard, DuplicateEntityGuard } from '@/internal/guards';
+import { AuthGuard } from '@/internal/guards';
 import { RequestWithEntity } from '@/internal/interfaces';
 import { cookieOptions } from '@/internal/helpers';
 
@@ -35,7 +35,6 @@ export class AuthController {
   @Post('register/user')
   @HttpCode(HttpStatus.CREATED)
   @UsePipes(new JoiValidationPipe(userRegisterSchema))
-  @UseGuards(DuplicateEntityGuard)
   async userRegister(
     @Body() newUser: UserRegisterDTO,
     @Res({ passthrough: true }) response: Response,
@@ -58,7 +57,6 @@ export class AuthController {
   @Post('register/artist')
   @HttpCode(HttpStatus.CREATED)
   @UsePipes(new JoiValidationPipe(artistRegisterSchema))
-  @UseGuards(DuplicateEntityGuard)
   async artistRegister(
     @Body() newArtist: ArtistRegisterDTO,
     @Res({ passthrough: true }) response: Response,

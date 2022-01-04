@@ -40,3 +40,10 @@ export const artistRegisterSchema = Joi.object({
     then: Joi.array().required(),
   }),
 });
+
+export const emailVerificationSchema = Joi.object({
+  id: Joi.number().required(),
+  hash: Joi.string().required(),
+  email: Joi.string().email().required(),
+  role: Joi.string().valid('USER', 'ARTIST').required(),
+});

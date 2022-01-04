@@ -20,7 +20,12 @@ import { RequestWithEntity } from '@/internal/interfaces';
 import { cookieOptions } from '@/internal/helpers';
 
 import { LoginDTO, UserRegisterDTO, ArtistRegisterDTO, VerifyEmailDTO } from './auth.dto';
-import { loginSchema, userRegisterSchema, artistRegisterSchema } from './auth.schemas';
+import {
+  loginSchema,
+  userRegisterSchema,
+  artistRegisterSchema,
+  emailVerificationSchema,
+} from './auth.schemas';
 import { AuthService } from './auth.service';
 import { MailService } from '../mail/mail.service';
 
@@ -103,6 +108,7 @@ export class AuthController {
   @Post('verify')
   @HttpCode(HttpStatus.ACCEPTED)
   @UseGuards(AuthGuard)
+  @UsePipes(new JoiValidationPipe(emailVerificationSchema))
   async verifyEmail(@Body() data: VerifyEmailDTO) {
     const { verifiedEmail } = await this.auth.verifyEmail(data);
 

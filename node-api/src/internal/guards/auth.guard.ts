@@ -8,8 +8,9 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Observable } from 'rxjs';
 import { JwtPayload, verify } from 'jsonwebtoken';
-import { Request } from 'express';
 import { Artist, User } from '.prisma/client';
+
+import { RequestWithEntity } from '@/internal/interfaces';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -23,7 +24,7 @@ export class AuthGuard implements CanActivate {
     return this.validate(request);
   }
 
-  validate(request: Request & { entity: Record<string, unknown> }) {
+  validate(request: RequestWithEntity) {
     const token = request.cookies['token'];
     const SECRET = this.config.get('JWT_SECRET');
 

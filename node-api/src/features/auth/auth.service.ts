@@ -1,19 +1,17 @@
 import {
   BadRequestException as BadRequest,
-  UnauthorizedException as Unauthorized,
-  NotFoundException as NotFound,
   InternalServerErrorException as InternalServerError,
   Injectable,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Artist, User, UserMetadata } from '@prisma/client';
+import { Artist, User, Band, UserMetadata } from '@prisma/client';
 import { compare, hash } from 'bcrypt';
-import { sign } from 'jsonwebtoken';
 import * as dayjs from 'dayjs';
 
 import { UserService } from '../user/user.service';
 import { ArtistService } from '../artist/artist.service';
-import { ArtistRegisterDTO, LoginDTO, UserRegisterDTO, VerifyEmailDTO } from './auth.dto';
+import { ArtistRegisterDTO, LoginDTO, VerifyEmailDTO } from './auth.dto';
+import { Entity, UserRegisterAndMetadata } from './auth.interface';
 
 import { PrismaService } from '@/internal/services';
 import { getHash } from '@/internal/helpers';
@@ -27,7 +25,7 @@ export class AuthService {
     private artist: ArtistService,
   ) {}
 
-  async createUser(user: UserRegisterDTO & { ipAddress: string }) {
+  async createUser(user: UserRegisterAndMetadata) {
     const { ipAddress, password, birthdate, ...userData } = user;
     const hashedPassword = await hash(password, 10);
 
@@ -64,7 +62,7 @@ export class AuthService {
   }
 
   async createArtist(artist: ArtistRegisterDTO) {
-    let newArtist = {};
+    let newArtist: Artist | Band;
     const { isBand, bandName, members, artisticName, ...artistData } = artist;
 
     const hashedPassword = await hash(artistData.password, 10);
@@ -111,7 +109,7 @@ export class AuthService {
   }
 
   async login(credentials: LoginDTO) {
-    let entity: Artist | (User & { verifiedEmail: boolean });
+    let entity: Entity;
 
     if (credentials.isArtist) {
       entity = await this.artist.getByEmail(credentials.email);
@@ -122,13 +120,13 @@ export class AuthService {
     }
 
     if (!entity) {
-      throw new NotFound('That account does not exist');
+      throw new BadRequest('Wrong credentials provided');
     }
 
     const passwordsMatch = await compare(credentials.password, entity.password);
 
     if (!passwordsMatch) {
-      throw new Unauthorized('Incorrect password');
+      throw new BadRequest('Wrong credentials provided');
     }
 
     const verifiedEmail = credentials.isArtist
@@ -169,11 +167,5 @@ export class AuthService {
     return {
       verifiedEmail: entity.verifiedEmail,
     };
-  }
-
-  getJwt(payload: Record<string, unknown>) {
-    return sign(payload, this.config.get('JWT_SECRET'), {
-      expiresIn: this.config.get('JWT_EXPIRY_TIME'),
-    });
   }
 }

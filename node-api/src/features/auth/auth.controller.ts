@@ -16,6 +16,7 @@ import { Request, Response } from 'express';
 
 import { JoiValidationPipe } from '@/internal/pipes';
 import { AuthGuard, DuplicateEntityGuard } from '@/internal/guards';
+import { RequestWithEntity } from '@/internal/interfaces';
 import { cookieOptions } from '@/internal/helpers';
 
 import { LoginDTO, UserRegisterDTO, ArtistRegisterDTO, VerifyEmailDTO } from './auth.dto';
@@ -115,7 +116,7 @@ export class AuthController {
 
   @Get('whoami')
   @UseGuards(AuthGuard)
-  whoAmI(@Req() request: Request & { entity: Record<string, unknown> }) {
+  whoAmI(@Req() request: RequestWithEntity) {
     return { entity: request.entity };
   }
 

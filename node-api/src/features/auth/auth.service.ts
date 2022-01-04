@@ -11,7 +11,7 @@ import * as dayjs from 'dayjs';
 import { UserService } from '../user/user.service';
 import { ArtistService } from '../artist/artist.service';
 import { ArtistRegisterDTO, LoginDTO, VerifyEmailDTO } from './auth.dto';
-import { Entity, UserRegisterAndMetadata } from './auth.interface';
+import { Entity, UserRegisterAndMetadata, UserWithVerifiedEmail } from './auth.interface';
 
 import { PrismaService } from '@/internal/services';
 import { getHash } from '@/internal/helpers';
@@ -114,9 +114,7 @@ export class AuthService {
     if (credentials.isArtist) {
       entity = await this.artist.getByEmail(credentials.email);
     } else {
-      entity = (await this.user.getByEmail(credentials.email)) as User & {
-        verifiedEmail: boolean;
-      };
+      entity = (await this.user.getByEmail(credentials.email)) as UserWithVerifiedEmail;
     }
 
     if (!entity) {

@@ -6,7 +6,7 @@ export interface UserRegisterAndMetadata extends UserRegisterDTO {
   ipAddress: string;
 }
 
-interface UserWithVerifiedEmail extends User {
+export interface UserWithVerifiedEmail extends User {
   verifiedEmail: boolean;
 }
 

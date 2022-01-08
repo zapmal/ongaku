@@ -98,8 +98,8 @@ const actionButtonsProps = [
     icon: MdMoreVert,
     variant: 'ghost',
     position: {
-      top: 0,
-      right: 0,
+      top: 1,
+      right: 1,
     },
   },
 ];

@@ -2,7 +2,7 @@ import { Box, Heading, SimpleGrid, Text, Image } from '@chakra-ui/react';
 import React from 'react';
 import { MdAlbum, MdPersonAdd } from 'react-icons/md';
 
-import { NavigationBar } from '../components';
+import { NavigationBar } from '../components/NavBar';
 
 import { BulletPoint, Highlight } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';

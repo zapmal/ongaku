@@ -1,8 +1,7 @@
 import { Flex, Box, Text } from '@chakra-ui/react';
 import React from 'react';
 
-import { Icon as IconWrapper } from '@/components/Elements';
-import { theme } from '@/stitches.config.js';
+import { theme, styled } from '@/stitches.config.js';
 
 export function BulletPoint({ Icon, title, content, variant = 'primary', ...extraProps }) {
   return (
@@ -26,3 +25,49 @@ export function BulletPoint({ Icon, title, content, variant = 'primary', ...extr
     </Flex>
   );
 }
+
+export function IconWrapper({ variant, wrapped = false, size = 40, children }) {
+  return wrapped ? (
+    <Wrapper backgroundColor={variant}>
+      {React.cloneElement(children, { color: '#ffffff', size })}
+    </Wrapper>
+  ) : (
+    React.cloneElement(children, { color: '#ffffff', size })
+  );
+}
+
+const Wrapper = styled('div', {
+  padding: '$4',
+  borderRadius: '20px',
+  width: '13%',
+  transition: '200ms ease-in',
+
+  '& *': {
+    margin: '0 auto',
+  },
+
+  '&:hover': {
+    backgroundColor: '$accentSolidHover',
+  },
+
+  variants: {
+    backgroundColor: {
+      primary: {
+        backgroundColor: '$primaryBg',
+      },
+      accent: {
+        backgroundColor: '$accentSolid',
+      },
+    },
+  },
+
+  '@sm': {
+    padding: '$2',
+    width: '20%',
+    height: '60%',
+  },
+
+  defaultVariants: {
+    backgroundColor: 'primary',
+  },
+});

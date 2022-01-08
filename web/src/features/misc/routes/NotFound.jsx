@@ -10,9 +10,7 @@ import { theme } from '@/stitches.config.js';
 export function NotFound() {
   const navigate = useNavigate();
 
-  const handleRedirect = () => {
-    navigate('/');
-  };
+  const handleRedirect = () => navigate('/');
 
   return (
     <Box align="center" paddingTop={['40px', '20px']}>

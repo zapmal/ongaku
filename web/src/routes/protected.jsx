@@ -11,31 +11,15 @@ const { ResendVerificationEmail } = lazyImport(
   () => import('@/features/auth'),
   'ResendVerificationEmail'
 );
-const { Home } = lazyImport(() => import('@/features/home'), 'Home');
-
-function Wrapper() {
-  const entity = useAuthStore((s) => s.entity);
-  return (
-    <>
-      <React.Suspense fallback={<LoadingFallback />}>
-        {!entity.verifiedEmail && <ResendVerificationEmail />}
-        <Outlet />
-      </React.Suspense>
-    </>
-  );
-}
+const { Home } = lazyImport(() => import('@/features/app'), 'Home');
 
 export const protectedRoutes = [
   {
-    element: <Wrapper />,
+    element: <VerifiedEmailWrapper />,
     children: [
       {
         path: '/welcome',
         element: <Welcome />,
-      },
-      {
-        path: '/hehe',
-        element: <h1>hellO!!!</h1>,
       },
       {
         path: '/home',
@@ -48,6 +32,18 @@ export const protectedRoutes = [
     element: <VerifyEmail />,
   },
 ];
+
+function VerifiedEmailWrapper() {
+  const entity = useAuthStore((s) => s.entity);
+  return (
+    <>
+      <React.Suspense fallback={<LoadingFallback />}>
+        {!entity.verifiedEmail && <ResendVerificationEmail />}
+        <Outlet />
+      </React.Suspense>
+    </>
+  );
+}
 
 function LoadingFallback() {
   return (

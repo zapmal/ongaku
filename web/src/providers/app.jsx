@@ -34,7 +34,7 @@ const chakraTheme = extendTheme({
       'html, body': {
         backgroundColor: theme.colors.primaryBase.value,
         color: '#ffffff',
-        overflowX: 'hidden',
+        // overflowX: 'hidden',
       },
       img: {
         width: '100%',
@@ -104,7 +104,7 @@ function ErrorFallback() {
         size="lg"
         rightIcon={<MdCached size={25} />}
       >
-        Refresh
+        Go Home
       </Button>
 
       <Image src="/assets/svgs/undraw-lost.svg" width={['300px', '400px']} margin="5px" />

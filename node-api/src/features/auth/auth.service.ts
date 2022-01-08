@@ -57,7 +57,7 @@ export class AuthService {
         },
       };
     } catch (error) {
-      this.handleCreationError(error);
+      this.handleAccountCreationError(error);
     }
   }
 
@@ -102,11 +102,11 @@ export class AuthService {
         },
       };
     } catch (error) {
-      this.handleCreationError(error);
+      this.handleAccountCreationError(error);
     }
   }
 
-  private handleCreationError(error) {
+  private handleAccountCreationError(error) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&
       error.code === PrismaError.UniqueConstraint

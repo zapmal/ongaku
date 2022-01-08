@@ -2,7 +2,7 @@ import { Box, Heading, Text, ButtonGroup, Button, Image } from '@chakra-ui/react
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
-import { NavigationBar } from '../components';
+import { NavigationBar } from '../components/NavBar';
 
 import { Link } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';

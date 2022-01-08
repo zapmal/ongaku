@@ -50,7 +50,7 @@ export function Field(props) {
           accept={'image/**'}
           register={props.register(props.name, { validate: validateFileInput })}
         >
-          <Button leftIcon={<MdFileUpload />}>Upload</Button>
+          <Button rightIcon={<MdFileUpload />}>Upload</Button>
         </FileInput>
       ) : (
         <InputGroup>

@@ -21,7 +21,7 @@ const fadeIn = keyframes`
 `;
 const animation = `${fadeIn} 300ms linear`;
 
-export function SongCard({ cover, name, isExplicit, type, authors, year }) {
+export function PlaylistCard({ cover, name, likes, amountOfSongs, author }) {
   const [isHovered, setIsHovered] = useState(false);
 
   const mouseHandlers = {
@@ -51,38 +51,34 @@ export function SongCard({ cover, name, isExplicit, type, authors, year }) {
           ))}
         </Box>
       )}
+      <Badge
+        marginTop="5px"
+        color={theme.colors.accentSolid.value}
+        position="absolute"
+        top={1}
+        left={1}
+      >
+        Playlist
+      </Badge>
       <Flex justify="end">
         <Text fontWeight="bold" marginRight="5px">
           {name}
         </Text>
         <Spacer />
-        <Badge marginTop="5px" marginRight="5px">
-          {year}
-        </Badge>
-        {isExplicit && (
-          <Badge
-            marginTop="5px"
-            marginRight="5px"
-            bg={theme.colors.dangerSolid.value}
-            color="whiteAlpha.900"
-          >
-            E
-          </Badge>
-        )}
-        <Badge
-          marginTop="5px"
-          color="whiteAlpha.900"
-          bg={theme.colors.accentSolid.value}
-          position="absolute"
-          top={1}
-          left={1}
-        >
-          {type}
-        </Badge>
+        <Text fontWeight="bold" fontSize="sm">
+          {likes} likes
+        </Text>
       </Flex>
-      <Text color="whiteAlpha.700" fontWeight="bold">
-        {authors}
-      </Text>
+
+      <Flex justify="end">
+        <Text color="whiteAlpha.700" fontSize="sm" width="50%">
+          By {author}
+        </Text>
+        <Spacer />
+        <Text fontWeight="bold" fontSize="sm">
+          {amountOfSongs} songs
+        </Text>
+      </Flex>
     </Box>
   );
 }

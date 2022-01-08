@@ -23,21 +23,24 @@ export const FEATURED_ARTIST = {
       isExplicit: true,
       type: 'SONG',
       cover: '/assets/images/static-oh-my-god.jpg',
-      yearAndAuthors: '2020- (G) I-DLE',
+      authors: '(G) I-DLE',
+      year: 2020,
     },
     {
       name: 'I TRUST',
       isExplicit: false,
       type: 'EP',
       cover: '/assets/images/static-i-trust.webp',
-      yearAndAuthors: '2020- (G) I-DLE',
+      authors: '(G) I-DLE',
+      year: 2020,
     },
     {
       name: 'MORE',
       isExplicit: false,
       type: 'SINGLE',
       cover: '/assets/images/static-more.jpg',
-      yearAndAuthors: '2020 - (G) I-DLE', // K/DA and more
+      authors: '(G) I-DLE, K/DA and more',
+      year: 2020,
     },
   ],
 };

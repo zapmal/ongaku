@@ -4,6 +4,7 @@ import React from 'react';
 import {
   NavigationBar,
   SongCard,
+  PlaylistCard,
   FeaturedArtistBanner,
   FeaturedArtistInformation,
 } from '../components';
@@ -39,7 +40,8 @@ export function Home() {
                   name={song.name}
                   isExplicit={song.isExplicit}
                   type={song.type}
-                  yearAndAuthors={song.yearAndAuthors}
+                  authors={song.authors}
+                  year={song.year}
                 />
               ))}
             </Flex>
@@ -47,18 +49,27 @@ export function Home() {
         </SimpleGrid>
       </FeaturedArtistBanner>
 
-      <Heading>bro?</Heading>
-      <Heading>bro?</Heading>
-      <Heading>bro?</Heading>
-      <Heading>bro?</Heading>
-      <Heading>bro?</Heading>
-      <Heading>bro?</Heading>
-      <Heading>bro?</Heading>
-      <Heading>bro?</Heading>
-      <Heading>bro?</Heading>
-      <Heading>bro?</Heading>
-      <Heading>bro?</Heading>
-      <Heading>bro?</Heading>
+      <Heading margin="10px">Recently Played</Heading>
+      <SimpleGrid column={6}>
+        <Flex margin="20px">
+          <SongCard
+            name="XD"
+            isExplicit={true}
+            type="song"
+            cover="/assets/images/static-oh-my-god.jpg"
+            authors="Yung Iverson"
+            year={2019}
+          />
+
+          <PlaylistCard
+            name="Example"
+            likes={36}
+            amountOfSongs={150}
+            cover="/assets/images/static-oh-my-god.jpg"
+            author="Yung Iverson"
+          />
+        </Flex>
+      </SimpleGrid>
     </>
   );
 }

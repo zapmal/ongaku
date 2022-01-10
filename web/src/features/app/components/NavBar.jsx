@@ -14,9 +14,10 @@ import { theme } from '@/stitches.config.js';
 
 export function NavigationBar() {
   const location = useLocation();
+  // const [isSmallScreen, isMediumScreen] = useMediaQuery(['(max-width: 30em)', '(min-width: 48em)']);
 
   return (
-    <Box bg="transparent" sx={{ position: 'sticky', top: 0 }} height={0}>
+    <Box bg="transparent" sx={{ position: 'sticky', top: 0 }} height={0} zIndex={1}>
       <Flex justify="center" align="center">
         <Avatar marginTop="10px" marginLeft="10px" size="lg" />
         <Spacer />
@@ -33,7 +34,7 @@ export function NavigationBar() {
         <Tooltip label="For help, issues, or suggestions contact us via: official.ongaku@gmail.com">
           <IconButton
             variant="link"
-            color="whiteAlpha.900"
+            color="whiteAlpha.800"
             marginRight="10px"
             size="lg"
             icon={<MdHelp size={35} />}
@@ -42,31 +43,6 @@ export function NavigationBar() {
         </Tooltip>
       </Flex>
     </Box>
-  );
-}
-
-function Item({ text, icon, to, isHighlighted }) {
-  return (
-    <Button
-      variant="link"
-      fontSize="xl"
-      margin="20px 0"
-      as={Link}
-      to={to}
-      color={isHighlighted ? theme.colors.accentSolid.value : 'whiteAlpha.800'}
-      textDecoration={isHighlighted && 'underline'}
-      marginLeft={text !== 'Home' && '20px'}
-      marginRight={text !== 'Rooms' && '20px'}
-      _hover={{
-        color: theme.colors.accentSolidHover.value,
-      }}
-      _active={{
-        color: theme.colors.accentSolidActive.value,
-      }}
-      leftIcon={<Icon as={icon} w="25px" h="25px" />}
-    >
-      {text}
-    </Button>
   );
 }
 
@@ -97,3 +73,28 @@ const items = [
     to: '/rooms',
   },
 ];
+
+function Item({ text, icon, to, isHighlighted }) {
+  return (
+    <Button
+      variant="link"
+      fontSize="xl"
+      margin="20px 0"
+      as={Link}
+      to={to}
+      color={isHighlighted ? theme.colors.accentText.value : 'whiteAlpha.800'}
+      textDecoration={isHighlighted && 'underline'}
+      marginLeft={text !== 'Home' && '20px'}
+      marginRight={text !== 'Rooms' && '20px'}
+      _hover={{
+        color: theme.colors.accentSolidHover.value,
+      }}
+      _active={{
+        color: theme.colors.accentSolidActive.value,
+      }}
+      leftIcon={<Icon as={icon} w="25px" h="25px" />}
+    >
+      {text}
+    </Button>
+  );
+}

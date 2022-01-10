@@ -8,7 +8,7 @@ import {
   FeaturedArtistBanner,
   FeaturedArtistInformation,
 } from '../components';
-import { FEATURED_ARTIST, GRADIENTS, GRID_COLUMN_HEIGHT } from '../constants';
+import { FEATURED_ARTIST, RECENTLY_PLAYED, GRADIENTS, GRID_COLUMN_HEIGHT } from '../constants';
 
 export function Home() {
   return (
@@ -50,24 +50,31 @@ export function Home() {
       </FeaturedArtistBanner>
 
       <Heading margin="10px">Recently Played</Heading>
+
       <SimpleGrid column={6}>
         <Flex margin="20px">
-          <SongCard
-            name="XD"
-            isExplicit={true}
-            type="song"
-            cover="/assets/images/static-oh-my-god.jpg"
-            authors="Yung Iverson"
-            year={2019}
-          />
-
-          <PlaylistCard
-            name="Example"
-            likes={36}
-            amountOfSongs={150}
-            cover="/assets/images/static-oh-my-god.jpg"
-            author="Yung Iverson"
-          />
+          {RECENTLY_PLAYED.map((item, index) =>
+            item.cardType === 'song' ? (
+              <SongCard
+                key={index}
+                cover={item.cover}
+                name={item.name}
+                isExplicit={item.isExplicit}
+                type={item.type}
+                authors={item.authors}
+                year={item.year}
+              />
+            ) : (
+              <PlaylistCard
+                key={index}
+                cover={item.cover}
+                name={item.name}
+                likes={item.likes}
+                amountOfSongs={item.amountOfSongs}
+                author={item.author}
+              />
+            )
+          )}
         </Flex>
       </SimpleGrid>
     </>

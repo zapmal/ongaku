@@ -1,4 +1,4 @@
 export * from './FeaturedArtist';
 export * from './NavBar';
-export * from './SongCard';
-export * from './PlaylistCard';
+export * from './cards/Playlist';
+export * from './cards/Song';

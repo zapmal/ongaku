@@ -1,23 +1,15 @@
-import { Box, Image, Icon, IconButton, keyframes } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { Box, Image, Icon, IconButton } from '@chakra-ui/react';
+import React from 'react';
 import { IoMdHeart } from 'react-icons/io';
 import { MdPlayArrow, MdMoreVert } from 'react-icons/md';
 
+import { FADE_OUT_ANIMATION } from '../../constants';
+import { useHover } from '../../hooks/useHover';
+
 import { theme } from '@/stitches.config.js';
 
-const fadeOutSteps = keyframes`
-  from { opacity: 0; }
-  to   { opacity: 1; }
-`;
-const fadeOutAnimation = `${fadeOutSteps} 300ms linear`;
-
 export function Card({ cover, children, ...extraStyles }) {
-  const [isHovered, setIsHovered] = useState(false);
-
-  const mouseHandlers = {
-    onMouseEnter: () => setIsHovered(true),
-    onMouseLeave: () => setIsHovered(false),
-  };
+  const [isHovered, mouseEventsHandlers] = useHover();
 
   return (
     <Box
@@ -36,12 +28,12 @@ export function Card({ cover, children, ...extraStyles }) {
         borderRadius="10px"
         transition="opacity 300ms ease-in-out"
         opacity={isHovered && 0.6}
-        {...mouseHandlers}
+        {...mouseEventsHandlers}
       />
       {isHovered && (
-        <Box animation={fadeOutAnimation}>
+        <Box animation={FADE_OUT_ANIMATION}>
           {hoverButtons.map((button, index) => (
-            <HoverButton key={index} button={button} mouseHandlers={mouseHandlers} />
+            <HoverButton key={index} button={button} mouseEventsHandlers={mouseEventsHandlers} />
           ))}
         </Box>
       )}
@@ -77,12 +69,13 @@ const hoverButtons = [
   },
 ];
 
-function HoverButton({ button, mouseHandlers }) {
+function HoverButton({ button, mouseEventsHandlers }) {
   return (
     <IconButton
       position="absolute"
       {...button.position}
       variant={button.variant}
+      borderRadius="50%"
       width="50px"
       height="50px"
       icon={<Icon as={button.icon} w="35px" h="35px" />}
@@ -93,7 +86,7 @@ function HoverButton({ button, mouseHandlers }) {
       _active={{
         backgroundColor: button.active || theme.colors.accentSolidActive.value,
       }}
-      {...mouseHandlers}
+      {...mouseEventsHandlers}
     />
   );
 }

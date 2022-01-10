@@ -1,11 +1,18 @@
+import { keyframes } from '@chakra-ui/react';
+
 import { theme } from '@/stitches.config.js';
 
-// This should be responsive.
 export const GRID_COLUMN_HEIGHT = '300px';
 export const GRADIENTS = {
   top: `linear-gradient(180deg, ${theme.colors.primaryBase.value} -5%, rgba(255,255,255,0) 15%)`,
   bottom: `linear-gradient(0, ${theme.colors.primaryBase.value} 5%, rgba(255,255,255,0) 60%)`,
 };
+
+const fadeOutSteps = keyframes`
+  from { opacity: 0; }
+  to   { opacity: 1; }
+`;
+export const FADE_OUT_ANIMATION = `${fadeOutSteps} 300ms linear`;
 
 /**
  * Mock data that will be used temporarily.
@@ -90,11 +97,32 @@ export const RECENTLY_PLAYED = [
     cardType: 'playlist',
     name: 'AVARICIA',
     cover: '/assets/images/static-playlist-avaricia.png',
-    likes: 58,
+    likes: 487,
     amountOfSongs: 412,
     author: 'pur_oblingbling',
   },
 ];
-export const SUGGESTED_ARTISTS = [];
+export const SUGGESTED_ARTISTS = [
+  {
+    name: 'Mori Calliope',
+    amountOfFollowers: '892.092',
+    image: '/assets/images/static-artist-mori.jpg',
+  },
+  {
+    name: 'TWICE',
+    amountOfFollowers: '10,763,588',
+    image: '/assets/images/static-artist-twice.jpeg',
+  },
+  {
+    name: 'The Gentlemen',
+    amountOfFollowers: '750,379',
+    image: '/assets/images/static-artist-gentlemen.jpg',
+  },
+  {
+    name: 'Yung Iverson',
+    amountOfFollowers: '102,838',
+    image: '/assets/images/static-artist-yung-iverson.jpg',
+  },
+];
 export const PERFECT_FOR_YOU = '';
 export const TRENDING = [];

@@ -1,4 +1,4 @@
-import { Box, Heading, SimpleGrid, Flex } from '@chakra-ui/react';
+import { Box, Heading, SimpleGrid, Flex, Text } from '@chakra-ui/react';
 import React from 'react';
 
 import {
@@ -7,8 +7,17 @@ import {
   PlaylistCard,
   FeaturedArtistBanner,
   FeaturedArtistInformation,
+  ArtistIcon,
 } from '../components';
-import { FEATURED_ARTIST, RECENTLY_PLAYED, GRADIENTS, GRID_COLUMN_HEIGHT } from '../constants';
+import {
+  FEATURED_ARTIST,
+  RECENTLY_PLAYED,
+  GRADIENTS,
+  GRID_COLUMN_HEIGHT,
+  SUGGESTED_ARTISTS,
+} from '../constants';
+
+import { Highlight } from '@/components/Utils';
 
 export function Home() {
   return (
@@ -49,7 +58,9 @@ export function Home() {
         </SimpleGrid>
       </FeaturedArtistBanner>
 
-      <Heading margin="10px">Recently Played</Heading>
+      <Heading margin="10px">
+        Recently <Highlight>Played</Highlight>
+      </Heading>
 
       <SimpleGrid column={6}>
         <Flex margin="20px">
@@ -76,6 +87,50 @@ export function Home() {
             )
           )}
         </Flex>
+      </SimpleGrid>
+
+      <Box margin="10px">
+        <Heading>
+          <Highlight>Suggested</Highlight> Artists
+        </Heading>
+        <Text color="whiteAlpha.800">Based on your recent activity.</Text>
+      </Box>
+
+      <SimpleGrid column={4} gridAutoFlow="column" justifyItems="center">
+        {SUGGESTED_ARTISTS.map((artist, index) => (
+          <ArtistIcon
+            key={index}
+            name={artist.name}
+            image={artist.image}
+            amountOfFollowers={artist.amountOfFollowers}
+            isHighlighted={index % 2 === 0}
+          />
+        ))}
+        {/* <Box margin="15px" textAlign="center">
+          <Image src="/assets/images/static-artist-mori.jpg" width="250px" borderRadius="50%" />
+          <Heading>Mori Calliope</Heading>
+
+          <Text color="whiteAlpha.800">890.839 Followers</Text>
+        </Box>
+
+        <Box margin="15px" textAlign="center">
+          <Image src="/assets/images/static-artist-mori.jpg" width="250px" borderRadius="50%" />
+          <Heading>Mori Calliope</Heading>
+
+          <Text color="whiteAlpha.800">Based on your recent activity.</Text>
+        </Box>
+        <Box margin="15px" textAlign="center">
+          <Image src="/assets/images/static-artist-mori.jpg" width="250px" borderRadius="50%" />
+          <Heading>Mori Calliope</Heading>
+
+          <Text color="whiteAlpha.800">Based on your recent activity.</Text>
+        </Box>
+        <Box margin="15px" textAlign="center">
+          <Image src="/assets/images/static-artist-mori.jpg" width="250px" borderRadius="50%" />
+          <Heading>Mori Calliope</Heading>
+
+          <Text color="whiteAlpha.800">Based on your recent activity.</Text>
+        </Box> */}
       </SimpleGrid>
     </>
   );

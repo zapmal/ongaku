@@ -4,7 +4,9 @@ import { theme } from '@/stitches.config.js';
 
 export const GRID_COLUMN_HEIGHT = '300px';
 export const GRADIENTS = {
-  top: `linear-gradient(180deg, ${theme.colors.primaryBase.value} -5%, rgba(255,255,255,0) 15%)`,
+  // old one used on the banner
+  // top: `linear-gradient(180deg, ${theme.colors.primaryBase.value} -5%, rgba(255,255,255,0) 15%)`,
+  top: `linear-gradient(180deg, ${theme.colors.primaryBase.value} -60%, rgba(255,255,255,0) 100%)`,
   bottom: `linear-gradient(0, ${theme.colors.primaryBase.value} 5%, rgba(255,255,255,0) 60%)`,
 };
 
@@ -105,7 +107,7 @@ export const RECENTLY_PLAYED = [
 export const SUGGESTED_ARTISTS = [
   {
     name: 'Mori Calliope',
-    amountOfFollowers: '892.092',
+    amountOfFollowers: '892,092',
     image: '/assets/images/static-artist-mori.jpg',
   },
   {

@@ -22,9 +22,8 @@ import { Highlight } from '@/components/Utils';
 export function Home() {
   return (
     <>
+      <NavigationBar />
       <FeaturedArtistBanner image="static-featured-artist-gidle.webp">
-        <NavigationBar />
-
         <SimpleGrid
           gridAutoFlow="column"
           alignItems="end"
@@ -106,31 +105,6 @@ export function Home() {
             isHighlighted={index % 2 === 0}
           />
         ))}
-        {/* <Box margin="15px" textAlign="center">
-          <Image src="/assets/images/static-artist-mori.jpg" width="250px" borderRadius="50%" />
-          <Heading>Mori Calliope</Heading>
-
-          <Text color="whiteAlpha.800">890.839 Followers</Text>
-        </Box>
-
-        <Box margin="15px" textAlign="center">
-          <Image src="/assets/images/static-artist-mori.jpg" width="250px" borderRadius="50%" />
-          <Heading>Mori Calliope</Heading>
-
-          <Text color="whiteAlpha.800">Based on your recent activity.</Text>
-        </Box>
-        <Box margin="15px" textAlign="center">
-          <Image src="/assets/images/static-artist-mori.jpg" width="250px" borderRadius="50%" />
-          <Heading>Mori Calliope</Heading>
-
-          <Text color="whiteAlpha.800">Based on your recent activity.</Text>
-        </Box>
-        <Box margin="15px" textAlign="center">
-          <Image src="/assets/images/static-artist-mori.jpg" width="250px" borderRadius="50%" />
-          <Heading>Mori Calliope</Heading>
-
-          <Text color="whiteAlpha.800">Based on your recent activity.</Text>
-        </Box> */}
       </SimpleGrid>
     </>
   );

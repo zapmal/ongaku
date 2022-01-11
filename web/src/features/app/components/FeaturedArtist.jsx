@@ -1,18 +1,13 @@
 import { Box, Button, Badge, Flex, Heading, Text } from '@chakra-ui/react';
 import React from 'react';
 
-import { GRADIENTS, GRID_COLUMN_HEIGHT } from '../constants';
+import { GRID_COLUMN_HEIGHT } from '../constants';
 
 import { theme } from '@/stitches.config.js';
 
 export function FeaturedArtistBanner({ image, children }) {
   return (
-    <Box
-      bg={`${GRADIENTS.top}, url(/assets/images/${image})`}
-      bgRepeat="round"
-      height="700px"
-      width="100%"
-    >
+    <Box bg={`url(/assets/images/${image})`} bgRepeat="round" height="700px" width="100%">
       {children}
     </Box>
   );

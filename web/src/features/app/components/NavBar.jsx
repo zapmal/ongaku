@@ -1,5 +1,5 @@
 import { Box, Flex, Spacer, Button, Icon, Avatar, IconButton, Tooltip } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   MdHome,
   MdLibraryMusic,
@@ -10,16 +10,50 @@ import {
 } from 'react-icons/md';
 import { useLocation, Link } from 'react-router-dom';
 
+import { GRADIENTS } from '../constants';
+
 import { theme } from '@/stitches.config.js';
 
 export function NavigationBar() {
   const location = useLocation();
-  // const [isSmallScreen, isMediumScreen] = useMediaQuery(['(max-width: 30em)', '(min-width: 48em)']);
+  const [y, setY] = useState(window.scrollY);
+  const [isBackgroundVisible, setVisibleBackground] = useState(false);
+
+  const handleNavigation = useCallback(
+    (event) => {
+      const window = event.currentTarget;
+
+      if (y < window.scrollY) {
+        setVisibleBackground(true);
+      }
+
+      if (window.pageYOffset == 0) {
+        setVisibleBackground(false);
+      }
+      setY(window.scrollY);
+    },
+    [y]
+  );
+
+  useEffect(() => {
+    setY(window.scrollY);
+
+    window.addEventListener('scroll', handleNavigation);
+
+    return () => {
+      window.removeEventListener('scroll', handleNavigation);
+    };
+  }, [handleNavigation]);
 
   return (
-    <Box bg="transparent" sx={{ position: 'sticky', top: 0 }} height={0} zIndex={1}>
-      <Flex justify="center" align="center">
-        <Avatar marginTop="10px" marginLeft="10px" size="lg" />
+    <Box sx={{ position: 'sticky', top: 0 }} height={0} zIndex={1}>
+      <Flex
+        align="center"
+        transition="all 200ms linear"
+        bg={isBackgroundVisible ? theme.colors.primaryBase.value : GRADIENTS.top}
+        borderBottom={isBackgroundVisible && `.5px solid ${theme.colors.primaryLine.value}`}
+      >
+        <Avatar margin="10px" />
         <Spacer />
         {items.map((item, index) => (
           <Item
@@ -35,8 +69,8 @@ export function NavigationBar() {
           <IconButton
             variant="link"
             color="whiteAlpha.800"
-            marginRight="10px"
-            size="lg"
+            margin="10px"
+            height="100%"
             icon={<MdHelp size={35} />}
             _active={{ color: 'whiteAlpha.700' }}
           />
@@ -79,7 +113,6 @@ function Item({ text, icon, to, isHighlighted }) {
     <Button
       variant="link"
       fontSize="xl"
-      margin="20px 0"
       as={Link}
       to={to}
       color={isHighlighted ? theme.colors.accentText.value : 'whiteAlpha.800'}

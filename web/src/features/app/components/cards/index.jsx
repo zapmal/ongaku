@@ -16,8 +16,7 @@ export function Card({ cover, children, ...extraStyles }) {
       marginRight="20px"
       position="relative"
       borderRadius="10px"
-      maxWidth="200px"
-      // width="50%"
+      width="50%"
       height="95%"
       bg={`linear-gradient(180deg, ${theme.colors.primaryBase.value} 5%, rgba(255,255,255,0) 60%)`}
       {...extraStyles}

@@ -126,5 +126,17 @@ export const SUGGESTED_ARTISTS = [
     image: '/assets/images/static-artist-yung-iverson.jpg',
   },
 ];
-export const PERFECT_FOR_YOU = '';
+export const PERFECT_FOR_YOU = [
+  {
+    name: 'DEMONDICE',
+    youtubeChannelURL: 'https://youtube.com/DEMONDICEKAREN',
+    pageURL: '/artist/DEMONDICE',
+    description:
+      'Karen, better known online as DEMONDICE, is an American YouTuber living in Japan who is most known for her rap, MV production and animations',
+    genres: 'Hip-Hop, Rap, Jazz Rap, Pop Rap',
+    monthlyListeners: '403,871',
+    followers: '103,948',
+    image: '/assets/images/static-artist-og-mori.jpeg',
+  },
+];
 export const TRENDING = [];

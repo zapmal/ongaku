@@ -29,7 +29,9 @@ export function ArtistIcon({ image, name, amountOfFollowers, isHighlighted }) {
           ))}
         </Box>
       )}
-      <Heading color={isHighlighted && theme.colors.accentText.value}>{name}</Heading>
+      <Heading color={isHighlighted && theme.colors.accentText.value} fontSize="3xl">
+        {name}
+      </Heading>
 
       <Text color="whiteAlpha.800">{amountOfFollowers} followers</Text>
     </Box>

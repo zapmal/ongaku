@@ -8,6 +8,7 @@ import {
   FeaturedArtistBanner,
   FeaturedArtistInformation,
   ArtistIcon,
+  PerfectForYou,
 } from '../components';
 import {
   FEATURED_ARTIST,
@@ -15,6 +16,7 @@ import {
   GRADIENTS,
   GRID_COLUMN_HEIGHT,
   SUGGESTED_ARTISTS,
+  PERFECT_FOR_YOU,
 } from '../constants';
 
 import { Highlight } from '@/components/Utils';
@@ -57,7 +59,7 @@ export function Home() {
         </SimpleGrid>
       </FeaturedArtistBanner>
 
-      <Heading margin="10px">
+      <Heading margin="30px">
         Recently <Highlight>Played</Highlight>
       </Heading>
 
@@ -88,11 +90,13 @@ export function Home() {
         </Flex>
       </SimpleGrid>
 
-      <Box margin="10px">
+      <Box margin="30px">
         <Heading>
           <Highlight>Suggested</Highlight> Artists
         </Heading>
-        <Text color="whiteAlpha.800">Based on your recent activity.</Text>
+        <Text color="whiteAlpha.800" marginTop="10px">
+          Based on your recent activity, we suggest a couple of artists that may fit your style.
+        </Text>
       </Box>
 
       <SimpleGrid column={4} gridAutoFlow="column" justifyItems="center">
@@ -106,6 +110,29 @@ export function Home() {
           />
         ))}
       </SimpleGrid>
+
+      <Box margin="30px">
+        <Heading>
+          Perfect for <Highlight>you</Highlight>
+        </Heading>
+        <Text color="whiteAlpha.800" marginTop="10px">
+          We base this one on your most listened artists, you will probably love them too.
+        </Text>
+
+        {PERFECT_FOR_YOU.map((artist, index) => (
+          <PerfectForYou
+            key={index}
+            name={artist.name}
+            description={artist.description}
+            genres={artist.genres}
+            monthlyListeners={artist.monthlyListeners}
+            followers={artist.followers}
+            image={artist.image}
+            pageURL={artist.pageURL}
+            youtubeChannelURL={artist.youtubeChannelURL}
+          />
+        ))}
+      </Box>
     </>
   );
 }

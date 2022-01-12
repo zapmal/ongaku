@@ -25,8 +25,14 @@ export function NotFound() {
         fontSize="lg"
         width={['70%', '50%']}
       >
-        The page you tried to access {"doesn't"} exist. It maybe got{' '}
-        <Highlight>deleted or renamed</Highlight>, go home and try again.
+        We could not load this page. If you do not have cookies enabled in your browser or if you
+        are using incognito mode, try enabling cookies or disabling the incognito and try again. If
+        none of these work, then the page may have been deleted or you do not have permissions to
+        see it.
+        <br />
+        <br />
+        If you think this is a mistake, contact us at:{' '}
+        <Highlight>official.ongaku@gmail.com</Highlight>
       </Text>
 
       <Button

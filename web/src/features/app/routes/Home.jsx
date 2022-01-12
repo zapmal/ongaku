@@ -14,6 +14,8 @@ import {
   FEATURED_ARTIST,
   RECENTLY_PLAYED,
   GRADIENTS,
+  SECTION_MARGIN,
+  SUB_SECTION_MARGIN,
   GRID_COLUMN_HEIGHT,
   SUGGESTED_ARTISTS,
   PERFECT_FOR_YOU,
@@ -91,7 +93,7 @@ export function Home() {
         </Flex>
       </SimpleGrid>
 
-      <Box margin="50px 20px 20px 20px">
+      <Box margin={SECTION_MARGIN}>
         <Heading>
           <Highlight>Suggested</Highlight> Artists
         </Heading>
@@ -112,7 +114,7 @@ export function Home() {
         ))}
       </SimpleGrid>
 
-      <Box margin="50px 20px 20px 20px">
+      <Box margin={SECTION_MARGIN}>
         <Heading>
           Perfect for <Highlight>you</Highlight>
         </Heading>
@@ -136,7 +138,7 @@ export function Home() {
         ))}
       </Box>
 
-      <Box margin="50px 20px 20px 20px">
+      <Box margin={SECTION_MARGIN}>
         <Heading>
           <Highlight>Trending</Highlight>
         </Heading>
@@ -146,7 +148,7 @@ export function Home() {
       </Box>
 
       <SimpleGrid column={5}>
-        <Flex margin="20px" justify="space-evenly" align="center">
+        <Flex margin={SUB_SECTION_MARGIN} justify="space-evenly" align="center">
           {TRENDING.map((item, index) =>
             item.cardType === 'song' ? (
               <SongCard
@@ -171,7 +173,11 @@ export function Home() {
         </Flex>
       </SimpleGrid>
 
-      <Image src="/assets/images/home-footer.png" width="500px" margin="20px auto" />
+      <Image
+        src="/assets/images/home-footer.png"
+        width="500px"
+        margin={`${SUB_SECTION_MARGIN} auto`}
+      />
     </>
   );
 }

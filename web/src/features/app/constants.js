@@ -2,6 +2,8 @@ import { keyframes } from '@chakra-ui/react';
 
 import { theme } from '@/stitches.config.js';
 
+export const SECTION_MARGIN = '50px 20px 20px 20px';
+export const SUB_SECTION_MARGIN = '20px';
 export const GRID_COLUMN_HEIGHT = '300px';
 export const GRADIENTS = {
   // old one used on the banner

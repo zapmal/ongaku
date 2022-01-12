@@ -139,4 +139,44 @@ export const PERFECT_FOR_YOU = [
     image: '/assets/images/static-artist-og-mori.jpeg',
   },
 ];
-export const TRENDING = [];
+export const TRENDING = [
+  {
+    cardType: 'song',
+    name: 'Human',
+    isExplicit: false,
+    type: 'SONG',
+    cover: '/assets/images/static-trending-human.jpg',
+    authors: "Rag'n'Bone Man",
+    year: 2017,
+  },
+  {
+    cardType: 'song',
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    type: 'EP',
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    year: 2019,
+  },
+  {
+    cardType: 'artist',
+    name: 'Bea Miller',
+    amountOfFollowers: '8,403,812',
+    image: '/assets/images/static-trending-bea-miller.jpg',
+  },
+  {
+    cardType: 'artist',
+    name: 'PVRIS',
+    amountOfFollowers: '3,111,992',
+    image: '/assets/images/static-trending-pvris.jpg',
+  },
+  {
+    cardType: 'song',
+    name: 'Speed of Light',
+    isExplicit: false,
+    type: 'SINGLE',
+    cover: '/assets/images/static-trending-speed-of-light.jpg',
+    authors: 'DJ Okawari, AI ninomiya',
+    year: 2019,
+  },
+];

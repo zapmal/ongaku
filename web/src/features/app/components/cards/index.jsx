@@ -13,17 +13,17 @@ export function Card({ cover, children, ...extraStyles }) {
 
   return (
     <Box
-      marginRight="20px"
+      marginRight="15px"
       position="relative"
       borderRadius="10px"
-      width="50%"
-      height="95%"
+      height="250px"
+      width="200px"
       bg={`linear-gradient(180deg, ${theme.colors.primaryBase.value} 5%, rgba(255,255,255,0) 60%)`}
       {...extraStyles}
     >
       <Image
         src={cover}
-        minHeight="200px"
+        height="200px"
         borderRadius="10px"
         transition="opacity 300ms ease-in-out"
         opacity={isHovered && 0.6}

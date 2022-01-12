@@ -1,13 +1,13 @@
-import { Box, Heading, SimpleGrid, Flex, Text } from '@chakra-ui/react';
+import { Box, Heading, SimpleGrid, Flex, Text, Image } from '@chakra-ui/react';
 import React from 'react';
 
 import {
   NavigationBar,
   SongCard,
   PlaylistCard,
+  ArtistCard,
   FeaturedArtistBanner,
   FeaturedArtistInformation,
-  ArtistIcon,
   PerfectForYou,
 } from '../components';
 import {
@@ -17,6 +17,7 @@ import {
   GRID_COLUMN_HEIGHT,
   SUGGESTED_ARTISTS,
   PERFECT_FOR_YOU,
+  TRENDING,
 } from '../constants';
 
 import { Highlight } from '@/components/Utils';
@@ -59,7 +60,7 @@ export function Home() {
         </SimpleGrid>
       </FeaturedArtistBanner>
 
-      <Heading margin="30px">
+      <Heading margin="20px">
         Recently <Highlight>Played</Highlight>
       </Heading>
 
@@ -90,7 +91,7 @@ export function Home() {
         </Flex>
       </SimpleGrid>
 
-      <Box margin="30px">
+      <Box margin="50px 20px 20px 20px">
         <Heading>
           <Highlight>Suggested</Highlight> Artists
         </Heading>
@@ -101,7 +102,7 @@ export function Home() {
 
       <SimpleGrid column={4} gridAutoFlow="column" justifyItems="center">
         {SUGGESTED_ARTISTS.map((artist, index) => (
-          <ArtistIcon
+          <ArtistCard
             key={index}
             name={artist.name}
             image={artist.image}
@@ -111,12 +112,13 @@ export function Home() {
         ))}
       </SimpleGrid>
 
-      <Box margin="30px">
+      <Box margin="50px 20px 20px 20px">
         <Heading>
           Perfect for <Highlight>you</Highlight>
         </Heading>
         <Text color="whiteAlpha.800" marginTop="10px">
-          We base this one on your most listened artists, you will probably love them too.
+          We base this one on your most listened artists and genres, you will probably love them{' '}
+          {';)'}
         </Text>
 
         {PERFECT_FOR_YOU.map((artist, index) => (
@@ -133,6 +135,43 @@ export function Home() {
           />
         ))}
       </Box>
+
+      <Box margin="50px 20px 20px 20px">
+        <Heading>
+          <Highlight>Trending</Highlight>
+        </Heading>
+        <Text color="whiteAlpha.800" marginTop="10px">
+          Most listened artists, songs or playlists on the past 48 hours.
+        </Text>
+      </Box>
+
+      <SimpleGrid column={5}>
+        <Flex margin="20px" justify="space-evenly" align="center">
+          {TRENDING.map((item, index) =>
+            item.cardType === 'song' ? (
+              <SongCard
+                key={index}
+                cover={item.cover}
+                name={item.name}
+                isExplicit={item.isExplicit}
+                type={item.type}
+                authors={item.authors}
+                year={item.year}
+              />
+            ) : (
+              <ArtistCard
+                key={index}
+                name={item.name}
+                image={item.image}
+                amountOfFollowers={item.amountOfFollowers}
+                size="sm"
+              />
+            )
+          )}
+        </Flex>
+      </SimpleGrid>
+
+      <Image src="/assets/images/home-footer.png" width="500px" margin="20px auto" />
     </>
   );
 }

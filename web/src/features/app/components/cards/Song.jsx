@@ -9,7 +9,7 @@ export function SongCard({ cover, name, isExplicit, type, authors, year }) {
   return (
     <Card cover={cover}>
       <Flex justify="end">
-        <Text fontWeight="bold" marginRight="5px">
+        <Text fontWeight="bold" wordBreak="break-word">
           {name}
         </Text>
         <Spacer />

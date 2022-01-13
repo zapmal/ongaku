@@ -6,7 +6,7 @@ import {
   Text,
   Divider,
   Spacer,
-  ChakraIconButton,
+  IconButton as ChakraIconButton,
   Icon,
   Slider,
   SliderTrack,
@@ -14,7 +14,6 @@ import {
   SliderThumb,
 } from '@chakra-ui/react';
 import React from 'react';
-// import { IoMdHeartEmpty, IoMdDownload } from 'react-icons/io';
 import { AiOutlineHeart, AiOutlineDownload } from 'react-icons/ai';
 import {
   MdPlayArrow,
@@ -39,28 +38,34 @@ const SONG_DATA_PROPS = {
 
 export function Player() {
   return (
-    <Box sx={{ position: 'sticky', bottom: 0 }} zIndex={1} height="80px" overflow="hidden">
+    <Box sx={{ position: 'sticky', bottom: 0 }} zIndex={1} height="100px" overflow="hidden">
       <Flex
         align="center"
         bg={theme.colors.primaryBase.value}
         borderTop={`.5px solid ${theme.colors.primaryLine.value}`}
       >
         <Flex width="300px">
-          <Image src="/assets/images/static-current-song-perfect-world.jpeg" width="80px" />
+          <Image
+            src="/assets/images/static-current-song-perfect-world.jpeg"
+            width="100px"
+            height="100px"
+          />
           <Flex flexFlow="column" justify="center" marginLeft="20px">
-            <Highlight>Perfect World</Highlight>
+            <Box>
+              <Highlight>Perfect World</Highlight>
 
-            <Text {...SONG_DATA_PROPS}>
-              From <Highlight variant="gray">TWICE</Highlight>
-            </Text>
-            <Text {...SONG_DATA_PROPS}>
-              Album: <Highlight>Perfect World</Highlight>
-            </Text>
+              <Text {...SONG_DATA_PROPS}>
+                From <Highlight variant="gray">TWICE</Highlight>
+              </Text>
+              <Text {...SONG_DATA_PROPS}>
+                Album: <Highlight>Perfect World</Highlight>
+              </Text>
+            </Box>
           </Flex>
 
           <Spacer />
 
-          <Divider {...DIVIDER_PROPS} marginTop="10px" />
+          <Divider {...DIVIDER_PROPS} marginTop="20px" />
         </Flex>
 
         <SimpleGrid width="700px">
@@ -82,7 +87,7 @@ export function Player() {
             <IconButton icon={MdRepeat} size="sm" />
           </Flex>
 
-          <Flex align="center" height="20px">
+          <Flex align="center" height="25px">
             <Spacer />
 
             <Text marginRight="10px" fontSize="sm">
@@ -108,8 +113,6 @@ export function Player() {
 
         <IconButton icon={AiOutlineDownload} size="md" marginLeft="20px" />
         <IconButton icon={AiOutlineHeart} size="md" />
-
-        <ChakraIconButton variant="ghost" icon={<Icon as={AiOutlineHeart} w="25px" h="25px" />} />
 
         <Flex margin="0 auto" align="center" width="200px">
           <Slider colorScheme="pink">
@@ -143,11 +146,23 @@ function IconButton({ icon, size, ...extraStyles }) {
       icon={
         <Icon
           as={icon}
-          w={iconButtonSizes[size]}
-          h={iconButtonSizes[size]}
+          w={iconButtonSizes[size].w}
+          h={iconButtonSizes[size].h}
           color="whiteAlpha.800"
+          _hover={{
+            color: 'whiteAlpha.700',
+          }}
+          _active={{
+            color: theme.colors.accentSolidActive.value,
+          }}
         />
       }
+      _hover={{
+        bg: 'transparent',
+      }}
+      _active={{
+        bg: 'transparent',
+      }}
       {...extraStyles}
     />
   );

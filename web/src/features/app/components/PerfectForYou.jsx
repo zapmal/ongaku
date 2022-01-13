@@ -19,8 +19,8 @@ import { Button } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
 
-const textProps = { marginTop: '20px', fontSize: 'xl', color: 'whiteAlpha.800' };
-const buttonProps = { margin: '20px 0 0 10px', width: '250px' };
+const TEXT_PROPS = { marginTop: '20px', fontSize: 'xl', color: 'whiteAlpha.800' };
+const BUTTON_PROPS = { margin: '20px 0 0 10px', width: '250px' };
 
 export function PerfectForYou({
   name,
@@ -56,26 +56,26 @@ export function PerfectForYou({
             />
           </Heading>
 
-          <Text {...textProps}>{description}</Text>
+          <Text {...TEXT_PROPS}>{description}</Text>
 
-          <Text {...textProps}>
+          <Text {...TEXT_PROPS}>
             <Highlight>Genres:</Highlight> {genres}
           </Text>
 
-          <Text {...textProps}>
+          <Text {...TEXT_PROPS}>
             <Highlight>Monthly Listeners:</Highlight> {monthlyListeners}
           </Text>
 
-          <Text {...textProps}>
+          <Text {...TEXT_PROPS}>
             <Highlight>Followers:</Highlight> {followers}
           </Text>
 
           <Box marginTop="40px" textAlign="center">
             <Flex justify="center">
-              <Button {...buttonProps} as={RouterLink} to={pageURL}>
+              <Button {...BUTTON_PROPS} as={RouterLink} to={pageURL}>
                 Go to Artist Page
               </Button>
-              <Button {...buttonProps} variant="accent">
+              <Button {...BUTTON_PROPS} variant="accent">
                 Start Listening
               </Button>
             </Flex>

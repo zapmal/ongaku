@@ -21,7 +21,7 @@ import { theme } from '@/stitches.config.js';
 
 const sizes = {
   sm: {
-    top: '90px',
+    top: '80px',
     boxHeight: '250px',
     width: '200px',
     height: '200px',

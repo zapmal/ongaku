@@ -1,27 +1,5 @@
-import {
-  Box,
-  Heading,
-  SimpleGrid,
-  Flex,
-  Text,
-  Image,
-  Divider,
-  Spacer,
-  IconButton,
-  Icon,
-} from '@chakra-ui/react';
+import { Box, Heading, SimpleGrid, Flex, Text, Image } from '@chakra-ui/react';
 import React from 'react';
-import { IoMdHeartEmpty, IoMdDownload } from 'react-icons/io';
-import {
-  MdPlayArrow,
-  MdRepeat,
-  MdShuffle,
-  MdVolumeUp,
-  MdSkipPrevious,
-  MdSkipNext,
-  MdForward30,
-  MdReplay30,
-} from 'react-icons/md';
 
 import {
   NavigationBar,
@@ -31,6 +9,7 @@ import {
   FeaturedArtistBanner,
   FeaturedArtistInformation,
   PerfectForYou,
+  Player,
 } from '../components';
 import {
   FEATURED_ARTIST,
@@ -45,7 +24,6 @@ import {
 } from '../constants';
 
 import { Highlight } from '@/components/Utils';
-import { theme } from '@/stitches.config.js';
 
 export function Home() {
   return (
@@ -202,78 +180,7 @@ export function Home() {
         margin={`${SUB_SECTION_MARGIN} auto`}
       />
 
-      <Box sx={{ position: 'sticky', bottom: 0 }} zIndex={1} height="100px" overflow="hidden">
-        <Flex
-          align="center"
-          bg={theme.colors.primaryBase.value}
-          borderTop={`.5px solid ${theme.colors.primaryLine.value}`}
-        >
-          <Flex width="300px">
-            <Image src="/assets/images/static-current-song-perfect-world.jpeg" width="100px" />
-            <Flex flexFlow="column" justify="center" marginLeft="20px">
-              <Highlight>Perfect World</Highlight>
-              <Text fontSize="sm" color="whiteAlpha.800">
-                From <Highlight variant="gray">TWICE</Highlight>
-              </Text>
-              <Text fontSize="sm" color="whiteAlpha.800">
-                Album: <Highlight>Perfect World</Highlight>
-              </Text>
-            </Flex>
-
-            <Spacer />
-
-            <Divider orientation="vertical" h="60px" marginTop="20px" />
-          </Flex>
-
-          <SimpleGrid width="700px">
-            <Flex justify="space-evenly">
-              <IconButton variant="ghost" icon={<Icon as={MdRepeat} w="25px" h="25px" />} />
-              <IconButton variant="ghost" icon={<Icon as={MdShuffle} w="25px" h="25px" />} />
-              <IconButton variant="ghost" icon={<Icon as={MdVolumeUp} w="25px" h="25px" />} />
-              <IconButton variant="ghost" icon={<Icon as={IoMdHeartEmpty} w="25px" h="25px" />} />
-              <IconButton variant="ghost" icon={<Icon as={IoMdDownload} w="25px" h="25px" />} />
-            </Flex>
-
-            <Flex align="center" height="35px">
-              <Spacer />
-
-              <Text marginRight="10px" fontSize="sm">
-                0:00
-              </Text>
-              <Divider width="500px" borderBlockStartWidth="1.5px" />
-              <Text marginLeft="10px" fontSize="sm">
-                3:40
-              </Text>
-
-              <Spacer />
-
-              <Divider orientation="vertical" h="60px" marginBottom="40px" />
-            </Flex>
-          </SimpleGrid>
-
-          <Box margin="0 auto">
-            <IconButton variant="ghost" icon={<Icon as={MdSkipPrevious} w="35px" h="35px" />} />
-            <IconButton
-              variant="ghost"
-              icon={<Icon as={MdReplay30} w="35px" h="35px" />}
-              marginRight="10px"
-            />
-            <IconButton
-              bg="whiteAlpha.900"
-              borderRadius="50%"
-              icon={
-                <Icon as={MdPlayArrow} w="35px" h="35px" color={theme.colors.primaryBase.value} />
-              }
-            />
-            <IconButton
-              variant="ghost"
-              icon={<Icon as={MdForward30} w="35px" h="35px" />}
-              marginLeft="10px"
-            />
-            <IconButton variant="ghost" icon={<Icon as={MdSkipNext} w="35px" h="35px" />} />
-          </Box>
-        </Flex>
-      </Box>
+      <Player />
     </>
   );
 }

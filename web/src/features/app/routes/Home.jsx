@@ -2,14 +2,12 @@ import { Box, Heading, SimpleGrid, Flex, Text, Image } from '@chakra-ui/react';
 import React from 'react';
 
 import {
-  NavigationBar,
   SongCard,
   PlaylistCard,
   ArtistCard,
   FeaturedArtistBanner,
   FeaturedArtistInformation,
   PerfectForYou,
-  Player,
 } from '../components';
 import {
   FEATURED_ARTIST,
@@ -28,7 +26,7 @@ import { Highlight } from '@/components/Utils';
 export function Home() {
   return (
     <>
-      <NavigationBar />
+      {/* <NavigationBar /> */}
       <FeaturedArtistBanner image="static-featured-artist-gidle.webp">
         <SimpleGrid
           gridAutoFlow="column"
@@ -180,7 +178,7 @@ export function Home() {
         margin={`${SUB_SECTION_MARGIN} auto`}
       />
 
-      <Player />
+      {/* <Player /> */}
     </>
   );
 }

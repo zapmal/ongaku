@@ -1,4 +1,4 @@
-import { Box, Spinner } from '@chakra-ui/react';
+// import { Box, Spinner } from '@chakra-ui/react';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 
@@ -12,6 +12,7 @@ const { ResendVerificationEmail } = lazyImport(
   'ResendVerificationEmail'
 );
 const { Home } = lazyImport(() => import('@/features/app'), 'Home');
+const { AppLayout } = lazyImport(() => import('@/features/app'), 'AppLayout');
 
 export const protectedRoutes = [
   {
@@ -22,8 +23,13 @@ export const protectedRoutes = [
         element: <Welcome />,
       },
       {
-        path: '/home',
-        element: <Home />,
+        element: <AppLayout />,
+        children: [
+          {
+            path: '/home',
+            element: <Home />,
+          },
+        ],
       },
     ],
   },
@@ -37,18 +43,18 @@ function VerifiedEmailWrapper() {
   const entity = useAuthStore((s) => s.entity);
   return (
     <>
-      <React.Suspense fallback={<LoadingFallback />}>
-        {!entity.verifiedEmail && <ResendVerificationEmail />}
-        <Outlet />
-      </React.Suspense>
+      {/* <React.Suspense fallback={<LoadingFallback />}> */}
+      {!entity.verifiedEmail && <ResendVerificationEmail />}
+      <Outlet />
+      {/* </React.Suspense> */}
     </>
   );
 }
 
-function LoadingFallback() {
-  return (
-    <Box textAlign="center" paddingTop="200px" overflow="hidden">
-      <Spinner size="xl" />
-    </Box>
-  );
-}
+// function LoadingFallback() {
+//   return (
+//     <Box textAlign="center" paddingTop="200px" overflow="hidden">
+//       <Spinner size="xl" />
+//     </Box>
+//   );
+// }

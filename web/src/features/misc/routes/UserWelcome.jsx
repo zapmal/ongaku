@@ -10,7 +10,7 @@ import { theme, styled } from '@/stitches.config.js';
 
 export function UserWelcome() {
   return (
-    <Box backgroundImage="/assets/svgs/lines.svg" height="100vh">
+    <Box backgroundImage="/assets/svgs/lines.svg" height="100%">
       <NavigationBar />
       <Box textAlign="center">
         <Heading paddingTop={['30px', 0]} fontSize={['3xl', '4xl']}>

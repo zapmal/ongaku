@@ -1,4 +1,4 @@
-import { Box, Flex, Spacer, Button, Icon, Avatar, IconButton, Tooltip } from '@chakra-ui/react';
+import { Box, Flex, Spacer, Button, Icon, IconButton, Tooltip } from '@chakra-ui/react';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   MdHome,
@@ -11,6 +11,8 @@ import {
 import { useLocation, Link } from 'react-router-dom';
 
 import { GRADIENTS } from '../constants';
+
+import { ProfileIcon } from './ProfileIcon';
 
 import { theme } from '@/stitches.config.js';
 
@@ -53,7 +55,8 @@ export function NavigationBar() {
         bg={isBackgroundVisible ? theme.colors.primaryBase.value : GRADIENTS.top}
         borderBottom={isBackgroundVisible && `.5px solid ${theme.colors.primaryLine.value}`}
       >
-        <Avatar margin="10px" />
+        <ProfileIcon />
+
         <Spacer />
         {items.map((item, index) => (
           <Item

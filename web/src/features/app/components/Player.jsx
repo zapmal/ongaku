@@ -13,8 +13,9 @@ import {
   SliderFilledTrack,
   SliderThumb,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { AiOutlineHeart, AiOutlineDownload } from 'react-icons/ai';
+import { FiChevronsUp } from 'react-icons/fi';
 import {
   MdPlayArrow,
   MdRepeat,
@@ -23,6 +24,9 @@ import {
   MdSkipPrevious,
   MdSkipNext,
 } from 'react-icons/md';
+
+import { FADE_OUT_ANIMATION } from '../constants';
+import { useHover } from '../hooks/useHover';
 
 import { Highlight } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
@@ -37,6 +41,11 @@ const SONG_DATA_PROPS = {
 };
 
 export function Player() {
+  const [isHovered, mouseHandlers] = useHover();
+  const [isOpen, setOpen] = useState(false);
+
+  const handleOnClick = () => setOpen(!isOpen);
+
   return (
     <Box sx={{ position: 'sticky', bottom: 0 }} zIndex={1} height="100px" overflow="hidden">
       <Flex
@@ -49,7 +58,30 @@ export function Player() {
             src="/assets/images/static-current-song-perfect-world.jpeg"
             width="100px"
             height="100px"
+            onClick={handleOnClick}
+            _hover={{
+              cursor: 'pointer',
+            }}
+            {...mouseHandlers}
           />
+          {isHovered && (
+            <Box
+              animation={FADE_OUT_ANIMATION}
+              _hover={{
+                cursor: 'pointer',
+              }}
+            >
+              <Icon
+                as={FiChevronsUp}
+                w="25px"
+                h="25px"
+                position="absolute"
+                left="70px"
+                top="5px"
+                {...mouseHandlers}
+              />
+            </Box>
+          )}
           <Flex flexFlow="column" justify="center" marginLeft="20px">
             <Box>
               <Highlight>Perfect World</Highlight>

@@ -23,7 +23,7 @@ export function ProfileIcon() {
 
   return (
     <Menu isLazy>
-      <MenuButton margin="10px">
+      <MenuButton margin="10px" _hover={{ opacity: '.8' }}>
         <Avatar src="/assets/images/static-admin-avatar.jpeg">
           <AvatarBadge
             as={Badge}

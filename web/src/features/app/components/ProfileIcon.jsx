@@ -8,8 +8,12 @@ import {
   Avatar,
   AvatarBadge,
   Badge,
+  Icon,
 } from '@chakra-ui/react';
 import React from 'react';
+import { CgProfile } from 'react-icons/cg';
+import { FiLogOut } from 'react-icons/fi';
+import { MdGroups, MdMusicNote, MdAdminPanelSettings, MdOutlineWork } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
 import { theme } from '@/stitches.config.js';
@@ -61,6 +65,7 @@ function MenuItems({ group, role }) {
               key={index}
               as={m.to && Link}
               to={m.to}
+              icon={<Icon as={m.icon} w="20px" h="20px" marginTop="5px" />}
               onClick={!m.to && handleLogout}
               _hover={{
                 bg: theme.colors.primaryBgHover.value,
@@ -88,23 +93,23 @@ const options = {
     {
       text: 'View Profile',
       to: '/profile',
-      icon: '',
+      icon: CgProfile,
     },
     {
       text: 'Logout',
-      icon: '',
+      icon: FiLogOut,
     },
   ],
   moderation: [
     {
       text: 'Users, artists and managers',
       to: '/m/entities',
-      icon: '',
+      icon: MdGroups,
     },
     {
       text: 'Songs, albums and metadata',
       to: '/m/published-work',
-      icon: '',
+      icon: MdMusicNote,
     },
   ],
 };
@@ -120,7 +125,7 @@ const optionsPerRole = [
         {
           text: "Artist's work",
           to: '/m/published-work',
-          icon: '',
+          icon: MdOutlineWork,
         },
       ],
     },
@@ -128,7 +133,7 @@ const optionsPerRole = [
   {
     ARTIST: {
       account: options.account,
-      management: [{ text: 'Published work', to: '/m/published-work', icon: '' }],
+      management: [{ text: 'Published work', to: '/m/published-work', icon: MdOutlineWork }],
     },
   },
   {
@@ -145,7 +150,7 @@ const optionsPerRole = [
         {
           text: 'Ongaku Staff',
           to: '/m/staff',
-          icon: '',
+          icon: MdAdminPanelSettings,
         },
       ],
     },

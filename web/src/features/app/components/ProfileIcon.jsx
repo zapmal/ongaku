@@ -10,6 +10,7 @@ import {
   Badge,
 } from '@chakra-ui/react';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { theme } from '@/stitches.config.js';
 
@@ -48,6 +49,8 @@ export function ProfileIcon() {
 }
 
 function MenuItems({ group, role }) {
+  const handleLogout = () => console.log('Logout');
+
   return optionsPerRole.map((currentOption, index) => {
     const option = currentOption[role];
     return (
@@ -56,15 +59,18 @@ function MenuItems({ group, role }) {
           {option[group].map((m, index) => (
             <MenuItem
               key={index}
+              as={m.to && Link}
+              to={m.to}
+              onClick={!m.to && handleLogout}
               _hover={{
                 bg: theme.colors.primaryBgHover.value,
               }}
               _active={{
-                bg: theme.colors.primaryBgHover.value,
+                bg: theme.colors.primaryBgActive.value,
                 color: theme.colors.accentSolidActive.value,
               }}
               _focus={{
-                bg: theme.colors.primaryBgHover.value,
+                bg: theme.colors.primaryBgActive.value,
                 color: theme.colors.accentSolidActive.value,
               }}
             >
@@ -81,6 +87,7 @@ const options = {
   account: [
     {
       text: 'View Profile',
+      to: '/profile',
       icon: '',
     },
     {
@@ -91,10 +98,12 @@ const options = {
   moderation: [
     {
       text: 'Users, artists and managers',
+      to: '/m/entities',
       icon: '',
     },
     {
       text: 'Songs, albums and metadata',
+      to: '/m/published-work',
       icon: '',
     },
   ],
@@ -110,6 +119,7 @@ const optionsPerRole = [
       management: [
         {
           text: "Artist's work",
+          to: '/m/published-work',
           icon: '',
         },
       ],
@@ -118,7 +128,7 @@ const optionsPerRole = [
   {
     ARTIST: {
       account: options.account,
-      management: [{ text: 'Published work', icon: '' }],
+      management: [{ text: 'Published work', to: '/m/published-work', icon: '' }],
     },
   },
   {
@@ -134,6 +144,7 @@ const optionsPerRole = [
         ...options.moderation,
         {
           text: 'Ongaku Staff',
+          to: '/m/staff',
           icon: '',
         },
       ],

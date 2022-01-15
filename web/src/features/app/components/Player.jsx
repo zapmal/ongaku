@@ -12,8 +12,9 @@ import {
   SliderTrack,
   SliderFilledTrack,
   SliderThumb,
+  Tooltip,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React from 'react';
 import { AiOutlineHeart, AiOutlineDownload } from 'react-icons/ai';
 import { FiChevronsUp } from 'react-icons/fi';
 import {
@@ -24,6 +25,7 @@ import {
   MdSkipPrevious,
   MdSkipNext,
 } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 
 import { Highlight } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
@@ -38,10 +40,6 @@ const SONG_DATA_PROPS = {
 };
 
 export function Player() {
-  const [isOpen, setOpen] = useState(false);
-
-  const handleOnClick = () => setOpen(!isOpen);
-
   return (
     <Box sx={{ position: 'sticky', bottom: 0 }} zIndex={1} height="100px" overflow="hidden">
       <Flex
@@ -50,29 +48,32 @@ export function Player() {
         borderTop={`.5px solid ${theme.colors.primaryLine.value}`}
       >
         <Flex width="300px">
-          <Image
-            src="/assets/images/static-current-song-perfect-world.jpeg"
-            width="100px"
-            height="100px"
-            onClick={handleOnClick}
-            _hover={{
-              cursor: 'pointer',
-            }}
-          />
-          <Icon
-            transition="all 300ms ease-in"
-            as={FiChevronsUp}
-            w="25px"
-            h="25px"
-            position="absolute"
-            left="70px"
-            top="5px"
-            _hover={{
-              color: theme.colors.accentSolidHover.value,
-              cursor: 'pointer',
-              transform: 'scale(1.2)',
-            }}
-          />
+          <Tooltip label="Click here to go to the player">
+            <Box as={Link} to="/player">
+              <Image
+                src="/assets/images/static-current-song-perfect-world.jpeg"
+                width="100px"
+                height="100px"
+                _hover={{
+                  cursor: 'pointer',
+                }}
+              />
+              <Icon
+                transition="all 300ms ease-in"
+                as={FiChevronsUp}
+                w="25px"
+                h="25px"
+                position="absolute"
+                left="70px"
+                top="5px"
+                _hover={{
+                  color: theme.colors.accentSolidHover.value,
+                  cursor: 'pointer',
+                  transform: 'scale(1.2)',
+                }}
+              />
+            </Box>
+          </Tooltip>
           <Flex flexFlow="column" justify="center" marginLeft="20px">
             <Box>
               <Highlight>Perfect World</Highlight>

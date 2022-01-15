@@ -50,7 +50,7 @@ export const FEATURED_ARTIST = {
       isExplicit: false,
       type: 'SINGLE',
       cover: '/assets/images/static-more.jpg',
-      authors: '(G) I-DLE, K/DA and more',
+      authors: '(G) I-DLE, K/DA, Madison Beer, Lexie Liu, Jaira Burns',
       year: 2020,
     },
   ],

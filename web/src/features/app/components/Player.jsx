@@ -25,9 +25,6 @@ import {
   MdSkipNext,
 } from 'react-icons/md';
 
-import { FADE_OUT_ANIMATION } from '../constants';
-import { useHover } from '../hooks/useHover';
-
 import { Highlight } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
 
@@ -41,7 +38,6 @@ const SONG_DATA_PROPS = {
 };
 
 export function Player() {
-  const [isHovered, mouseHandlers] = useHover();
   const [isOpen, setOpen] = useState(false);
 
   const handleOnClick = () => setOpen(!isOpen);
@@ -62,26 +58,21 @@ export function Player() {
             _hover={{
               cursor: 'pointer',
             }}
-            {...mouseHandlers}
           />
-          {isHovered && (
-            <Box
-              animation={FADE_OUT_ANIMATION}
-              _hover={{
-                cursor: 'pointer',
-              }}
-            >
-              <Icon
-                as={FiChevronsUp}
-                w="25px"
-                h="25px"
-                position="absolute"
-                left="70px"
-                top="5px"
-                {...mouseHandlers}
-              />
-            </Box>
-          )}
+          <Icon
+            transition="all 300ms ease-in"
+            as={FiChevronsUp}
+            w="25px"
+            h="25px"
+            position="absolute"
+            left="70px"
+            top="5px"
+            _hover={{
+              color: theme.colors.accentSolidHover.value,
+              cursor: 'pointer',
+              transform: 'scale(1.2)',
+            }}
+          />
           <Flex flexFlow="column" justify="center" marginLeft="20px">
             <Box>
               <Highlight>Perfect World</Highlight>

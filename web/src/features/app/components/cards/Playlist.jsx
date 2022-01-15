@@ -3,11 +3,12 @@ import React from 'react';
 
 import { Card } from './index';
 
+import { Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 
 export function PlaylistCard({ cover, name, likes, amountOfSongs, author }) {
   return (
-    <Card cover={cover}>
+    <Card cover={cover} type="playlist">
       <Badge marginTop="5px" position="absolute" top={1} left={1}>
         Playlist
       </Badge>
@@ -23,7 +24,14 @@ export function PlaylistCard({ cover, name, likes, amountOfSongs, author }) {
 
       <Flex justify="end">
         <Text color="whiteAlpha.700" fontSize="sm" maxWidth="60%">
-          By {author}
+          By{' '}
+          <Link
+            underline={false}
+            variant="gray"
+            to={`/user/${author.split(' ').join('-').toLowerCase()}`}
+          >
+            {author}
+          </Link>
         </Text>
         <Spacer />
         <Text fontWeight="bold" fontSize="sm">

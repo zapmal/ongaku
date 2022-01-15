@@ -1,14 +1,26 @@
-import { Box, Image, Icon, IconButton } from '@chakra-ui/react';
+import {
+  Box,
+  Image,
+  Icon,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuOptionGroup,
+  MenuItem,
+  MenuDivider,
+} from '@chakra-ui/react';
 import React from 'react';
+import { FaScroll } from 'react-icons/fa';
 import { IoMdHeart } from 'react-icons/io';
-import { MdPlayArrow, MdMoreVert } from 'react-icons/md';
+import { MdPlayArrow, MdMoreVert, MdOutlineQueue } from 'react-icons/md';
 
 import { FADE_OUT_ANIMATION } from '../../constants';
 import { useHover } from '../../hooks/useHover';
 
 import { theme } from '@/stitches.config.js';
 
-export function Card({ cover, children, ...extraStyles }) {
+export function Card({ cover, children, type, ...extraStyles }) {
   const [isHovered, mouseEventsHandlers] = useHover();
 
   return (
@@ -34,6 +46,7 @@ export function Card({ cover, children, ...extraStyles }) {
           {hoverButtons.map((button, index) => (
             <HoverButton key={index} button={button} mouseEventsHandlers={mouseEventsHandlers} />
           ))}
+          <OptionsButton mouseEventsHandlers={mouseEventsHandlers} type={type} />
         </Box>
       )}
       {children}
@@ -56,36 +69,99 @@ const hoverButtons = [
       left: '20px',
     },
   },
-  {
-    hover: 'transparent',
-    active: 'blackAlpha.500',
-    variant: 'ghost',
-    icon: MdMoreVert,
-    position: {
-      top: 1,
-      right: 1,
-    },
-  },
 ];
+
+const ICON_BUTTON_PROPS = {
+  position: 'absolute',
+  width: '50px',
+  height: '50px',
+};
 
 function HoverButton({ button, mouseEventsHandlers }) {
   return (
     <IconButton
-      position="absolute"
-      {...button.position}
-      variant={button.variant}
       borderRadius="50%"
-      width="50px"
-      height="50px"
       icon={<Icon as={button.icon} w="35px" h="35px" />}
-      backgroundColor={!button.variant && theme.colors.primaryBase.value}
+      backgroundColor={theme.colors.primaryBase.value}
       _hover={{
-        backgroundColor: button.hover || theme.colors.accentSolid.value,
+        backgroundColor: theme.colors.accentSolid.value,
       }}
       _active={{
-        backgroundColor: button.active || theme.colors.accentSolidActive.value,
+        backgroundColor: theme.colors.accentSolidActive.value,
       }}
+      {...button.position}
+      {...ICON_BUTTON_PROPS}
       {...mouseEventsHandlers}
     />
+  );
+}
+
+const INTERACTION_PROPS = {
+  _hover: {
+    bg: theme.colors.primaryBgHover.value,
+  },
+  _active: {
+    bg: theme.colors.primaryBgActive.value,
+    color: theme.colors.accentSolidActive.value,
+  },
+  _focus: {
+    bg: theme.colors.primaryBgActive.value,
+    color: theme.colors.accentSolidActive.value,
+  },
+};
+
+/**
+ * This is intentionally missing some options that will *probably* be added in the future (i.e. deleting)
+ */
+function OptionsButton({ type, mouseEventsHandlers }) {
+  return (
+    <Menu isLazy closeOnBlur={false} gutter={2} placement="left">
+      <MenuButton
+        as={IconButton}
+        {...mouseEventsHandlers}
+        {...ICON_BUTTON_PROPS}
+        borderRadius="5px"
+        icon={<Icon as={MdMoreVert} w="35px" h="35px" />}
+        variant="ghost"
+        top="5px"
+        right="5px"
+        margin={0}
+        _active={{
+          backgroundColor: 'blackAlpha.500',
+        }}
+        _hover={{
+          backgroundColor: 'transparent',
+        }}
+      />
+      <MenuList bg={theme.colors.primaryBase.value} {...mouseEventsHandlers} marginTop="10px">
+        <MenuItem
+          {...INTERACTION_PROPS}
+          icon={<Icon as={MdOutlineQueue} w="15px" h="15px" marginTop="5px" />}
+        >
+          Add to queue
+        </MenuItem>
+
+        <MenuDivider />
+        {type !== 'playlist' && (
+          <>
+            <MenuOptionGroup title="Add to playlist">
+              <MenuItem {...INTERACTION_PROPS} fontSize="sm">
+                Big Boi tunes
+              </MenuItem>
+              <MenuItem {...INTERACTION_PROPS} fontSize="sm">
+                OnlyPain Official Soundtrack
+              </MenuItem>
+            </MenuOptionGroup>
+            <MenuDivider />
+          </>
+        )}
+        <MenuItem
+          {...INTERACTION_PROPS}
+          icon={<Icon as={FaScroll} w="15px" h="15px" marginTop="5px" />}
+        >
+          Show credits
+        </MenuItem>
+      </MenuList>
+    </Menu>
   );
 }

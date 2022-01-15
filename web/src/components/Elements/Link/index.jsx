@@ -11,14 +11,15 @@ const variants = {
 };
 
 export function Link({ to, variant = 'primary', underline = true, children, ...extraProps }) {
-  const hasUnderline = underline ? { textDecoration: 'underline' } : null;
   return (
     <ChakraLink
       as={RouterLink}
       to={to}
       color={variants[variant]}
-      _hover={{ hasUnderline }}
-      {...hasUnderline}
+      _hover={{
+        textDecoration: !underline && 'underline',
+      }}
+      textDecoration={underline && 'underline'}
       {...extraProps}
     >
       {children}

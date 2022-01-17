@@ -26,8 +26,10 @@ import { MdPlayArrow, MdPause, MdMoreVert, MdOutlineQueue } from 'react-icons/md
 import { FADE_OUT_ANIMATION, MENU_ITEM_PROPS } from '../constants';
 import { useHover } from '../hooks/useHover';
 
+import { Link } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
+import { getSongAuthorPage } from '@/utils/getUrl';
 
 export function Queue() {
   return (
@@ -74,7 +76,7 @@ export function Queue() {
               isExplicit={song.isExplicit}
             />
 
-            <Divider />
+            {SONGS_IN_QUEUE.length !== index + 1 && <Divider />}
           </div>
         ))}
       </Box>
@@ -106,7 +108,14 @@ function QueueItem({ isPlaying, itemNumber, name, author, duration, isExplicit }
           )}
         </Text>
         <Text fontSize="xs" color="whiteAlpha.800">
-          {author}
+          {author.split(',').map((a, index) => {
+            const [linkText, authorPath] = getSongAuthorPage(a, author);
+            return (
+              <Link to={`/artist/${authorPath}`} key={index} underline={false} variant="gray">
+                {linkText}
+              </Link>
+            );
+          })}
         </Text>
       </Box>
       <Spacer />

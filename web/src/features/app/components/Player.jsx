@@ -25,8 +25,9 @@ import {
   MdSkipPrevious,
   MdSkipNext,
 } from 'react-icons/md';
-import { Link, useLocation } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 
+import { Link } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
 
@@ -52,7 +53,7 @@ export function Player() {
         <Flex width="300px">
           {pathname !== '/queue' && (
             <Tooltip label="Click here to go to the queue">
-              <Box as={Link} to="/queue">
+              <Box as={RouterLink} to="/queue">
                 <Image
                   src="/assets/images/static-queue-ztd.jpg"
                   width="100px"
@@ -85,7 +86,10 @@ export function Player() {
               </Text>
 
               <Text {...SONG_DATA_PROPS}>
-                From: <Highlight variant="gray">Shinji Hosoe</Highlight>
+                From:{' '}
+                <Link variant="gray" to="/artist/shinji-hosoe" underline={false}>
+                  Shinji Hosoe
+                </Link>
               </Text>
 
               <Text {...SONG_DATA_PROPS}>

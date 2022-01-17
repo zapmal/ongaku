@@ -109,6 +109,7 @@ export function Home() {
             image={artist.image}
             amountOfFollowers={artist.amountOfFollowers}
             isHighlighted={index % 2 === 0}
+            to={artist.to}
           />
         ))}
       </SimpleGrid>
@@ -165,6 +166,7 @@ export function Home() {
                 name={item.name}
                 image={item.image}
                 amountOfFollowers={item.amountOfFollowers}
+                to={item.to}
                 size="sm"
               />
             )

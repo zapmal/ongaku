@@ -111,21 +111,25 @@ export const SUGGESTED_ARTISTS = [
     name: 'Mori Calliope',
     amountOfFollowers: '892,092',
     image: '/assets/images/static-artist-mori.jpg',
+    to: '/artist/mori-calliope',
   },
   {
     name: 'TWICE',
     amountOfFollowers: '10,763,588',
     image: '/assets/images/static-artist-twice.jpeg',
+    to: '/artist/twice',
   },
   {
     name: 'The Gentlemen',
     amountOfFollowers: '750,379',
     image: '/assets/images/static-artist-gentlemen.jpg',
+    to: '/artist/the-gentlemen',
   },
   {
     name: 'Yung Iverson',
     amountOfFollowers: '102,838',
     image: '/assets/images/static-artist-yung-iverson.jpg',
+    to: '/artist/yung-iverson',
   },
 ];
 export const PERFECT_FOR_YOU = [
@@ -165,12 +169,14 @@ export const TRENDING = [
     name: 'Bea Miller',
     amountOfFollowers: '8,403,812',
     image: '/assets/images/static-trending-bea-miller.jpg',
+    to: '/artist/bea-miller',
   },
   {
     cardType: 'artist',
     name: 'PVRIS',
     amountOfFollowers: '3,111,992',
     image: '/assets/images/static-trending-pvris.jpg',
+    to: '/artist/pvris',
   },
   {
     cardType: 'song',

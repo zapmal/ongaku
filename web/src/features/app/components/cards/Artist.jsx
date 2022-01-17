@@ -13,6 +13,7 @@ import {
 import React from 'react';
 import { HiOutlineExternalLink } from 'react-icons/hi';
 import { MdAdd } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 
 import { FADE_OUT_ANIMATION } from '../../constants';
 import { useHover } from '../../hooks/useHover';
@@ -36,7 +37,7 @@ const sizes = {
   },
 };
 
-export function ArtistCard({ image, name, amountOfFollowers, isHighlighted, size = 'lg' }) {
+export function ArtistCard({ image, name, amountOfFollowers, isHighlighted, to, size = 'lg' }) {
   const [isHovered, mouseEventsHandlers] = useHover();
 
   return (
@@ -62,6 +63,7 @@ export function ArtistCard({ image, name, amountOfFollowers, isHighlighted, size
             <HoverButton
               key={index}
               button={button}
+              to={to}
               mouseEventsHandlers={mouseEventsHandlers}
               size={size}
             />
@@ -110,12 +112,14 @@ const hoverButtons = [
   },
 ];
 
-function HoverButton({ button, size, mouseEventsHandlers }) {
+function HoverButton({ button, size, to, mouseEventsHandlers }) {
+  const goToPageProps = to && { as: Link, to };
   return (
     <Tooltip label={button.text}>
       <IconButton
         position="absolute"
         top={sizes[size].top}
+        {...goToPageProps}
         {...button.position}
         variant={button.variant}
         width="50px"

@@ -20,8 +20,8 @@ import {
 import React from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { FaScroll } from 'react-icons/fa';
-import { IoMdHeartEmpty, IoMdMicrophone } from 'react-icons/io';
-import { MdPlayArrow, MdPause, MdMoreVert, MdOutlineQueue } from 'react-icons/md';
+import { IoMdHeartEmpty, IoMdMicrophone, IoMdRemoveCircleOutline } from 'react-icons/io';
+import { MdPlayArrow, MdPause, MdMoreVert } from 'react-icons/md';
 
 import { FADE_OUT_ANIMATION, MENU_ITEM_PROPS } from '../constants';
 import { useHover } from '../hooks/useHover';
@@ -184,10 +184,17 @@ function OptionMenuButton({ isLarge = false, placement = 'top', ...styles }) {
         }}
       />
       <MenuList bg={theme.colors.primaryBase.value}>
-        <MenuItem {...MENU_ITEM_PROPS} icon={<Icon as={MdOutlineQueue} marginTop="10px" />}>
-          Go to artist page
-        </MenuItem>
-        <MenuDivider />
+        {!isLarge && (
+          <>
+            <MenuItem
+              {...MENU_ITEM_PROPS}
+              icon={<Icon as={IoMdRemoveCircleOutline} marginTop="10px" />}
+            >
+              Remove from queue
+            </MenuItem>
+            <MenuDivider />
+          </>
+        )}
 
         <MenuOptionGroup title="Add to playlist">
           <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">

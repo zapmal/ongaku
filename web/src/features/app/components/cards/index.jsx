@@ -15,7 +15,7 @@ import { FaScroll } from 'react-icons/fa';
 import { IoMdHeart } from 'react-icons/io';
 import { MdPlayArrow, MdMoreVert, MdOutlineQueue } from 'react-icons/md';
 
-import { FADE_OUT_ANIMATION } from '../../constants';
+import { FADE_OUT_ANIMATION, MENU_ITEM_PROPS } from '../../constants';
 import { useHover } from '../../hooks/useHover';
 
 import { theme } from '@/stitches.config.js';
@@ -96,20 +96,6 @@ function HoverButton({ button, mouseEventsHandlers }) {
   );
 }
 
-const INTERACTION_PROPS = {
-  _hover: {
-    bg: theme.colors.primaryBgHover.value,
-  },
-  _active: {
-    bg: theme.colors.primaryBgActive.value,
-    color: theme.colors.accentSolidActive.value,
-  },
-  _focus: {
-    bg: theme.colors.primaryBgActive.value,
-    color: theme.colors.accentSolidActive.value,
-  },
-};
-
 /**
  * This is intentionally missing some options that will *probably* be added in the future (i.e. deleting)
  */
@@ -135,7 +121,7 @@ function OptionsButton({ type, mouseEventsHandlers }) {
       />
       <MenuList bg={theme.colors.primaryBase.value} {...mouseEventsHandlers} marginTop="10px">
         <MenuItem
-          {...INTERACTION_PROPS}
+          {...MENU_ITEM_PROPS}
           icon={<Icon as={MdOutlineQueue} w="15px" h="15px" marginTop="5px" />}
         >
           Add to queue
@@ -145,10 +131,10 @@ function OptionsButton({ type, mouseEventsHandlers }) {
         {type !== 'playlist' && (
           <>
             <MenuOptionGroup title="Add to playlist">
-              <MenuItem {...INTERACTION_PROPS} fontSize="sm">
+              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
                 Big Boi tunes
               </MenuItem>
-              <MenuItem {...INTERACTION_PROPS} fontSize="sm">
+              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
                 OnlyPain Official Soundtrack
               </MenuItem>
             </MenuOptionGroup>
@@ -156,7 +142,7 @@ function OptionsButton({ type, mouseEventsHandlers }) {
           </>
         )}
         <MenuItem
-          {...INTERACTION_PROPS}
+          {...MENU_ITEM_PROPS}
           icon={<Icon as={FaScroll} w="15px" h="15px" marginTop="5px" />}
         >
           Show credits

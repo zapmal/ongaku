@@ -54,7 +54,7 @@ export function Login(props) {
   const setEntity = useAuthStore((s) => s.setEntity);
 
   // Easter egg.
-  const location = useLocation();
+  const { pathname } = useLocation();
   const addNotification = useNotificationStore((s) => s.addNotification);
 
   const handleShow = () => setShow(!show);
@@ -180,7 +180,7 @@ export function Login(props) {
           <Center>
             <ModalFooter display="block" textAlign="center">
               <Text>Not registered yet?</Text>
-              {location.pathname === '/register' ? (
+              {pathname === '/register' ? (
                 <Button
                   variant="link"
                   onClick={() => {

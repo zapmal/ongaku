@@ -25,7 +25,7 @@ import {
   MdSkipPrevious,
   MdSkipNext,
 } from 'react-icons/md';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { Highlight } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
@@ -35,11 +35,13 @@ const DIVIDER_PROPS = {
   h: '60px',
 };
 const SONG_DATA_PROPS = {
-  fontSize: 'sm',
+  fontSize: 'xs',
   color: 'whiteAlpha.800',
 };
 
 export function Player() {
+  const { pathname } = useLocation();
+
   return (
     <Box sx={{ position: 'sticky', bottom: 0 }} zIndex={1} height="100px" overflow="hidden">
       <Flex
@@ -48,48 +50,53 @@ export function Player() {
         borderTop={`.5px solid ${theme.colors.primaryLine.value}`}
       >
         <Flex width="300px">
-          <Tooltip label="Click here to go to the player">
-            <Box as={Link} to="/player">
-              <Image
-                src="/assets/images/static-current-song-perfect-world.jpeg"
-                width="100px"
-                height="100px"
-                _hover={{
-                  cursor: 'pointer',
-                }}
-              />
-              <Icon
-                transition="all 300ms ease-in"
-                as={FiChevronsUp}
-                w="25px"
-                h="25px"
-                position="absolute"
-                left="70px"
-                top="5px"
-                _hover={{
-                  color: theme.colors.accentSolidHover.value,
-                  cursor: 'pointer',
-                  transform: 'scale(1.2)',
-                }}
-              />
-            </Box>
-          </Tooltip>
-          <Flex flexFlow="column" justify="center" marginLeft="20px">
+          {pathname !== '/queue' && (
+            <Tooltip label="Click here to go to the queue">
+              <Box as={Link} to="/queue">
+                <Image
+                  src="/assets/images/static-queue-ztd.jpg"
+                  width="100px"
+                  height="100px"
+                  _hover={{
+                    cursor: 'pointer',
+                  }}
+                />
+                <Icon
+                  transition="all 300ms ease-in"
+                  as={FiChevronsUp}
+                  w="25px"
+                  h="25px"
+                  position="absolute"
+                  left="70px"
+                  top="5px"
+                  _hover={{
+                    color: theme.colors.accentSolidHover.value,
+                    cursor: 'pointer',
+                    transform: 'scale(1.2)',
+                  }}
+                />
+              </Box>
+            </Tooltip>
+          )}
+          <Flex flexFlow="column" justify="center" margin="0 10px" height="100px">
             <Box>
-              <Highlight>Perfect World</Highlight>
+              <Text color={theme.colors.accentSolid.value} fontSize="sm" fontWeight="bold">
+                Morphogenetic Sorrow
+              </Text>
 
               <Text {...SONG_DATA_PROPS}>
-                From <Highlight variant="gray">TWICE</Highlight>
+                From: <Highlight variant="gray">Shinji Hosoe</Highlight>
               </Text>
+
               <Text {...SONG_DATA_PROPS}>
-                Album: <Highlight>Perfect World</Highlight>
+                Album: <Highlight>Zero Escape Official OST</Highlight>
               </Text>
             </Box>
           </Flex>
 
           <Spacer />
 
-          <Divider {...DIVIDER_PROPS} marginTop="20px" />
+          <Divider {...DIVIDER_PROPS} margin="20px 2px" />
         </Flex>
 
         <SimpleGrid width="700px">
@@ -131,7 +138,7 @@ export function Player() {
 
             <Spacer />
 
-            <Divider {...DIVIDER_PROPS} marginBottom="40px" />
+            <Divider {...DIVIDER_PROPS} marginBottom="42px" />
           </Flex>
         </SimpleGrid>
 

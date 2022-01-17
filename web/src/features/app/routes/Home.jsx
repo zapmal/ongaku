@@ -26,7 +26,6 @@ import { Highlight } from '@/components/Utils';
 export function Home() {
   return (
     <>
-      {/* <NavigationBar /> */}
       <FeaturedArtistBanner image="static-featured-artist-gidle.webp">
         <SimpleGrid
           gridAutoFlow="column"
@@ -179,8 +178,6 @@ export function Home() {
         width="500px"
         margin={`${SUB_SECTION_MARGIN} auto`}
       />
-
-      {/* <Player /> */}
     </>
   );
 }

@@ -113,7 +113,7 @@ const hoverButtons = [
 ];
 
 function HoverButton({ button, size, to, mouseEventsHandlers }) {
-  const goToPageProps = to && { as: Link, to };
+  const goToPageProps = to && button.text.includes('Page') && { as: Link, to };
   return (
     <Tooltip label={button.text}>
       <IconButton

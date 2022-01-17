@@ -2,6 +2,20 @@ import { keyframes } from '@chakra-ui/react';
 
 import { theme } from '@/stitches.config.js';
 
+export const MENU_ITEM_PROPS = {
+  _hover: {
+    bg: theme.colors.primaryBgHover.value,
+  },
+  _active: {
+    bg: theme.colors.primaryBgActive.value,
+    color: theme.colors.accentSolidActive.value,
+  },
+  _focus: {
+    bg: theme.colors.primaryBgActive.value,
+    color: theme.colors.accentSolidActive.value,
+  },
+};
+
 export const SECTION_MARGIN = '50px 20px 20px 20px';
 export const SUB_SECTION_MARGIN = '20px';
 export const GRID_COLUMN_HEIGHT = '300px';

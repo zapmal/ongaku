@@ -12,6 +12,7 @@ const { ResendVerificationEmail } = lazyImport(
   'ResendVerificationEmail'
 );
 const { Home } = lazyImport(() => import('@/features/app'), 'Home');
+const { Queue } = lazyImport(() => import('@/features/app'), 'Queue');
 const { AppLayout } = lazyImport(() => import('@/features/app'), 'AppLayout');
 
 export const protectedRoutes = [
@@ -28,6 +29,10 @@ export const protectedRoutes = [
           {
             path: '/home',
             element: <Home />,
+          },
+          {
+            path: '/queue',
+            element: <Queue />,
           },
         ],
       },

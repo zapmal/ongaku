@@ -17,7 +17,7 @@ import { ProfileIcon } from './ProfileIcon';
 import { theme } from '@/stitches.config.js';
 
 export function NavigationBar() {
-  const location = useLocation();
+  const { pathname } = useLocation();
   const [y, setY] = useState(window.scrollY);
   const [isBackgroundVisible, setVisibleBackground] = useState(false);
 
@@ -52,7 +52,11 @@ export function NavigationBar() {
       <Flex
         align="center"
         transition="all 200ms linear"
-        bg={isBackgroundVisible ? theme.colors.primaryBase.value : GRADIENTS.top}
+        bg={
+          isBackgroundVisible || pathname !== '/home'
+            ? theme.colors.primaryBase.value
+            : GRADIENTS.top
+        }
         borderBottom={isBackgroundVisible && `.5px solid ${theme.colors.primaryLine.value}`}
       >
         <ProfileIcon />
@@ -64,7 +68,7 @@ export function NavigationBar() {
             text={item.text}
             icon={item.icon}
             to={item.to}
-            isHighlighted={location.pathname === `/${item.text.toLowerCase()}`}
+            isHighlighted={pathname === `/${item.text.toLowerCase()}`}
           />
         ))}
         <Spacer />

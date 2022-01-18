@@ -32,10 +32,7 @@ const fadeOutSteps = keyframes`
 `;
 export const FADE_OUT_ANIMATION = `${fadeOutSteps} 300ms linear`;
 
-/**
- * Mock data that will be used temporarily.
- */
-
+// Mock data that will be used temporarily.
 export const FEATURED_ARTIST = {
   name: '(G) I-DLE',
   amountOfFollowers: '2,123,505 followers',
@@ -201,4 +198,20 @@ export const TRENDING = [
     authors: 'DJ Okawari, AI ninomiya',
     year: 2019,
   },
+];
+export const SONGS_IN_QUEUE = [
+  { name: 'Morphogenetic Sorrow', author: 'Shinji Hosoe', duration: '4:03' },
+  { name: 'Blue Bird Lamentation', author: 'Shinji Hosoe', duration: '3:33' },
+  { name: 'INDUSTRY BABY', author: 'Lil Nas X, Jack Harlow', duration: '2:22', isExplicit: true },
+  { name: 'Watch Me', author: 'The Phantoms', duration: '3:35' },
+  { name: 'Blood Sweat & Tears', author: 'BTS', duration: '3:37' },
+  { name: 'guh', author: 'Mori Calliope', duration: '3:02' },
+  {
+    name: 'POP/STARS',
+    author: 'K/DA, Madison Beer, (G)-IDLE, League of Legends',
+    duration: '3:11',
+  },
+  { name: 'Aftershock', author: 'Pentakill', duration: '3:31' },
+  { name: 'Last of Me', author: 'Steve Aoki, RUNN', duration: '3:02' },
+  { name: 'Monster', author: 'PVRIS', duration: '2:59' },
 ];

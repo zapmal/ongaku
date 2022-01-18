@@ -5,7 +5,7 @@ import { Card } from './index';
 
 import { Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
-import { getSongAuthorPage } from '@/utils/getUrl';
+import { getSongAuthorPage } from '@/utils/getSongAuthorPage';
 
 export function SongCard({ cover, name, isExplicit, type, authors, year }) {
   return (

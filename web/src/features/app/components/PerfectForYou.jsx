@@ -33,71 +33,69 @@ export function PerfectForYou({
   youtubeChannelURL,
 }) {
   return (
-    <>
-      <SimpleGrid
-        columns={2}
-        margin={SUB_SECTION_MARGIN}
-        maxHeight="500px"
-        border={`.5px solid ${theme.colors.primaryLine.value}`}
-        borderRadius="10px"
-      >
-        <Box margin={SUB_SECTION_MARGIN}>
-          <Heading fontSize="xxx-large" color={theme.colors.accentText.value}>
-            {name}{' '}
-            <IconButton
-              variant="ghost"
-              href={youtubeChannelURL}
-              isDisabled={!youtubeChannelURL}
-              as={Link}
-              isExternal
-              icon={<Icon as={FaYoutube} w="35px" h="35px" />}
-              _hover={{ bg: 'transparent' }}
-              _active={{ bg: 'transparent' }}
-            />
-          </Heading>
+    <SimpleGrid
+      columns={2}
+      margin={SUB_SECTION_MARGIN}
+      maxHeight="500px"
+      border={`.5px solid ${theme.colors.primaryLine.value}`}
+      borderRadius="10px"
+    >
+      <Box margin={SUB_SECTION_MARGIN}>
+        <Heading fontSize="xxx-large" color={theme.colors.accentText.value}>
+          {name}{' '}
+          <IconButton
+            variant="ghost"
+            href={youtubeChannelURL}
+            isDisabled={!youtubeChannelURL}
+            as={Link}
+            isExternal
+            icon={<Icon as={FaYoutube} w="35px" h="35px" />}
+            _hover={{ bg: 'transparent' }}
+            _active={{ bg: 'transparent' }}
+          />
+        </Heading>
 
-          <Text {...TEXT_PROPS}>{description}</Text>
+        <Text {...TEXT_PROPS}>{description}</Text>
 
-          <Text {...TEXT_PROPS}>
-            <Highlight>Genres:</Highlight> {genres}
-          </Text>
+        <Text {...TEXT_PROPS}>
+          <Highlight>Genres:</Highlight> {genres}
+        </Text>
 
-          <Text {...TEXT_PROPS}>
-            <Highlight>Monthly Listeners:</Highlight> {monthlyListeners}
-          </Text>
+        <Text {...TEXT_PROPS}>
+          <Highlight>Monthly Listeners:</Highlight> {monthlyListeners}
+        </Text>
 
-          <Text {...TEXT_PROPS}>
-            <Highlight>Followers:</Highlight> {followers}
-          </Text>
+        <Text {...TEXT_PROPS}>
+          <Highlight>Followers:</Highlight> {followers}
+        </Text>
 
-          <Box marginTop="40px" textAlign="center">
-            <Flex justify="center">
-              <Button {...BUTTON_PROPS} as={RouterLink} to={pageURL}>
-                Go to Artist Page
-              </Button>
-              <Button {...BUTTON_PROPS} variant="accent">
-                Start Listening
-              </Button>
-            </Flex>
-          </Box>
+        <Box marginTop="40px" textAlign="center">
+          <Flex justify="center">
+            <Button {...BUTTON_PROPS} as={RouterLink} to={pageURL}>
+              Go to Artist Page
+            </Button>
+            <Button {...BUTTON_PROPS} variant="accent">
+              Start Listening
+            </Button>
+          </Flex>
         </Box>
-        <Image
-          src={image}
-          height="500px"
-          borderTopRightRadius="inherit"
-          borderBottomRightRadius="inherit"
-          onClick={(event) => {
-            if (name === 'DEMONDICE') {
-              const moriImage = `${window.origin}/assets/images/static-artist-mori.jpg`;
-              const demondiceImage = `${window.origin}/assets/images/static-artist-og-mori.jpeg`;
+      </Box>
+      <Image
+        src={image}
+        height="500px"
+        borderTopRightRadius="inherit"
+        borderBottomRightRadius="inherit"
+        onClick={(event) => {
+          if (name === 'DEMONDICE') {
+            const moriImage = `${window.origin}/assets/images/static-artist-mori.jpg`;
+            const demondiceImage = `${window.origin}/assets/images/static-artist-og-mori.jpeg`;
 
-              event.target.src = moriImage;
+            event.target.src = moriImage;
 
-              setTimeout(() => (event.target.src = demondiceImage), 3000);
-            }
-          }}
-        />
-      </SimpleGrid>
-    </>
+            setTimeout(() => (event.target.src = demondiceImage), 3000);
+          }
+        }}
+      />
+    </SimpleGrid>
   );
 }

@@ -23,13 +23,13 @@ import { FaScroll } from 'react-icons/fa';
 import { IoMdHeartEmpty, IoMdMicrophone, IoMdRemoveCircleOutline } from 'react-icons/io';
 import { MdPlayArrow, MdPause, MdMoreVert } from 'react-icons/md';
 
-import { FADE_OUT_ANIMATION, MENU_ITEM_PROPS } from '../constants';
+import { FADE_OUT_ANIMATION, MENU_ITEM_PROPS, SONGS_IN_QUEUE } from '../constants';
 import { useHover } from '../hooks/useHover';
 
 import { Link } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
-import { getSongAuthorPage } from '@/utils/getUrl';
+import { getSongAuthorPage } from '@/utils/getSongAuthorPage';
 
 export function Queue() {
   return (
@@ -91,7 +91,7 @@ function QueueItem({ isPlaying, itemNumber, name, author, duration, isExplicit }
     <Flex align="center" margin="10px 0" {...mouseEventsHandlers}>
       {isPlaying || isHovered ? (
         <Box animation={FADE_OUT_ANIMATION}>
-          <PlayButton icon={isPlaying ? MdPause : MdPlayArrow} />
+          <ActionButton icon={isPlaying ? MdPause : MdPlayArrow} />
         </Box>
       ) : (
         <Text color="whiteAlpha.700" width="20px" margin="5px 6.1px" textAlign="center">
@@ -122,7 +122,7 @@ function QueueItem({ isPlaying, itemNumber, name, author, duration, isExplicit }
 
       {isHovered && (
         <Box animation={FADE_OUT_ANIMATION}>
-          {!isPlaying && <OptionMenuButton placement="left" />}
+          {!isPlaying && <OptionMenuButton />}
           <OptionButton icon={IoMdHeartEmpty} />
         </Box>
       )}
@@ -133,7 +133,7 @@ function QueueItem({ isPlaying, itemNumber, name, author, duration, isExplicit }
   );
 }
 
-function PlayButton({ icon }) {
+function ActionButton({ icon }) {
   return (
     <IconButton
       bg="whiteAlpha.900"
@@ -168,10 +168,10 @@ function OptionButton({ icon, label, isLarge = false, ...styles }) {
   return label ? <Tooltip label={label}>{iconButton}</Tooltip> : iconButton;
 }
 
-function OptionMenuButton({ isLarge = false, placement = 'top', ...styles }) {
+function OptionMenuButton({ isLarge = false, ...styles }) {
   const dimensions = isLarge && { ...DIMENSIONS };
   return (
-    <Menu isLazy placement={placement} {...styles}>
+    <Menu isLazy placement="top-end" gutter={2} {...styles}>
       <MenuButton
         as={IconButton}
         variant="ghost"
@@ -184,11 +184,12 @@ function OptionMenuButton({ isLarge = false, placement = 'top', ...styles }) {
         }}
       />
       <MenuList bg={theme.colors.primaryBase.value}>
+        {/* Big one is currently playing, so no need to remove from queue */}
         {!isLarge && (
           <>
             <MenuItem
               {...MENU_ITEM_PROPS}
-              icon={<Icon as={IoMdRemoveCircleOutline} marginTop="10px" />}
+              icon={<Icon as={IoMdRemoveCircleOutline} w="15px" h="15px" marginTop="5px" />}
             >
               Remove from queue
             </MenuItem>
@@ -206,27 +207,14 @@ function OptionMenuButton({ isLarge = false, placement = 'top', ...styles }) {
         </MenuOptionGroup>
 
         <MenuDivider />
-        <MenuItem {...MENU_ITEM_PROPS} icon={<Icon as={FaScroll} marginTop="10px" />}>
+
+        <MenuItem
+          {...MENU_ITEM_PROPS}
+          icon={<Icon as={FaScroll} w="15px" h="15px" marginTop="5px" />}
+        >
           Show credits
         </MenuItem>
       </MenuList>
     </Menu>
   );
 }
-
-const SONGS_IN_QUEUE = [
-  { name: 'Morphogenetic Sorrow', author: 'Shinji Hosoe', duration: '4:03' },
-  { name: 'Blue Bird Lamentation', author: 'Shinji Hosoe', duration: '3:33' },
-  { name: 'INDUSTRY BABY', author: 'Lil Nas X, Jack Harlow', duration: '2:22', isExplicit: true },
-  { name: 'Watch Me', author: 'The Phantoms', duration: '3:35' },
-  { name: 'Blood Sweat & Tears', author: 'BTS', duration: '3:37' },
-  { name: 'guh', author: 'Mori Calliope', duration: '3:02' },
-  {
-    name: 'POP/STARS',
-    author: 'K/DA, Madison Beer, (G)-IDLE, League of Legends',
-    duration: '3:11',
-  },
-  { name: 'Aftershock', author: 'Pentakill', duration: '3:31' },
-  { name: 'Last of Me', author: 'Steve Aoki, RUNN', duration: '3:02' },
-  { name: 'Monster', author: 'PVRIS', duration: '2:59' },
-];

@@ -16,6 +16,8 @@ import { FiLogOut } from 'react-icons/fi';
 import { MdGroups, MdMusicNote, MdAdminPanelSettings, MdOutlineWork } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
+import { MENU_ITEM_PROPS } from '../constants';
+
 import { theme } from '@/stitches.config.js';
 
 export function ProfileIcon() {
@@ -67,17 +69,7 @@ function MenuItems({ group, role }) {
               to={m.to}
               icon={<Icon as={m.icon} w="20px" h="20px" marginTop="5px" />}
               onClick={!m.to && handleLogout}
-              _hover={{
-                bg: theme.colors.primaryBgHover.value,
-              }}
-              _active={{
-                bg: theme.colors.primaryBgActive.value,
-                color: theme.colors.accentSolidActive.value,
-              }}
-              _focus={{
-                bg: theme.colors.primaryBgActive.value,
-                color: theme.colors.accentSolidActive.value,
-              }}
+              {...MENU_ITEM_PROPS}
             >
               {m.text}
             </MenuItem>

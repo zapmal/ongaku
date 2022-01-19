@@ -3,7 +3,7 @@ import React from 'react';
 import { MdCheck } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 
-import { markEmailAsVerified } from '../api/verification';
+import { verifyEmail } from '../api/verification';
 
 import { Button } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
@@ -21,7 +21,7 @@ export function VerifyEmail() {
     try {
       setSubmissionState({ isSubmitting: true });
 
-      const response = await markEmailAsVerified({
+      const response = await verifyEmail({
         id: entity.id,
         hash,
         email: entity.email,

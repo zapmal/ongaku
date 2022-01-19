@@ -1,6 +1,7 @@
 import {
   BadRequestException as BadRequest,
   InternalServerErrorException as InternalServerError,
+  NotFoundException as NotFound,
   Injectable,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -126,13 +127,7 @@ export class AuthService {
   }
 
   async login(credentials: LoginDTO) {
-    let entity: Entity;
-
-    if (credentials.isArtist) {
-      entity = await this.artist.getByEmail(credentials.email);
-    } else {
-      entity = (await this.user.getByEmail(credentials.email)) as UserWithVerifiedEmail;
-    }
+    const entity: Entity = await this.getEntity(credentials.email, credentials.isArtist);
 
     if (!entity) {
       throw new BadRequest('Wrong credentials provided');
@@ -180,7 +175,50 @@ export class AuthService {
     }
 
     return {
-      verifiedEmail: entity.verifiedEmail,
+      isEmailVerified: entity.verifiedEmail,
     };
+  }
+
+  async getRecoveryCode(email: string, isArtist: boolean) {
+    const entity: Entity = await this.getEntity(email, isArtist);
+
+    if (!entity) {
+      throw new NotFound('This email is not associated to an Ongaku account');
+    }
+
+    const code = Math.floor(Math.random() * 899999 + 100000);
+
+    return { code, entityID: entity.id };
+  }
+
+  async changePassword(newPassword: string, entityID: number, isArtist: boolean) {
+    let didUpdate = false;
+    const hashedPassword = await hash(newPassword, 10);
+
+    if (isArtist) {
+      await this.artist.update(entityID, { password: hashedPassword });
+      didUpdate = true;
+    } else {
+      await this.user.update(entityID, { password: hashedPassword });
+      didUpdate = true;
+    }
+
+    if (!didUpdate) {
+      throw new InternalServerError(
+        'Something went wrong while trying to update your password, try again',
+      );
+    }
+  }
+
+  async getEntity(email, isArtist) {
+    let entity: Entity;
+
+    if (isArtist) {
+      entity = await this.artist.getByEmail(email);
+    } else {
+      entity = (await this.user.getByEmail(email)) as UserWithVerifiedEmail;
+    }
+
+    return entity;
   }
 }

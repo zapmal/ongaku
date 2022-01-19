@@ -1,3 +1,5 @@
+import { boolean, string } from 'joi';
+
 export class UserRegisterDTO {
   fullName: string;
   password: string;
@@ -33,4 +35,9 @@ export class VerifyEmailDTO {
   hash: string;
   email: string;
   role: 'USER' | 'ARTIST';
+}
+
+export class SendRecoveryCodeDTO {
+  email: string;
+  isArtist: boolean;
 }

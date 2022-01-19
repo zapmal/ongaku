@@ -9,6 +9,7 @@ import {
   Req,
   HttpCode,
   HttpStatus,
+  Put,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { sign } from 'jsonwebtoken';
@@ -19,7 +20,13 @@ import { AuthGuard } from '@/internal/guards';
 import { RequestWithEntity } from '@/internal/interfaces';
 import { cookieOptions } from '@/internal/helpers';
 
-import { LoginDTO, UserRegisterDTO, ArtistRegisterDTO, VerifyEmailDTO } from './auth.dto';
+import {
+  LoginDTO,
+  UserRegisterDTO,
+  ArtistRegisterDTO,
+  VerifyEmailDTO,
+  SendRecoveryCodeDTO,
+} from './auth.dto';
 import {
   loginSchema,
   userRegisterSchema,
@@ -27,13 +34,13 @@ import {
   emailVerificationSchema,
 } from './auth.schemas';
 import { AuthService } from './auth.service';
-import { MailService } from '../mail/mail.service';
+import { EmailService } from '../email/email.service';
 
 @Controller()
 export class AuthController {
   constructor(
     private auth: AuthService,
-    private mail: MailService,
+    private email: EmailService,
     private config: ConfigService,
   ) {}
 
@@ -51,7 +58,7 @@ export class AuthController {
 
     response.cookie('token', token, cookieOptions);
 
-    await this.mail.sendVerificationEmail(user.email);
+    await this.email.sendVerificationEmail(user.email);
 
     return {
       message: 'Account created successfully',
@@ -71,7 +78,7 @@ export class AuthController {
 
     response.cookie('token', token, { ...cookieOptions });
 
-    await this.mail.sendVerificationEmail(artist.email);
+    await this.email.sendVerificationEmail(artist.email);
 
     return {
       message: 'Account created successfully',
@@ -105,16 +112,38 @@ export class AuthController {
     return { message: 'Logged out successfully', status: 'SUCCESS' };
   }
 
-  @Post('verify')
+  @Post('verify-email')
   @HttpCode(HttpStatus.ACCEPTED)
   @UseGuards(AuthGuard)
   @UsePipes(new JoiValidationPipe(emailVerificationSchema))
   async verifyEmail(@Body() data: VerifyEmailDTO) {
-    const { verifiedEmail } = await this.auth.verifyEmail(data);
+    const { isEmailVerified } = await this.auth.verifyEmail(data);
 
     return {
       message: 'Email verified successfully!',
-      verifiedEmail,
+      verifiedEmail: isEmailVerified,
+    };
+  }
+
+  @Post('send-recovery-code')
+  async sendAccountRecoveryCode(@Body() { email, isArtist }: SendRecoveryCodeDTO) {
+    const { code, entityID } = await this.auth.getRecoveryCode(email, isArtist);
+    const status = await this.email.sendRecoveryCode(email, code);
+
+    return {
+      message: 'Success! Check your inbox for further instructions',
+      status,
+      code,
+      entityID,
+    };
+  }
+
+  @Put('change-password')
+  async changePassword(@Body() { newPassword, entityID, isArtist }) {
+    await this.auth.changePassword(newPassword, entityID, isArtist);
+
+    return {
+      message: 'Password updated successfully! You can login now',
     };
   }
 

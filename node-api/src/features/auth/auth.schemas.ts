@@ -47,3 +47,14 @@ export const emailVerificationSchema = Joi.object({
   email: Joi.string().email().required(),
   role: Joi.string().valid('USER', 'ARTIST').required(),
 });
+
+export const recoveryCodeSchema = Joi.object({
+  email: Joi.string().email().required(),
+  isArtist: Joi.boolean().required(),
+});
+
+export const changePasswordSchema = Joi.object({
+  newPassword: Joi.string().min(8).required(),
+  entityID: Joi.number().required(),
+  isArtist: Joi.boolean().required(),
+});

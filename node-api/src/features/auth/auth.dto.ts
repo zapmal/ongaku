@@ -1,5 +1,3 @@
-import { boolean, string } from 'joi';
-
 export class UserRegisterDTO {
   fullName: string;
   password: string;
@@ -39,5 +37,11 @@ export class VerifyEmailDTO {
 
 export class SendRecoveryCodeDTO {
   email: string;
+  isArtist: boolean;
+}
+
+export class ChangePasswordDTO {
+  newPassword: string;
+  entityID: number;
   isArtist: boolean;
 }

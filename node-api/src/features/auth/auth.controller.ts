@@ -26,12 +26,15 @@ import {
   ArtistRegisterDTO,
   VerifyEmailDTO,
   SendRecoveryCodeDTO,
+  ChangePasswordDTO,
 } from './auth.dto';
 import {
   loginSchema,
   userRegisterSchema,
   artistRegisterSchema,
   emailVerificationSchema,
+  recoveryCodeSchema,
+  changePasswordSchema,
 } from './auth.schemas';
 import { AuthService } from './auth.service';
 import { EmailService } from '../email/email.service';
@@ -126,6 +129,7 @@ export class AuthController {
   }
 
   @Post('send-recovery-code')
+  @UsePipes(new JoiValidationPipe(recoveryCodeSchema))
   async sendAccountRecoveryCode(@Body() { email, isArtist }: SendRecoveryCodeDTO) {
     const { code, entityID } = await this.auth.getRecoveryCode(email, isArtist);
     const status = await this.email.sendRecoveryCode(email, code);
@@ -139,7 +143,8 @@ export class AuthController {
   }
 
   @Put('change-password')
-  async changePassword(@Body() { newPassword, entityID, isArtist }) {
+  @UsePipes(new JoiValidationPipe(changePasswordSchema))
+  async changePassword(@Body() { newPassword, entityID, isArtist }: ChangePasswordDTO) {
     await this.auth.changePassword(newPassword, entityID, isArtist);
 
     return {

@@ -208,10 +208,7 @@ function OptionMenuButton({ isLarge = false, ...styles }) {
 
         <MenuDivider />
 
-        <MenuItem
-          {...MENU_ITEM_PROPS}
-          icon={<Icon as={FaScroll} w="15px" h="15px" marginTop="5px" />}
-        >
+        <MenuItem {...MENU_ITEM_PROPS} icon={<Icon as={FaScroll} w="15px" h="15px" />}>
           Show credits
         </MenuItem>
       </MenuList>

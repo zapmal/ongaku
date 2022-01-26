@@ -192,21 +192,12 @@ export class AuthService {
   }
 
   async changePassword(newPassword: string, entityID: number, isArtist: boolean) {
-    let didUpdate = false;
     const hashedPassword = await hash(newPassword, 10);
 
     if (isArtist) {
       await this.artist.update(entityID, { password: hashedPassword });
-      didUpdate = true;
     } else {
       await this.user.update(entityID, { password: hashedPassword });
-      didUpdate = true;
-    }
-
-    if (!didUpdate) {
-      throw new InternalServerError(
-        'Something went wrong while trying to update your password, try again',
-      );
     }
   }
 

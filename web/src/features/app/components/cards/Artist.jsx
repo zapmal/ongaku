@@ -1,6 +1,7 @@
 import {
   Box,
   Image,
+  Avatar,
   Heading,
   Flex,
   Spacer,
@@ -102,6 +103,46 @@ export function ArtistCard({
         </>
       )}
     </Box>
+  );
+}
+
+export function SmallArtistCard({ name, image, amountOfFollowers, to }) {
+  const [isHovered, mouseEventsHandlers] = useHover();
+
+  return (
+    <Flex align="center" margin="13px 0" width="75%">
+      <Avatar
+        size="lg"
+        transition="opacity 300ms ease-in-out"
+        as={Link}
+        to={to}
+        src={image}
+        opacity={isHovered && 0.6}
+        {...mouseEventsHandlers}
+      />
+      <Box marginLeft="20px">
+        <Text color={theme.colors.accentText.value} fontSize="lg" fontWeight="bold">
+          {name}
+        </Text>
+        <Text color="whiteAlpha.700" fontSize="sm" textAlign="left">
+          {amountOfFollowers} followers
+        </Text>
+      </Box>
+
+      <Spacer />
+
+      <IconButton
+        icon={<Icon as={MdAdd} />}
+        variant="outline"
+        _hover={{
+          color: 'whiteAlpha.800',
+        }}
+        _active={{
+          color: theme.colors.accentSolidActive.value,
+          borderColor: theme.colors.accentSolidActive.value,
+        }}
+      />
+    </Flex>
   );
 }
 

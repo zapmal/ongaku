@@ -391,3 +391,30 @@ export const NEW_SONGS = [
     duration: '3:11',
   },
 ];
+
+export const NEW_ARTISTS = [
+  {
+    name: 'The Gentlemen',
+    amountOfFollowers: '750,379',
+    image: '/assets/images/static-artist-gentlemen.jpg',
+    to: '/artist/the-gentlemen',
+  },
+  {
+    name: 'Yung Iverson',
+    amountOfFollowers: '102,838',
+    image: '/assets/images/static-artist-yung-iverson.jpg',
+    to: '/artist/yung-iverson',
+  },
+  {
+    name: 'The Gentlemen',
+    amountOfFollowers: '750,379',
+    image: '/assets/images/static-artist-gentlemen.jpg',
+    to: '/artist/the-gentlemen',
+  },
+  {
+    name: 'Yung Iverson',
+    amountOfFollowers: '102,838',
+    image: '/assets/images/static-artist-yung-iverson.jpg',
+    to: '/artist/yung-iverson',
+  },
+];

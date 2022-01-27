@@ -1,8 +1,8 @@
 import { SimpleGrid, Heading, Box, Divider } from '@chakra-ui/react';
 import React from 'react';
 
-import { QueueSong } from '../components';
-import { NEW_SONGS } from '../constants';
+import { QueueSong, SmallArtistCard } from '../components';
+import { NEW_ARTISTS, NEW_SONGS } from '../constants';
 
 import { Highlight } from '@/components/Utils';
 
@@ -34,6 +34,20 @@ export function Explore() {
         <Heading fontSize="2xl">
           <Highlight>New</Highlight> Artists
         </Heading>
+
+        {NEW_ARTISTS.map((artist, index) => (
+          <Box key={index}>
+            <SmallArtistCard
+              name={artist.name}
+              image={artist.image}
+              amountOfFollowers={artist.amountOfFollowers}
+              to={artist.to}
+              badge={false}
+              size="sm"
+            />
+            <Divider width="75%" />
+          </Box>
+        ))}
       </Box>
     </SimpleGrid>
   );

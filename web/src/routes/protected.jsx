@@ -15,6 +15,7 @@ const { Home } = lazyImport(() => import('@/features/app'), 'Home');
 const { Queue } = lazyImport(() => import('@/features/app'), 'Queue');
 const { AppLayout } = lazyImport(() => import('@/features/app'), 'AppLayout');
 const { Library } = lazyImport(() => import('@/features/app'), 'Library');
+const { Explore } = lazyImport(() => import('@/features/app'), 'Explore');
 
 export const protectedRoutes = [
   {
@@ -38,6 +39,10 @@ export const protectedRoutes = [
           {
             path: '/library',
             element: <Library />,
+          },
+          {
+            path: '/explore',
+            element: <Explore />,
           },
         ],
       },

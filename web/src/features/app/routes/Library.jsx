@@ -2,12 +2,7 @@ import { Box, Image, Flex, Divider, Text, SimpleGrid } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
 import { ArtistCard, PlaylistCard, SongCard } from '../components';
-import {
-  PARENT_BOX_MARGIN,
-  ARTISTS_IN_LIBRARY,
-  PLAYLISTS_IN_LIBRARY,
-  ALBUMS_IN_LIBRARY,
-} from '../constants';
+import { ARTISTS_IN_LIBRARY, PLAYLISTS_IN_LIBRARY, ALBUMS_IN_LIBRARY } from '../constants';
 
 import { theme } from '@/stitches.config.js';
 
@@ -35,7 +30,7 @@ export function Library() {
   }
 
   return (
-    <Box margin={PARENT_BOX_MARGIN} minHeight="455px" maxHeight="700px">
+    <Box minHeight="455px" maxHeight="700px" margin="0 20px 0 40px">
       <Flex gap={20} justify="center">
         <LibraryOption onClick={() => setSelected('artist')} selected={selected === 'artist'}>
           Artists

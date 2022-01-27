@@ -16,7 +16,6 @@ export const MENU_ITEM_PROPS = {
   },
 };
 
-export const PARENT_BOX_MARGIN = '80px 50px 0 50px';
 export const SECTION_MARGIN = '50px 20px 20px 20px';
 export const SUB_SECTION_MARGIN = '20px';
 export const GRID_COLUMN_HEIGHT = '300px';
@@ -201,20 +200,20 @@ export const TRENDING = [
   },
 ];
 export const SONGS_IN_QUEUE = [
-  { name: 'Morphogenetic Sorrow', author: 'Shinji Hosoe', duration: '4:03' },
-  { name: 'Blue Bird Lamentation', author: 'Shinji Hosoe', duration: '3:33' },
-  { name: 'INDUSTRY BABY', author: 'Lil Nas X, Jack Harlow', duration: '2:22', isExplicit: true },
-  { name: 'Watch Me', author: 'The Phantoms', duration: '3:35' },
-  { name: 'Blood Sweat & Tears', author: 'BTS', duration: '3:37' },
-  { name: 'guh', author: 'Mori Calliope', duration: '3:02' },
+  { name: 'Morphogenetic Sorrow', authors: 'Shinji Hosoe', duration: '4:03' },
+  { name: 'Blue Bird Lamentation', authors: 'Shinji Hosoe', duration: '3:33' },
+  { name: 'INDUSTRY BABY', authors: 'Lil Nas X, Jack Harlow', duration: '2:22', isExplicit: true },
+  { name: 'Watch Me', authors: 'The Phantoms', duration: '3:35' },
+  { name: 'Blood Sweat & Tears', authors: 'BTS', duration: '3:37' },
+  { name: 'guh', authors: 'Mori Calliope', duration: '3:02' },
   {
     name: 'POP/STARS',
-    author: 'K/DA, Madison Beer, (G)-IDLE, League of Legends',
+    authors: 'K/DA, Madison Beer, (G)-IDLE, League of Legends',
     duration: '3:11',
   },
-  { name: 'Aftershock', author: 'Pentakill', duration: '3:31' },
-  { name: 'Last of Me', author: 'Steve Aoki, RUNN', duration: '3:02' },
-  { name: 'Monster', author: 'PVRIS', duration: '2:59' },
+  { name: 'Aftershock', authors: 'Pentakill', duration: '3:31' },
+  { name: 'Last of Me', authors: 'Steve Aoki, RUNN', duration: '3:02' },
+  { name: 'Monster', authors: 'PVRIS', duration: '2:59' },
 ];
 
 export const ARTISTS_IN_LIBRARY = [
@@ -347,5 +346,48 @@ export const ALBUMS_IN_LIBRARY = [
     cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
     authors: 'Minami',
     year: 2019,
+  },
+];
+
+export const NEW_SONGS = [
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    type: 'EP',
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    albumName: 'Kawaki wo Ameku',
+    year: 2019,
+    duration: '3:11',
+  },
+  {
+    name: 'Speed of Light',
+    isExplicit: false,
+    type: 'SINGLE',
+    cover: '/assets/images/static-trending-speed-of-light.jpg',
+    authors: 'DJ Okawari, AI ninomiya',
+    albumName: 'Arknights Official OST',
+    year: 2019,
+    duration: '3:11',
+  },
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    type: 'EP',
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    albumName: 'Kawaki wo Ameku',
+    year: 2019,
+    duration: '3:11',
+  },
+  {
+    name: 'Speed of Light',
+    isExplicit: false,
+    type: 'SINGLE',
+    cover: '/assets/images/static-trending-speed-of-light.jpg',
+    authors: 'DJ Okawari, AI ninomiya',
+    albumName: 'Arknights Official OST',
+    year: 2019,
+    duration: '3:11',
   },
 ];

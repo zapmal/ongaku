@@ -5,7 +5,7 @@ import { Card } from './index';
 
 import { Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
-import { getSongAuthorPage } from '@/utils/getSongAuthorPage';
+import { getLink } from '@/utils/getLink';
 
 export function SongCard({ cover, name, isExplicit, type, authors, year }) {
   return (
@@ -42,7 +42,7 @@ export function SongCard({ cover, name, isExplicit, type, authors, year }) {
       </Flex>
       <Text color="whiteAlpha.700" fontSize="sm">
         {authors.split(',').map((author, index) => {
-          const [linkText, authorPath] = getSongAuthorPage(author, authors);
+          const [linkText, authorPath] = getLink(author, authors);
 
           return (
             <Link to={`/artist/${authorPath}`} key={index} underline={false} variant="gray">

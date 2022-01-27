@@ -1,0 +1,233 @@
+import {
+  Tooltip,
+  IconButton as ChakraIconButton,
+  Icon,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuOptionGroup,
+  MenuItem,
+  MenuDivider,
+  Flex,
+  Image,
+  Text,
+  Spacer,
+  Badge,
+  Box,
+} from '@chakra-ui/react';
+import React from 'react';
+import { FaScroll } from 'react-icons/fa';
+import { IoMdHeartEmpty, IoMdRemoveCircleOutline } from 'react-icons/io';
+import { MdMoreVert, MdPlayArrow, MdPause } from 'react-icons/md';
+
+import { MENU_ITEM_PROPS, FADE_OUT_ANIMATION } from '../constants';
+import { useHover } from '../hooks/useHover';
+
+import { Link } from '@/components/Elements';
+import { theme } from '@/stitches.config.js';
+import { getLink } from '@/utils/getLink';
+
+export function QueueSong({ name, cover, isExplicit, authors, albumName, year, duration }) {
+  const [isHovered, mouseHandlers] = useHover();
+
+  return (
+    // change width for streams usage
+    <Flex align="center" margin="15px 0" width="75%" {...mouseHandlers}>
+      {isHovered ? (
+        <Box animation={FADE_OUT_ANIMATION}>
+          <IconButton icon={MdPlayArrow} size="lg" w="40px" h="40px" />
+        </Box>
+      ) : (
+        <Image src={cover} w="60px" h="60px" borderRadius="5px" />
+      )}
+
+      <QueueData
+        name={name}
+        isExplicit={isExplicit}
+        authors={authors}
+        albumName={albumName}
+        year={year}
+      />
+
+      <QueueOptions isHovered={isHovered} duration={duration} isLarge={true} />
+    </Flex>
+  );
+}
+
+export function QueueItem({ isPlaying, itemNumber, name, authors, duration, isExplicit }) {
+  const [isHovered, mouseEventsHandlers] = useHover();
+
+  return (
+    <Flex align="center" margin="10px 0" {...mouseEventsHandlers}>
+      {isPlaying || isHovered ? (
+        <Box animation={FADE_OUT_ANIMATION}>
+          <IconButton icon={isPlaying ? MdPause : MdPlayArrow} w="20px" h="20px" />
+        </Box>
+      ) : (
+        <Text color="whiteAlpha.700" width="20px" margin="5px 6.1px" textAlign="center">
+          {itemNumber}
+        </Text>
+      )}
+
+      <QueueData name={name} isPlaying={isPlaying} isExplicit={isExplicit} authors={authors} />
+
+      <QueueOptions isHovered={isHovered} duration={duration} />
+    </Flex>
+  );
+}
+
+function QueueData({ name, isPlaying, isExplicit, authors, albumName, year }) {
+  return (
+    <>
+      <Box marginLeft="10px" textAlign="left">
+        <Text color={isPlaying || albumName ? theme.colors.accentText.value : 'whiteAlpha.700'}>
+          {name}{' '}
+          {isExplicit && (
+            <Badge bg={theme.colors.dangerSolid.value} color="whiteAlpha.900">
+              E
+            </Badge>
+          )}
+        </Text>
+        <Text fontSize="xs" color={theme.colors.primaryText.value}>
+          {authors.split(',').map((a, index) => {
+            const [linkText, authorPath] = getLink(a, authors);
+            return (
+              <Link to={`/artist/${authorPath}`} key={index} underline={false} variant="gray">
+                {linkText}
+              </Link>
+            );
+          })}
+          {albumName &&
+            albumName.split(',').map((a, index) => {
+              const [linkText, authorPath] = getLink(a, albumName);
+              return (
+                <>
+                  {' - '}
+                  <Link to={`/album/${authorPath}`} key={index} underline={false} variant="gray">
+                    {linkText}
+                  </Link>
+                  {' - '}
+                </>
+              );
+            })}
+          {year}
+        </Text>
+      </Box>
+
+      <Spacer />
+    </>
+  );
+}
+
+function QueueOptions({ isHovered, duration, streams, isLarge = false }) {
+  return (
+    <>
+      {isHovered && (
+        <Box animation={FADE_OUT_ANIMATION} textAlign="left">
+          <OptionMenu isLarge={isLarge} />
+          <Option icon={IoMdHeartEmpty} isLarge={isLarge} />
+        </Box>
+      )}
+
+      {streams && (
+        <Text marginRight="20px" fontSize="sm" color={theme.colors.primaryText.value}>
+          3,000,000 streams
+        </Text>
+      )}
+
+      <Text
+        color={theme.colors.primaryText.value}
+        fontSize={isLarge ? 'md' : 'sm'}
+        marginRight="5px"
+        marginLeft={isLarge && '5px'}
+      >
+        {duration}
+      </Text>
+    </>
+  );
+}
+
+const DIMENSIONS = {
+  w: '25px',
+  h: '25px',
+};
+
+function IconButton({ icon, size = 'sm', w = DIMENSIONS.w, h = DIMENSIONS.h }) {
+  const customSize = size !== 'sm' && { w: '60px', h: '60px' };
+  return (
+    <ChakraIconButton
+      bg="whiteAlpha.900"
+      borderRadius="50%"
+      size={size}
+      {...customSize}
+      icon={<Icon as={icon} w={w} h={h} color={theme.colors.primaryBase.value} />}
+    />
+  );
+}
+
+export function Option({ icon, label, isLarge = false, ...styles }) {
+  const dimensions = isLarge && { ...DIMENSIONS };
+  const iconButton = (
+    <ChakraIconButton
+      {...styles}
+      variant="ghost"
+      icon={<Icon as={icon} {...dimensions} />}
+      _hover={{
+        color: theme.colors.accentSolidHover.value,
+      }}
+      _active={{
+        color: theme.colors.accentSolidActive.value,
+      }}
+    />
+  );
+
+  return label ? <Tooltip label={label}>{iconButton}</Tooltip> : iconButton;
+}
+
+export function OptionMenu({ isLarge = false, ...styles }) {
+  const dimensions = isLarge && { ...DIMENSIONS };
+  return (
+    <Menu isLazy placement="top-end" gutter={2} {...styles}>
+      <MenuButton
+        as={ChakraIconButton}
+        variant="ghost"
+        icon={<Icon as={MdMoreVert} {...dimensions} />}
+        _hover={{
+          color: theme.colors.accentSolidHover.value,
+        }}
+        _active={{
+          color: theme.colors.accentSolidActive.value,
+        }}
+      />
+      <MenuList bg={theme.colors.primaryBase.value}>
+        {/* Big one is currently playing, so no need to remove from queue */}
+        {!isLarge && (
+          <>
+            <MenuItem
+              {...MENU_ITEM_PROPS}
+              icon={<Icon as={IoMdRemoveCircleOutline} w="15px" h="15px" marginTop="5px" />}
+            >
+              Remove from queue
+            </MenuItem>
+            <MenuDivider />
+          </>
+        )}
+
+        <MenuOptionGroup title="Add to playlist">
+          <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
+            Big Boi tunes
+          </MenuItem>
+          <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
+            OnlyPain Official Soundtrack
+          </MenuItem>
+        </MenuOptionGroup>
+
+        <MenuDivider />
+
+        <MenuItem {...MENU_ITEM_PROPS} icon={<Icon as={FaScroll} w="15px" h="15px" />}>
+          Show credits
+        </MenuItem>
+      </MenuList>
+    </Menu>
+  );
+}

@@ -1,4 +1,4 @@
-export function getSongAuthorPage(author, authors) {
+export function getLink(author, authors) {
   const authorPath = author
     .split(' ')
     .filter((a) => a !== '')

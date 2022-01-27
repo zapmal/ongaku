@@ -1,18 +1,18 @@
-export function getLink(author, authors) {
-  const authorPath = author
+export function getLink(current, array) {
+  const authorPath = current
     .split(' ')
     .filter((a) => a !== '')
     .map((a) => a.replace(/[^a-zA-Z ]/g, ''))
     .join('-')
     .toLowerCase();
 
-  const authorsArray = authors.split(',');
+  const splittedArray = array.split(',');
   let linkText = '';
 
-  if (authorsArray.length === 1 || author === authorsArray[authorsArray.length - 1]) {
-    linkText = author;
+  if (splittedArray.length === 1 || current === splittedArray[splittedArray.length - 1]) {
+    linkText = current;
   } else {
-    linkText = `${author},`;
+    linkText = `${current},`;
   }
 
   return [linkText, authorPath];

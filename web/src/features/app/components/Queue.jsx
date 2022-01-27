@@ -101,13 +101,13 @@ function QueueData({ name, isPlaying, isExplicit, authors, albumName, year }) {
             albumName.split(',').map((a, index) => {
               const [linkText, authorPath] = getLink(a, albumName);
               return (
-                <>
+                <React.Fragment key={index}>
                   {' - '}
-                  <Link to={`/album/${authorPath}`} key={index} underline={false} variant="gray">
+                  <Link to={`/album/${authorPath}`} underline={false} variant="gray">
                     {linkText}
                   </Link>
                   {' - '}
-                </>
+                </React.Fragment>
               );
             })}
           {year}

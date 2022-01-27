@@ -130,18 +130,19 @@ export function SmallArtistCard({ name, image, amountOfFollowers, to }) {
       </Box>
 
       <Spacer />
-
-      <IconButton
-        icon={<Icon as={MdAdd} />}
-        variant="outline"
-        _hover={{
-          color: 'whiteAlpha.800',
-        }}
-        _active={{
-          color: theme.colors.accentSolidActive.value,
-          borderColor: theme.colors.accentSolidActive.value,
-        }}
-      />
+      <Tooltip label={`Follow ${name}`}>
+        <IconButton
+          icon={<Icon as={MdAdd} />}
+          variant="outline"
+          _hover={{
+            color: 'whiteAlpha.800',
+          }}
+          _active={{
+            color: theme.colors.accentSolidActive.value,
+            borderColor: theme.colors.accentSolidActive.value,
+          }}
+        />
+      </Tooltip>
     </Flex>
   );
 }

@@ -6,12 +6,14 @@ import { Card } from './index';
 import { Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 
-export function PlaylistCard({ cover, name, likes, amountOfSongs, author }) {
+export function PlaylistCard({ cover, name, likes, amountOfSongs, author, badge = true }) {
   return (
     <Card cover={cover} type="playlist">
-      <Badge marginTop="5px" position="absolute" top={1} left={1}>
-        Playlist
-      </Badge>
+      {badge && (
+        <Badge marginTop="5px" position="absolute" top={1} left={1}>
+          Playlist
+        </Badge>
+      )}
       <Flex justify="end">
         <Text fontWeight="bold" marginRight="5px" color={theme.colors.accentText.value}>
           {name}

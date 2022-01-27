@@ -23,7 +23,7 @@ import { FaScroll } from 'react-icons/fa';
 import { IoMdHeartEmpty, IoMdMicrophone, IoMdRemoveCircleOutline } from 'react-icons/io';
 import { MdPlayArrow, MdPause, MdMoreVert } from 'react-icons/md';
 
-import { FADE_OUT_ANIMATION, MENU_ITEM_PROPS, SONGS_IN_QUEUE } from '../constants';
+import { FADE_OUT_ANIMATION, MENU_ITEM_PROPS, SONGS_IN_QUEUE, PARENT_BOX_MARGIN } from '../constants';
 import { useHover } from '../hooks/useHover';
 
 import { Link } from '@/components/Elements';
@@ -33,7 +33,7 @@ import { getSongAuthorPage } from '@/utils/getSongAuthorPage';
 
 export function Queue() {
   return (
-    <SimpleGrid columns={2} align="space-evenly" margin="80px 50px 0 50px" position="relative">
+    <SimpleGrid columns={2} align="space-evenly" margin={PARENT_BOX_MARGIN} position="relative">
       <Box width="550px">
         <Image
           src="/assets/images/static-queue-ztd.jpg"

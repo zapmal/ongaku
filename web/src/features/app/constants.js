@@ -16,6 +16,7 @@ export const MENU_ITEM_PROPS = {
   },
 };
 
+export const PARENT_BOX_MARGIN = '80px 50px 0 50px';
 export const SECTION_MARGIN = '50px 20px 20px 20px';
 export const SUB_SECTION_MARGIN = '20px';
 export const GRID_COLUMN_HEIGHT = '300px';
@@ -43,7 +44,7 @@ export const FEATURED_ARTIST = {
     {
       name: 'OH MY GOD',
       isExplicit: true,
-      type: 'SONG',
+      type: 'ALBUM',
       cover: '/assets/images/static-oh-my-god.jpg',
       authors: '(G) I-DLE',
       year: 2020,
@@ -79,7 +80,7 @@ export const RECENTLY_PLAYED = [
     cardType: 'song',
     name: 'SAQUENME DE VENEZUELA',
     isExplicit: true,
-    type: 'SONG',
+    type: 'SINGLE',
     cover: '/assets/images/static-song-saquenme-de-vzla.jpeg',
     authors: 'Yung Iverson',
     year: 2019,
@@ -161,7 +162,7 @@ export const TRENDING = [
     cardType: 'song',
     name: 'Human',
     isExplicit: false,
-    type: 'SONG',
+    type: 'ALBUM',
     cover: '/assets/images/static-trending-human.jpg',
     authors: "Rag'n'Bone Man",
     year: 2017,
@@ -214,4 +215,137 @@ export const SONGS_IN_QUEUE = [
   { name: 'Aftershock', author: 'Pentakill', duration: '3:31' },
   { name: 'Last of Me', author: 'Steve Aoki, RUNN', duration: '3:02' },
   { name: 'Monster', author: 'PVRIS', duration: '2:59' },
+];
+
+export const ARTISTS_IN_LIBRARY = [
+  {
+    cardType: 'artist',
+    name: 'Bea Miller',
+    amountOfFollowers: '8,403,812',
+    image: '/assets/images/static-trending-bea-miller.jpg',
+    to: '/artist/bea-miller',
+  },
+  {
+    cardType: 'artist',
+    name: 'Bea Miller',
+    amountOfFollowers: '8,403,812',
+    image: '/assets/images/static-trending-bea-miller.jpg',
+    to: '/artist/bea-miller',
+  },
+  {
+    cardType: 'artist',
+    name: 'Bea Miller',
+    amountOfFollowers: '8,403,812',
+    image: '/assets/images/static-trending-bea-miller.jpg',
+    to: '/artist/bea-miller',
+  },
+  {
+    cardType: 'artist',
+    name: 'Bea Miller',
+    amountOfFollowers: '8,403,812',
+    image: '/assets/images/static-trending-bea-miller.jpg',
+    to: '/artist/bea-miller',
+  },
+  {
+    cardType: 'artist',
+    name: 'Bea Miller',
+    amountOfFollowers: '8,403,812',
+    image: '/assets/images/static-trending-bea-miller.jpg',
+    to: '/artist/bea-miller',
+  },
+  {
+    cardType: 'artist',
+    name: 'Bea Miller',
+    amountOfFollowers: '8,403,812',
+    image: '/assets/images/static-trending-bea-miller.jpg',
+    to: '/artist/bea-miller',
+  },
+  {
+    cardType: 'artist',
+    name: 'Bea Miller',
+    amountOfFollowers: '8,403,812',
+    image: '/assets/images/static-trending-bea-miller.jpg',
+    to: '/artist/bea-miller',
+  },
+  {
+    cardType: 'artist',
+    name: 'Bea Miller',
+    amountOfFollowers: '8,403,812',
+    image: '/assets/images/static-trending-bea-miller.jpg',
+    to: '/artist/bea-miller',
+  },
+];
+
+export const PLAYLISTS_IN_LIBRARY = [
+  {
+    name: 'AVARICIA',
+    cover: '/assets/images/static-playlist-avaricia.png',
+    likes: 487,
+    amountOfSongs: 412,
+    author: 'pur_oblingbling',
+  },
+  {
+    name: 'AVARICIA',
+    cover: '/assets/images/static-playlist-avaricia.png',
+    likes: 487,
+    amountOfSongs: 412,
+    author: 'pur_oblingbling',
+  },
+  {
+    name: 'AVARICIA',
+    cover: '/assets/images/static-playlist-avaricia.png',
+    likes: 487,
+    amountOfSongs: 412,
+    author: 'pur_oblingbling',
+  },
+  {
+    name: 'AVARICIA',
+    cover: '/assets/images/static-playlist-avaricia.png',
+    likes: 487,
+    amountOfSongs: 412,
+    author: 'pur_oblingbling',
+  },
+  {
+    name: 'AVARICIA',
+    cover: '/assets/images/static-playlist-avaricia.png',
+    likes: 487,
+    amountOfSongs: 412,
+    author: 'pur_oblingbling',
+  },
+];
+
+export const ALBUMS_IN_LIBRARY = [
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    type: 'EP',
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    year: 2019,
+  },
+
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    type: 'EP',
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    year: 2019,
+  },
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    type: 'EP',
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    year: 2019,
+  },
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    type: 'EP',
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    year: 2019,
+  },
 ];

@@ -37,7 +37,15 @@ const sizes = {
   },
 };
 
-export function ArtistCard({ image, name, amountOfFollowers, isHighlighted, to, size = 'lg' }) {
+export function ArtistCard({
+  image,
+  name,
+  amountOfFollowers,
+  isHighlighted,
+  to,
+  size = 'lg',
+  badge = true,
+}) {
   const [isHovered, mouseEventsHandlers] = useHover();
 
   return (
@@ -82,9 +90,11 @@ export function ArtistCard({ image, name, amountOfFollowers, isHighlighted, to, 
           <Flex align="center">
             <Text fontWeight="bold">{name}</Text>
             <Spacer />
-            <Badge bg={theme.colors.accentSolid.value} color="whiteAlpha.900" height="100%">
-              ARTIST
-            </Badge>
+            {badge && (
+              <Badge bg={theme.colors.accentSolid.value} color="whiteAlpha.900" height="100%">
+                ARTIST
+              </Badge>
+            )}
           </Flex>
           <Text color="whiteAlpha.700" fontSize="sm" textAlign="left">
             {amountOfFollowers} followers

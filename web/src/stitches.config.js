@@ -61,6 +61,7 @@ export const { styled, css, global, keyframes, getCssString, theme } = createSti
       dangerBorderHover: '$red8',
       dangerSolid: '$red9',
       dangerSolidHover: '$red10',
+      dangerSolidActive: '$red11',
       dangerText: '$red11',
       dangerTextContrast: '$red12',
 

@@ -1,7 +1,7 @@
 import { Box, Button, Badge, Flex, Heading, Text } from '@chakra-ui/react';
 import React from 'react';
 
-import { GRID_COLUMN_HEIGHT } from '../constants';
+import { GRID_COLUMN_HEIGHT } from '../../constants';
 
 import { theme } from '@/stitches.config.js';
 

@@ -27,7 +27,7 @@ import { Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 import { getLink } from '@/utils/getLink';
 
-export function QueueSong({ name, cover, isExplicit, authors, albumName, year, duration }) {
+export function SongRow({ name, cover, isExplicit, authors, albumName, year, duration }) {
   const [isHovered, mouseHandlers] = useHover();
 
   return (
@@ -41,7 +41,7 @@ export function QueueSong({ name, cover, isExplicit, authors, albumName, year, d
         <Image src={cover} w="60px" h="60px" borderRadius="5px" />
       )}
 
-      <QueueData
+      <SongInformation
         name={name}
         isExplicit={isExplicit}
         authors={authors}
@@ -49,12 +49,12 @@ export function QueueSong({ name, cover, isExplicit, authors, albumName, year, d
         year={year}
       />
 
-      <QueueOptions isHovered={isHovered} duration={duration} isLarge={true} />
+      <SongOptions isHovered={isHovered} duration={duration} isLarge={true} />
     </Flex>
   );
 }
 
-export function QueueItem({ isPlaying, itemNumber, name, authors, duration, isExplicit }) {
+export function SongInQueue({ isPlaying, itemNumber, name, authors, duration, isExplicit }) {
   const [isHovered, mouseEventsHandlers] = useHover();
 
   return (
@@ -69,14 +69,19 @@ export function QueueItem({ isPlaying, itemNumber, name, authors, duration, isEx
         </Text>
       )}
 
-      <QueueData name={name} isPlaying={isPlaying} isExplicit={isExplicit} authors={authors} />
+      <SongInformation
+        name={name}
+        isPlaying={isPlaying}
+        isExplicit={isExplicit}
+        authors={authors}
+      />
 
-      <QueueOptions isHovered={isHovered} duration={duration} />
+      <SongOptions isHovered={isHovered} duration={duration} />
     </Flex>
   );
 }
 
-function QueueData({ name, isPlaying, isExplicit, authors, albumName, year }) {
+function SongInformation({ name, isPlaying, isExplicit, authors, albumName, year }) {
   return (
     <>
       <Box marginLeft="10px" textAlign="left">
@@ -119,7 +124,7 @@ function QueueData({ name, isPlaying, isExplicit, authors, albumName, year }) {
   );
 }
 
-function QueueOptions({ isHovered, duration, streams, isLarge = false }) {
+function SongOptions({ isHovered, duration, streams, isLarge = false }) {
   return (
     <>
       {isHovered && (

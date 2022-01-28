@@ -2,7 +2,7 @@ import { SimpleGrid, Heading, Box, Divider } from '@chakra-ui/react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { QueueSong, SmallArtistCard } from '../components';
+import { SongRow, ArtistRow } from '../components';
 import { NEW_ARTISTS, NEW_SONGS } from '../constants';
 
 import { Highlight } from '@/components/Utils';
@@ -20,7 +20,7 @@ export function Explore() {
 
           {NEW_SONGS.map((song, index) => (
             <Box key={index}>
-              <QueueSong
+              <SongRow
                 name={song.name}
                 cover={song.cover}
                 isExplicit={song.isExplicit}
@@ -41,7 +41,7 @@ export function Explore() {
 
           {NEW_ARTISTS.map((artist, index) => (
             <Box key={index}>
-              <SmallArtistCard
+              <ArtistRow
                 name={artist.name}
                 image={artist.image}
                 amountOfFollowers={artist.amountOfFollowers}
@@ -90,7 +90,7 @@ function Genre({ name, color }) {
       to={`/search?genre=${link}`}
       transition="all 300ms ease-in"
       _hover={{
-        backgroundColor: `${color}.500`,
+        backgroundColor: `${color}.400`,
       }}
     >
       {name}

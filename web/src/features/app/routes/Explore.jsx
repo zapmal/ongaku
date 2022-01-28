@@ -1,4 +1,4 @@
-import { SimpleGrid, Heading, Box, Divider } from '@chakra-ui/react';
+import { SimpleGrid, Heading, Box, Divider, Text } from '@chakra-ui/react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -56,9 +56,13 @@ export function Explore() {
         </Box>
       </SimpleGrid>
 
-      <Heading fontSize="2xl" textAlign="center" margin="40px 0 15px 0">
+      <Heading fontSize="2xl" textAlign="center" margin="40px 0 10px 0">
         <Highlight>Genres</Highlight> to search by
       </Heading>
+
+      <Text color="whiteAlpha.800" textAlign="center" fontSize="sm">
+        Filter by your favorite genres, those that fit your unique style.
+      </Text>
 
       <SimpleGrid margin="0 20px 30px 20px" columns={Math.floor(MUSIC_GENRES.length / 2) - 2}>
         {MUSIC_GENRES.map((genre, index) => {

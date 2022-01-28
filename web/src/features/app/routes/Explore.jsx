@@ -55,15 +55,16 @@ export function Explore() {
         </Box>
       </SimpleGrid>
 
-      <Heading fontSize="2xl" textAlign="center" margin="40px 0">
-        <Highlight>Hot</Highlight> Genres
-        <SimpleGrid margin="20px" columns={Math.floor(MUSIC_GENRES.length / 2) - 2}>
-          {MUSIC_GENRES.map((genre, index) => {
-            const randomNumber = Math.round(Math.random() * 5);
-            return <Genre name={genre.label} key={index} color={COLORS[randomNumber]} />;
-          })}
-        </SimpleGrid>
+      <Heading fontSize="2xl" textAlign="center" margin="40px 0 15px 0">
+        <Highlight>Genres</Highlight> to search by
       </Heading>
+
+      <SimpleGrid margin="0 20px 30px 20px" columns={Math.floor(MUSIC_GENRES.length / 2) - 2}>
+        {MUSIC_GENRES.map((genre, index) => {
+          const randomNumber = Math.round(Math.random() * 5);
+          return <Genre name={genre.label} key={index} color={COLORS[randomNumber]} />;
+        })}
+      </SimpleGrid>
     </Box>
   );
 }
@@ -73,6 +74,7 @@ const COLORS = ['green', 'yellow', 'red', 'blue', 'pink', 'purple'];
 function Genre({ name, color }) {
   // eslint-disable-next-line no-unused-vars
   const [_, link] = getLink(name, name);
+
   return (
     <Box
       backgroundColor={`${color}.600`}
@@ -82,9 +84,14 @@ function Genre({ name, color }) {
       borderRadius="5px"
       fontSize="lg"
       textAlign="center"
-      margin="10px"
+      margin="15px 10px"
       as={Link}
+      fontWeight="bold"
       to={`/search?genre=${link}`}
+      transition="all 300ms ease-in"
+      _hover={{
+        backgroundColor: `${color}.500`,
+      }}
     >
       {name}
     </Box>

@@ -2,6 +2,7 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 
+import { AppLayout } from '@/features/app';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { lazyImport } from '@/utils/lazyImport';
 
@@ -13,7 +14,6 @@ const { ResendVerificationEmail } = lazyImport(
 );
 const { Home } = lazyImport(() => import('@/features/app'), 'Home');
 const { Queue } = lazyImport(() => import('@/features/app'), 'Queue');
-const { AppLayout } = lazyImport(() => import('@/features/app'), 'AppLayout');
 const { Library } = lazyImport(() => import('@/features/app'), 'Library');
 const { Explore } = lazyImport(() => import('@/features/app'), 'Explore');
 

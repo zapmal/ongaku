@@ -1,9 +1,10 @@
-import { Box, Image, Flex, Divider, Text, SimpleGrid } from '@chakra-ui/react';
+import { Box, Flex, Divider, Text, SimpleGrid } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
 import { ArtistCard, PlaylistCard, SongCard } from '../components';
 import { ARTISTS_IN_LIBRARY, PLAYLISTS_IN_LIBRARY, ALBUMS_IN_LIBRARY } from '../constants';
 
+import { Footer } from '@/components/Core';
 import { theme } from '@/stitches.config.js';
 
 export function Library() {
@@ -55,7 +56,7 @@ export function Library() {
         </SimpleGrid>
       )}
 
-      <Image src="/assets/images/home-footer.png" width="500px" margin={`25px auto`} />
+      <Footer topMargin="25px" />
     </Box>
   );
 }

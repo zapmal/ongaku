@@ -1,4 +1,4 @@
-import { Box, Heading, SimpleGrid, Flex, Text, Image } from '@chakra-ui/react';
+import { Box, Heading, SimpleGrid, Flex, Text } from '@chakra-ui/react';
 import React from 'react';
 
 import {
@@ -21,6 +21,7 @@ import {
   TRENDING,
 } from '../constants';
 
+import { Footer } from '@/components/Core';
 import { Highlight } from '@/components/Utils';
 
 export function Home() {
@@ -173,11 +174,7 @@ export function Home() {
         </Flex>
       </SimpleGrid>
 
-      <Image
-        src="/assets/images/home-footer.png"
-        width="500px"
-        margin={`${SUB_SECTION_MARGIN} auto`}
-      />
+      <Footer topMargin={SUB_SECTION_MARGIN} />
     </>
   );
 }

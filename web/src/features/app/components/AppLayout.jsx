@@ -2,8 +2,7 @@ import { Box } from '@chakra-ui/react';
 import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
-import { NavigationBar } from './NavBar';
-import { Player } from './Player';
+import { NavigationBar, Player } from '@/components/Core';
 
 export function AppLayout() {
   const { pathname } = useLocation();

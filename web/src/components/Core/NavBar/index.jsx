@@ -10,10 +10,9 @@ import {
 } from 'react-icons/md';
 import { useLocation, Link } from 'react-router-dom';
 
-import { GRADIENTS } from '../constants';
-
 import { ProfileIcon } from './ProfileIcon';
 
+import { GRADIENTS } from '@/features/app';
 import { theme } from '@/stitches.config.js';
 
 export function NavigationBar() {

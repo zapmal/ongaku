@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { SongRow, ArtistRow } from '../components';
 import { NEW_ARTISTS, NEW_SONGS } from '../constants';
 
+import { Footer } from '@/components/Core';
 import { Highlight } from '@/components/Utils';
 import { MUSIC_GENRES } from '@/features/auth';
 import { getLink } from '@/utils/getLink';
@@ -65,6 +66,8 @@ export function Explore() {
           return <Genre name={genre.label} key={index} color={COLORS[randomNumber]} />;
         })}
       </SimpleGrid>
+
+      <Footer topMargin="25px" />
     </Box>
   );
 }

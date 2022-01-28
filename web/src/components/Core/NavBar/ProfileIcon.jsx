@@ -16,8 +16,7 @@ import { FiLogOut } from 'react-icons/fi';
 import { MdGroups, MdMusicNote, MdAdminPanelSettings, MdOutlineWork } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
-import { MENU_ITEM_PROPS } from '../constants';
-
+import { MENU_ITEM_PROPS } from '@/features/app';
 import { theme } from '@/stitches.config.js';
 
 export function ProfileIcon() {

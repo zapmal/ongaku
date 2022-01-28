@@ -1,7 +1,5 @@
 export * from './home/FeaturedArtist';
 export * from './home/PerfectForYou';
-export * from './NavBar';
-export * from './Player';
 export * from './Song';
 export * from './ArtistRow';
 

@@ -28,8 +28,9 @@ export function Library() {
     case 'playlist': {
       optionToRender = (
         <>
-          <LikedSongsPlaylist />
-          {/* <AddNewPlaylist /> */}
+          <Box marginTop="10px">
+            <LikedSongsPlaylist />
+          </Box>
           <Playlists />
         </>
       );

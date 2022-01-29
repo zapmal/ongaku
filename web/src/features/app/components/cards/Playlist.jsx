@@ -48,24 +48,7 @@ export function LikedSongsPlaylist() {
   return (
     <Card cover="/assets/images/static-admin-avatar.jpeg" type="playlist" isLikedPlaylist={true}>
       <Box align="center">
-        <Text fontWeight="bold" marginTop="5px">
-          Liked Songs
-        </Text>
-        <Text color="whiteAlpha.700" fontSize="sm">
-          200 songs
-        </Text>
-      </Box>
-    </Card>
-  );
-}
-
-export function AddNewPlaylist() {
-  return (
-    <Card cover="/assets/images/static-admin-avatar.jpeg">
-      <Box align="center">
-        <Text fontWeight="bold" marginTop="5px">
-          Liked Songs
-        </Text>
+        <Text fontWeight="bold">Liked Songs</Text>
         <Text color="whiteAlpha.700" fontSize="sm">
           200 songs
         </Text>

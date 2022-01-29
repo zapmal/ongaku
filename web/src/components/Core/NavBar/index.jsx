@@ -7,13 +7,12 @@ import {
   MdGroups,
   MdHelp,
   MdSearch,
-  MdArrowBack,
 } from 'react-icons/md';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link as RouterLink } from 'react-router-dom';
 
 import { ProfileIcon } from './ProfileIcon';
+import { SearchBar } from './SearchBar';
 
-import { Field } from '@/components/Form';
 import { GRADIENTS } from '@/features/app';
 import { theme } from '@/stitches.config.js';
 
@@ -66,30 +65,7 @@ export function NavigationBar() {
         <Spacer />
 
         {clickedSearch ? (
-          <Flex
-            backgroundColor={theme.colors.primaryBg.value}
-            border={`.5px solid ${theme.colors.primaryLine.value}`}
-            width="500px"
-            height="50px"
-          >
-            <IconButton
-              icon={<Icon as={MdArrowBack} w="20px" h="20px" marginTop="5px" />}
-              variant="ghost"
-              onClick={() => setClickedSearch(false)}
-              _hover={{ bg: 'transparent' }}
-              _active={{ bg: 'transparent' }}
-              _focus={{ bg: 'transparent' }}
-            />
-            <Field
-              type="text"
-              name="searchQuery"
-              css={{ width: '90%', padding: '10px' }}
-              placeholder="El Minero"
-              variant="unstyled"
-              rightIcon={<Icon as={MdSearch} w="25px" h="25px" marginTop="5px" />}
-              register={() => {}}
-            />
-          </Flex>
+          <SearchBar setClickedSearch={setClickedSearch} />
         ) : (
           items.map((item, index) => (
             <Item
@@ -157,7 +133,7 @@ function Item({ text, icon, to, isHighlighted, onClick }) {
     <Button
       variant="link"
       fontSize="xl"
-      as={to && Link}
+      as={to && RouterLink}
       to={to && to}
       onClick={onClick}
       color={isHighlighted ? theme.colors.accentText.value : 'whiteAlpha.800'}

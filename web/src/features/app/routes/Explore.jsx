@@ -94,7 +94,7 @@ function Genre({ name, color }) {
       margin="15px 10px"
       as={Link}
       fontWeight="bold"
-      to={`/search?genre=${link}`}
+      to={`/search?query=${link}`}
       transition="all 300ms ease-in"
       _hover={{
         backgroundColor: `${color}.400`,

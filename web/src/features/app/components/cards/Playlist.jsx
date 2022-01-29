@@ -1,4 +1,4 @@
-import { Badge, Flex, Spacer, Text } from '@chakra-ui/react';
+import { Badge, Box, Flex, Spacer, Text } from '@chakra-ui/react';
 import React from 'react';
 
 import { Card } from './index';
@@ -40,6 +40,36 @@ export function PlaylistCard({ cover, name, likes, amountOfSongs, author, badge 
           {amountOfSongs} songs
         </Text>
       </Flex>
+    </Card>
+  );
+}
+
+export function LikedSongsPlaylist() {
+  return (
+    <Card cover="/assets/images/static-admin-avatar.jpeg" type="playlist" isLikedPlaylist={true}>
+      <Box align="center">
+        <Text fontWeight="bold" marginTop="5px">
+          Liked Songs
+        </Text>
+        <Text color="whiteAlpha.700" fontSize="sm">
+          200 songs
+        </Text>
+      </Box>
+    </Card>
+  );
+}
+
+export function AddNewPlaylist() {
+  return (
+    <Card cover="/assets/images/static-admin-avatar.jpeg">
+      <Box align="center">
+        <Text fontWeight="bold" marginTop="5px">
+          Liked Songs
+        </Text>
+        <Text color="whiteAlpha.700" fontSize="sm">
+          200 songs
+        </Text>
+      </Box>
     </Card>
   );
 }

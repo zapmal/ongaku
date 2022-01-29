@@ -63,6 +63,7 @@ export function ArtistCard({
         borderRadius={sizes[size].borderRadius}
         opacity={isHovered && 0.6}
         transition="opacity 300ms ease-in-out"
+        objectFit="cover"
         {...mouseEventsHandlers}
       />
       {isHovered && (

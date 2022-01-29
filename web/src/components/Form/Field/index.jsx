@@ -57,6 +57,7 @@ export function Field(props) {
           <Input
             type={props.type}
             id={props.name}
+            variant={props.variant}
             placeholder={props.placeholder}
             isInvalid={!!props.error}
             isDisabled={!!props.isDisabled}

@@ -1,10 +1,12 @@
 import { Box, Flex, Divider, Text, SimpleGrid } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { MdAdd } from 'react-icons/md';
 
-import { ArtistCard, PlaylistCard, SongCard } from '../components';
+import { ArtistCard, PlaylistCard, LikedSongsPlaylist, SongCard } from '../components';
 import { ARTISTS_IN_LIBRARY, PLAYLISTS_IN_LIBRARY, ALBUMS_IN_LIBRARY } from '../constants';
 
 import { Footer } from '@/components/Core';
+import { Button } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 
 export function Library() {
@@ -24,14 +26,20 @@ export function Library() {
       break;
     }
     case 'playlist': {
-      optionToRender = <Playlists />;
-      numberOfColumns = Math.ceil(PLAYLISTS_IN_LIBRARY.length / 2) + 1;
+      optionToRender = (
+        <>
+          <LikedSongsPlaylist />
+          {/* <AddNewPlaylist /> */}
+          <Playlists />
+        </>
+      );
+      numberOfColumns = Math.ceil(PLAYLISTS_IN_LIBRARY.length / 2) + 2;
       break;
     }
   }
 
   return (
-    <Box minHeight="455px" maxHeight="700px" margin="0 20px 0 40px">
+    <Box minHeight="455px" maxHeight="700px" margin="0 20px 0 40px" textAlign="center">
       <Flex gap={20} justify="center">
         <LibraryOption onClick={() => setSelected('artist')} selected={selected === 'artist'}>
           Artists
@@ -46,6 +54,12 @@ export function Library() {
 
       <Divider width="50%" margin="10px auto" />
 
+      {selected === 'playlist' && (
+        <Button rightIcon={<MdAdd />} margin="10px 0">
+          Create a new Playlist
+        </Button>
+      )}
+
       {numberOfColumns <= 4 ? (
         <Flex justify="center" gap="20px">
           {optionToRender}
@@ -55,7 +69,6 @@ export function Library() {
           {optionToRender}
         </SimpleGrid>
       )}
-
       <Footer topMargin="25px" />
     </Box>
   );

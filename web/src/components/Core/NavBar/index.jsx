@@ -4,20 +4,23 @@ import {
   MdHome,
   MdLibraryMusic,
   MdOutlineExplore,
-  MdSearch,
   MdGroups,
   MdHelp,
+  MdSearch,
+  MdArrowBack,
 } from 'react-icons/md';
 import { useLocation, Link } from 'react-router-dom';
 
 import { ProfileIcon } from './ProfileIcon';
 
+import { Field } from '@/components/Form';
 import { GRADIENTS } from '@/features/app';
 import { theme } from '@/stitches.config.js';
 
 export function NavigationBar() {
   const { pathname } = useLocation();
   const [y, setY] = useState(window.scrollY);
+  const [clickedSearch, setClickedSearch] = useState(false);
   const [isBackgroundVisible, setVisibleBackground] = useState(false);
 
   const handleNavigation = useCallback(
@@ -61,16 +64,52 @@ export function NavigationBar() {
         <ProfileIcon />
 
         <Spacer />
-        {items.map((item, index) => (
-          <Item
-            key={index}
-            text={item.text}
-            icon={item.icon}
-            to={item.to}
-            isHighlighted={pathname === `/${item.text.toLowerCase()}`}
-          />
-        ))}
+
+        {clickedSearch ? (
+          <Flex
+            backgroundColor={theme.colors.primaryBg.value}
+            border={`.5px solid ${theme.colors.primaryLine.value}`}
+            width="500px"
+            height="50px"
+          >
+            <IconButton
+              icon={<Icon as={MdArrowBack} w="20px" h="20px" marginTop="5px" />}
+              variant="ghost"
+              onClick={() => setClickedSearch(false)}
+              _hover={{ bg: 'transparent' }}
+              _active={{ bg: 'transparent' }}
+              _focus={{ bg: 'transparent' }}
+            />
+            <Field
+              type="text"
+              name="searchQuery"
+              css={{ width: '90%', padding: '10px' }}
+              placeholder="El Minero"
+              variant="unstyled"
+              rightIcon={<Icon as={MdSearch} w="25px" h="25px" marginTop="5px" />}
+              register={() => {}}
+            />
+          </Flex>
+        ) : (
+          items.map((item, index) => (
+            <Item
+              key={index}
+              text={item.text}
+              icon={item.icon}
+              to={item.to}
+              onClick={
+                item.text === 'Search' &&
+                (() => {
+                  setClickedSearch(true);
+                })
+              }
+              isHighlighted={pathname === `/${item.text.toLowerCase()}`}
+            />
+          ))
+        )}
+
         <Spacer />
+
         <Tooltip label="For help, issues, or suggestions contact us via: official.ongaku@gmail.com">
           <IconButton
             variant="link"
@@ -105,7 +144,6 @@ const items = [
   {
     text: 'Search',
     icon: MdSearch,
-    to: '/search',
   },
   {
     text: 'Rooms',
@@ -114,13 +152,14 @@ const items = [
   },
 ];
 
-function Item({ text, icon, to, isHighlighted }) {
+function Item({ text, icon, to, isHighlighted, onClick }) {
   return (
     <Button
       variant="link"
       fontSize="xl"
-      as={Link}
-      to={to}
+      as={to && Link}
+      to={to && to}
+      onClick={onClick}
       color={isHighlighted ? theme.colors.accentText.value : 'whiteAlpha.800'}
       textDecoration={isHighlighted && 'underline'}
       marginLeft={text !== 'Home' && '20px'}

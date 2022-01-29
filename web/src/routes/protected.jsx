@@ -16,6 +16,7 @@ const { Home } = lazyImport(() => import('@/features/app'), 'Home');
 const { Queue } = lazyImport(() => import('@/features/app'), 'Queue');
 const { Library } = lazyImport(() => import('@/features/app'), 'Library');
 const { Explore } = lazyImport(() => import('@/features/app'), 'Explore');
+const { Search } = lazyImport(() => import('@/features/app'), 'Search');
 const { Rooms } = lazyImport(() => import('@/features/app'), 'Rooms');
 const { Room } = lazyImport(() => import('@/features/app'), 'Room');
 
@@ -53,6 +54,10 @@ export const protectedRoutes = [
           {
             path: '/room/:id',
             element: <Room />,
+          },
+          {
+            path: '/search',
+            element: <Search />,
           },
         ],
       },

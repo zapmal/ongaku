@@ -493,3 +493,36 @@ export const PUBLIC_ROOMS = [
     roomId: 'BX3A-ASS1',
   },
 ];
+
+export const USERS_IN_ROOM = [
+  {
+    name: 'Estefany B',
+    role: 'MOD',
+    profilePicture: '/assets/images/static-user-2.jpeg',
+  },
+  {
+    name: 'Manuel Zapata',
+    role: 'ONGAKU STAFF',
+    profilePicture: '/assets/images/static-user-1.png',
+  },
+  {
+    name: 'Rolo Epereza',
+    role: 'USER',
+    profilePicture: '/assets/images/static-user-3.jpg',
+  },
+  {
+    name: 'Manuel Zapata',
+    role: 'ONGAKU STAFF',
+    profilePicture: '/assets/images/static-user-1.png',
+  },
+  {
+    name: 'Rolo Epereza',
+    role: 'USER',
+    profilePicture: '/assets/images/static-user-3.jpg',
+  },
+  {
+    name: 'Estefany B',
+    role: 'MOD',
+    profilePicture: '/assets/images/static-user-2.jpeg',
+  },
+];

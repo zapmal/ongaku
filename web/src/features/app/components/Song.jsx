@@ -85,7 +85,7 @@ function SongInformation({ name, isPlaying, isExplicit, authors, albumName, year
   return (
     <>
       <Box marginLeft="10px" textAlign="left">
-        <Text color={isPlaying || albumName ? theme.colors.accentText.value : 'whiteAlpha.700'}>
+        <Text color={isPlaying || albumName ? theme.colors.accentText.value : 'whiteAlpha.800'}>
           {name}{' '}
           {isExplicit && (
             <Badge bg={theme.colors.dangerSolid.value} color="whiteAlpha.900">

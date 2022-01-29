@@ -27,6 +27,7 @@ export function CurrentRoomOverlay({ name, host, activeUsers, userLimit, roomId 
         <Heading fontSize="xl">
           <Highlight>Listening</Highlight> to {name}
         </Heading>
+
         <Flex align="center">
           <Text color="whiteAlpha.800" fontSize="sm" margin="10px 0">
             <Link to={`/user/${userProfileLink}`} underline={false}>

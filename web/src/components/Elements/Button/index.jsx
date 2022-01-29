@@ -28,6 +28,12 @@ const variants = {
     text: theme.colors.primaryText.value,
     padding: 0,
   },
+  danger: {
+    backgroundColor: theme.colors.dangerSolid.value,
+    hover: theme.colors.dangerSolidHover.value,
+    active: theme.colors.dangerSolidActive.value,
+    text: 'white',
+  },
 };
 
 export function Button({

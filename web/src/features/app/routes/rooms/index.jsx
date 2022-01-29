@@ -10,8 +10,6 @@ import { PUBLIC_ROOMS } from '../../constants';
 import { Button } from '@/components/Elements';
 import { Field } from '@/components/Form';
 
-const BOX_MARGIN = '0 20px 40px 20px';
-
 export function Rooms() {
   const {
     register,
@@ -41,7 +39,7 @@ export function Rooms() {
         <Spacer />
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Flex gap="20px" margin={BOX_MARGIN}>
+          <Flex gap="20px" margin="0 20px 40px 20px">
             <Field
               type="text"
               name="roomName"

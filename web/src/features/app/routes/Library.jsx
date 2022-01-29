@@ -1,8 +1,14 @@
-import { Box, Flex, Divider, Text, SimpleGrid } from '@chakra-ui/react';
+import { Box, Flex, Divider, Text, SimpleGrid, useDisclosure } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 
-import { ArtistCard, PlaylistCard, LikedSongsPlaylist, SongCard } from '../components';
+import {
+  ArtistCard,
+  PlaylistCard,
+  LikedSongsPlaylist,
+  SongCard,
+  CreateNewPlaylist,
+} from '../components';
 import { ARTISTS_IN_LIBRARY, PLAYLISTS_IN_LIBRARY, ALBUMS_IN_LIBRARY } from '../constants';
 
 import { Footer } from '@/components/Core';
@@ -11,6 +17,8 @@ import { theme } from '@/stitches.config.js';
 
 export function Library() {
   const [selected, setSelected] = useState('artist');
+  const { onOpen, onClose, isOpen } = useDisclosure();
+
   let optionToRender = null;
   let numberOfColumns = 0;
 
@@ -40,38 +48,41 @@ export function Library() {
   }
 
   return (
-    <Box minHeight="455px" maxHeight="700px" margin="0 20px 0 40px" textAlign="center">
-      <Flex gap={20} justify="center">
-        <LibraryOption onClick={() => setSelected('artist')} selected={selected === 'artist'}>
-          Artists
-        </LibraryOption>
-        <LibraryOption onClick={() => setSelected('playlist')} selected={selected === 'playlist'}>
-          Playlists
-        </LibraryOption>
-        <LibraryOption onClick={() => setSelected('album')} selected={selected === 'album'}>
-          Albums
-        </LibraryOption>
-      </Flex>
-
-      <Divider width="50%" margin="10px auto" />
-
-      {selected === 'playlist' && (
-        <Button rightIcon={<MdAdd />} margin="10px 0">
-          Create a new Playlist
-        </Button>
-      )}
-
-      {numberOfColumns <= 4 ? (
-        <Flex justify="center" gap="20px">
-          {optionToRender}
+    <>
+      <Box minHeight="455px" maxHeight="700px" margin="0 20px 0 40px" textAlign="center">
+        <Flex gap={20} justify="center">
+          <LibraryOption onClick={() => setSelected('artist')} selected={selected === 'artist'}>
+            Artists
+          </LibraryOption>
+          <LibraryOption onClick={() => setSelected('playlist')} selected={selected === 'playlist'}>
+            Playlists
+          </LibraryOption>
+          <LibraryOption onClick={() => setSelected('album')} selected={selected === 'album'}>
+            Albums
+          </LibraryOption>
         </Flex>
-      ) : (
-        <SimpleGrid columns={numberOfColumns} justifyItems="center">
-          {optionToRender}
-        </SimpleGrid>
-      )}
-      <Footer topMargin="25px" />
-    </Box>
+
+        <Divider width="50%" margin="10px auto" />
+
+        {selected === 'playlist' && (
+          <Button rightIcon={<MdAdd />} margin="10px 0" onClick={onOpen}>
+            Create a new Playlist
+          </Button>
+        )}
+
+        {numberOfColumns <= 4 ? (
+          <Flex justify="center" gap="20px">
+            {optionToRender}
+          </Flex>
+        ) : (
+          <SimpleGrid columns={numberOfColumns} justifyItems="center">
+            {optionToRender}
+          </SimpleGrid>
+        )}
+        <Footer topMargin="25px" />
+      </Box>
+      {isOpen && <CreateNewPlaylist isOpen={isOpen} onClose={onClose} />}
+    </>
   );
 }
 

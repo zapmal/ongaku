@@ -123,7 +123,7 @@ export function CreateNewRoom({ isOpen, onClose }) {
                 </Text>
               )}
             </ModalBody>
-            <ModalFooter>
+            <ModalFooter margin="0 auto">
               <Button variant="accent" type="submit">
                 Create
               </Button>

@@ -1,4 +1,4 @@
-import { Box, Flex, Divider, Text, SimpleGrid, useDisclosure } from '@chakra-ui/react';
+import { Box, Flex, Divider, Center, Text, SimpleGrid, useDisclosure } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 
@@ -49,7 +49,7 @@ export function Library() {
 
   return (
     <>
-      <Box minHeight="455px" maxHeight="700px" margin="0 20px 0 40px" textAlign="center">
+      <Box minHeight="455px" maxHeight="700px" margin="0 20px 0 40px">
         <Flex gap={20} justify="center">
           <LibraryOption onClick={() => setSelected('artist')} selected={selected === 'artist'}>
             Artists
@@ -65,9 +65,11 @@ export function Library() {
         <Divider width="50%" margin="10px auto" />
 
         {selected === 'playlist' && (
-          <Button rightIcon={<MdAdd />} margin="10px 0" onClick={onOpen}>
-            Create a new Playlist
-          </Button>
+          <Center>
+            <Button rightIcon={<MdAdd />} margin="10px auto" onClick={onOpen}>
+              Create a new Playlist
+            </Button>
+          </Center>
         )}
 
         {numberOfColumns <= 4 ? (

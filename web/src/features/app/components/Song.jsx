@@ -28,11 +28,11 @@ import { theme } from '@/stitches.config.js';
 import { getLink } from '@/utils/getLink';
 
 export function SongRow({ name, cover, isExplicit, authors, albumName, year, duration }) {
-  const [isHovered, mouseHandlers] = useHover();
+  const [isHovered, mouseEventsHandlers] = useHover();
 
   return (
     // change width for streams usage
-    <Flex align="center" margin="15px 0" width="75%" {...mouseHandlers}>
+    <Flex align="center" margin="15px 0" width="75%" {...mouseEventsHandlers}>
       {isHovered ? (
         <Box animation={FADE_OUT_ANIMATION}>
           <IconButton icon={MdPlayArrow} size="lg" w="40px" h="40px" />
@@ -49,7 +49,7 @@ export function SongRow({ name, cover, isExplicit, authors, albumName, year, dur
         year={year}
       />
 
-      <SongOptions isHovered={isHovered} duration={duration} isLarge={true} />
+      <Options isHovered={isHovered} duration={duration} isLarge={true} />
     </Flex>
   );
 }
@@ -76,7 +76,7 @@ export function SongInQueue({ isPlaying, itemNumber, name, authors, duration, is
         authors={authors}
       />
 
-      <SongOptions isHovered={isHovered} duration={duration} />
+      <Options isHovered={isHovered} duration={duration} />
     </Flex>
   );
 }
@@ -124,12 +124,12 @@ function SongInformation({ name, isPlaying, isExplicit, authors, albumName, year
   );
 }
 
-function SongOptions({ isHovered, duration, streams, isLarge = false }) {
+export function Options({ isHovered, duration, streams, isLarge = false, onlyHeart = false }) {
   return (
     <>
       {isHovered && (
         <Box animation={FADE_OUT_ANIMATION} textAlign="left">
-          <OptionMenu isLarge={isLarge} />
+          {!onlyHeart && <OptionMenu isLarge={isLarge} />}
           <Option icon={IoMdHeartEmpty} isLarge={isLarge} />
         </Box>
       )}
@@ -157,7 +157,7 @@ const DIMENSIONS = {
   h: '25px',
 };
 
-function IconButton({ icon, size = 'sm', w = DIMENSIONS.w, h = DIMENSIONS.h }) {
+export function IconButton({ icon, size = 'sm', w = DIMENSIONS.w, h = DIMENSIONS.h }) {
   const customSize = size !== 'sm' && { w: '60px', h: '60px' };
   return (
     <ChakraIconButton

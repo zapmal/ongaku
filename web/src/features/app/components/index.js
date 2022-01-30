@@ -1,8 +1,7 @@
 export * from './home/FeaturedArtist';
 export * from './home/PerfectForYou';
 export * from './Song';
-export * from './ArtistRow';
-export * from './RoomRow';
+export * from './Rows';
 export * from './CreateNewPlaylist';
 export * from './CreateNewRoom';
 

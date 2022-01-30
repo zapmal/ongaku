@@ -353,7 +353,6 @@ export const NEW_SONGS = [
   {
     name: 'Kawaki wo Ameku',
     isExplicit: false,
-    type: 'EP',
     cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
     authors: 'Minami',
     albumName: 'Kawaki wo Ameku',
@@ -363,7 +362,6 @@ export const NEW_SONGS = [
   {
     name: 'Speed of Light',
     isExplicit: false,
-    type: 'SINGLE',
     cover: '/assets/images/static-trending-speed-of-light.jpg',
     authors: 'DJ Okawari, AI ninomiya',
     albumName: 'Arknights Official OST',
@@ -373,7 +371,6 @@ export const NEW_SONGS = [
   {
     name: 'Kawaki wo Ameku',
     isExplicit: false,
-    type: 'EP',
     cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
     authors: 'Minami',
     albumName: 'Kawaki wo Ameku',
@@ -383,7 +380,6 @@ export const NEW_SONGS = [
   {
     name: 'Speed of Light',
     isExplicit: false,
-    type: 'SINGLE',
     cover: '/assets/images/static-trending-speed-of-light.jpg',
     authors: 'DJ Okawari, AI ninomiya',
     albumName: 'Arknights Official OST',
@@ -524,5 +520,107 @@ export const USERS_IN_ROOM = [
     name: 'Estefany B',
     role: 'MOD',
     profilePicture: '/assets/images/static-user-2.jpeg',
+  },
+];
+
+export const ARTIST_SEARCH_RESULT = [
+  {
+    name: 'The Gentlemen',
+    amountOfFollowers: '750,379',
+    image: '/assets/images/static-artist-gentlemen.jpg',
+    to: '/artist/the-gentlemen',
+  },
+  {
+    name: 'Yung Iverson',
+    amountOfFollowers: '102,838',
+    image: '/assets/images/static-artist-yung-iverson.jpg',
+    to: '/artist/yung-iverson',
+  },
+  {
+    name: 'The Gentlemen',
+    amountOfFollowers: '750,379',
+    image: '/assets/images/static-artist-gentlemen.jpg',
+    to: '/artist/the-gentlemen',
+  },
+  {
+    name: 'Yung Iverson',
+    amountOfFollowers: '102,838',
+    image: '/assets/images/static-artist-yung-iverson.jpg',
+    to: '/artist/yung-iverson',
+  },
+];
+
+export const SONGS_SEARCH_RESULT = [
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    albumName: 'Kawaki wo Ameku',
+    year: 2019,
+    duration: '3:11',
+  },
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    albumName: 'Kawaki wo Ameku',
+    year: 2019,
+    duration: '3:11',
+  },
+];
+
+export const ALBUMS_SEARCH_RESULTS = [
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    type: 'EP',
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    year: 2019,
+  },
+
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    type: 'EP',
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    year: 2019,
+  },
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    type: 'EP',
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    year: 2019,
+  },
+
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    type: 'EP',
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    year: 2019,
+  },
+];
+
+export const PLAYLISTS_SEARCH_RESULTS = [
+  {
+    name: '- Risas -',
+    cover: '/assets/images/static-playlist-risas.png',
+    likes: 444,
+    amountOfSongs: 4,
+    author: 'X_Blackie_X',
+  },
+  {
+    name: 'Rough Waves',
+    cover: '/assets/images/static-playlist-rough-waves.png',
+    likes: 3094,
+    amountOfSongs: 102,
+    author: 'sad_tuna',
   },
 ];

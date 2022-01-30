@@ -5,14 +5,6 @@ import { GRID_COLUMN_HEIGHT } from '../../constants';
 
 import { theme } from '@/stitches.config.js';
 
-export function FeaturedArtistBanner({ image, children }) {
-  return (
-    <Box bg={`url(/assets/images/${image})`} bgRepeat="round" height="700px" width="100%">
-      {children}
-    </Box>
-  );
-}
-
 export function FeaturedArtistInformation({ name, amountOfFollowers, description }) {
   return (
     <Box height={GRID_COLUMN_HEIGHT}>

@@ -9,7 +9,8 @@ import { NavigationBar, Player } from '@/components/Core';
 export function AppLayout() {
   const { pathname } = useLocation();
 
-  const hasTopMargin = !pathname.includes('/home') && { marginTop: '80px' };
+  const hasTopMargin =
+    !pathname.includes('/home') || (!pathname.includes('/user/') && { marginTop: '80px' });
 
   return (
     <>

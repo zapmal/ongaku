@@ -5,7 +5,6 @@ import {
   SongCard,
   PlaylistCard,
   ArtistCard,
-  FeaturedArtistBanner,
   FeaturedArtistInformation,
   PerfectForYou,
 } from '../components';
@@ -22,12 +21,13 @@ import {
 } from '../constants';
 
 import { Footer } from '@/components/Core';
+import { Banner } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
 
 export function Home() {
   return (
     <>
-      <FeaturedArtistBanner image="static-featured-artist-gidle.webp">
+      <Banner image="static-featured-artist-gidle.webp">
         <SimpleGrid
           gridAutoFlow="column"
           alignItems="end"
@@ -59,7 +59,7 @@ export function Home() {
             </Flex>
           </Box>
         </SimpleGrid>
-      </FeaturedArtistBanner>
+      </Banner>
 
       <Heading margin="20px">
         Recently <Highlight>Played</Highlight>

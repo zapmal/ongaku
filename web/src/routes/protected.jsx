@@ -20,6 +20,9 @@ const { Search } = lazyImport(() => import('@/features/app'), 'Search');
 const { Rooms } = lazyImport(() => import('@/features/app'), 'Rooms');
 const { Room } = lazyImport(() => import('@/features/app'), 'Room');
 
+const { UserProfile } = lazyImport(() => import('@/features/profiles'), 'UserProfile');
+const { ArtistProfile } = lazyImport(() => import('@/features/profiles'), 'ArtistProfile');
+
 export const protectedRoutes = [
   {
     element: <VerifiedEmailWrapper />,
@@ -58,6 +61,14 @@ export const protectedRoutes = [
           {
             path: '/search',
             element: <Search />,
+          },
+          {
+            path: '/user/:name',
+            element: <UserProfile />,
+          },
+          {
+            path: '/artist/:name',
+            element: <ArtistProfile />,
           },
         ],
       },

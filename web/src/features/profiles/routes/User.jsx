@@ -6,8 +6,8 @@ import {
   Text,
   Badge,
   Icon,
-  Spacer,
   ButtonGroup,
+  HStack,
 } from '@chakra-ui/react';
 import React from 'react';
 import { MdEdit, MdShare } from 'react-icons/md';
@@ -35,51 +35,54 @@ export function UserProfile() {
           justify="flex-start"
           align="self-end"
         >
-          <Image
-            marginLeft="40px"
-            src="/assets/images/static-admin-avatar.jpeg"
-            w="300px"
-            h="300px"
-            objectFit="cover"
-            borderRadius="20px"
-          />
+          <HStack>
+            <Image
+              marginLeft="40px"
+              src="/assets/images/static-admin-avatar.jpeg"
+              w="300px"
+              h="300px"
+              objectFit="cover"
+              borderRadius="20px"
+            />
 
-          <Box marginLeft="40px" marginBottom="40px">
-            <Heading color={theme.colors.accentText.value} fontSize="xxx-large">
-              Manuel Zapata <Badge fontSize="md">ADMIN</Badge>
-            </Heading>
-            <Text fontWeight="bold" fontSize="lg">
-              Ongaku Staff - Active
-              <Badge
-                backgroundColor={theme.colors.successBorderHover.value}
-                marginLeft="10px"
-                width="10px"
-                height="10px"
-                borderRadius="100%"
-              />
-            </Text>
-
-            <Text fontSize="lg">Member since many years ago</Text>
-
-            <Flex marginTop="10px" gap="20px" align="center">
-              <Text fontWeight="bold" marginRight="20px">
-                <Highlight>0</Highlight> <a href="#playlists">Public Playlists</a>
-              </Text>
-
-              <Text fontWeight="bold">
-                <Highlight>3</Highlight> <a href="#following">Following</a>
-              </Text>
-
-              <Spacer />
-
-              <ButtonGroup>
+            <Box paddingLeft="20px">
+              <ButtonGroup gap="5px" marginBottom="5px">
                 <Button rightIcon={<Icon as={MdEdit} w="15px" h="15px" />}>Edit</Button>
                 <Button rightIcon={<Icon as={MdShare} w="15px" h="15px" />} variant="accent">
                   Share
                 </Button>
               </ButtonGroup>
-            </Flex>
-          </Box>
+
+              <Heading color={theme.colors.accentText.value} fontSize="xxx-large">
+                Manuel Zapata <Badge fontSize="md">ADMIN</Badge>
+              </Heading>
+
+              <Text fontWeight="bold" fontSize="lg">
+                Ongaku Staff - Active
+                <Badge
+                  backgroundColor={theme.colors.successBorderHover.value}
+                  marginLeft="10px"
+                  width="10px"
+                  height="10px"
+                  borderRadius="100%"
+                />
+              </Text>
+
+              <Text fontSize="lg" marginTop="5px">
+                Member since many years ago
+              </Text>
+
+              <Flex marginTop="10px" align="center">
+                <Text fontWeight="bold" marginRight="20px">
+                  <Highlight>0</Highlight> <a href="#playlists">Public Playlists</a>
+                </Text>
+
+                <Text fontWeight="bold">
+                  <Highlight>3</Highlight> <a href="#following">Following</a>
+                </Text>
+              </Flex>
+            </Box>
+          </HStack>
         </Flex>
       </Banner>
 

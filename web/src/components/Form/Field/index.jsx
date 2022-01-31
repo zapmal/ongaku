@@ -15,6 +15,11 @@ import { Button } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 
 export function Field(props) {
+  const variants = {
+    primary: theme.colors.primaryTextContrast.value,
+    gray: theme.colors.primaryText.value,
+  };
+
   const label = (
     <FormLabel
       color={theme.colors.primaryTextContrast.value}
@@ -61,6 +66,7 @@ export function Field(props) {
             isInvalid={!!props.error}
             isDisabled={!!props.isDisabled}
             css={props.css}
+            borderColor={props.variant ? variants[props.variant] : variants["primary"]}
             focusBorderColor={'#E93D82'}
             {...props.register(props.name, {
               disabled: props.isDisabled,

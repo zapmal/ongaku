@@ -82,7 +82,7 @@ export function UserRegister() {
           <Link to="/">
             <Image src="/assets/images/app-icon-transparent.png" alt="Ongaku Logo" />
           </Link>
-          <Link to="/register" variant="gray" margin="50px 50px 0 0">
+          <Link to="/register" variant="gray" margin="40px 50px 40px 0">
             Go Back
           </Link>
         </NavigationBar>
@@ -176,7 +176,7 @@ export function UserRegister() {
             {submission.isSubmitting ? (
               <Spinner size="lg" marginTop="20px" />
             ) : (
-              <Box textAlign="center" marginLeft="35px">
+              <Box textAlign="center" marginLeft="-10px">
                 <Button
                   type="submit"
                   variant="accent"

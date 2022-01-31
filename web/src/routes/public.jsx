@@ -7,6 +7,7 @@ const { Landing } = lazyImport(() => import('@/features/misc'), 'Landing');
 const { UserRegister } = lazyImport(() => import('@/features/auth'), 'UserRegister');
 const { ArtistRegister } = lazyImport(() => import('@/features/auth'), 'ArtistRegister');
 const { ChooseUserType } = lazyImport(() => import('@/features/auth'), 'ChooseUserType');
+const { AccountRecovery } = lazyImport(() => import('@/features/auth'), 'AccountRecovery');
 
 export const publicRoutes = [
   {
@@ -20,6 +21,10 @@ export const publicRoutes = [
   {
     path: '/register/artist',
     element: <ArtistRegister />,
+  },
+  {
+    path: '/account-recovery',
+    element: <AccountRecovery />,
   },
 ];
 

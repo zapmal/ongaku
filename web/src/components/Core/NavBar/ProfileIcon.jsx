@@ -83,7 +83,7 @@ const options = {
   account: [
     {
       text: 'View Profile',
-      to: '/profile',
+      to: '/user/zapmal',
       icon: CgProfile,
     },
     {

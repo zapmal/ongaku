@@ -27,8 +27,8 @@ const FLEX_PROPS = { margin: '20px 10px', justify: 'center' };
 
 export function UserProfile() {
   return (
-    <Box marginTop="20px">
-      <Banner image="static-user-profile-banner.jpg" height="600px">
+    <Box>
+      <Banner image="static-user-profile-banner.jpg" height="700px">
         <Flex
           bg={`linear-gradient(0, ${theme.colors.primaryBase.value} 40%, rgba(255,255,255,0) 100%)`}
           height="100%"

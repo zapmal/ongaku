@@ -2,15 +2,15 @@ import { Box } from '@chakra-ui/react';
 import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
-import { CurrentRoomOverlay } from './CurrentRoomOverlay';
+import { CurrentRoomOverlay } from '../../../features/app/components/CurrentRoomOverlay';
 
 import { NavigationBar, Player } from '@/components/Core';
 
-export function AppLayout() {
+export function Layout() {
   const { pathname } = useLocation();
 
-  const hasTopMargin =
-    !pathname.includes('/home') || (!pathname.includes('/user/') && { marginTop: '80px' });
+  const isNotProfilePage = !pathname.includes('/user') && !pathname.includes('/artist');
+  const hasTopMargin = !pathname.includes('/home') && isNotProfilePage && { marginTop: '80px' };
 
   return (
     <>

@@ -5,6 +5,7 @@ import { MdArrowBack, MdHistory } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
 import { Link } from '@/components/Elements';
+import { TRANSPARENT_ICON_PROPS } from '@/features/app';
 import { useHistory } from '@/hooks/useHistory';
 import { theme } from '@/stitches.config.js';
 
@@ -29,11 +30,8 @@ export function SearchBar({ setClickedSearch }) {
       >
         <IconButton
           icon={<Icon as={MdArrowBack} w="20px" h="20px" marginTop="5px" />}
-          variant="ghost"
           onClick={() => setClickedSearch(false)}
-          _hover={{ bg: 'transparent' }}
-          _active={{ bg: 'transparent' }}
-          _focus={{ bg: 'transparent' }}
+          {...TRANSPARENT_ICON_PROPS}
         />
         <Input
           type="text"
@@ -46,12 +44,9 @@ export function SearchBar({ setClickedSearch }) {
         <Tooltip label="Clear history">
           <IconButton
             onClick={cleanHistory}
-            variant="ghost"
             icon={<Icon as={FiTrash} />}
             marginTop="3px"
-            _hover={{ bg: 'transparent' }}
-            _active={{ bg: 'transparent' }}
-            _focus={{ bg: 'transparent' }}
+            {...TRANSPARENT_ICON_PROPS}
           />
         </Tooltip>
       </Flex>

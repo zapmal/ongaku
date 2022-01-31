@@ -27,12 +27,22 @@ import { Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 import { getLink } from '@/utils/getLink';
 
-export function SongRow({ name, cover, isExplicit, authors, albumName, year, duration }) {
+export function SongRow({
+  name,
+  cover,
+  isExplicit,
+  authors,
+  albumName,
+  year,
+  duration,
+  streams,
+  width = '75%',
+}) {
   const [isHovered, mouseEventsHandlers] = useHover();
 
   return (
     // change width for streams usage
-    <Flex align="center" margin="15px 0" width="75%" {...mouseEventsHandlers}>
+    <Flex align="center" margin="15px 0" width={width} {...mouseEventsHandlers}>
       {isHovered ? (
         <Box animation={FADE_OUT_ANIMATION}>
           <IconButton icon={MdPlayArrow} size="lg" w="40px" h="40px" />
@@ -49,7 +59,7 @@ export function SongRow({ name, cover, isExplicit, authors, albumName, year, dur
         year={year}
       />
 
-      <Options isHovered={isHovered} duration={duration} isLarge={true} />
+      <Options isHovered={isHovered} streams={streams} duration={duration} isLarge={true} />
     </Flex>
   );
 }
@@ -127,17 +137,17 @@ function SongInformation({ name, isPlaying, isExplicit, authors, albumName, year
 export function Options({ isHovered, duration, streams, isLarge = false, onlyHeart = false }) {
   return (
     <>
+      {streams && !isHovered && (
+        <Text marginRight="10px" fontSize="sm" color={theme.colors.primaryText.value}>
+          {streams} streams
+        </Text>
+      )}
+
       {isHovered && (
         <Box animation={FADE_OUT_ANIMATION} textAlign="left">
           {!onlyHeart && <OptionMenu isLarge={isLarge} />}
           <Option icon={IoMdHeartEmpty} isLarge={isLarge} />
         </Box>
-      )}
-
-      {streams && (
-        <Text marginRight="20px" fontSize="sm" color={theme.colors.primaryText.value}>
-          3,000,000 streams
-        </Text>
       )}
 
       <Text

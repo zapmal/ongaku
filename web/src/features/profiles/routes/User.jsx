@@ -12,15 +12,16 @@ import {
 import React from 'react';
 import { MdEdit, MdShare } from 'react-icons/md';
 
-import {
-  ARTIST_SEARCH_RESULT as ARTISTS_IN_PROFILE,
-  PLAYLISTS_SEARCH_RESULTS as PLAYLISTS_IN_PROFILE,
-} from '../../app/constants';
-
 import { Footer } from '@/components/Core';
 import { Banner, Button } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
-import { ArtistCard, PlaylistCard } from '@/features/app';
+import {
+  ArtistCard,
+  PlaylistCard,
+  ARTIST_SEARCH_RESULT as ARTISTS_IN_PROFILE,
+  PLAYLISTS_SEARCH_RESULTS as PLAYLISTS_IN_PROFILE,
+  GRADIENTS,
+} from '@/features/app';
 import { theme } from '@/stitches.config.js';
 
 const FLEX_PROPS = { margin: '20px 10px', justify: 'center' };
@@ -29,12 +30,7 @@ export function UserProfile() {
   return (
     <Box>
       <Banner image="static-user-profile-banner.jpg" height="700px">
-        <Flex
-          bg={`linear-gradient(0, ${theme.colors.primaryBase.value} 40%, rgba(255,255,255,0) 100%)`}
-          height="100%"
-          justify="flex-start"
-          align="self-end"
-        >
+        <Flex bg={GRADIENTS.bottom} height="100%" justify="flex-start" align="self-end">
           <HStack>
             <Image
               marginLeft="40px"
@@ -46,15 +42,11 @@ export function UserProfile() {
             />
 
             <Box paddingLeft="20px">
-              <ButtonGroup gap="5px" marginBottom="5px">
-                <Button rightIcon={<Icon as={MdEdit} w="15px" h="15px" />}>Edit</Button>
-                <Button rightIcon={<Icon as={MdShare} w="15px" h="15px" />} variant="accent">
-                  Share
-                </Button>
-              </ButtonGroup>
-
-              <Heading color={theme.colors.accentText.value} fontSize="xxx-large">
-                Manuel Zapata <Badge fontSize="md">ADMIN</Badge>
+              <Heading fontSize="xxx-large">
+                Manuel Zapata{' '}
+                <Badge fontSize="md" color="white" bg={theme.colors.accentSolid.value}>
+                  ADMIN
+                </Badge>
               </Heading>
 
               <Text fontWeight="bold" fontSize="lg">
@@ -81,6 +73,12 @@ export function UserProfile() {
                   <Highlight>3</Highlight> <a href="#following">Following</a>
                 </Text>
               </Flex>
+              <ButtonGroup gap="5px" margin="20px 0">
+                <Button rightIcon={<Icon as={MdEdit} w="15px" h="15px" />}>Edit</Button>
+                <Button variant="accent" rightIcon={<Icon as={MdShare} w="15px" h="15px" />}>
+                  Share
+                </Button>
+              </ButtonGroup>
             </Box>
           </HStack>
         </Flex>
@@ -99,8 +97,8 @@ export function UserProfile() {
               amountOfFollowers={artist.amountOfFollowers}
               to={artist.to}
               isHighlighted={index % 2 === 0}
-              size="sm"
               badge={false}
+              size="sm"
             />
           ))}
         </Flex>
@@ -121,14 +119,14 @@ export function UserProfile() {
             />
           ))}
         </Flex>
+
         <Heading marginTop="40px" id="playlists">
           <Highlight>Public</Highlight> Playlists
         </Heading>
 
         <Text margin="20px 0">Nothing to see here, come back later!</Text>
-
-        <Footer topMargin="40px" />
       </Box>
+      <Footer topMargin="40px" />
     </Box>
   );
 }

@@ -22,7 +22,7 @@ export function NavigationBar() {
   const [clickedSearch, setClickedSearch] = useState(false);
   const [isBackgroundVisible, setVisibleBackground] = useState(false);
 
-  const isProfilePage = pathname.includes('/user/') || pathname.includes('/artist/');
+  const isNotProfilePage = !pathname.includes('/user') && !pathname.includes('/artist');
 
   const handleNavigation = useCallback(
     (event) => {
@@ -56,13 +56,11 @@ export function NavigationBar() {
         align="center"
         transition="all 200ms linear"
         bg={
-          isBackgroundVisible || pathname !== '/home'
+          isBackgroundVisible || (pathname !== '/home' && isNotProfilePage)
             ? theme.colors.primaryBase.value
             : GRADIENTS.top
         }
-        borderBottom={
-          (isBackgroundVisible || isProfilePage) && `.5px solid ${theme.colors.primaryLine.value}`
-        }
+        borderBottom={isBackgroundVisible && `.5px solid ${theme.colors.primaryLine.value}`}
       >
         <ProfileIcon />
 

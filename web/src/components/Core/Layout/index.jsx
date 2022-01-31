@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Spinner } from '@chakra-ui/react';
 import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ export function Layout() {
   const hasTopMargin = !pathname.includes('/home') && isNotProfilePage && { marginTop: '80px' };
 
   return (
-    <>
+    <React.Suspense fallback={<LoadingFallback />}>
       <NavigationBar />
       <Box {...hasTopMargin}>
         <Outlet />
@@ -28,6 +28,14 @@ export function Layout() {
         />
       )}
       <Player />
-    </>
+    </React.Suspense>
+  );
+}
+
+function LoadingFallback() {
+  return (
+    <Box textAlign="center" paddingTop="200px" overflow="hidden">
+      <Spinner size="xl" />
+    </Box>
   );
 }

@@ -151,7 +151,11 @@ export function ArtistProfile() {
       </Box>
 
       <SimpleGrid columns={2} align="center" margin="20px">
-        <Image src="/assets/images/static-artist-about-banner.jpg" height="500px" border="5px" />
+        <Image
+          src="/assets/images/static-artist-about-banner.jpg"
+          height="500px"
+          borderRadius="10px"
+        />
         <Box textAlign="left" margin="0 30px" color="whiteAlpha.700">
           <Heading fontSize="xx-large" color={theme.colors.accentText.value} margin="10px 0">
             About Arknights

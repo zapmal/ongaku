@@ -42,10 +42,10 @@ export function SongCard({ cover, name, isExplicit, type, authors, year }) {
       </Flex>
       <Text color="whiteAlpha.700" fontSize="sm">
         {authors.split(',').map((author, index) => {
-          const [linkText, authorPath] = getLink(author, authors);
+          const [linkText, authorLink] = getLink(author, authors);
 
           return (
-            <Link to={`/artist/${authorPath}`} key={index} underline={false} variant="gray">
+            <Link to={`/artist/${authorLink}`} key={index} underline={false} variant="gray">
               {linkText}
             </Link>
           );

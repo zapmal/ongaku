@@ -10,7 +10,11 @@ export function Layout() {
   const { pathname } = useLocation();
 
   const isNotProfilePage = !pathname.includes('/user') && !pathname.includes('/artist');
-  const hasTopMargin = !pathname.includes('/home') && isNotProfilePage && { marginTop: '80px' };
+  const isNotView = !pathname.includes('/view');
+
+  const hasTopMargin = !pathname.includes('/home') &&
+    isNotProfilePage &&
+    isNotView && { marginTop: '80px' };
 
   return (
     <React.Suspense fallback={<LoadingFallback />}>

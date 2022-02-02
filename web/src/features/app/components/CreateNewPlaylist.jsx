@@ -61,6 +61,15 @@ export function CreateNewPlaylist({ isOpen, onClose }) {
                 type="file"
                 name="cover"
                 label="Cover"
+                css={{ marginBottom: '10px' }}
+                // isDisabled={true}
+                // error={errors.cover}
+                register={register}
+              />
+              <Field
+                type="file"
+                name="BackgroundImage"
+                label="Background Image"
                 // isDisabled={true}
                 // error={errors.cover}
                 register={register}

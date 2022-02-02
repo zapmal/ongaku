@@ -23,6 +23,7 @@ export function NavigationBar() {
   const [isBackgroundVisible, setVisibleBackground] = useState(false);
 
   const isNotProfilePage = !pathname.includes('/user') && !pathname.includes('/artist');
+  const isNotView = !pathname.includes('/view');
 
   const handleNavigation = useCallback(
     (event) => {
@@ -56,7 +57,7 @@ export function NavigationBar() {
         align="center"
         transition="all 200ms linear"
         bg={
-          isBackgroundVisible || (pathname !== '/home' && isNotProfilePage)
+          isBackgroundVisible || (pathname !== '/home' && isNotProfilePage && isNotView)
             ? theme.colors.primaryBase.value
             : GRADIENTS.top
         }

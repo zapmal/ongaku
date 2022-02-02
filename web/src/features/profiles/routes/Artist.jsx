@@ -81,7 +81,7 @@ export function ArtistProfile() {
               />
             </HStack>
             <HStack>
-              <Button {...BUTTON_PROPS} rightIcon={<Icon as={MdAdd} w="20px" h="20px" />}>
+              <Button {...BUTTON_PROPS} rightIcon={<Icon as={MdAdd} w="25px" h="25px" />}>
                 Follow
               </Button>
               <Button {...BUTTON_PROPS} rightIcon={<Icon as={MdShare} w="20px" h="20px" />}>

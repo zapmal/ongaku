@@ -53,7 +53,7 @@ export function Field(props) {
             disabled: props.isDisabled,
           })}
         >
-          <Button rightIcon={<MdFileUpload />} isDisabled={props.isDisabled}>
+          <Button rightIcon={<MdFileUpload />} isDisabled={props.isDisabled} {...props.css}>
             Upload
           </Button>
         </FileInput>

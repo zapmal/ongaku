@@ -1,11 +1,9 @@
 import {
   SimpleGrid,
   Image,
-  Center,
   Box,
   Text,
   Heading,
-  Flex,
   PinInput,
   PinInputField,
   HStack,

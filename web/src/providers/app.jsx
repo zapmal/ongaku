@@ -25,6 +25,9 @@ const CustomizedSteps = {
     label: {
       color: 'white',
     },
+    description: {
+      color: 'whiteAlpha.700',
+    },
   },
 };
 

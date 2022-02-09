@@ -72,7 +72,7 @@ export function Field(props) {
             isInvalid={!!props.error}
             isDisabled={!!props.isDisabled}
             css={props.css}
-            borderColor={props.variant ? variants[props.variant] : variants["primary"]}
+            borderColor={props.variant ? variants[props.variant] : variants['primary']}
             focusBorderColor={'#E93D82'}
             {...props.register(props.name, {
               disabled: props.isDisabled,

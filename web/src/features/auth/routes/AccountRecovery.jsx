@@ -21,6 +21,7 @@ import * as yup from 'yup';
 
 import { Login } from '../components/Login';
 
+import { Footer } from '@/components/Core';
 import { Link, Button } from '@/components/Elements';
 import { Field, Checkbox } from '@/components/Form';
 import { Highlight } from '@/components/Utils';
@@ -126,9 +127,7 @@ export function AccountRecovery() {
         </Link>
       </Box>
 
-      <Box margin="auto">
-        <Image src="/assets/images/home-footer.png" margin="40px 0 20px 0" />
-      </Box>
+      <Footer topMargin="25px" />
     </SimpleGrid>
   );
 }

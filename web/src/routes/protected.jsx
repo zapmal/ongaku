@@ -2,6 +2,7 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 
+import { Layout } from '@/components/Core';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { lazyImport } from '@/utils/lazyImport';
 
@@ -13,7 +14,15 @@ const { ResendVerificationEmail } = lazyImport(
 );
 const { Home } = lazyImport(() => import('@/features/app'), 'Home');
 const { Queue } = lazyImport(() => import('@/features/app'), 'Queue');
-const { AppLayout } = lazyImport(() => import('@/features/app'), 'AppLayout');
+const { Library } = lazyImport(() => import('@/features/app'), 'Library');
+const { Explore } = lazyImport(() => import('@/features/app'), 'Explore');
+const { Search } = lazyImport(() => import('@/features/app'), 'Search');
+const { Rooms } = lazyImport(() => import('@/features/app'), 'Rooms');
+const { Room } = lazyImport(() => import('@/features/app'), 'Room');
+const { View } = lazyImport(() => import('@/features/app'), 'View');
+
+const { UserProfile } = lazyImport(() => import('@/features/profiles'), 'UserProfile');
+const { ArtistProfile } = lazyImport(() => import('@/features/profiles'), 'ArtistProfile');
 
 export const protectedRoutes = [
   {
@@ -24,7 +33,7 @@ export const protectedRoutes = [
         element: <Welcome />,
       },
       {
-        element: <AppLayout />,
+        element: <Layout />,
         children: [
           {
             path: '/home',
@@ -33,6 +42,38 @@ export const protectedRoutes = [
           {
             path: '/queue',
             element: <Queue />,
+          },
+          {
+            path: '/library',
+            element: <Library />,
+          },
+          {
+            path: '/explore',
+            element: <Explore />,
+          },
+          {
+            path: '/rooms',
+            element: <Rooms />,
+          },
+          {
+            path: '/room/:id',
+            element: <Room />,
+          },
+          {
+            path: '/search',
+            element: <Search />,
+          },
+          {
+            path: '/user/:name',
+            element: <UserProfile />,
+          },
+          {
+            path: '/artist/:name',
+            element: <ArtistProfile />,
+          },
+          {
+            path: '/view/:name',
+            element: <View />,
           },
         ],
       },

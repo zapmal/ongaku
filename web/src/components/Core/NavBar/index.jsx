@@ -4,22 +4,26 @@ import {
   MdHome,
   MdLibraryMusic,
   MdOutlineExplore,
-  MdSearch,
   MdGroups,
   MdHelp,
+  MdSearch,
 } from 'react-icons/md';
-import { useLocation, Link } from 'react-router-dom';
-
-import { GRADIENTS } from '../constants';
+import { useLocation, Link as RouterLink } from 'react-router-dom';
 
 import { ProfileIcon } from './ProfileIcon';
+import { SearchBar } from './SearchBar';
 
+import { GRADIENTS } from '@/features/app';
 import { theme } from '@/stitches.config.js';
 
 export function NavigationBar() {
   const { pathname } = useLocation();
   const [y, setY] = useState(window.scrollY);
+  const [clickedSearch, setClickedSearch] = useState(false);
   const [isBackgroundVisible, setVisibleBackground] = useState(false);
+
+  const isNotProfilePage = !pathname.includes('/user') && !pathname.includes('/artist');
+  const isNotView = !pathname.includes('/view');
 
   const handleNavigation = useCallback(
     (event) => {
@@ -53,7 +57,7 @@ export function NavigationBar() {
         align="center"
         transition="all 200ms linear"
         bg={
-          isBackgroundVisible || pathname !== '/home'
+          isBackgroundVisible || (pathname !== '/home' && isNotProfilePage && isNotView)
             ? theme.colors.primaryBase.value
             : GRADIENTS.top
         }
@@ -62,16 +66,29 @@ export function NavigationBar() {
         <ProfileIcon />
 
         <Spacer />
-        {items.map((item, index) => (
-          <Item
-            key={index}
-            text={item.text}
-            icon={item.icon}
-            to={item.to}
-            isHighlighted={pathname === `/${item.text.toLowerCase()}`}
-          />
-        ))}
+
+        {clickedSearch ? (
+          <SearchBar setClickedSearch={setClickedSearch} />
+        ) : (
+          items.map((item, index) => (
+            <Item
+              key={index}
+              text={item.text}
+              icon={item.icon}
+              to={item.to}
+              onClick={
+                item.text === 'Search' &&
+                (() => {
+                  setClickedSearch(true);
+                })
+              }
+              isHighlighted={pathname === `/${item.text.toLowerCase()}`}
+            />
+          ))
+        )}
+
         <Spacer />
+
         <Tooltip label="For help, issues, or suggestions contact us via: official.ongaku@gmail.com">
           <IconButton
             variant="link"
@@ -106,7 +123,6 @@ const items = [
   {
     text: 'Search',
     icon: MdSearch,
-    to: '/search',
   },
   {
     text: 'Rooms',
@@ -115,13 +131,14 @@ const items = [
   },
 ];
 
-function Item({ text, icon, to, isHighlighted }) {
+function Item({ text, icon, to, isHighlighted, onClick }) {
   return (
     <Button
       variant="link"
       fontSize="xl"
-      as={Link}
-      to={to}
+      as={to && RouterLink}
+      to={to && to}
+      onClick={onClick}
       color={isHighlighted ? theme.colors.accentText.value : 'whiteAlpha.800'}
       textDecoration={isHighlighted && 'underline'}
       marginLeft={text !== 'Home' && '20px'}

@@ -53,15 +53,21 @@ export function Field(props) {
         <FileInput
           id={props.name}
           accept={'image/**'}
-          register={props.register(props.name, { validate: validateFileInput })}
+          register={props.register(props.name, {
+            validate: validateFileInput,
+            disabled: props.isDisabled,
+          })}
         >
-          <Button rightIcon={<MdFileUpload />}>Upload</Button>
+          <Button rightIcon={<MdFileUpload />} isDisabled={props.isDisabled} {...props.css}>
+            Upload
+          </Button>
         </FileInput>
       ) : (
         <InputGroup>
           <Input
             type={props.type}
             id={props.name}
+            variant={props.variant}
             placeholder={props.placeholder}
             isInvalid={!!props.error}
             isDisabled={!!props.isDisabled}
@@ -111,6 +117,7 @@ function FileInput(props) {
         id={props.id}
         type={'file'}
         multiple={props.multiple || false}
+        disabled={field.isDisabled}
         hidden
         accept={props.accept}
         {...field}

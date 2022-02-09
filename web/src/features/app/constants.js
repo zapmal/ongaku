@@ -2,6 +2,12 @@ import { keyframes } from '@chakra-ui/react';
 
 import { theme } from '@/stitches.config.js';
 
+export const TRANSPARENT_ICON_PROPS = {
+  variant: 'ghost',
+  _hover: { bg: 'transparent' },
+  _active: { bg: 'transparent' },
+  _focus: { bg: 'transparent' },
+};
 export const MENU_ITEM_PROPS = {
   _hover: {
     bg: theme.colors.primaryBgHover.value,
@@ -15,7 +21,6 @@ export const MENU_ITEM_PROPS = {
     color: theme.colors.accentSolidActive.value,
   },
 };
-
 export const SECTION_MARGIN = '50px 20px 20px 20px';
 export const SUB_SECTION_MARGIN = '20px';
 export const GRID_COLUMN_HEIGHT = '300px';
@@ -43,7 +48,7 @@ export const FEATURED_ARTIST = {
     {
       name: 'OH MY GOD',
       isExplicit: true,
-      type: 'SONG',
+      type: 'ALBUM',
       cover: '/assets/images/static-oh-my-god.jpg',
       authors: '(G) I-DLE',
       year: 2020,
@@ -79,7 +84,7 @@ export const RECENTLY_PLAYED = [
     cardType: 'song',
     name: 'SAQUENME DE VENEZUELA',
     isExplicit: true,
-    type: 'SONG',
+    type: 'SINGLE',
     cover: '/assets/images/static-song-saquenme-de-vzla.jpeg',
     authors: 'Yung Iverson',
     year: 2019,
@@ -161,7 +166,7 @@ export const TRENDING = [
     cardType: 'song',
     name: 'Human',
     isExplicit: false,
-    type: 'SONG',
+    type: 'ALBUM',
     cover: '/assets/images/static-trending-human.jpg',
     authors: "Rag'n'Bone Man",
     year: 2017,
@@ -200,18 +205,454 @@ export const TRENDING = [
   },
 ];
 export const SONGS_IN_QUEUE = [
-  { name: 'Morphogenetic Sorrow', author: 'Shinji Hosoe', duration: '4:03' },
-  { name: 'Blue Bird Lamentation', author: 'Shinji Hosoe', duration: '3:33' },
-  { name: 'INDUSTRY BABY', author: 'Lil Nas X, Jack Harlow', duration: '2:22', isExplicit: true },
-  { name: 'Watch Me', author: 'The Phantoms', duration: '3:35' },
-  { name: 'Blood Sweat & Tears', author: 'BTS', duration: '3:37' },
-  { name: 'guh', author: 'Mori Calliope', duration: '3:02' },
+  { name: 'Morphogenetic Sorrow', authors: 'Shinji Hosoe', duration: '4:03' },
+  { name: 'Blue Bird Lamentation', authors: 'Shinji Hosoe', duration: '3:33' },
+  { name: 'INDUSTRY BABY', authors: 'Lil Nas X, Jack Harlow', duration: '2:22', isExplicit: true },
+  { name: 'Watch Me', authors: 'The Phantoms', duration: '3:35' },
+  { name: 'Blood Sweat & Tears', authors: 'BTS', duration: '3:37' },
+  { name: 'guh', authors: 'Mori Calliope', duration: '3:02' },
   {
     name: 'POP/STARS',
-    author: 'K/DA, Madison Beer, (G)-IDLE, League of Legends',
+    authors: 'K/DA, Madison Beer, (G)-IDLE, League of Legends',
     duration: '3:11',
   },
-  { name: 'Aftershock', author: 'Pentakill', duration: '3:31' },
-  { name: 'Last of Me', author: 'Steve Aoki, RUNN', duration: '3:02' },
-  { name: 'Monster', author: 'PVRIS', duration: '2:59' },
+  { name: 'Aftershock', authors: 'Pentakill', duration: '3:31' },
+  { name: 'Last of Me', authors: 'Steve Aoki, RUNN', duration: '3:02' },
+  { name: 'Monster', authors: 'PVRIS', duration: '2:59' },
+];
+
+export const ARTISTS_IN_LIBRARY = [
+  {
+    cardType: 'artist',
+    name: 'Bea Miller',
+    amountOfFollowers: '8,403,812',
+    image: '/assets/images/static-trending-bea-miller.jpg',
+    to: '/artist/bea-miller',
+  },
+  {
+    cardType: 'artist',
+    name: 'Bea Miller',
+    amountOfFollowers: '8,403,812',
+    image: '/assets/images/static-trending-bea-miller.jpg',
+    to: '/artist/bea-miller',
+  },
+  {
+    cardType: 'artist',
+    name: 'Bea Miller',
+    amountOfFollowers: '8,403,812',
+    image: '/assets/images/static-trending-bea-miller.jpg',
+    to: '/artist/bea-miller',
+  },
+  {
+    cardType: 'artist',
+    name: 'Bea Miller',
+    amountOfFollowers: '8,403,812',
+    image: '/assets/images/static-trending-bea-miller.jpg',
+    to: '/artist/bea-miller',
+  },
+  {
+    cardType: 'artist',
+    name: 'Bea Miller',
+    amountOfFollowers: '8,403,812',
+    image: '/assets/images/static-trending-bea-miller.jpg',
+    to: '/artist/bea-miller',
+  },
+  {
+    cardType: 'artist',
+    name: 'Bea Miller',
+    amountOfFollowers: '8,403,812',
+    image: '/assets/images/static-trending-bea-miller.jpg',
+    to: '/artist/bea-miller',
+  },
+  {
+    cardType: 'artist',
+    name: 'Bea Miller',
+    amountOfFollowers: '8,403,812',
+    image: '/assets/images/static-trending-bea-miller.jpg',
+    to: '/artist/bea-miller',
+  },
+  {
+    cardType: 'artist',
+    name: 'Bea Miller',
+    amountOfFollowers: '8,403,812',
+    image: '/assets/images/static-trending-bea-miller.jpg',
+    to: '/artist/bea-miller',
+  },
+];
+
+export const PLAYLISTS_IN_LIBRARY = [
+  {
+    name: 'AVARICIA',
+    cover: '/assets/images/static-playlist-avaricia.png',
+    likes: 487,
+    amountOfSongs: 412,
+    author: 'pur_oblingbling',
+  },
+  {
+    name: 'AVARICIA',
+    cover: '/assets/images/static-playlist-avaricia.png',
+    likes: 487,
+    amountOfSongs: 412,
+    author: 'pur_oblingbling',
+  },
+  {
+    name: 'AVARICIA',
+    cover: '/assets/images/static-playlist-avaricia.png',
+    likes: 487,
+    amountOfSongs: 412,
+    author: 'pur_oblingbling',
+  },
+  {
+    name: 'AVARICIA',
+    cover: '/assets/images/static-playlist-avaricia.png',
+    likes: 487,
+    amountOfSongs: 412,
+    author: 'pur_oblingbling',
+  },
+  {
+    name: 'AVARICIA',
+    cover: '/assets/images/static-playlist-avaricia.png',
+    likes: 487,
+    amountOfSongs: 412,
+    author: 'pur_oblingbling',
+  },
+];
+
+export const ALBUMS_IN_LIBRARY = [
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    type: 'EP',
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    year: 2019,
+  },
+
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    type: 'EP',
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    year: 2019,
+  },
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    type: 'EP',
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    year: 2019,
+  },
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    type: 'EP',
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    year: 2019,
+  },
+];
+
+export const NEW_SONGS = [
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    albumName: 'Kawaki wo Ameku',
+    year: 2019,
+    duration: '3:11',
+  },
+  {
+    name: 'Speed of Light',
+    isExplicit: false,
+    cover: '/assets/images/static-trending-speed-of-light.jpg',
+    authors: 'DJ Okawari, AI ninomiya',
+    albumName: 'Arknights Official OST',
+    year: 2019,
+    duration: '3:11',
+  },
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    albumName: 'Kawaki wo Ameku',
+    year: 2019,
+    duration: '3:11',
+  },
+  {
+    name: 'Speed of Light',
+    isExplicit: false,
+    cover: '/assets/images/static-trending-speed-of-light.jpg',
+    authors: 'DJ Okawari, AI ninomiya',
+    albumName: 'Arknights Official OST',
+    year: 2019,
+    duration: '3:11',
+  },
+];
+
+export const NEW_ARTISTS = [
+  {
+    name: 'The Gentlemen',
+    amountOfFollowers: '750,379',
+    image: '/assets/images/static-artist-gentlemen.jpg',
+    to: '/artist/the-gentlemen',
+  },
+  {
+    name: 'Yung Iverson',
+    amountOfFollowers: '102,838',
+    image: '/assets/images/static-artist-yung-iverson.jpg',
+    to: '/artist/yung-iverson',
+  },
+  {
+    name: 'The Gentlemen',
+    amountOfFollowers: '750,379',
+    image: '/assets/images/static-artist-gentlemen.jpg',
+    to: '/artist/the-gentlemen',
+  },
+  {
+    name: 'Yung Iverson',
+    amountOfFollowers: '102,838',
+    image: '/assets/images/static-artist-yung-iverson.jpg',
+    to: '/artist/yung-iverson',
+  },
+];
+
+export const PUBLIC_ROOMS = [
+  {
+    name: 'Bachata Intensa',
+    activeUsers: 8,
+    userLimit: 10,
+    host: 'cxrlos_1',
+    startedAt: new Date(),
+    genres: 'Cucalombiano, Droga, IDK',
+    roomId: 'D13A-XD9',
+  },
+  {
+    name: 'Otaku Hediondo',
+    activeUsers: 1,
+    userLimit: 90,
+    host: 'maris_kin',
+    startedAt: new Date(),
+    genres: 'Weeb, Dont Enter, IDK',
+    roomId: 'BX3A-ASS1',
+  },
+  {
+    name: 'Bachata Intensa',
+    activeUsers: 8,
+    userLimit: 10,
+    host: 'cxrlos_1',
+    startedAt: new Date(),
+    genres: 'Cucalombiano, Droga, IDK',
+    roomId: 'D13A-XD9',
+  },
+  {
+    name: 'Otaku Hediondo',
+    activeUsers: 1,
+    userLimit: 90,
+    host: 'maris_kin',
+    startedAt: new Date(),
+    genres: 'Weeb, Dont Enter, IDK',
+    roomId: 'BX3A-ASS1',
+  },
+  {
+    name: 'Bachata Intensa',
+    activeUsers: 8,
+    userLimit: 10,
+    host: 'cxrlos_1',
+    startedAt: new Date(),
+    genres: 'Cucalombiano, Droga, IDK',
+    roomId: 'D13A-XD9',
+  },
+  {
+    name: 'Otaku Hediondo',
+    activeUsers: 1,
+    userLimit: 90,
+    host: 'maris_kin',
+    startedAt: new Date(),
+    genres: 'Weeb, Dont Enter, IDK',
+    roomId: 'BX3A-ASS1',
+  },
+  {
+    name: 'Bachata Intensa',
+    activeUsers: 8,
+    userLimit: 10,
+    host: 'cxrlos_1',
+    startedAt: new Date(),
+    genres: 'Cucalombiano, Droga, IDK',
+    roomId: 'D13A-XD9',
+  },
+  {
+    name: 'Otaku Hediondo',
+    activeUsers: 1,
+    userLimit: 90,
+    host: 'maris_kin',
+    startedAt: new Date(),
+    genres: 'Weeb, Dont Enter, IDK',
+    roomId: 'BX3A-ASS1',
+  },
+];
+
+export const USERS_IN_ROOM = [
+  {
+    name: 'Estefany B',
+    role: 'MOD',
+    profilePicture: '/assets/images/static-user-2.jpeg',
+  },
+  {
+    name: 'Manuel Zapata',
+    role: 'ONGAKU STAFF',
+    profilePicture: '/assets/images/static-user-1.png',
+  },
+  {
+    name: 'Rolo Epereza',
+    role: 'USER',
+    profilePicture: '/assets/images/static-user-3.jpg',
+  },
+  {
+    name: 'Manuel Zapata',
+    role: 'ONGAKU STAFF',
+    profilePicture: '/assets/images/static-user-1.png',
+  },
+  {
+    name: 'Rolo Epereza',
+    role: 'USER',
+    profilePicture: '/assets/images/static-user-3.jpg',
+  },
+  {
+    name: 'Estefany B',
+    role: 'MOD',
+    profilePicture: '/assets/images/static-user-2.jpeg',
+  },
+];
+
+export const ARTIST_SEARCH_RESULT = [
+  {
+    name: 'The Gentlemen',
+    amountOfFollowers: '750,379',
+    image: '/assets/images/static-artist-gentlemen.jpg',
+    to: '/artist/the-gentlemen',
+  },
+  {
+    name: 'Yung Iverson',
+    amountOfFollowers: '102,838',
+    image: '/assets/images/static-artist-yung-iverson.jpg',
+    to: '/artist/yung-iverson',
+  },
+  {
+    name: 'The Gentlemen',
+    amountOfFollowers: '750,379',
+    image: '/assets/images/static-artist-gentlemen.jpg',
+    to: '/artist/the-gentlemen',
+  },
+  {
+    name: 'Yung Iverson',
+    amountOfFollowers: '102,838',
+    image: '/assets/images/static-artist-yung-iverson.jpg',
+    to: '/artist/yung-iverson',
+  },
+];
+
+export const SONGS_SEARCH_RESULT = [
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    albumName: 'Kawaki wo Ameku',
+    year: 2019,
+    duration: '3:11',
+  },
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    albumName: 'Kawaki wo Ameku',
+    year: 2019,
+    duration: '3:11',
+  },
+];
+
+export const ALBUMS_SEARCH_RESULTS = [
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    type: 'EP',
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    year: 2019,
+  },
+
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    type: 'EP',
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    year: 2019,
+  },
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    type: 'EP',
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    year: 2019,
+  },
+
+  {
+    name: 'Kawaki wo Ameku',
+    isExplicit: false,
+    type: 'EP',
+    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
+    authors: 'Minami',
+    year: 2019,
+  },
+];
+
+export const PLAYLISTS_SEARCH_RESULTS = [
+  {
+    name: '- Risas -',
+    cover: '/assets/images/static-playlist-risas.png',
+    likes: 444,
+    amountOfSongs: 4,
+    author: 'X_Blackie_X',
+  },
+  {
+    name: 'Rough Waves',
+    cover: '/assets/images/static-playlist-rough-waves.png',
+    likes: 3094,
+    amountOfSongs: 102,
+    author: 'sad_tuna',
+  },
+];
+
+export const NEW_ALBUMS_AND_SINGLES = [
+  {
+    name: 'MORE',
+    isExplicit: false,
+    type: 'SINGLE',
+    cover: '/assets/images/static-more.jpg',
+    authors: '(G) I-DLE, K/DA, Madison Beer, Lexie Liu, Jaira Burns',
+    year: 2020,
+  },
+  {
+    name: 'MORE',
+    isExplicit: false,
+    type: 'SINGLE',
+    cover: '/assets/images/static-more.jpg',
+    authors: '(G) I-DLE, K/DA, Madison Beer, Lexie Liu, Jaira Burns',
+    year: 2020,
+  },
+  {
+    name: 'MORE',
+    isExplicit: false,
+    type: 'SINGLE',
+    cover: '/assets/images/static-more.jpg',
+    authors: '(G) I-DLE, K/DA, Madison Beer, Lexie Liu, Jaira Burns',
+    year: 2020,
+  },
 ];

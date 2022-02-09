@@ -1,4 +1,4 @@
-import { Badge, Flex, Spacer, Text } from '@chakra-ui/react';
+import { Badge, Box, Flex, Spacer, Text } from '@chakra-ui/react';
 import React from 'react';
 
 import { Card } from './index';
@@ -6,12 +6,14 @@ import { Card } from './index';
 import { Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 
-export function PlaylistCard({ cover, name, likes, amountOfSongs, author }) {
+export function PlaylistCard({ cover, name, likes, amountOfSongs, author, badge = true }) {
   return (
     <Card cover={cover} type="playlist">
-      <Badge marginTop="5px" position="absolute" top={1} left={1}>
-        Playlist
-      </Badge>
+      {badge && (
+        <Badge marginTop="5px" position="absolute" top={1} left={1}>
+          Playlist
+        </Badge>
+      )}
       <Flex justify="end">
         <Text fontWeight="bold" marginRight="5px" color={theme.colors.accentText.value}>
           {name}
@@ -38,6 +40,19 @@ export function PlaylistCard({ cover, name, likes, amountOfSongs, author }) {
           {amountOfSongs} songs
         </Text>
       </Flex>
+    </Card>
+  );
+}
+
+export function LikedSongsPlaylist() {
+  return (
+    <Card cover="/assets/images/static-admin-avatar.jpeg" type="playlist" isLikedPlaylist={true}>
+      <Box align="center">
+        <Text fontWeight="bold">Liked Songs</Text>
+        <Text color="whiteAlpha.700" fontSize="sm">
+          200 songs
+        </Text>
+      </Box>
     </Card>
   );
 }

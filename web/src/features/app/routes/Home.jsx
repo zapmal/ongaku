@@ -1,11 +1,10 @@
-import { Box, Heading, SimpleGrid, Flex, Text, Image } from '@chakra-ui/react';
+import { Box, Heading, SimpleGrid, Flex, Text } from '@chakra-ui/react';
 import React from 'react';
 
 import {
   SongCard,
   PlaylistCard,
   ArtistCard,
-  FeaturedArtistBanner,
   FeaturedArtistInformation,
   PerfectForYou,
 } from '../components';
@@ -21,12 +20,14 @@ import {
   TRENDING,
 } from '../constants';
 
+import { Footer } from '@/components/Core';
+import { Banner } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
 
 export function Home() {
   return (
     <>
-      <FeaturedArtistBanner image="static-featured-artist-gidle.webp">
+      <Banner image="static-featured-artist-gidle.webp">
         <SimpleGrid
           gridAutoFlow="column"
           alignItems="end"
@@ -58,7 +59,7 @@ export function Home() {
             </Flex>
           </Box>
         </SimpleGrid>
-      </FeaturedArtistBanner>
+      </Banner>
 
       <Heading margin="20px">
         Recently <Highlight>Played</Highlight>
@@ -173,11 +174,7 @@ export function Home() {
         </Flex>
       </SimpleGrid>
 
-      <Image
-        src="/assets/images/home-footer.png"
-        width="500px"
-        margin={`${SUB_SECTION_MARGIN} auto`}
-      />
+      <Footer topMargin={SUB_SECTION_MARGIN} />
     </>
   );
 }

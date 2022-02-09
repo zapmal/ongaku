@@ -13,14 +13,14 @@ import {
 import React from 'react';
 import { FaScroll } from 'react-icons/fa';
 import { IoMdHeart } from 'react-icons/io';
-import { MdPlayArrow, MdMoreVert, MdOutlineQueue } from 'react-icons/md';
+import { MdPlayArrow, MdMoreVert, MdOutlineQueue, MdOpenInNew } from 'react-icons/md';
 
 import { FADE_OUT_ANIMATION, MENU_ITEM_PROPS } from '../../constants';
 import { useHover } from '../../hooks/useHover';
 
 import { theme } from '@/stitches.config.js';
 
-export function Card({ cover, children, type, ...extraStyles }) {
+export function Card({ cover, children, type, isLikedPlaylist = false, ...extraStyles }) {
   const [isHovered, mouseEventsHandlers] = useHover();
 
   return (
@@ -38,21 +38,53 @@ export function Card({ cover, children, type, ...extraStyles }) {
         height="200px"
         borderRadius="10px"
         transition="opacity 300ms ease-in-out"
+        objectFit="cover"
         opacity={isHovered && 0.6}
         {...mouseEventsHandlers}
       />
       {isHovered && (
         <Box animation={FADE_OUT_ANIMATION}>
-          {hoverButtons.map((button, index) => (
-            <HoverButton key={index} button={button} mouseEventsHandlers={mouseEventsHandlers} />
-          ))}
-          <OptionsButton mouseEventsHandlers={mouseEventsHandlers} type={type} />
+          {isLikedPlaylist
+            ? likedSongsPlaylistButtons.map((button, index) => (
+                <HoverButton
+                  key={index}
+                  button={button}
+                  mouseEventsHandlers={mouseEventsHandlers}
+                />
+              ))
+            : hoverButtons.map((button, index) => (
+                <HoverButton
+                  key={index}
+                  button={button}
+                  mouseEventsHandlers={mouseEventsHandlers}
+                />
+              ))}
+          {!isLikedPlaylist && (
+            <OptionsButton mouseEventsHandlers={mouseEventsHandlers} type={type} />
+          )}
         </Box>
       )}
       {children}
     </Box>
   );
 }
+
+const likedSongsPlaylistButtons = [
+  {
+    icon: MdOpenInNew,
+    position: {
+      bottom: '60px',
+      left: '20px',
+    },
+  },
+  {
+    icon: MdPlayArrow,
+    position: {
+      bottom: '60px',
+      right: '20px',
+    },
+  },
+];
 
 const hoverButtons = [
   {
@@ -125,6 +157,12 @@ function OptionsButton({ type, mouseEventsHandlers }) {
           icon={<Icon as={MdOutlineQueue} w="15px" h="15px" marginTop="5px" />}
         >
           Add to queue
+        </MenuItem>
+        <MenuItem
+          {...MENU_ITEM_PROPS}
+          icon={<Icon as={MdOpenInNew} w="15px" h="15px" marginTop="5px" />}
+        >
+          Open
         </MenuItem>
 
         <MenuDivider />

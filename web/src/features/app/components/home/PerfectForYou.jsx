@@ -13,7 +13,7 @@ import React from 'react';
 import { FaYoutube } from 'react-icons/fa';
 import { Link as RouterLink } from 'react-router-dom';
 
-import { SUB_SECTION_MARGIN } from '../constants';
+import { SUB_SECTION_MARGIN } from '../../constants';
 
 import { Button } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';

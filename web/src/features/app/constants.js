@@ -656,3 +656,157 @@ export const NEW_ALBUMS_AND_SINGLES = [
     year: 2020,
   },
 ];
+
+export const ENTITIES = [
+  {
+    id: 32,
+    email: 'mzxgd16@gmail.com',
+    username: 'zapmal',
+    fullName: 'Manuel Zapata',
+    password: 'jJUashah123!))!#%',
+    avatar: '/assets/images/static-user-1.png',
+    birthdate: '01/02/2000',
+  },
+  {
+    id: 73,
+    email: 'example@gmail.com',
+    username: 'idkman',
+    fullName: 'Whor U',
+    password: 'jJUashah123!))!#%',
+    avatar: '/assets/images/static-user-2.jpeg',
+    birthdate: '01/02/2001',
+  },
+  {
+    id: 13,
+    email: 'xddddd@gmail.com',
+    username: 'el_pana',
+    fullName: 'Elp Ana',
+    password: 'jJUashah123!))!#%',
+    avatar: '/assets/images/static-user-3.jpg',
+    birthdate: '01/02/1999',
+  },
+  {
+    id: 32,
+    email: 'mzxgd16@gmail.com',
+    username: 'zapmal',
+    fullName: 'Manuel Zapata',
+    password: 'jJUashah123!))!#%',
+    avatar: '/assets/images/static-user-1.png',
+    birthdate: '01/02/2000',
+  },
+  {
+    id: 73,
+    email: 'example@gmail.com',
+    username: 'idkman',
+    fullName: 'Whor U',
+    password: 'jJUashah123!))!#%',
+    avatar: '/assets/images/static-user-2.jpeg',
+    birthdate: '01/02/2001',
+  },
+  {
+    id: 13,
+    email: 'xddddd@gmail.com',
+    username: 'el_pana',
+    fullName: 'Elp Ana',
+    password: 'jJUashah123!))!#%',
+    avatar: '/assets/images/static-user-3.jpg',
+    birthdate: '01/02/1999',
+  },
+];
+
+export const ENTITIES_METADATA = [
+  {
+    createdAt: '01/02/2000',
+    updatedAt: '01/02/2000',
+    active: true,
+    ipAddress: '192.168.1.1',
+    verifiedEmail: false,
+    userId: 32,
+  },
+  {
+    createdAt: '01/02/2000',
+    updatedAt: '11/02/2000',
+    active: true,
+    ipAddress: '192.168.1.1',
+    verifiedEmail: true,
+    userId: 73,
+  },
+  {
+    createdAt: '01/02/2000',
+    updatedAt: '01/02/2000',
+    active: true,
+    ipAddress: '192.168.1.1',
+    verifiedEmail: true,
+    userId: 13,
+  },
+  {
+    createdAt: '01/01/2000',
+    updatedAt: '01/02/2000',
+    active: true,
+    ipAddress: '192.168.1.1',
+    verifiedEmail: true,
+    userId: 42,
+  },
+  {
+    createdAt: '04/01/2000',
+    updatedAt: '03/02/2000',
+    active: true,
+    ipAddress: '192.168.1.1',
+    verifiedEmail: true,
+    userId: 14,
+  },
+  {
+    createdAt: '01/02/2000',
+    updatedAt: '01/02/2000',
+    active: false,
+    ipAddress: '192.168.1.1',
+    verifiedEmail: true,
+    userId: 33,
+  },
+];
+
+export const SONGS = [
+  {
+    id: 3,
+    name: 'Whatever Goes',
+    length: '3:14',
+    lyrics: true,
+    isExplicit: true,
+    albumId: 1,
+  },
+  {
+    id: 44,
+    name: 'Way too long',
+    length: '2:14',
+    lyrics: false,
+    isExplicit: false,
+    albumId: 198,
+  },
+  {
+    id: 33,
+    name: 'A good example',
+    length: '4:14',
+    lyrics: true,
+    isExplicit: false,
+    albumId: 44,
+  },
+];
+
+export const ALBUMS = [
+  {
+    id: 31,
+    name: 'The Album',
+    year: '2015',
+    releaseType: 'EP',
+    cover: '/assets/images/static-i-trust.webp',
+    artistId: 12,
+  },
+  {
+    id: 11,
+    name: 'The Other',
+    year: '2011',
+    releaseType: 'SINGLE',
+    cover: '/assets/images/static-oh-my-god.jpg',
+    artistId: 391,
+  },
+];

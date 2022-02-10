@@ -146,10 +146,9 @@ export function Player() {
           </Flex>
         </SimpleGrid>
 
-        <IconButton icon={AiOutlineDownload} size="md" marginLeft="20px" />
-        <IconButton icon={AiOutlineHeart} size="md" />
-
-        <Flex margin="0 auto" align="center" width="200px">
+        <Flex margin="0 auto" align="center" width="320px">
+          <IconButton icon={AiOutlineDownload} size="md" />
+          <IconButton icon={AiOutlineHeart} size="md" marginRight="20px" />
           <Slider colorScheme="pink">
             <SliderTrack>
               <SliderFilledTrack />

@@ -34,7 +34,7 @@ const BUTTON_PROPS = {
   _active: { bg: theme.colors.accentSolidActive.value },
 };
 
-const TABLE_DATA = {
+const TABLE_ROW_PROPS = {
   color: 'whiteAlpha.700',
   fontSize: 'sm',
 };
@@ -88,12 +88,12 @@ export function View() {
       <Table variant="unstyled">
         <Thead color={theme.colors.accentText.value}>
           <Tr>
-            <Th color="inherit">#</Th>
-            <Th color="inherit">Cover</Th>
-            <Th color="inherit">Name</Th>
-            <Th color="inherit">Author(s)</Th>
-            <Th color="inherit">Album</Th>
-            <Th color="inherit">Duration</Th>
+            <Th>#</Th>
+            <Th>Cover</Th>
+            <Th>Name</Th>
+            <Th>Author(s)</Th>
+            <Th>Album</Th>
+            <Th>Duration</Th>
             <Th>Options</Th>
           </Tr>
         </Thead>
@@ -103,8 +103,8 @@ export function View() {
             const [_, albumLink] = getLink(song.albumName, song.albumName);
 
             return (
-              <Tr key={index}>
-                <Td color="whiteAlpha.700">
+              <Tr key={index} {...TABLE_ROW_PROPS}>
+                <Td>
                   {/* This should be "isPlaying?" */}
                   {index === 0 ? (
                     <Icon
@@ -121,8 +121,8 @@ export function View() {
                 <Td>
                   <Image src={song.cover} w="50px" h="50px" borderRadius="5px" />
                 </Td>
-                <Td {...TABLE_DATA}>{song.name}</Td>
-                <Td {...TABLE_DATA}>
+                <Td>{song.name}</Td>
+                <Td>
                   {song.authors.split(',').map((author, index) => {
                     const [linkText, authorLink] = getLink(author, song.authors);
                     return (
@@ -137,12 +137,12 @@ export function View() {
                     );
                   })}
                 </Td>
-                <Td {...TABLE_DATA}>
+                <Td>
                   <Link to={`/view/${albumLink}`} underline={false} variant="gray">
                     {song.albumName}
                   </Link>
                 </Td>
-                <Td {...TABLE_DATA}>{song.duration}</Td>
+                <Td>{song.duration}</Td>
                 <Td>
                   <IconButton
                     icon={<Icon as={AiOutlineHeart} w="25px" h="25px" />}

@@ -126,13 +126,13 @@ model Manager {
 }
 
 model ArtistInformation {
-  id              Int      @id @default(autoincrement())
+  id              Int     @id @default(autoincrement())
   biography       String?
-  officialWebsite String?  @map("official_website") @db.VarChar(50)
-  coverImage      String?  @map("cover_image")
-  biographyImages String[] @map("biography_images")
-  artistId        Int      @unique @map("artist_id")
-  managerId       Int?     @unique @map("manager_id")
+  officialWebsite String? @map("official_website") @db.VarChar(50)
+  coverImage      String? @map("cover_image")
+  biographyImage  String? @map("biography_image")
+  artistId        Int     @unique @map("artist_id")
+  managerId       Int?    @unique @map("manager_id")
 
   manager Manager? @relation(fields: [managerId], references: [id])
   artist  Artist?  @relation(fields: [artistId], references: [id])

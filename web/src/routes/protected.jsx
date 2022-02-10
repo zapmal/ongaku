@@ -24,6 +24,9 @@ const { View } = lazyImport(() => import('@/features/app'), 'View');
 const { UserProfile } = lazyImport(() => import('@/features/profiles'), 'UserProfile');
 const { ArtistProfile } = lazyImport(() => import('@/features/profiles'), 'ArtistProfile');
 
+const { Entities } = lazyImport(() => import('@/features/administration'), 'Entities');
+const { PublishedWork } = lazyImport(() => import('@/features/administration'), 'PublishedWork');
+
 export const protectedRoutes = [
   {
     element: <VerifiedEmailWrapper />,
@@ -74,6 +77,14 @@ export const protectedRoutes = [
           {
             path: '/view/:name',
             element: <View />,
+          },
+          {
+            path: '/administration/entities',
+            element: <Entities />,
+          },
+          {
+            path: '/administration/published-work',
+            element: <PublishedWork />,
           },
         ],
       },

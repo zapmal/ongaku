@@ -107,7 +107,7 @@ export function Login(props) {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
               <VStack maxWidth="300px" marginLeft={['20px', '45px']}>
                 <Field
                   type="text"

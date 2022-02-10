@@ -21,6 +21,7 @@ export const { styled, css, global, keyframes, getCssString, theme } = createSti
       primaryBorderHover: '$mauve8',
       primarySolid: '$mauve9',
       primarySolidHover: '$mauve10',
+      primarySolidActive: '$mauve11',
       primaryText: '$mauve11',
       primaryTextContrast: '$mauve12',
 

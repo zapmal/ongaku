@@ -94,12 +94,12 @@ const options = {
   moderation: [
     {
       text: 'Users, artists and managers',
-      to: '/m/entities',
+      to: '/administration/entities',
       icon: MdGroups,
     },
     {
       text: 'Songs, albums and metadata',
-      to: '/m/published-work',
+      to: '/administration/published-work',
       icon: MdMusicNote,
     },
   ],
@@ -138,11 +138,11 @@ const optionsPerRole = [
       account: options.account,
       management: [
         ...options.moderation,
-        {
-          text: 'Ongaku Staff',
-          to: '/m/staff',
-          icon: MdAdminPanelSettings,
-        },
+        // {
+        //   text: 'Ongaku Staff',
+        //   to: '/administration/staff',
+        //   icon: MdAdminPanelSettings,
+        // },
       ],
     },
   },

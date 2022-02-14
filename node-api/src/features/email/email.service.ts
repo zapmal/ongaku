@@ -16,34 +16,29 @@ export class EmailService {
     const hash = getHash(to);
 
     const url = `${FRONTEND_URL}/verify/${hash}`;
+    const context = { context: { url } };
 
-    try {
-      await this.mailer.sendMail({
-        to,
-        subject: 'Email Verification',
-        template: './email-verification',
-        context: {
-          url,
-        },
-      });
-
-      return 'SENT';
-    } catch (error) {
-      throw new ServiceUnavailable(
-        'We could not send the email right now, please try again later',
-      );
-    }
+    return await this.sendEmail(
+      to,
+      'Email Verification',
+      './email-verification',
+      context,
+    );
   }
 
   async sendRecoveryCode(to: string, code: number) {
+    const context = { context: { code } };
+
+    return await this.sendEmail(to, 'Account Recovery', './account-recovery', context);
+  }
+
+  private async sendEmail(to, subject, template, context) {
     try {
       await this.mailer.sendMail({
         to,
-        subject: 'Account Recovery',
-        template: './account-recovery',
-        context: {
-          code,
-        },
+        subject,
+        template,
+        ...context,
       });
 
       return 'SENT';

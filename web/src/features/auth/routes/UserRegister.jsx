@@ -64,6 +64,7 @@ export function UserRegister() {
         message: `${response.message}, we'll redirect you to the home page shortly`,
       });
 
+      localStorage.setItem('isLoggedIn', true);
       setTimeout(() => navigate('/'), 8000);
     } catch (error) {
       setSubmissionState({

@@ -56,10 +56,9 @@ export function NavigationBar() {
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     logout();
     window.location.assign('/');
-    navigate('/');
   };
 
   return (

@@ -1,10 +1,11 @@
-import { Box, Spinner } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
 import { CurrentRoomOverlay } from '../../../features/app/components/CurrentRoomOverlay';
 
 import { NavigationBar, Player } from '@/components/Core';
+import { Spinner } from '@/components/Utils';
 
 export function Layout() {
   const { pathname } = useLocation();
@@ -17,15 +18,15 @@ export function Layout() {
     isNotView && { marginTop: '80px' };
 
   return (
-    <React.Suspense fallback={<LoadingFallback />}>
+    <React.Suspense fallback={<Spinner />}>
       <NavigationBar />
       <Box {...hasTopMargin}>
         <Outlet />
       </Box>
       {false && (
         <CurrentRoomOverlay
-          name="Rolas Vergatarias"
-          host="El Papi"
+          name="Buen Reguetón"
+          host="Ejemplo"
           activeUsers={5}
           userLimit={5}
           roomId="ADAD-139D"
@@ -33,13 +34,5 @@ export function Layout() {
       )}
       <Player />
     </React.Suspense>
-  );
-}
-
-function LoadingFallback() {
-  return (
-    <Box textAlign="center" paddingTop="200px" overflow="hidden">
-      <Spinner size="xl" />
-    </Box>
   );
 }

@@ -1,4 +1,4 @@
-import { Spinner, ChakraProvider, extendTheme, Box, Heading, Text, Image } from '@chakra-ui/react';
+import { ChakraProvider, extendTheme, Box, Heading, Text, Image } from '@chakra-ui/react';
 import { StepsStyleConfig } from 'chakra-ui-steps';
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -9,7 +9,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import { Button } from '@/components/Elements';
 import { Notifications } from '@/components/Notifications';
-import { Highlight } from '@/components/Utils';
+import { Highlight, Spinner } from '@/components/Utils';
 import { queryClient } from '@/lib/react-query';
 import { theme } from '@/stitches.config.js';
 
@@ -59,7 +59,7 @@ const chakraTheme = extendTheme({
 export const AppProvider = ({ children }) => {
   return (
     <ChakraProvider theme={chakraTheme}>
-      <React.Suspense fallback={<LoadingFallback />}>
+      <React.Suspense fallback={<Spinner />}>
         <ErrorBoundary FallbackComponent={ErrorFallback}>
           <QueryClientProvider client={queryClient}>
             {process.env.NODE_ENV !== 'test' && <ReactQueryDevtools />}
@@ -75,14 +75,6 @@ export const AppProvider = ({ children }) => {
     </ChakraProvider>
   );
 };
-
-function LoadingFallback() {
-  return (
-    <Box textAlign="center" paddingTop="200px" overflow="hidden">
-      <Spinner size="xl" />
-    </Box>
-  );
-}
 
 function ErrorFallback() {
   return (

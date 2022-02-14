@@ -1,4 +1,3 @@
-// import { Box, Spinner } from '@chakra-ui/react';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 
@@ -107,11 +106,3 @@ function VerifiedEmailWrapper() {
     </>
   );
 }
-
-// function LoadingFallback() {
-//   return (
-//     <Box textAlign="center" paddingTop="200px" overflow="hidden">
-//       <Spinner size="xl" />
-//     </Box>
-//   );
-// }

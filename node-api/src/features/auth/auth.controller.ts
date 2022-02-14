@@ -108,11 +108,9 @@ export class AuthController {
   }
 
   @Get('logout')
-  @HttpCode(HttpStatus.RESET_CONTENT)
+  @HttpCode(HttpStatus.NO_CONTENT)
   logout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('token');
-
-    return { message: 'Logged out successfully', status: 'SUCCESS' };
   }
 
   @Post('verify-email')

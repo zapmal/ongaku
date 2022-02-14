@@ -67,6 +67,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
         isSubmitting: false,
       });
 
+      localStorage.setItem('isLoggedIn', true);
       nextStep();
     } catch (error) {
       setSubmissionState({

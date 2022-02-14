@@ -6,12 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
-import { useAuthStore } from '@/stores/useAuthStore';
 
 export function NotFound() {
   const navigate = useNavigate();
-  const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
-  console.log('NotFound()', isLoggedIn());
 
   const handleRedirect = () => navigate('/');
 

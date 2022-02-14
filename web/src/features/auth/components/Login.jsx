@@ -74,6 +74,7 @@ export function Login(props) {
         message: `${response.message}, we'll redirect you shortly`,
       });
 
+      localStorage.setItem('isLoggedIn', true);
       setTimeout(() => navigate('/home'), 8000);
     } catch (error) {
       setSubmissionState({

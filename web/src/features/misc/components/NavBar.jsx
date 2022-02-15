@@ -2,7 +2,7 @@ import { Image, ButtonGroup, Divider, Center, useDisclosure } from '@chakra-ui/r
 import React from 'react';
 import { FiLogOut } from 'react-icons/fi';
 import { MdHome } from 'react-icons/md';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { Button } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
@@ -53,7 +53,6 @@ const Container = styled('header', {
 
 export function NavigationBar() {
   const [isLoggedIn, logout] = useAuthStore((s) => [s.isLoggedIn, s.logout]);
-  const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleLogout = async () => {

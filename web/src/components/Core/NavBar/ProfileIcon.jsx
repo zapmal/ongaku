@@ -18,9 +18,10 @@ import { Link } from 'react-router-dom';
 
 import { MENU_ITEM_PROPS } from '@/features/app';
 import { theme } from '@/stitches.config.js';
+import { useAuthStore } from '@/stores/useAuthStore';
 
 export function ProfileIcon() {
-  const user = { role: 'ADMIN' };
+  const { role = {} } = useAuthStore((s) => s.entity);
 
   return (
     <Menu isLazy>
@@ -33,28 +34,33 @@ export function ProfileIcon() {
             height="20px"
             borderColor="transparent"
             width="50px"
-            fontSize={user.role === 'MANAGER' && 'xx-small'}
+            fontSize={role === 'MANAGER' && 'xx-small'}
           >
-            {user.role === 'MODERATOR' ? 'MOD' : user.role}
+            {role === 'MODERATOR' ? 'MOD' : role}
           </AvatarBadge>
         </Avatar>
       </MenuButton>
       <MenuList bg={theme.colors.primaryBase.value} marginTop="10px">
-        {user.role !== 'USER' && (
+        {role !== 'USER' && (
           <>
-            <MenuItems group="management" role={user.role} />
+            <MenuItems group="management" role={role} />
             <MenuDivider />
           </>
         )}
 
-        <MenuItems group="account" role={user.role} />
+        <MenuItems group="account" role={role} />
       </MenuList>
     </Menu>
   );
 }
 
 function MenuItems({ group, role }) {
-  const handleLogout = () => console.log('Logout');
+  const logout = useAuthStore((s) => s.logout);
+
+  const handleLogout = async () => {
+    logout();
+    window.location.assign('/');
+  };
 
   return optionsPerRole.map((currentOption, index) => {
     const option = currentOption[role];

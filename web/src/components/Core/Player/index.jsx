@@ -147,7 +147,7 @@ export function Player() {
         </SimpleGrid>
 
         <Flex margin="0 auto" align="center" width="320px">
-          <IconButton icon={AiOutlineDownload} size="md" />
+          <IconButton icon={AiOutlineDownload} size="md" marginLeft="15px" />
           <IconButton icon={AiOutlineHeart} size="md" marginRight="20px" />
           <Slider colorScheme="pink">
             <SliderTrack>
@@ -155,7 +155,7 @@ export function Player() {
             </SliderTrack>
             <SliderThumb />
           </Slider>
-          <Icon as={MdVolumeUp} w="20px" h="20px" color="whiteAlpha.800" marginLeft="10px" />
+          <Icon as={MdVolumeUp} w="20px" h="20px" color="whiteAlpha.800" margin="0 15px" />
         </Flex>
       </Flex>
     </Box>

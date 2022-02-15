@@ -1,5 +1,6 @@
 import {
   Box,
+  Spacer,
   Image,
   IconButton,
   Button,
@@ -45,15 +46,29 @@ export function View() {
       <Banner image="static-background-image-view.png" height="100%" bgRepeat="cover">
         <Flex align="flex-end" justify="flex-start" height="400px" bg={GRADIENTS.bottom}>
           <SimpleGrid margin="20px">
-            <Heading fontSize="xxx-large" letterSpacing="4px">
-              <Text fontSize="sm" fontWeight="bold" letterSpacing="2px">
-                PLAYLIST
-              </Text>
+            <Heading fontSize="xxx-large" letterSpacing="2px">
+              <HStack fontSize="sm" letterSpacing="initial">
+                <Avatar src="/assets/images/static-user-1.png" />
+                <Link to="/user/verox" underline={false} fontWeight="bold">
+                  Verox
+                </Link>
+              </HStack>
               Gaming
+            </Heading>
+
+            <HStack color="whiteAlpha.800" marginTop="5px">
+              <Text fontWeight="bold">PLAYLIST</Text>
+              <Text>
+                {' - '}33 songs {' - '}
+              </Text>
+              <Text>7 hr 33 min {' - '}</Text>
+              <Text>42 likes</Text>
+            </HStack>
+
+            <HStack marginTop="10px">
               <IconButton
                 bg="whiteAlpha.900"
                 borderRadius="50%"
-                marginLeft="10px"
                 w="70px"
                 h="70px"
                 backgroundColor={theme.colors.accentSolid.value}
@@ -61,20 +76,6 @@ export function View() {
                 _hover={{ backgroundColor: theme.colors.accentSolidHover.value }}
                 _active={{ backgroundColor: theme.colors.accentSolidActive.value }}
               />
-            </Heading>
-
-            <HStack color="whiteAlpha.800" marginTop="5px">
-              <Avatar src="/assets/images/static-user-1.png" />
-              <Link to="/user/verox" underline={false} fontWeight="bold">
-                Verox
-              </Link>
-              <Text>
-                {' - '} 33 songs {' - '}
-              </Text>
-              <Text>7 hr 33 min {' - '}</Text>
-              <Text>42 likes</Text>
-            </HStack>
-            <HStack marginTop="15px">
               <Button {...BUTTON_PROPS} rightIcon={<Icon as={AiOutlineHeart} w="25px" h="25px" />}>
                 Like
               </Button>

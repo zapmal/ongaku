@@ -18,27 +18,27 @@ import { resendVerificationEmail } from '../api/verification';
 
 import { Button } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
-import { useSubmissionState } from '@/hooks/useSubmissionState';
+import { useRequest } from '@/hooks';
 import { useAuthStore } from '@/stores/useAuthStore';
 
 export function ResendVerificationEmail() {
   const entity = useAuthStore((s) => s.entity);
-  const [submission, setSubmissionState] = useSubmissionState();
+  const [request, setRequestState] = useRequest();
 
   const handleResendClick = async () => {
     try {
-      setSubmissionState({ isSubmitting: true });
+      setRequestState({ isSubmitting: true });
 
       const response = await resendVerificationEmail({ to: entity.email });
 
-      setSubmissionState({
+      setRequestState({
         status: 'success',
         isSubmitting: false,
         title: 'Email sent!',
         message: response.message,
       });
     } catch (error) {
-      setSubmissionState({
+      setRequestState({
         status: 'error',
         isSubmitting: false,
         title: 'Error',
@@ -63,7 +63,7 @@ export function ResendVerificationEmail() {
                 <Highlight>verify your email</Highlight> to start using{' '}
                 <Highlight>Ongaku</Highlight>, this is for both your and our safety and protection.
               </Text>
-              {submission.isSubmitting ? (
+              {request.isSubmitting ? (
                 <Spinner size="lg" />
               ) : (
                 <Button
@@ -71,7 +71,7 @@ export function ResendVerificationEmail() {
                   rightIcon={<MdReplay />}
                   variant="accent"
                   onClick={handleResendClick}
-                  isDisabled={submission.status != ''}
+                  isDisabled={request.status != ''}
                 >
                   Resend
                 </Button>

@@ -28,7 +28,7 @@ import { login } from '../api/auth';
 import { Link, Button } from '@/components/Elements';
 import { Field, Checkbox } from '@/components/Form';
 import { Highlight } from '@/components/Utils';
-import { useSubmissionState } from '@/hooks/useSubmissionState';
+import { useRequest } from '@/hooks';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useNotificationStore } from '@/stores/useNotificationStore';
 
@@ -37,7 +37,7 @@ export function Login(props) {
     control,
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -48,7 +48,7 @@ export function Login(props) {
   });
   const [show, setShow] = useState(false);
   const [isArtist, setIsArtist] = useState(false);
-  const [submission, setSubmissionState] = useSubmissionState();
+  const [request, setRequestState] = useRequest();
   const navigate = useNavigate();
 
   const setEntity = useAuthStore((s) => s.setEntity);
@@ -62,14 +62,11 @@ export function Login(props) {
 
   const onSubmit = async (data) => {
     try {
-      setSubmissionState({ isSubmitting: true });
-
       const response = await login(data);
       setEntity(response.entity);
 
-      setSubmissionState({
+      setRequestState({
         status: 'success',
-        isSubmitting: false,
         title: 'Success!',
         message: `${response.message}, we'll redirect you shortly`,
       });
@@ -77,9 +74,8 @@ export function Login(props) {
       localStorage.setItem('isLoggedIn', true);
       setTimeout(() => navigate('/home'), 8000);
     } catch (error) {
-      setSubmissionState({
+      setRequestState({
         status: 'error',
-        isSubmitting: false,
         title: 'Error',
         message: error,
       });
@@ -116,7 +112,7 @@ export function Login(props) {
                   label="Email"
                   placeholder="JoeMama@gmail.com"
                   error={errors.email}
-                  isDisabled={submission.status != ''}
+                  isDisabled={request.status != ''}
                   register={register}
                 />
                 <InputGroup size="md">
@@ -126,7 +122,7 @@ export function Login(props) {
                     label="Password"
                     placeholder="********"
                     error={errors.password}
-                    isDisabled={submission.status != ''}
+                    isDisabled={request.status != ''}
                     register={register}
                   />
                   <InputRightElement width="50px">
@@ -157,12 +153,12 @@ export function Login(props) {
                   control={control}
                   onChangeHandler={handleIsArtist}
                   value={isArtist}
-                  isDisabled={submission.status != ''}
+                  isDisabled={request.status != ''}
                   size="md"
                   padding="5px 0"
                 />
 
-                {submission.isSubmitting ? (
+                {isSubmitting ? (
                   <Spinner size="lg" />
                 ) : (
                   <Button
@@ -170,7 +166,7 @@ export function Login(props) {
                     variant="accent"
                     rightIcon={<MdArrowForward size={20} />}
                     marginTop="5px"
-                    isDisabled={submission.status != ''}
+                    isDisabled={request.status != ''}
                   >
                     Login
                   </Button>

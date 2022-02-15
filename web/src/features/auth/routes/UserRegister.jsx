@@ -23,7 +23,7 @@ import { NavigationBar } from '../styles';
 import { Link, Button } from '@/components/Elements';
 import { Field } from '@/components/Form';
 import { Highlight } from '@/components/Utils';
-import { useSubmissionState } from '@/hooks/useSubmissionState';
+import { useRequest } from '@/hooks';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
 
@@ -33,7 +33,7 @@ export function UserRegister() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -46,20 +46,17 @@ export function UserRegister() {
     },
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [submission, setSubmissionState] = useSubmissionState();
+  const [request, setRequestState] = useRequest();
   const setEntity = useAuthStore((s) => s.setEntity);
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
-      setSubmissionState({ isSubmitting: true });
-
       const response = await registerUser(data);
       setEntity(response.user);
 
-      setSubmissionState({
+      setRequestState({
         status: 'success',
-        isSubmitting: false,
         title: 'Success!',
         message: `${response.message}, we'll redirect you to the home page shortly`,
       });
@@ -67,9 +64,8 @@ export function UserRegister() {
       localStorage.setItem('isLoggedIn', true);
       setTimeout(() => navigate('/'), 8000);
     } catch (error) {
-      setSubmissionState({
+      setRequestState({
         status: 'error',
-        isSubmitting: false,
         title: 'Error',
         message: error,
       });
@@ -103,7 +99,7 @@ export function UserRegister() {
                   label="Full Name"
                   placeholder="Joe Mama"
                   error={errors.fullName}
-                  isDisabled={submission.status !== ''}
+                  isDisabled={request.status !== ''}
                   register={register}
                 />
               </WrapItem>
@@ -113,7 +109,7 @@ export function UserRegister() {
                   name="email"
                   label="Email"
                   placeholder="joemama@gmail.com"
-                  isDisabled={submission.status !== ''}
+                  isDisabled={request.status !== ''}
                   error={errors.email}
                   register={register}
                 />
@@ -125,7 +121,7 @@ export function UserRegister() {
                   label="Password"
                   placeholder="*********"
                   error={errors.password}
-                  isDisabled={submission.status !== ''}
+                  isDisabled={request.status !== ''}
                   register={register}
                 />
               </WrapItem>
@@ -136,7 +132,7 @@ export function UserRegister() {
                   label="Password Confirmation"
                   placeholder="*********"
                   error={errors.passwordConfirmation}
-                  isDisabled={submission.status !== ''}
+                  isDisabled={request.status !== ''}
                   register={register}
                 />
               </WrapItem>
@@ -147,7 +143,7 @@ export function UserRegister() {
                   label="Username"
                   placeholder="xXJoeMama777Xx"
                   error={errors.username}
-                  isDisabled={submission.status !== ''}
+                  isDisabled={request.status !== ''}
                   register={register}
                 />
               </WrapItem>
@@ -168,13 +164,13 @@ export function UserRegister() {
                     }
                   `}
                   error={errors.birthdate}
-                  isDisabled={submission.status !== ''}
+                  isDisabled={request.status !== ''}
                   register={register}
                 />
               </WrapItem>
             </Wrap>
 
-            {submission.isSubmitting ? (
+            {isSubmitting ? (
               <Spinner size="lg" marginTop="20px" />
             ) : (
               <Box textAlign="center" marginLeft="-10px">
@@ -182,7 +178,7 @@ export function UserRegister() {
                   type="submit"
                   variant="accent"
                   marginTop="30px"
-                  isDisabled={submission.status !== ''}
+                  isDisabled={request.status !== ''}
                 >
                   Submit
                 </Button>

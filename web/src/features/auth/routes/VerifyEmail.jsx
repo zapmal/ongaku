@@ -8,18 +8,18 @@ import { verifyEmail } from '../api/verification';
 import { Button } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
 import { NavigationBar } from '@/features/misc';
-import { useSubmissionState } from '@/hooks/useSubmissionState';
+import { useRequest } from '@/hooks';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
 
 export function VerifyEmail() {
   const [entity, setEntity] = useAuthStore((s) => [s.entity, s.setEntity]);
-  const [submission, setSubmissionState] = useSubmissionState();
+  const [request, setRequestState] = useRequest();
   const { hash } = useParams();
 
   const handleVerifyClick = async () => {
     try {
-      setSubmissionState({ isSubmitting: true });
+      setRequestState({ isSubmitting: true });
 
       const response = await verifyEmail({
         id: entity.id,
@@ -29,14 +29,14 @@ export function VerifyEmail() {
       });
       setEntity({ ...entity, verifiedEmail: response.verifiedEmail });
 
-      setSubmissionState({
+      setRequestState({
         status: 'success',
         isSubmitting: false,
         title: 'Success!',
         message: `We'll redirect you to the home page shortly.`,
       });
     } catch (error) {
-      setSubmissionState({
+      setRequestState({
         status: 'error',
         isSubmitting: false,
         title: 'Error',
@@ -63,12 +63,12 @@ export function VerifyEmail() {
           to {"it's"} fullest!
         </Text>
 
-        {submission.isSubmitting ? (
+        {request.isSubmitting ? (
           <Spinner size="lg" marginTop="30px" />
         ) : (
           <Button
             onClick={handleVerifyClick}
-            isDisabled={submission.status != ''}
+            isDisabled={request.status != ''}
             variant="accent"
             rightIcon={<MdCheck size={25} />}
             size="lg"

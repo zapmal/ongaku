@@ -10,7 +10,7 @@ import { Login } from '../Login';
 
 import { Button } from '@/components/Elements';
 import { Field, Select, Checkbox } from '@/components/Form';
-import { useSubmissionState } from '@/hooks/useSubmissionState';
+import { useRequest } from '@/hooks';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
 
@@ -20,7 +20,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
     control,
     handleSubmit,
     resetField,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(secondStepSchema),
     defaultValues: {
@@ -35,7 +35,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
     },
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [submission, setSubmissionState] = useSubmissionState();
+  const [request, setRequestState] = useRequest();
   const setEntity = useAuthStore((s) => s.setEntity);
   const [isBand, setIsBand] = useState(false);
 
@@ -52,8 +52,6 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
         };
 
     try {
-      setSubmissionState({ isSubmitting: true });
-
       const response = await registerArtist({
         ...artistData,
         ...basicData,
@@ -62,17 +60,15 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
       });
       setEntity(response.artist);
 
-      setSubmissionState({
+      setRequestState({
         status: 'success',
-        isSubmitting: false,
       });
 
       localStorage.setItem('isLoggedIn', true);
       nextStep();
     } catch (error) {
-      setSubmissionState({
+      setRequestState({
         status: 'error',
-        isSubmitting: false,
         title: 'Error',
         message: error,
       });
@@ -120,7 +116,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
               error={errors.genres}
               onChangeCallback={(value) => value.map((v) => v.value)}
               isMulti
-              isDisabled={submission.status != ''}
+              isDisabled={request.status != ''}
             />
             {errors.genres && (
               <Text color={theme.colors.dangerSolid.value} paddingTop="5px" textAlign="left">
@@ -138,7 +134,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
               placeholder="JM Records, Hybe"
               helperText="Labels must be divided by commas."
               error={errors.labels}
-              isDisabled={submission.status != ''}
+              isDisabled={request.status != ''}
               register={register}
             />
           </Box>
@@ -151,7 +147,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
               label="Years Active"
               placeholder="13"
               error={errors.yearsActive}
-              isDisabled={submission.status != ''}
+              isDisabled={request.status != ''}
               register={register}
             />
           </Box>
@@ -165,7 +161,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
                 label="Band Name"
                 placeholder="Joe n' the Mamas"
                 error={errors.bandName}
-                isDisabled={submission.status != ''}
+                isDisabled={request.status != ''}
                 register={register}
               />
             ) : (
@@ -175,7 +171,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
                 label="Artistic Name"
                 placeholder="Lil xxxJoemama"
                 error={errors.artisticName}
-                isDisabled={submission.status != ''}
+                isDisabled={request.status != ''}
                 register={register}
               />
             )}
@@ -198,7 +194,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
               name="country"
               placeholder="Select a country"
               error={errors.country}
-              isDisabled={submission.status != ''}
+              isDisabled={request.status != ''}
               onChangeCallback={(value) => value.value}
             />
             {errors.country && (
@@ -217,7 +213,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
               helperText="Members must be divided by commas."
               placeholder="Joe Mama, Carl Johnson"
               error={errors.members}
-              isDisabled={!isBand || submission.status != ''}
+              isDisabled={!isBand || request.status != ''}
               register={register}
             />
           </Box>
@@ -230,28 +226,23 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
         control={control}
         value={isBand}
         onChangeHandler={handleIsBand}
-        isDisabled={submission.status != ''}
+        isDisabled={request.status != ''}
         marginTop="30px"
         marginLeft="30px"
         size="lg"
       />
 
-      {submission.isSubmitting ? (
+      {isSubmitting ? (
         <Center marginTop="40px">
           <Spinner size="lg" />
         </Center>
       ) : (
         <div>
           <Center marginTop="40px">
-            <Button onClick={prevStep} margin="0 30px" isDisabled={submission.status != ''}>
+            <Button onClick={prevStep} margin="0 30px" isDisabled={request.status != ''}>
               Go Back
             </Button>
-            <Button
-              type="submit"
-              align="center"
-              variant="accent"
-              isDisabled={submission.status != ''}
-            >
+            <Button type="submit" align="center" variant="accent" isDisabled={request.status != ''}>
               Submit
             </Button>
           </Center>

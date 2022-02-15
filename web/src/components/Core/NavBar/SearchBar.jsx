@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Link } from '@/components/Elements';
 import { TRANSPARENT_ICON_PROPS } from '@/features/app';
-import { useHistory } from '@/hooks/useHistory';
+import { useHistory } from '@/hooks';
 import { theme } from '@/stitches.config.js';
 
 export function SearchBar({ setClickedSearch }) {

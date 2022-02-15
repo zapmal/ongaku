@@ -2,27 +2,27 @@ import { useState, useEffect } from 'react';
 
 import { useNotificationStore } from '@/stores/useNotificationStore';
 
-export const useSubmissionState = (
+export const useRequest = (
   initialState = {
     status: '',
     isSubmitting: false,
   }
 ) => {
-  const [submission, _setSubmissionState] = useState(initialState);
+  const [request, _setRequestState] = useState(initialState);
   const addNotification = useNotificationStore((s) => s.addNotification);
 
   useEffect(() => {
     const errorTimeout = setTimeout(() => {
-      if (submission.status !== 'success') {
-        _setSubmissionState((prev) => ({ ...prev, status: '' }));
+      if (request.status !== 'success') {
+        _setRequestState((prev) => ({ ...prev, status: '' }));
       }
     }, 7000);
 
     return () => clearInterval(errorTimeout);
-  }, [submission.status]);
+  }, [request.status]);
 
-  const setSubmissionState = ({ title, message, status, isSubmitting }) => {
-    _setSubmissionState({
+  const setRequestState = ({ title, message, status, isSubmitting }) => {
+    _setRequestState({
       status,
       isSubmitting,
     });
@@ -36,5 +36,5 @@ export const useSubmissionState = (
     }
   };
 
-  return [submission, setSubmissionState];
+  return [request, setRequestState];
 };

@@ -110,10 +110,12 @@ export function NavigationBar() {
 
             <Button
               label={<Highlight variant="primary">Lost account?</Highlight>}
+              as={Link}
+              to="/account-recovery"
               variant="accent"
               align="center"
             >
-              <Link to="/account-recovery">Recover it</Link>
+              Recover it
             </Button>
           </>
         )}

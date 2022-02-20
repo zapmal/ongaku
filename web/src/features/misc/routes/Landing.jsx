@@ -22,14 +22,13 @@ export function Landing() {
 
         <Box textAlign="center">
           <Heading paddingTop="20px" fontSize={['2xl', '4xl']}>
-            Ongaku - <Highlight>Music at {"it's"} best</Highlight>
+            Ongaku - <Highlight>Música al límite</Highlight>
           </Heading>
           <Text padding="20px" fontSize={['sm', 'md']} lineHeight={2}>
-            <Highlight>Ongaku</Highlight> is a music streaming platform inspired by the likes of{' '}
-            <Highlight>iTunes, Spotify and YouTube Music</Highlight> that is focused on delivering a
-            comfortable and blazing-fast streaming experience to the <Highlight>user</Highlight>{' '}
-            regardless of their zone, so that they can listen their favorite artists even on poor or
-            unstable connections.
+            <Highlight>Ongaku</Highlight> es una plataforma de streaming músical, inspirada por sus
+            predecesores como son <Highlight>Spotify, iTunes y Youtube Music</Highlight>, estando
+            enfocada principalmente en la experiencia de usuario, rendimiento y usabilidad, con el
+            fin de asegurar una placentera experiencia en cualquier ocasión.
           </Text>
         </Box>
 
@@ -41,7 +40,8 @@ export function Landing() {
           padding={['10px 30px 0 30px', '10px 0 0 0']}
           fontSize="sm"
         >
-          All rights belong to their respective owners, this project was made for learning purposes.
+          Todos los derechos le pertenecen a sus respectivos autores, este proyecto fue realizado
+          sin fines de lucro.
         </Text>
       </div>
     </SimpleGrid>
@@ -63,16 +63,15 @@ function BulletList() {
 
 const bulletPoints = [
   {
-    title: 'Listen to whatever you want, even with friends',
-    content: `You can create playlists and listen to your favorite artists. On top of that, 
-    you also can listen music with your friends!
-    `,
+    title: 'Escucha lo que quieras, con quién quieras',
+    content: `Crea playlists que contengan a tus artistas, canciones o albumes favoritos. 
+    Puedes crear salas y disfrutarlas en grupo.`,
     icon: MdPersonAdd,
   },
   {
-    title: 'Perfect for artists',
-    content: `Regardless of your experience on the field, we will provide you the best 
-    tools available at hand.`,
+    title: 'Perfecto para artistas',
+    content: `Sin importar tu experiencia en el campo, te recibimos 
+    con los brazos abiertos y ofrecemos el mejor servicio posible.`,
     icon: MdAlbum,
   },
 ];

@@ -14,10 +14,11 @@ export function UserWelcome() {
       <NavigationBar />
       <Box textAlign="center">
         <Heading paddingTop={['30px', 0]} fontSize={['3xl', '4xl']}>
-          Welcome, <Highlight>user</Highlight>
+          Bienvenido, <Highlight>usuario</Highlight>
         </Heading>
         <Text padding="15px" fontSize={['md', 'lg']} lineHeight={2}>
-          Want a headstart? Check out our set of <Highlight>recommended artists</Highlight>
+          ¿Quieres una recomendación? Revisa nuestro conjunto de{' '}
+          <Highlight>artistas recomendados</Highlight>
         </Text>
 
         <Box

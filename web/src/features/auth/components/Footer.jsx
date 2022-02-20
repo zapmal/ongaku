@@ -8,13 +8,13 @@ export function Footer({ paddingTop = '0' }) {
     <div>
       <Center textAlign="center" paddingTop={paddingTop} paddingBottom="10px">
         <Text color={theme.colors.primaryText.value} maxW={['300px', '450px', '500px', '600px']}>
-          By using our application you agree to the usage of cookies, which are needed to make the
-          application work correctly. We also store your IP address and registration date for
-          security purposes.
+          Al registrarte en Ongaku estás de acuerdo con el uso de cookies, las cuáles son
+          fundamentales para el funcionamiento de la misma. Además, almacenamos tu dirección IP,
+          fecha de registro y ubicación por seguridad.
         </Text>
       </Center>
       <Center paddingBottom={['30px', '10px']}>
-        <Text fontWeight="bold">All rights belong to their respective owners.</Text>
+        <Text fontWeight="bold">Todos los derechos le pertenecen a sus respectivos autores.</Text>
       </Center>
     </div>
   );

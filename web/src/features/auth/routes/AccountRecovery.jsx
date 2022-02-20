@@ -156,7 +156,7 @@ function FirstStep({ nextStep, isArtist, setIsArtist, setVerificationCode, setEn
 
       setRequestState({
         status: 'success',
-        title: 'Éxito!',
+        title: '¡Éxito!',
         message: `${response.message}`,
       });
 
@@ -273,7 +273,7 @@ function ThirdStep({ nextStep, isArtist, entityId }) {
 
       setSubmissionState({
         status: 'success',
-        title: 'Éxito!',
+        title: '¡Éxito!',
         message: `${response.message}`,
       });
 

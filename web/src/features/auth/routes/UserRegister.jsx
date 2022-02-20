@@ -57,8 +57,8 @@ export function UserRegister() {
 
       setRequestState({
         status: 'success',
-        title: 'Success!',
-        message: `${response.message}, we'll redirect you to the home page shortly`,
+        title: '¡Éxito!',
+        message: `${response.message}, te redigiremos pronto`,
       });
 
       localStorage.setItem('isLoggedIn', true);
@@ -80,14 +80,14 @@ export function UserRegister() {
             <Image src="/assets/images/app-icon-transparent.png" alt="Ongaku Logo" />
           </Link>
           <Link to="/register" variant="gray" margin="40px 50px 40px 0">
-            Go Back
+            Volver
           </Link>
         </NavigationBar>
 
         <Box textAlign="center" align="center">
-          <Heading>Almost there</Heading>
+          <Heading>Ya casi estás listo</Heading>
           <Text paddingTop="10px" fontSize="xl">
-            <Highlight>Tell us about you.</Highlight>
+            <Highlight>Dinos más sobre ti</Highlight>
           </Text>
 
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -96,7 +96,7 @@ export function UserRegister() {
                 <Field
                   type="text"
                   name="fullName"
-                  label="Full Name"
+                  label="Nombre Completo"
                   placeholder="Joe Mama"
                   error={errors.fullName}
                   isDisabled={request.status !== ''}
@@ -118,7 +118,7 @@ export function UserRegister() {
                 <Field
                   type="password"
                   name="password"
-                  label="Password"
+                  label="Contraseña"
                   placeholder="*********"
                   error={errors.password}
                   isDisabled={request.status !== ''}
@@ -129,7 +129,7 @@ export function UserRegister() {
                 <Field
                   type="password"
                   name="passwordConfirmation"
-                  label="Password Confirmation"
+                  label="Confirmación de Contraseña"
                   placeholder="*********"
                   error={errors.passwordConfirmation}
                   isDisabled={request.status !== ''}
@@ -140,7 +140,7 @@ export function UserRegister() {
                 <Field
                   type="text"
                   name="username"
-                  label="Username"
+                  label="Nombre de Usuario"
                   placeholder="xXJoeMama777Xx"
                   error={errors.username}
                   isDisabled={request.status !== ''}
@@ -151,7 +151,7 @@ export function UserRegister() {
                 <Field
                   type="date"
                   name="birthdate"
-                  label="Birthdate"
+                  label="Fecha de nacimiento"
                   rightIcon={
                     // To display this icon ONLY on firefox (any version).
                     navigator.userAgent.toLowerCase().indexOf('firefox') > -1 && (
@@ -180,13 +180,13 @@ export function UserRegister() {
                   marginTop="30px"
                   isDisabled={request.status !== ''}
                 >
-                  Submit
+                  Enviar
                 </Button>
                 <Text color={theme.colors.primaryText.value} padding="5px">
-                  or
+                  o
                 </Text>
                 <Button variant="link" onClick={onOpen}>
-                  Login
+                  Inicia Sesión
                 </Button>
               </Box>
             )}
@@ -209,16 +209,13 @@ export function UserRegister() {
 }
 
 const schema = yup.object({
-  fullName: yup.string().required('This field is required.'),
-  password: yup
-    .string()
-    .min(8, 'Minimum eight (8) characters.')
-    .required('This field is required.'),
+  fullName: yup.string().required('Este campo es requerido'),
+  password: yup.string().min(8, 'Mínimo ocho (8) carácteres').required('Este campo es requerido'),
   passwordConfirmation: yup
     .string()
-    .required('This field is required.')
-    .oneOf([yup.ref('password'), null], 'Both passwords must match.'),
-  email: yup.string().email('You must enter a valid email.').required('This field is required.'),
-  username: yup.string().required('This field is required.'),
-  birthdate: yup.string().required('This field is required.'),
+    .required('Este campo es requerido')
+    .oneOf([yup.ref('password'), null], 'Las contraseñas deben coincidir'),
+  email: yup.string().email('Debes ingresar un correo válido').required('Este campo es requerido'),
+  username: yup.string().required('Este campo es requerido'),
+  birthdate: yup.string().required('Este campo es requerido'),
 });

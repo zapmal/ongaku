@@ -32,8 +32,8 @@ export function VerifyEmail() {
       setRequestState({
         status: 'success',
         isSubmitting: false,
-        title: 'Success!',
-        message: `We'll redirect you to the home page shortly.`,
+        title: '¡Éxito!',
+        message: `Te redigiremos pronto`,
       });
     } catch (error) {
       setRequestState({
@@ -50,7 +50,7 @@ export function VerifyEmail() {
       <NavigationBar />
       <Box align="center" paddingTop={['40px', '20px']}>
         <Heading size="lg">
-          <Highlight>Thank you for choosing us</Highlight>
+          <Highlight>¡Gracias por elegirnos!</Highlight>
         </Heading>
 
         <Text
@@ -59,8 +59,8 @@ export function VerifyEmail() {
           fontSize="lg"
           width={['100%', '550px']}
         >
-          This is the last registration step, after this, you will be able to use and enjoy Ongaku
-          to {"it's"} fullest!
+          Este es el último paso para el registro, después de esto, podrás disfrutar Ongaku a su
+          límite.
         </Text>
 
         {request.isSubmitting ? (
@@ -74,7 +74,7 @@ export function VerifyEmail() {
             size="lg"
             marginTop="5px"
           >
-            Verify
+            Verificar
           </Button>
         )}
         <Image src="/assets/svgs/undraw-dreamer.svg" width={['300px', '400px']} margin="5px" />

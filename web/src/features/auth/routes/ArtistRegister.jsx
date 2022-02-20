@@ -27,14 +27,14 @@ export function ArtistRegister() {
             <Image src="/assets/images/app-icon-transparent.png" alt="Ongaku Logo" />
           </Link>
           <Link to="/register" variant="gray" margin="40px 50px 40px 0">
-            Go Back
+            Volver
           </Link>
         </NavigationBar>
 
         <Box textAlign="center" align="center">
-          <Heading paddingTop="10px">You&apos;re almost part of our team</Heading>
+          <Heading paddingTop="10px">Ya casi formas parte de nuestro equipo</Heading>
           <Text paddingTop="10px" fontSize="xl">
-            <Highlight>Tell us about you.</Highlight>
+            <Highlight>Dinos más sobre ti</Highlight>
           </Text>
         </Box>
 

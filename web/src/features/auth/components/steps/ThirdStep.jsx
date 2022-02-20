@@ -3,22 +3,21 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { Button } from '@/components/Elements';
-import { Highlight } from '@/components/Utils';
 
 export function ThirdStep() {
   return (
     <div>
       <Box textAlign="left">
         <Heading size="lg" paddingTop="10px">
-          Registration finished!
+          ¡Registro Finalizado!
         </Heading>
         <Text padding="20px">
-          You should check your <Highlight>email inbox</Highlight> and complete the final step, the
-          confirmation, so that {"you'll"} be able to start publishing and managing your work here
-          on Ongaku!
+          Debes de revisar la bandeja principal de tu correo, te enviamos un link para la
+          verificación de tu cuenta. ¡Una vez verificada podrás usar Ongaku! Debes revisar tu correo
+          para verificarlo y poder usar Ongaku.
         </Text>
         <Button marginLeft="20px" as={Link} to={'/welcome?type=artist'}>
-          Go to Ongaku
+          Ir a Ongaku
         </Button>
       </Box>
       <Divider padding="10px" width="90%" />

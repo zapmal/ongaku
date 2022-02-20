@@ -67,7 +67,7 @@ export function NavigationBar() {
         {isLoggedIn() ? (
           <>
             <Button size="lg" rightIcon={<MdHome size={20} />} as={Link} to="/home">
-              Home
+              Inicio
             </Button>
 
             <Center>
@@ -80,26 +80,26 @@ export function NavigationBar() {
               size="lg"
               rightIcon={<FiLogOut size={20} />}
             >
-              Logout
+              Cerrar Sesión
             </Button>
           </>
         ) : (
           <>
             <Button
-              label={<Highlight>Existing user?</Highlight>}
+              label={<Highlight>¿Ya tienes cuenta?</Highlight>}
               align="center"
               isFullWidth={true}
               onClick={onOpen}
             >
-              Login
+              Inicio de Sesión
             </Button>
             <Button
-              label={<Highlight>New user?</Highlight>}
+              label={<Highlight>¿Nuevo usuario?</Highlight>}
               as={Link}
               to="/register"
               align="center"
             >
-              Register
+              Registro
             </Button>
 
             <Center>
@@ -107,13 +107,13 @@ export function NavigationBar() {
             </Center>
 
             <Button
-              label={<Highlight variant="primary">Lost account?</Highlight>}
+              label={<Highlight variant="primary">¿Perdiste tu cuenta?</Highlight>}
               as={Link}
               to="/account-recovery"
               variant="accent"
               align="center"
             >
-              Recover it
+              Recúperar Cuenta
             </Button>
           </>
         )}

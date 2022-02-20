@@ -9,6 +9,7 @@ import {
   Text,
   Heading,
   useDisclosure,
+  VStack,
 } from '@chakra-ui/react';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -31,20 +32,22 @@ export function ChooseUserType() {
 
         <Box margin="20px 30px 0 0">
           <Button
-            label={<Highlight variant="gray">Already have an account?</Highlight>}
+            label={<Highlight variant="gray">¿Ya tienes una cuenta?</Highlight>}
             align="center"
             padding="20px 30px"
             onClick={onOpen}
           >
-            Login
+            Inicia Sesión
           </Button>
         </Box>
       </NavigationBar>
 
       <Box textAlign="center">
-        <Heading fontSize={['2xl', '3xl', '4xl', '5xl']}>We&apos;re ready to let you in</Heading>
-        <Text paddingTop="15px" fontSize="xl">
-          But first, <Highlight>what are you?</Highlight>
+        <Heading fontSize={['2xl', '3xl', '4xl', '5xl']}>
+          Estamos listos para darte la bienvenida
+        </Heading>
+        <Text paddingTop="15px" fontSize="2xl">
+          Pero primero, <Highlight>¿qué eres?</Highlight>
         </Text>
       </Box>
 
@@ -60,10 +63,10 @@ export function ChooseUserType() {
                     src="/assets/images/laura-chouette-artist.png"
                   />
                   <Text fontSize="2xl" color={theme.colors.accentSolid.value}>
-                    Artist
+                    Artista
                   </Text>
                   <Text color={theme.colors.primaryText.value}>
-                    You want to publish and manage your songs.
+                    Quieres publicar y manejar tu trabajo en Ongaku.
                   </Text>
                 </Card>
               </Link>
@@ -79,10 +82,10 @@ export function ChooseUserType() {
                     src="/assets/images/laura-chouette-user.png"
                   />
                   <Text fontSize="2xl" color={theme.colors.accentSolid.value}>
-                    User
+                    Usuario
                   </Text>
                   <Text color={theme.colors.primaryText.value}>
-                    You want to use the application normally.
+                    Quieres usar la aplicación de manera normal
                   </Text>
                 </Card>
               </Link>
@@ -91,11 +94,16 @@ export function ChooseUserType() {
         </Wrap>
       </Center>
 
-      <Center>
-        <Text color={theme.colors.primaryText.value}>
-          This decision cannot be changed later on.
+      <VStack textAlign="center" marginBottom="20px" color={theme.colors.primaryText.value}>
+        <Text width="40%" marginBottom="5px">
+          Esta decisión no puede ser cambiada en el futuro.{' '}
         </Text>
-      </Center>
+        <Text>
+          Para aplicar como manager envia un correo a ongaku.official@gmail.com con tu cuenta
+          (USUARIO) e información sobre el artista que administrarás.
+        </Text>
+      </VStack>
+
       {isOpen && <Login isOpen={isOpen} onClose={onClose} />}
     </SimpleGrid>
   );

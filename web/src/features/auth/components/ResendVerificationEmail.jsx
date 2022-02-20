@@ -34,7 +34,7 @@ export function ResendVerificationEmail() {
       setRequestState({
         status: 'success',
         isSubmitting: false,
-        title: 'Email sent!',
+        title: '¡Email enviado éxitosamente!',
         message: response.message,
       });
     } catch (error) {
@@ -53,15 +53,15 @@ export function ResendVerificationEmail() {
         <ModalOverlay />
         <ModalContent width={['75%', '80%']}>
           <ModalHeader textAlign="center">
-            <Heading fontSize="2xl">You have not verified your email</Heading>
+            <Heading fontSize="2xl">No has verificado tu correo</Heading>
             <Divider orientation="horizontal" w="125px" p={3} marginLeft={['50px', '130px']} />
           </ModalHeader>
           <ModalBody textAlign="center">
             <VStack>
               <Text>
-                As it was stated on the registration process, you need to{' '}
-                <Highlight>verify your email</Highlight> to start using{' '}
-                <Highlight>Ongaku</Highlight>, this is for both your and our safety and protection.
+                Como se mencionó en el proceso de registración, necesitas{' '}
+                <Highlight>verificar tu correo</Highlight> para empezar a usar Ongaku. Esto es para
+                asegurar la seguridad de nuestra comunidad.
               </Text>
               {request.isSubmitting ? (
                 <Spinner size="lg" />
@@ -73,14 +73,14 @@ export function ResendVerificationEmail() {
                   onClick={handleResendClick}
                   isDisabled={request.status != ''}
                 >
-                  Resend
+                  Reenviar
                 </Button>
               )}
             </VStack>
           </ModalBody>
           <ModalFooter display="block" textAlign="center">
             <Text fontSize="sm" color="gray.400">
-              If you think this is a mistake, contact us at:
+              Si consideras que esto es un error, contáctanos:
               <Highlight> ongaku.official@gmail.com</Highlight>
             </Text>
           </ModalFooter>

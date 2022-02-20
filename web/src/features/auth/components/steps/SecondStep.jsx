@@ -106,13 +106,13 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
               paddingLeft="5px"
               fontWeight="bold"
             >
-              Genres
+              Géneros
             </Text>
             <Select
               control={control}
               options={[...MUSIC_GENRES]}
               name="genres"
-              placeholder="Select genres"
+              placeholder="Selecciona los Géneros"
               error={errors.genres}
               onChangeCallback={(value) => value.map((v) => v.value)}
               isMulti
@@ -130,9 +130,9 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
             <Field
               type="text"
               name="labels"
-              label="Label(s)"
+              label="Sello(s) Musical(es)"
               placeholder="JM Records, Hybe"
-              helperText="Labels must be divided by commas."
+              helperText="Deben estar divididos con comas si formas parte de más de uno"
               error={errors.labels}
               isDisabled={request.status != ''}
               register={register}
@@ -144,7 +144,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
             <Field
               type="number"
               name="yearsActive"
-              label="Years Active"
+              label="Años Activo"
               placeholder="13"
               error={errors.yearsActive}
               isDisabled={request.status != ''}
@@ -158,7 +158,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
               <Field
                 type="text"
                 name="bandName"
-                label="Band Name"
+                label="Nombre de la Banda"
                 placeholder="Joe n' the Mamas"
                 error={errors.bandName}
                 isDisabled={request.status != ''}
@@ -168,7 +168,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
               <Field
                 type="text"
                 name="artisticName"
-                label="Artistic Name"
+                label="Nombre Artístico"
                 placeholder="Lil xxxJoemama"
                 error={errors.artisticName}
                 isDisabled={request.status != ''}
@@ -186,13 +186,13 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
               paddingLeft="5px"
               fontWeight="bold"
             >
-              Country
+              País
             </Text>
             <Select
               control={control}
               options={[...COUNTRIES]}
               name="country"
-              placeholder="Select a country"
+              placeholder="Selecciona un País"
               error={errors.country}
               isDisabled={request.status != ''}
               onChangeCallback={(value) => value.value}
@@ -209,8 +209,8 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
             <Field
               type="text"
               name="members"
-              label="Members"
-              helperText="Members must be divided by commas."
+              label="Miembros"
+              helperText="Deben estar divididos por comas"
               placeholder="Joe Mama, Carl Johnson"
               error={errors.members}
               isDisabled={!isBand || request.status != ''}
@@ -222,7 +222,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
 
       <Checkbox
         name="isBand"
-        text="Is it a band?"
+        text="¿Es una banda?"
         control={control}
         value={isBand}
         onChangeHandler={handleIsBand}
@@ -240,17 +240,17 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
         <div>
           <Center marginTop="40px">
             <Button onClick={prevStep} margin="0 30px" isDisabled={request.status != ''}>
-              Go Back
+              Volver
             </Button>
             <Button type="submit" align="center" variant="accent" isDisabled={request.status != ''}>
-              Submit
+              Enviar
             </Button>
           </Center>
 
           <Box padding="10px 0 5px 0" marginLeft="35px">
             <Text color={theme.colors.primaryText.value}>or</Text>
             <Button variant="link" onClick={onOpen}>
-              Login
+              Iniciar Sesión
             </Button>
           </Box>
         </div>
@@ -261,29 +261,29 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
 }
 
 const secondStepSchema = yup.object({
-  country: yup.string().required('This field is required.'),
+  country: yup.string().required('Este campo es requerido'),
   genres: yup
     .array()
-    .min(1, 'You must select at least one genre.')
-    .required('This field is required.'),
-  labels: yup.string().required('This field is required.'),
+    .min(1, 'Debes seleccionar al menos un género')
+    .required('Este campo es requerido'),
+  labels: yup.string().required('Este campo es requerido'),
   yearsActive: yup
     .number()
     .transform((parsedValue, originalValue) => (originalValue === '' ? undefined : parsedValue))
-    .required('This field is required.')
-    .positive('You must enter a positive number.')
-    .integer('You must enter a whole number.'),
+    .required('Este campo es requerido')
+    .positive('Debe ser un número positivo')
+    .integer('Debe ser un número entero'),
   isBand: yup.boolean(),
   artisticName: yup.string().when('isBand', {
     is: false,
-    then: yup.string().required('This field is required.'),
+    then: yup.string().required('Este campo es requerido'),
   }),
   bandName: yup.string().when('isBand', {
     is: true,
-    then: yup.string().required('This field is required.'),
+    then: yup.string().required('Este campo es requerido'),
   }),
   members: yup.string().when('isBand', {
     is: true,
-    then: yup.string().required('This field is required.'),
+    then: yup.string().required('Este campo es requerido'),
   }),
 });

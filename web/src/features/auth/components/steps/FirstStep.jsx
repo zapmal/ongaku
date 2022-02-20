@@ -56,7 +56,7 @@ export function FirstStep({ nextStep, setStepState, setBasicData }) {
             <Field
               type="password"
               name="password"
-              label="Password"
+              label="Contraseña"
               placeholder="********"
               error={errors.password}
               register={register}
@@ -68,7 +68,7 @@ export function FirstStep({ nextStep, setStepState, setBasicData }) {
             <Field
               type="password"
               name="passwordConfirmation"
-              label="Password Confirmation"
+              label="Confirmación de Contraseña"
               placeholder="********"
               error={errors.passwordConfirmation}
               register={register}
@@ -78,7 +78,7 @@ export function FirstStep({ nextStep, setStepState, setBasicData }) {
       </Wrap>
       <Center>
         <Button type="submit" variant="accent" margin="40px 0">
-          Next
+          Siguiente
         </Button>
       </Center>
     </form>
@@ -86,13 +86,10 @@ export function FirstStep({ nextStep, setStepState, setBasicData }) {
 }
 
 const firstStepSchema = yup.object({
-  email: yup.string().email('You must enter a valid email.').required('This field is required.'),
-  password: yup
-    .string()
-    .min(8, 'Minimum eight (8) characters.')
-    .required('This field is required.'),
+  email: yup.string().email('Debes ingresar un correo válido').required('Este campo es requerido'),
+  password: yup.string().min(8, 'Mínimo ocho (8) carácteres').required('Este campo es requerido'),
   passwordConfirmation: yup
     .string()
-    .required('This field is required.')
-    .oneOf([yup.ref('password'), null], 'Both passwords must match.'),
+    .required('ESte campo es requerido')
+    .oneOf([yup.ref('password'), null], 'Las contraseñas deben coincidir'),
 });

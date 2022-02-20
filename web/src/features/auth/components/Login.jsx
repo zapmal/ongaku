@@ -67,8 +67,8 @@ export function Login(props) {
 
       setRequestState({
         status: 'success',
-        title: 'Success!',
-        message: `${response.message}, we'll redirect you shortly`,
+        title: '¡Éxito!',
+        message: `${response.message}, te redigiremos pronto`,
       });
 
       localStorage.setItem('isLoggedIn', true);
@@ -95,10 +95,10 @@ export function Login(props) {
         <ModalContent width={['75%', '80%']}>
           <ModalHeader textAlign="center">
             <Text fontSize="2xl">
-              <Highlight>Welcome back</Highlight>
+              <Highlight>Bienvenido</Highlight>
             </Text>
             <Heading fontSize="3xl" marginTop="5px">
-              Log into your account
+              Inicia Sesión en tu Cuenta
             </Heading>
             <Divider orientation="horizontal" w="125px" p={3} marginLeft={['50px', '130px']} />
           </ModalHeader>
@@ -119,7 +119,7 @@ export function Login(props) {
                   <Field
                     type={show ? 'text' : 'password'}
                     name="password"
-                    label="Password"
+                    label="Contraseña"
                     placeholder="********"
                     error={errors.password}
                     isDisabled={request.status != ''}
@@ -139,17 +139,18 @@ export function Login(props) {
                       to="/account-recovery"
                       variant="gray"
                       position="absolute"
-                      width="130px"
+                      width="150px"
                       marginBottom="5px"
                       marginRight="70px"
+                      fontSize="xs"
                     >
-                      Forgot password?
+                      ¿Olvidaste tu contraseña?
                     </Link>
                   </InputRightElement>
                 </InputGroup>
                 <Checkbox
                   name="isArtist"
-                  text="Are you an artist?"
+                  text="¿Eres un Artista?"
                   control={control}
                   onChangeHandler={handleIsArtist}
                   value={isArtist}
@@ -168,7 +169,7 @@ export function Login(props) {
                     marginTop="5px"
                     isDisabled={request.status != ''}
                   >
-                    Login
+                    Inicia Sesión
                   </Button>
                 )}
               </VStack>
@@ -176,7 +177,7 @@ export function Login(props) {
           </ModalBody>
           <Center>
             <ModalFooter display="block" textAlign="center">
-              <Text>Not registered yet?</Text>
+              <Text>¿No estás registrado?</Text>
               {pathname === '/register' ? (
                 <Button
                   variant="link"
@@ -184,16 +185,16 @@ export function Login(props) {
                     addNotification({
                       title: 'Easter Egg',
                       type: 'info',
-                      message: 'Congratulations! You played yourself. You are already here.',
+                      message: '¡Felicitaciones! Te faltan lentes, ya estás ahí.',
                     });
                     props.onClose();
                   }}
                 >
-                  Register
+                  Registrate
                 </Button>
               ) : (
                 <Link to="/register" variant="accent" marginLeft="5px">
-                  Register
+                  Registrate
                 </Link>
               )}
             </ModalFooter>

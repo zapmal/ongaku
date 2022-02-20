@@ -24,7 +24,6 @@ export const useAuthStore = create((set, get) => ({
       localStorage.removeItem('isLoggedIn');
       set({ user: {}, csrfToken: null });
     } catch (error) {
-      console.log('Logout error', error);
       set({ user: {} });
     }
   },

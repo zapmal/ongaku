@@ -52,7 +52,7 @@ export function Player() {
       >
         <Flex width="300px">
           {pathname !== '/queue' && (
-            <Tooltip label="Click here to go to the queue">
+            <Tooltip label="Haz click para ir a la cola">
               <Box as={RouterLink} to="/queue">
                 <Image
                   src="/assets/images/static-queue-ztd.jpg"
@@ -86,7 +86,7 @@ export function Player() {
               </Text>
 
               <Text {...SONG_DATA_PROPS}>
-                From:{' '}
+                De:{' '}
                 <Link variant="gray" to="/artist/shinji-hosoe" underline={false}>
                   Shinji Hosoe
                 </Link>

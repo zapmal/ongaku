@@ -58,7 +58,7 @@ export function EditEntity({ isOpen, onClose }) {
             <Field
               type="text"
               name="username"
-              label="Username"
+              label="Nombre de Usuario"
               placeholder="Amazi_ngUser_11"
               css={{ marginBottom: '10px' }}
               error={errors.username}
@@ -67,7 +67,7 @@ export function EditEntity({ isOpen, onClose }) {
             <Field
               type="text"
               name="fullName"
-              label="Full Name"
+              label="Nombre Completo"
               placeholder="Amazi Use"
               css={{ marginBottom: '10px' }}
               error={errors.fullName}
@@ -76,7 +76,7 @@ export function EditEntity({ isOpen, onClose }) {
             <Field
               type="password"
               name="password"
-              label="Password"
+              label="Contraseña"
               placeholder="*********"
               css={{ marginBottom: '10px' }}
               error={errors.password}
@@ -85,7 +85,7 @@ export function EditEntity({ isOpen, onClose }) {
             <Field
               type="date"
               name="birthdate"
-              label="Birthdate"
+              label="Fecha de Nacimiento"
               css={{ marginBottom: '10px' }}
               error={errors.birthdate}
               register={register}
@@ -93,7 +93,7 @@ export function EditEntity({ isOpen, onClose }) {
             <Field
               type="file"
               name="avatar"
-              label="Avatar"
+              label="Foto de Perfil"
               css={{ marginBottom: '10px' }}
               // isDisabled={true}
               // error={errors.cover}
@@ -102,7 +102,7 @@ export function EditEntity({ isOpen, onClose }) {
           </ModalBody>
           <ModalFooter margin="0 auto">
             <Button variant="accent" type="submit">
-              Change
+              Cambiar
             </Button>
             <Text
               textDecoration="underline"
@@ -112,7 +112,7 @@ export function EditEntity({ isOpen, onClose }) {
               onClick={onClose}
               _hover={{ cursor: 'pointer' }}
             >
-              Cancel
+              Cancelar
             </Text>
           </ModalFooter>
         </ModalContent>
@@ -122,7 +122,7 @@ export function EditEntity({ isOpen, onClose }) {
 }
 
 const schema = yup.object({
-  email: yup.string().email('You must provide a valid email.'),
+  email: yup.string().email('Debes proveer un email válido'),
   username: yup.string(),
   fullName: yup.string(),
   password: yup.string(),

@@ -65,10 +65,10 @@ export function ArtistProfile() {
               </Heading>
               <HStack fontWeight="bold" fontSize="lg">
                 <Icon as={MdVerifiedUser} color="cyan.300" w="25px" h="25px" />
-                <Text>Verified Artist</Text>
+                <Text>Artista Verificado</Text>
               </HStack>
-              <Text fontWeight="bold" fontSize="lg" color="whiteAlpha.800">
-                3,001,828 monthly listeners
+              <Text fontWeight="bold" fontSize="lg" color="whiteAlpha.900">
+                Audiencia mensual: 3,001,828
               </Text>
               <HStack>
                 <IconButton
@@ -88,15 +88,15 @@ export function ArtistProfile() {
               </HStack>
               <HStack>
                 <ChakraButton {...BUTTON_PROPS} rightIcon={<Icon as={MdAdd} w="25px" h="25px" />}>
-                  Follow
+                  Seguir
                 </ChakraButton>
                 <ChakraButton {...BUTTON_PROPS} rightIcon={<Icon as={MdShare} w="20px" h="20px" />}>
-                  Share
+                  Compartir
                 </ChakraButton>
                 {/* isArtist or isManager */}
                 {true && (
                   <Button variant="accent" rightIcon={<Icon as={MdEdit} />} onClick={onOpen}>
-                    Edit Profile
+                    Editar Perfil
                   </Button>
                 )}
               </HStack>
@@ -106,7 +106,7 @@ export function ArtistProfile() {
 
         <SimpleGrid columns={2} align="center">
           <Box>
-            <Heading fontSize="xx-large">Top Songs</Heading>
+            <Heading fontSize="xx-large">Canciones Populares</Heading>
             {NEW_SONGS.map((song, index) => (
               <Box key={index}>
                 <SongRow
@@ -125,7 +125,7 @@ export function ArtistProfile() {
             ))}
           </Box>
           <Box>
-            <Heading fontSize="xx-large">Fans also like</Heading>
+            <Heading fontSize="xx-large">A los fans también les gusta</Heading>
             {NEW_ARTISTS.map((artist, index) => (
               <Box key={index}>
                 <ArtistRow
@@ -144,7 +144,7 @@ export function ArtistProfile() {
 
         <Box margin="60px 0">
           <Heading fontSize="xx-large" textAlign="center">
-            New albums & singles
+            Nuevos albumes y singles
           </Heading>
           <Flex justify="center">
             {NEW_ALBUMS_AND_SINGLES.map((song, index) => (
@@ -170,7 +170,7 @@ export function ArtistProfile() {
           />
           <Box textAlign="left" margin="0 30px" color="whiteAlpha.700">
             <Heading fontSize="xx-large" color={theme.colors.accentText.value} margin="10px 0">
-              About Arknights
+              Acerca de Arknights
             </Heading>
             <Text>
               Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vitae non asperiores fugit
@@ -185,12 +185,12 @@ export function ArtistProfile() {
             </Text>
 
             <HStack marginTop="20px">
-              <Text {...HIGHLIGHT_PROPS}>Genres: </Text>
+              <Text {...HIGHLIGHT_PROPS}>Géneros: </Text>
               <Text {...TEXT_PROPS}>Electropop, synth-pop-alternative, rock, post-hardcore</Text>
             </HStack>
 
             <HStack marginTop="5px">
-              <Text {...HIGHLIGHT_PROPS}>Followers: </Text>
+              <Text {...HIGHLIGHT_PROPS}>Seguidores: </Text>
               <Text {...TEXT_PROPS}>6,000,311 </Text>
             </HStack>
           </Box>

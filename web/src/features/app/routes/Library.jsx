@@ -52,13 +52,13 @@ export function Library() {
       <Box minHeight="455px" maxHeight="700px" margin="0 20px 0 40px">
         <Flex gap={20} justify="center">
           <LibraryOption onClick={() => setSelected('artist')} selected={selected === 'artist'}>
-            Artists
+            Artistas
           </LibraryOption>
           <LibraryOption onClick={() => setSelected('playlist')} selected={selected === 'playlist'}>
             Playlists
           </LibraryOption>
           <LibraryOption onClick={() => setSelected('album')} selected={selected === 'album'}>
-            Albums
+            Albumes
           </LibraryOption>
         </Flex>
 
@@ -67,7 +67,7 @@ export function Library() {
         {selected === 'playlist' && (
           <Center>
             <Button rightIcon={<MdAdd />} margin="10px auto" onClick={onOpen}>
-              Create a new Playlist
+              Crea una nueva playlist
             </Button>
           </Center>
         )}

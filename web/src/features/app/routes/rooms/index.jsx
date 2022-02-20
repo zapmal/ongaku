@@ -19,7 +19,6 @@ export function Rooms() {
     resolver: yupResolver(schema),
     defaultValues: {
       roomName: '',
-      privateRoomId: '',
     },
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -30,9 +29,9 @@ export function Rooms() {
     <Box>
       <Flex align="center" margin="0px 50px 0 20px">
         <Heading fontSize="3xl" marginBottom="20px">
-          Public Rooms
+          Salas Disponibles
           <Text color="whiteAlpha.800" fontSize="sm" marginTop="10px" fontWeight="normal">
-            Hangout with people that share the same music interest as you!
+            ¡Pasa el rato disfrutando con gente que comparte el mismo gusto músical que tu!
           </Text>
         </Heading>
 
@@ -43,23 +42,15 @@ export function Rooms() {
             <Field
               type="text"
               name="roomName"
-              label="Room Name"
-              placeholder="Joey's Audio Room"
-              error={errors.roomName}
-              register={register}
-            />
-            <Field
-              type="text"
-              name="privateRoomId"
-              label="Private Room ID"
-              placeholder="AD23-312B"
+              label="Buscar Sala"
+              placeholder="Sala de José"
               error={errors.roomName}
               register={register}
             />
           </Flex>
         </form>
         <Button variant="accent" onClick={onOpen}>
-          New Room
+          Nueva Sala
         </Button>
       </Flex>
 
@@ -84,5 +75,4 @@ export function Rooms() {
 
 const schema = yup.object({
   roomName: yup.string(),
-  privateRoomId: yup.string(),
 });

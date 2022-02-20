@@ -80,7 +80,7 @@ function ErrorFallback() {
   return (
     <Box align="center" paddingTop={['40px', '20px']}>
       <Heading size="xl">
-        Oops, <Highlight>something went wrong</Highlight>
+        Oops, <Highlight>algo salió mal</Highlight>
       </Heading>
       <Text
         textAlign="center"
@@ -88,8 +88,7 @@ function ErrorFallback() {
         padding="20px"
         fontSize="lg"
       >
-        But {"don't"} fret — {"it's"} not your fault. Why {"don't"} we give it{' '}
-        <Highlight>another chance?</Highlight>
+        Pero no te asustes, no fue tu culpa. ¿Porqué no lo intentas <Highlight>otra vez?</Highlight>
       </Text>
 
       <Button
@@ -99,7 +98,7 @@ function ErrorFallback() {
         size="lg"
         rightIcon={<MdCached size={25} />}
       >
-        Go Home
+        Ir a Inicio
       </Button>
 
       <Image src="/assets/svgs/undraw-lost.svg" width={['300px', '400px']} margin="5px" />

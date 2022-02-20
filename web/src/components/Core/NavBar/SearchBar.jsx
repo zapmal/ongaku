@@ -41,7 +41,7 @@ export function SearchBar({ setClickedSearch }) {
           variant="unstyled"
           onChange={(e) => setQuery(e.target.value)}
         />
-        <Tooltip label="Clear history">
+        <Tooltip label="Limpiar historial">
           <IconButton
             onClick={cleanHistory}
             icon={<Icon as={FiTrash} />}

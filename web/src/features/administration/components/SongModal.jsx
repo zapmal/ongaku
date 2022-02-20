@@ -56,7 +56,7 @@ export function SongModal({ isOpen, onClose, shouldValidate }) {
             <Field
               type="text"
               name="name"
-              label="Name"
+              label="Nombre"
               placeholder="Down Horrendous"
               css={{ marginBottom: '10px' }}
               error={errors.name}
@@ -65,18 +65,18 @@ export function SongModal({ isOpen, onClose, shouldValidate }) {
             <Field
               type="text"
               name="length"
-              label="Length (m:ss)"
+              label="Longitud (m:ss)"
               placeholder="3:14, 1:15"
               css={{ marginBottom: '10px' }}
               error={errors.length}
               register={register}
             />
             <Text fontWeight="bold" fontSize="sm" margin="10px 3px 15px">
-              Lyrics
+              Líricas
             </Text>
             <Textarea
               name="lyrics"
-              placeholder="Biography"
+              placeholder="Líricas..."
               resize="none"
               marginBottom="10px"
               borderColor={errors.lyrics && theme.colors.dangerSolid.value}
@@ -92,8 +92,8 @@ export function SongModal({ isOpen, onClose, shouldValidate }) {
               </Text>
             )}
             <Checkbox
-              name="verifiedEmail"
-              text="Verified Email"
+              name="isExplicit"
+              text="¿Es Explicito?"
               control={control}
               onChangeHandler={handleExplicitChange}
               value={isExplicit}
@@ -103,7 +103,7 @@ export function SongModal({ isOpen, onClose, shouldValidate }) {
           </ModalBody>
           <ModalFooter margin="0 auto">
             <Button variant="accent" type="submit">
-              Change
+              Cambiar
             </Button>
             <Text
               textDecoration="underline"
@@ -113,7 +113,7 @@ export function SongModal({ isOpen, onClose, shouldValidate }) {
               onClick={onClose}
               _hover={{ cursor: 'pointer' }}
             >
-              Cancel
+              Cancelar
             </Text>
           </ModalFooter>
         </ModalContent>
@@ -123,10 +123,10 @@ export function SongModal({ isOpen, onClose, shouldValidate }) {
 }
 
 const schema = yup.object({
-  name: yup.string().required('This field is required.'),
-  length: yup.string().required('This field is required.'),
-  lyrics: yup.string().required('This field is required.'),
-  isExplicit: yup.boolean().required('This field is required.'),
+  name: yup.string().required('Este campo es requerido'),
+  length: yup.string().required('Este campo es requerido'),
+  lyrics: yup.string().required('Este campo es requerido'),
+  isExplicit: yup.boolean().required('Este campo es requerido'),
 });
 
 const editSchema = yup.object({

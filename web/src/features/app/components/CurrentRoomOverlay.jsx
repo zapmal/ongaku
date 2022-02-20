@@ -25,15 +25,15 @@ export function CurrentRoomOverlay({ name, host, activeUsers, userLimit, roomId 
     >
       <Box margin="10px">
         <Heading fontSize="xl">
-          <Highlight>Listening</Highlight> to {name}
+          <Highlight>Escuchando</Highlight> {name}
         </Heading>
 
         <Flex align="center">
           <Text color="whiteAlpha.800" fontSize="sm" margin="10px 0">
+            Sala de{' '}
             <Link to={`/user/${userProfileLink}`} underline={false}>
               {host}
-            </Link>{' '}
-            room
+            </Link>
           </Text>
 
           <Spacer />
@@ -46,7 +46,7 @@ export function CurrentRoomOverlay({ name, host, activeUsers, userLimit, roomId 
             borderRadius="100%"
           />
           <Text fontSize="sm" color="whiteAlpha.700">
-            {activeUsers} / {userLimit} Users
+            {activeUsers} / {userLimit} Usuarios
           </Text>
         </Flex>
 

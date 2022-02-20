@@ -47,7 +47,7 @@ export function AlbumModal({ isOpen, onClose, shouldValidate }) {
             <Field
               type="text"
               name="name"
-              label="Name"
+              label="Nombre"
               placeholder="The Og Album"
               css={{ marginBottom: '10px' }}
               error={errors.name}
@@ -56,7 +56,7 @@ export function AlbumModal({ isOpen, onClose, shouldValidate }) {
             <Field
               type="number"
               name="year"
-              label="Year"
+              label="Año"
               placeholder="2014, 2013, 2002"
               css={{ marginBottom: '10px' }}
               error={errors.year}
@@ -65,7 +65,7 @@ export function AlbumModal({ isOpen, onClose, shouldValidate }) {
             <Field
               type="text"
               name="releaseType"
-              label="Release Type"
+              label="Tipo"
               placeholder="EP, Single, Album"
               css={{ marginBottom: '10px' }}
               error={errors.releaseType}
@@ -74,14 +74,14 @@ export function AlbumModal({ isOpen, onClose, shouldValidate }) {
             <Field
               type="file"
               name="cover"
-              label="Cover"
+              label="Portada"
               css={{ marginBottom: '10px' }}
               register={register}
             />
           </ModalBody>
           <ModalFooter margin="0 auto">
             <Button variant="accent" type="submit">
-              Change
+              Cambiar
             </Button>
             <Text
               textDecoration="underline"
@@ -91,7 +91,7 @@ export function AlbumModal({ isOpen, onClose, shouldValidate }) {
               onClick={onClose}
               _hover={{ cursor: 'pointer' }}
             >
-              Cancel
+              Cancelar
             </Text>
           </ModalFooter>
         </ModalContent>

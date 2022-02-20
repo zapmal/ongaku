@@ -9,19 +9,19 @@ export function FeaturedArtistInformation({ name, amountOfFollowers, description
   return (
     <Box height={GRID_COLUMN_HEIGHT}>
       <Badge color="whiteAlpha.900" bg={theme.colors.accentSolid.value}>
-        FEATURED ARTIST OF THE MONTH
+        ARTISTA DESTACADO DEL MES
       </Badge>
       <Flex>
         <Heading fontSize="6xl" paddingRight="20px">
           {name}
         </Heading>
         <Flex flexFlow="column">
-          <ActionButton>FOLLOW</ActionButton>
-          <ActionButton marginTop="10px">GO TO PAGE</ActionButton>
+          <ActionButton>SEGUIR</ActionButton>
+          <ActionButton marginTop="10px">IR A PÁGINA</ActionButton>
         </Flex>
       </Flex>
       <Text fontWeight="bold" paddingTop="10px">
-        {amountOfFollowers}
+        {amountOfFollowers} seguidores
       </Text>
 
       <Text width="70%" paddingTop="5px" color="whiteAlpha.800">

@@ -12,6 +12,8 @@ import {
   Image,
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
+// eslint-disable-next-line no-unused-vars
+import { es } from 'dayjs/locale/es';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React from 'react';
 import { MdShare, MdAdd, MdPlayArrow } from 'react-icons/md';
@@ -27,6 +29,7 @@ import { useNotificationStore } from '@/stores/useNotificationStore';
 import { getLink } from '@/utils/getLink';
 
 dayjs.extend(relativeTime);
+dayjs.locale('es');
 
 export function RoomRow({ name, activeUsers, userLimit, host, startedAt, genres, roomId }) {
   const addNotification = useNotificationStore((s) => s.addNotification);
@@ -64,7 +67,7 @@ export function RoomRow({ name, activeUsers, userLimit, host, startedAt, genres,
           borderRadius="100%"
         />
         <Text fontSize="sm" color="whiteAlpha.700" fontWeight="bold">
-          {activeUsers} / {userLimit} Users
+          {activeUsers} / {userLimit} Usuarios
         </Text>
       </Flex>
 
@@ -73,7 +76,7 @@ export function RoomRow({ name, activeUsers, userLimit, host, startedAt, genres,
           <Link to={`/user/${userProfileLink}`} underline={false}>
             {host}
           </Link>{' '}
-          - Started {dayjs().from(startedAt, true)} ago.
+          - Empezó hace {dayjs().from(startedAt, true)}.
         </Text>
 
         <Flex margin="10px 0" gap="10px">
@@ -97,8 +100,8 @@ export function RoomRow({ name, activeUsers, userLimit, host, startedAt, genres,
             onClick={() => {
               navigator.clipboard.writeText(roomId);
               addNotification({
-                title: 'Copied!',
-                message: 'Room ID successfully copied to clipboard',
+                title: '¡Copiado!',
+                message: 'ID de la sala copiada al portapapeles',
               });
             }}
           />
@@ -127,12 +130,12 @@ export function ArtistRow({ name, image, amountOfFollowers, to }) {
           {name}
         </Text>
         <Text color="whiteAlpha.700" fontSize="sm" textAlign="left">
-          {amountOfFollowers} followers
+          {amountOfFollowers} seguidores
         </Text>
       </Box>
 
       <Spacer />
-      <Tooltip label={`Follow ${name}`}>
+      <Tooltip label={`Sigue a ${name}`}>
         <IconButton
           icon={<Icon as={MdAdd} />}
           variant="outline"
@@ -212,13 +215,12 @@ export function PlaylistRow({ name, author, cover, amountOfSongs }) {
 
         <Flex gap="5px">
           <Text fontSize="xs" color={theme.colors.primaryText.value}>
-            By{' '}
             <Link to={`/user/${linkToUserProfile}`} underline={false} variant="gray">
               {linkText}{' '}
             </Link>
           </Text>
           <Text fontSize="xs" color={theme.colors.primaryText.value}>
-            - {amountOfSongs} Songs
+            - {amountOfSongs} canciones
           </Text>
         </Flex>
       </Box>

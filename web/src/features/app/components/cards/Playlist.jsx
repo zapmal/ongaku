@@ -26,7 +26,6 @@ export function PlaylistCard({ cover, name, likes, amountOfSongs, author, badge 
 
       <Flex justify="end">
         <Text color="whiteAlpha.700" fontSize="sm" maxWidth="60%">
-          By{' '}
           <Link
             underline={false}
             variant="gray"
@@ -37,7 +36,7 @@ export function PlaylistCard({ cover, name, likes, amountOfSongs, author, badge 
         </Text>
         <Spacer />
         <Text fontWeight="bold" fontSize="sm">
-          {amountOfSongs} songs
+          {amountOfSongs} canciones
         </Text>
       </Flex>
     </Card>
@@ -48,9 +47,9 @@ export function LikedSongsPlaylist() {
   return (
     <Card cover="/assets/images/static-admin-avatar.jpeg" type="playlist" isLikedPlaylist={true}>
       <Box align="center">
-        <Text fontWeight="bold">Liked Songs</Text>
+        <Text fontWeight="bold">Canciones Favoritas</Text>
         <Text color="whiteAlpha.700" fontSize="sm">
-          200 songs
+          200 canciones
         </Text>
       </Box>
     </Card>

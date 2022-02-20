@@ -55,7 +55,7 @@ export function EditEntityMetadata({ isOpen, onClose }) {
             <Field
               type="text"
               name="ipAddress"
-              label="Ip Address"
+              label="Dirección IP"
               placeholder="192.168.1.1"
               css={{ marginBottom: '10px' }}
               error={errors.ipAddress}
@@ -63,7 +63,7 @@ export function EditEntityMetadata({ isOpen, onClose }) {
             />
             <Checkbox
               name="active"
-              text="Active"
+              text="Activo"
               control={control}
               onChangeHandler={handleActivation}
               value={isActive}
@@ -73,7 +73,7 @@ export function EditEntityMetadata({ isOpen, onClose }) {
             />
             <Checkbox
               name="verifiedEmail"
-              text="Verified Email"
+              text="Correo Verificado"
               control={control}
               onChangeHandler={handleEmailVerification}
               value={isEmailVerified}
@@ -83,7 +83,7 @@ export function EditEntityMetadata({ isOpen, onClose }) {
           </ModalBody>
           <ModalFooter margin="0 auto">
             <Button variant="accent" type="submit">
-              Change
+              Cambiar
             </Button>
             <Text
               textDecoration="underline"
@@ -93,7 +93,7 @@ export function EditEntityMetadata({ isOpen, onClose }) {
               onClick={onClose}
               _hover={{ cursor: 'pointer' }}
             >
-              Cancel
+              Cancelar
             </Text>
           </ModalFooter>
         </ModalContent>

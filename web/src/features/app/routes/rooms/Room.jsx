@@ -35,10 +35,10 @@ export function Room() {
     <Box padding="20px 60px">
       <Flex gap="80px">
         <Box width="80%">
-          <Heading>Perreo Intenso</Heading>
+          <Heading>Reguetón Bueno</Heading>
 
           <Text color="whiteAlpha.800" margin="10px 0">
-            <Highlight>Queue</Highlight> · 10 songs · 37 min 45 sec
+            <Highlight>Cola</Highlight> · 10 canciones · 37 min 45 seg
           </Text>
 
           <Divider />
@@ -61,27 +61,27 @@ export function Room() {
 
         <Box width="80%">
           <Flex align="center">
-            <Heading>Users</Heading>
+            <Heading>Usuarios</Heading>
             <Spacer />
             <Button margin="0 10px" variant="danger">
-              Close Room
+              Cerrar Sala
             </Button>
             <Button
               onClick={() => {
                 // this should use the env var.
                 navigator.clipboard.writeText('http://localhost:3000/room/BX3A-ASS1');
                 addNotification({
-                  title: 'Copied!',
-                  message: 'Room link successfully copied to clipboard',
+                  title: '¡Copiado!',
+                  message: 'URL copiada al portapapeles',
                 });
               }}
             >
-              Invite
+              Invitar
             </Button>
           </Flex>
 
           <Text color="whiteAlpha.800" margin="10px 0">
-            Room is full · <Highlight>6/6 users</Highlight>
+            La sala está llena · <Highlight>6/6 usuarios</Highlight>
           </Text>
 
           <Divider />

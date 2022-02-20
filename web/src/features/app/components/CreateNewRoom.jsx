@@ -31,7 +31,6 @@ export function CreateNewRoom({ isOpen, onClose }) {
       name: '',
       limit: 0,
       genres: [],
-      visibility: '',
     },
   });
 
@@ -50,17 +49,14 @@ export function CreateNewRoom({ isOpen, onClose }) {
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalContent width={['75%', '80%']}>
             <ModalHeader>
-              <Heading fontSize="xl">Create a Room</Heading>
-              <Text fontSize="sm" color="whiteAlpha.700" marginTop="10px">
-                Fill the following fields to start a new room.
-              </Text>
+              <Heading fontSize="xl">Crea una Sala</Heading>
             </ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <Field
                 type="text"
                 name="name"
-                label="Room Name"
+                label="Nombre de la Sala"
                 placeholder="Joe's Room"
                 error={errors.name}
                 register={register}
@@ -68,7 +64,7 @@ export function CreateNewRoom({ isOpen, onClose }) {
               <Field
                 type="number"
                 name="limit"
-                label="Room Limit"
+                label="Límite"
                 placeholder="1, 3, 5"
                 error={errors.limit}
                 register={register}
@@ -80,13 +76,13 @@ export function CreateNewRoom({ isOpen, onClose }) {
                 paddingLeft="5px"
                 fontWeight="bold"
               >
-                Genres
+                Géneros
               </Text>
               <Select
                 control={control}
                 options={[...MUSIC_GENRES]}
                 name="genres"
-                placeholder="Select genres"
+                placeholder="Selecciona los Géneros"
                 error={errors.genres}
                 onChangeCallback={(value) => value.map((v) => v.value)}
                 isMulti
@@ -96,36 +92,10 @@ export function CreateNewRoom({ isOpen, onClose }) {
                   {errors.genres.message}
                 </Text>
               )}
-
-              <Text
-                textAlign="left"
-                marginTop="10px"
-                paddingBottom="10px"
-                paddingLeft="5px"
-                fontWeight="bold"
-              >
-                Visibility
-              </Text>
-              <Select
-                control={control}
-                options={[
-                  { label: 'Public', value: 'public' },
-                  { label: 'Private', value: 'private' },
-                ]}
-                name="visibility"
-                placeholder="Visibility of the Room"
-                error={errors.visibility}
-                onChangeCallback={(value) => value.value}
-              />
-              {errors.visibility && (
-                <Text color={theme.colors.dangerSolid.value} paddingTop="5px" textAlign="left">
-                  {errors.visibility.message}
-                </Text>
-              )}
             </ModalBody>
             <ModalFooter margin="0 auto">
               <Button variant="accent" type="submit">
-                Create
+                Crear
               </Button>
               <Text
                 textDecoration="underline"
@@ -135,7 +105,7 @@ export function CreateNewRoom({ isOpen, onClose }) {
                 onClick={onClose}
                 _hover={{ cursor: 'pointer' }}
               >
-                Cancel
+                Cancelar
               </Text>
             </ModalFooter>
           </ModalContent>
@@ -146,15 +116,14 @@ export function CreateNewRoom({ isOpen, onClose }) {
 }
 
 const schema = yup.object({
-  name: yup.string().required('This field is required.'),
+  name: yup.string().required('Este campo es requerido'),
   limit: yup
     .number()
-    .min(1, 'The limit must be greater than 1.')
-    .max(5, 'The limit can not go beyond 5 at the moment.')
-    .required('This field is required.'),
+    .min(1, 'El límite debe ser mayor que uno (1)')
+    .max(5, 'El límite no puede ser más de cinco (5)')
+    .required('Este campo es requerido'),
   genres: yup
     .array()
-    .min(1, 'You must select at least one genre.')
-    .required('This field is required.'),
-  visibility: yup.string().required('This field is required.'),
+    .min(1, 'Debes seleccionar al menos un género')
+    .required('Este campo es requerido'),
 });

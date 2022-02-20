@@ -48,7 +48,7 @@ export function EditArtistProfile({ isOpen, onClose }) {
               <Field
                 type="text"
                 name="officialWebsite"
-                label="Official Website"
+                label="Sitio Oficial"
                 placeholder="example-records.net"
                 css={{ marginBottom: '10px' }}
                 error={errors.officialWebsite}
@@ -57,7 +57,7 @@ export function EditArtistProfile({ isOpen, onClose }) {
               <Field
                 type="file"
                 name="coverImage"
-                label="Cover Image"
+                label="Portada"
                 css={{ marginBottom: '10px' }}
                 // isDisabled={true}
                 // error={errors.cover}
@@ -66,18 +66,18 @@ export function EditArtistProfile({ isOpen, onClose }) {
               <Field
                 type="file"
                 name="biographyImage"
-                label="Biography Image"
+                label="Imágen para la Biografía"
                 css={{ marginBottom: '10px' }}
                 // isDisabled={true}
                 // error={errors.cover}
                 register={register}
               />
               <Text fontWeight="bold" fontSize="sm" margin="10px 3px 15px">
-                Biography
+                Biografía
               </Text>
               <Textarea
                 name="biography"
-                placeholder="Biography"
+                placeholder="Biografía"
                 resize="none"
                 marginBottom="10px"
                 {...register('biography')}
@@ -85,7 +85,7 @@ export function EditArtistProfile({ isOpen, onClose }) {
             </ModalBody>
             <ModalFooter margin="0 auto">
               <Button variant="accent" type="submit">
-                Change
+                Cambiar
               </Button>
               <Text
                 textDecoration="underline"
@@ -95,7 +95,7 @@ export function EditArtistProfile({ isOpen, onClose }) {
                 onClick={onClose}
                 _hover={{ cursor: 'pointer' }}
               >
-                Cancel
+                Cancelar
               </Text>
             </ModalFooter>
           </ModalContent>
@@ -106,6 +106,6 @@ export function EditArtistProfile({ isOpen, onClose }) {
 }
 
 const schema = yup.object({
-  officialWebsite: yup.string().url('You must provide a valid url.'),
+  officialWebsite: yup.string().url('Debes proveer una URL válida'),
   biography: yup.string(),
 });

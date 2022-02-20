@@ -40,10 +40,10 @@ export const FADE_OUT_ANIMATION = `${fadeOutSteps} 300ms linear`;
 // Mock data that will be used temporarily.
 export const FEATURED_ARTIST = {
   name: '(G) I-DLE',
-  amountOfFollowers: '2,123,505 followers',
-  description: `South Korean girl group formed by Cube Entertainment in 2018. The group consists of
-  five members: Miyeon, Minnie, Soyeon, Yuqi, and Shuhua. Originally a six-piece Soojin
-  departed from the group on August 14, 2021.`,
+  amountOfFollowers: '2,123,505',
+  description: `(G)I-dle (en hangul, (여자)아이들; romanización revisada del coreano, Yeoja Aideul; abreviatura de GIRL-I-DLE; 
+  estilizado como (G)I-DLE), es un grupo musical femenino formado por Cube Entertainment en 2018. El grupo consta de cinco integrantes: 
+  Miyeon, Minnie, Soyeon, Yuqi y Shuhua.`,
   songs: [
     {
       name: 'OH MY GOD',
@@ -153,8 +153,8 @@ export const PERFECT_FOR_YOU = [
     name: 'DEMONDICE',
     youtubeChannelURL: 'https://youtube.com/DEMONDICEKAREN',
     pageURL: '/artist/DEMONDICE',
-    description:
-      'Karen, better known online as DEMONDICE, is an American YouTuber living in Japan who is most known for her rap, MV production and animations',
+    description: `Karen, meojr conocida online como DEMONDICE es una YouTuber Américana viviendo en japón 
+    que es mayormente conocida por su rap, producción de videos músicales y animación.`,
     genres: 'Hip-Hop, Rap, Jazz Rap, Pop Rap',
     monthlyListeners: '403,871',
     followers: '103,948',
@@ -503,7 +503,7 @@ export const USERS_IN_ROOM = [
   },
   {
     name: 'Manuel Zapata',
-    role: 'ONGAKU STAFF',
+    role: 'ADMIN',
     profilePicture: '/assets/images/static-user-1.png',
   },
   {
@@ -513,7 +513,7 @@ export const USERS_IN_ROOM = [
   },
   {
     name: 'Manuel Zapata',
-    role: 'ONGAKU STAFF',
+    role: 'ADMIN',
     profilePicture: '/assets/images/static-user-1.png',
   },
   {

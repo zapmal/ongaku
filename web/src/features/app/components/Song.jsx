@@ -222,13 +222,13 @@ export function OptionMenu({ isLarge = false, ...styles }) {
               {...MENU_ITEM_PROPS}
               icon={<Icon as={IoMdRemoveCircleOutline} w="15px" h="15px" marginTop="5px" />}
             >
-              Remove from queue
+              Remover de la cola
             </MenuItem>
             <MenuDivider />
           </>
         )}
 
-        <MenuOptionGroup title="Add to playlist">
+        <MenuOptionGroup title="Agregar a Playlist">
           <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
             Big Boi tunes
           </MenuItem>
@@ -240,7 +240,7 @@ export function OptionMenu({ isLarge = false, ...styles }) {
         <MenuDivider />
 
         <MenuItem {...MENU_ITEM_PROPS} icon={<Icon as={FaScroll} w="15px" h="15px" />}>
-          Show credits
+          Mostrar créditos
         </MenuItem>
       </MenuList>
     </Menu>

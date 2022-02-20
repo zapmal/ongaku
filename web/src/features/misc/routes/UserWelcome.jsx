@@ -16,8 +16,8 @@ export function UserWelcome() {
         <Heading paddingTop={['30px', 0]} fontSize={['3xl', '4xl']}>
           Bienvenido, <Highlight>usuario</Highlight>
         </Heading>
-        <Text padding="15px" fontSize={['md', 'lg']} lineHeight={2}>
-          ¿Quieres una recomendación? Revisa nuestro conjunto de{' '}
+        <Text padding="25px" fontSize={['md', 'lg']} lineHeight={2}>
+          ¿Quieres una recomendación, un buen inicio? Revisa nuestro conjunto de{' '}
           <Highlight>artistas recomendados</Highlight>
         </Text>
 
@@ -33,7 +33,7 @@ export function UserWelcome() {
 
       <Box textAlign="center" padding="20px">
         <Link to="/home" variant="gray">
-          Skip
+          Saltar
         </Link>
       </Box>
     </Box>
@@ -66,7 +66,7 @@ function RecommendedArtists() {
             bg: artist.activeColor,
           }}
         >
-          Go to artist page
+          Ir a Página
         </Button>
         <Button
           size="sm"
@@ -82,7 +82,7 @@ function RecommendedArtists() {
             borderColor: artist.activeColor,
           }}
         >
-          Follow
+          Seguir
         </Button>
       </ButtonGroup>
     </ArtistCard>
@@ -92,8 +92,8 @@ function RecommendedArtists() {
 const ArtistCard = styled('div', {
   borderRadius: '20px',
   paddingBottom: '$4',
-  maxWidth: '350px',
-  maxHeight: '400px',
+  width: '350px',
+  height: '380px',
   textAlign: 'center',
   backgroundColor: '$primaryBg',
   filter: 'drop-shadow(10px 10px 4px rgba(0, 0, 0, 0.25))',
@@ -122,35 +122,29 @@ const ArtistCard = styled('div', {
 const recommendedArtists = [
   {
     name: 'Joji',
-    biography: `George Miller, better known by his stage name Joji 
-    and formerly by his online alias Filthy Frank, is a Japanese singer 
-    and songwriter.
-    `,
+    biography: `George Miller, también conocido por su pseudónimo Joji es un cantante japónes y escritor
+    de canciones. Previamente conocido como Filthy Frank.`,
     solidColor: 'cyan.600',
     hoverColor: 'cyan.700',
     activeColor: 'cyan.500',
-    page: '/artists/joji',
+    page: '/artist/joji',
   },
   {
     name: 'BTS',
-    biography: `BTS, also known as the Bangtan Boys, is a seven-member 
-    South Korean boy band that was formed in 2010 and debuted in 2013 
-    under Big Hit Entertainment.
-    `,
+    biography: `BTS, también conocidos como los Bangtan Boys es una banda de siete miembros de origen coreano
+    que fue formada en 2010 y debutó en 2013 con Big Hit Entertainment.`,
     solidColor: 'yellow.600',
     hoverColor: 'yellow.700',
     activeColor: 'yellow.500',
-    page: '/artists/bts',
+    page: '/artist/bts',
   },
   {
     name: 'KDA',
-    biography: `K/DA is a virtual K-pop–inspired girl group consisting 
-    of four themed versions of League of Legends characters: Ahri, Akali,
-    Evelynn and Kai'Sa. 
-    `,
+    biography: `K/DA es un grupo virtual inspirado por el K-Pop que consiste de cuatro personajes de League of Legends: 
+    Ahri, Akali, Kai'sa y Evelynn.`,
     solidColor: 'purple.600',
     hoverColor: 'purple.700',
     activeColor: 'purple.500',
-    page: '/artists/kda',
+    page: '/artist/kda',
   },
 ];

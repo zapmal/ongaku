@@ -25,13 +25,13 @@ export function Search() {
   return (
     <Box width="80%" align="center" margin="0 auto">
       <Heading fontSize="3xl">
-        Showing Results for <Highlight>{`"${query}"`} </Highlight>
+        Mostrando resultados para <Highlight>{`"${query}"`} </Highlight>
         <Text fontSize="sm" margin="10px 0" color="whiteAlpha.700" fontWeight="normal">
-          Try to avoid ambiguous queries in order to get the best results.
+          Intenta evitar búsquedas ambiguas, así podrás obtener los mejores resultados.
         </Text>
       </Heading>
 
-      <Heading {...HEADING_PROPS}>Songs</Heading>
+      <Heading {...HEADING_PROPS}>Canciones</Heading>
 
       <Divider width={DIVIDER_WIDTH} />
 
@@ -48,7 +48,7 @@ export function Search() {
         />
       ))}
 
-      <Heading {...HEADING_PROPS}>Artists</Heading>
+      <Heading {...HEADING_PROPS}>Artistas</Heading>
 
       <Divider width={DIVIDER_WIDTH} />
 
@@ -63,7 +63,7 @@ export function Search() {
         />
       ))}
 
-      <Heading {...HEADING_PROPS}>Albums, Singles and EPs</Heading>
+      <Heading {...HEADING_PROPS}>Albumes, Singles y EPs</Heading>
 
       <Divider width={DIVIDER_WIDTH} />
 

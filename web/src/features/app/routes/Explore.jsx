@@ -16,7 +16,7 @@ export function Explore() {
       <SimpleGrid columns={2} align="center">
         <Box>
           <Heading fontSize="2xl">
-            <Highlight>New</Highlight> Songs
+            <Highlight>Nuevas</Highlight> Canciones
           </Heading>
 
           {NEW_SONGS.map((song, index) => (
@@ -37,7 +37,7 @@ export function Explore() {
 
         <Box>
           <Heading fontSize="2xl">
-            <Highlight>New</Highlight> Artists
+            <Highlight>Nuevos</Highlight> Artistas
           </Heading>
 
           {NEW_ARTISTS.map((artist, index) => (
@@ -57,11 +57,11 @@ export function Explore() {
       </SimpleGrid>
 
       <Heading fontSize="2xl" textAlign="center" margin="40px 0 10px 0">
-        <Highlight>Genres</Highlight> to search by
+        <Highlight>Géneros</Highlight> para buscar canciones
       </Heading>
 
       <Text color="whiteAlpha.800" textAlign="center" fontSize="sm">
-        Filter by your favorite genres, those that fit your unique style.
+        Haz click en uno de los géneros para filtrar canciones que se adapten a tu estilo único.
       </Text>
 
       <SimpleGrid margin="0 20px 30px 20px" columns={Math.floor(MUSIC_GENRES.length / 2) - 2}>

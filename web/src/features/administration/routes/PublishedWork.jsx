@@ -62,13 +62,14 @@ export function PublishedWork() {
     <>
       <Box paddingTop="10px">
         <Box margin="0 20px" textAlign="center">
-          <Heading>Song Administration</Heading>
+          <Heading>Administración de Canciones</Heading>
           <Text color="whiteAlpha.800" marginTop="10px">
-            Every action performed in this page is logged for future audits and security purposes.
+            Toda acción realizada en esta página es almacenada para auditorías o revisiones de
+            seguridad.
           </Text>
 
           <Button rightIcon={<Icon as={MdAdd} />} marginTop="20px" onClick={handleNewSongOpen}>
-            Publish a New Song
+            Publicar nueva
           </Button>
         </Box>
 
@@ -76,12 +77,12 @@ export function PublishedWork() {
           <Thead color={theme.colors.accentText.value}>
             <Tr>
               <Th color="inherit">id</Th>
-              <Th color="inherit">Name</Th>
-              <Th color="inherit">Length</Th>
-              <Th color="inherit">Lyrics</Th>
-              <Th color="inherit">Is Explicit</Th>
-              <Th color="inherit">Album Id</Th>
-              <Th color="inherit">Options</Th>
+              <Th color="inherit">Nombre</Th>
+              <Th color="inherit">Longitud</Th>
+              <Th color="inherit">Líricas</Th>
+              <Th color="inherit">Explicito</Th>
+              <Th color="inherit">ID de Album</Th>
+              <Th color="inherit">Opciones</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -90,8 +91,8 @@ export function PublishedWork() {
                 <Td>{song.id}</Td>
                 <Td>{song.name}</Td>
                 <Td>{song.length}</Td>
-                <Td>{song.lyrics ? 'Available' : 'Not provided'}</Td>
-                <Td>{song.isExplicit ? 'Yes' : 'No'}</Td>
+                <Td>{song.lyrics ? 'Disponibles' : 'Inexistentes'}</Td>
+                <Td>{song.isExplicit ? 'Sí' : 'No'}</Td>
                 <Td>{song.albumId}</Td>
                 <Td>
                   <Option type="edit" onClick={handleEditSongOpen} />
@@ -103,21 +104,21 @@ export function PublishedWork() {
         </Table>
 
         <Box textAlign="center" margin={SUB_HEADER_MARGIN}>
-          <Heading>Album Administration</Heading>
+          <Heading>Administración de Albumes, EP, Singles</Heading>
           <Button rightIcon={<Icon as={MdAdd} />} marginTop="20px" onClick={handleNewAlbumOpen}>
-            Publish a New Album
+            Publicar nuevo
           </Button>
         </Box>
         <Table {...TABLE_PROPS}>
           <Thead color={theme.colors.accentText.value}>
             <Tr>
               <Th color="inherit">Id</Th>
-              <Th color="inherit">Cover</Th>
-              <Th color="inherit">Name</Th>
-              <Th color="inherit">Year</Th>
-              <Th color="inherit">Release Type</Th>
-              <Th color="inherit">Artist ID</Th>
-              <Th color="inherit">Options</Th>
+              <Th color="inherit">Portada</Th>
+              <Th color="inherit">Nombre</Th>
+              <Th color="inherit">Año</Th>
+              <Th color="inherit">Tipo</Th>
+              <Th color="inherit">ID de Artista</Th>
+              <Th color="inherit">Opciones</Th>
             </Tr>
           </Thead>
           <Tbody>

@@ -58,24 +58,24 @@ export function PerfectForYou({
         <Text {...TEXT_PROPS}>{description}</Text>
 
         <Text {...TEXT_PROPS}>
-          <Highlight>Genres:</Highlight> {genres}
+          <Highlight>Géneros:</Highlight> {genres}
         </Text>
 
         <Text {...TEXT_PROPS}>
-          <Highlight>Monthly Listeners:</Highlight> {monthlyListeners}
+          <Highlight>Audiencia Mensual:</Highlight> {monthlyListeners}
         </Text>
 
         <Text {...TEXT_PROPS}>
-          <Highlight>Followers:</Highlight> {followers}
+          <Highlight>Seguidores:</Highlight> {followers}
         </Text>
 
         <Box marginTop="40px" textAlign="center">
           <Flex justify="center">
             <Button {...BUTTON_PROPS} as={RouterLink} to={pageURL}>
-              Go to Artist Page
+              Ir a Página
             </Button>
             <Button {...BUTTON_PROPS} variant="accent">
-              Start Listening
+              Empezar a Escuchar
             </Button>
           </Flex>
         </Box>

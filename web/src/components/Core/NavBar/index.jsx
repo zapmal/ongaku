@@ -77,19 +77,19 @@ export function NavigationBar() {
               icon={item.icon}
               to={item.to}
               onClick={
-                item.text === 'Search' &&
+                item.text === 'Búsqueda' &&
                 (() => {
                   setClickedSearch(true);
                 })
               }
-              isHighlighted={pathname === `/${item.text.toLowerCase()}`}
+              isHighlighted={pathname === item.to}
             />
           ))
         )}
 
         <Spacer />
 
-        <Tooltip label="For help, issues, or suggestions contact us via: official.ongaku@gmail.com">
+        <Tooltip label="Si necesitas ayuda con un problema o deseas plantear una sugerencia, contáctanos: official.ongaku@gmail.com">
           <IconButton
             variant="link"
             color="whiteAlpha.800"
@@ -106,26 +106,26 @@ export function NavigationBar() {
 
 const items = [
   {
-    text: 'Home',
+    text: 'Inicio',
     icon: MdHome,
     to: '/home',
   },
   {
-    text: 'Library',
+    text: 'Librería',
     icon: MdLibraryMusic,
     to: '/library',
   },
   {
-    text: 'Explore',
+    text: 'Explora',
     icon: MdOutlineExplore,
     to: '/explore',
   },
   {
-    text: 'Search',
+    text: 'Búsqueda',
     icon: MdSearch,
   },
   {
-    text: 'Rooms',
+    text: 'Salas',
     icon: MdGroups,
     to: '/rooms',
   },
@@ -141,8 +141,8 @@ function Item({ text, icon, to, isHighlighted, onClick }) {
       onClick={onClick}
       color={isHighlighted ? theme.colors.accentText.value : 'whiteAlpha.800'}
       textDecoration={isHighlighted && 'underline'}
-      marginLeft={text !== 'Home' && '20px'}
-      marginRight={text !== 'Rooms' && '20px'}
+      marginLeft={text !== 'Inicio' && '20px'}
+      marginRight={text !== 'Salas' && '20px'}
       _hover={{
         color: theme.colors.accentSolidHover.value,
       }}

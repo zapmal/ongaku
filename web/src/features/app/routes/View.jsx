@@ -1,6 +1,5 @@
 import {
   Box,
-  Spacer,
   Image,
   IconButton,
   Button,
@@ -59,7 +58,7 @@ export function View() {
             <HStack color="whiteAlpha.800" marginTop="5px">
               <Text fontWeight="bold">PLAYLIST</Text>
               <Text>
-                {' - '}33 songs {' - '}
+                {' - '}33 canciones {' - '}
               </Text>
               <Text>7 hr 33 min {' - '}</Text>
               <Text>42 likes</Text>
@@ -80,7 +79,7 @@ export function View() {
                 Like
               </Button>
               <Button {...BUTTON_PROPS} rightIcon={<Icon as={MdShare} w="20px" h="20px" />}>
-                Share
+                Compartir
               </Button>
             </HStack>
           </SimpleGrid>
@@ -90,12 +89,12 @@ export function View() {
         <Thead color={theme.colors.accentText.value}>
           <Tr>
             <Th>#</Th>
-            <Th>Cover</Th>
-            <Th>Name</Th>
-            <Th>Author(s)</Th>
+            <Th>Portada</Th>
+            <Th>Nombre</Th>
+            <Th>Autor(es)</Th>
             <Th>Album</Th>
-            <Th>Duration</Th>
-            <Th>Options</Th>
+            <Th>Duración</Th>
+            <Th>Opciones</Th>
           </Tr>
         </Thead>
         <Tbody>

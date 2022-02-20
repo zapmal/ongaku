@@ -56,7 +56,7 @@ export function UserProfile() {
                 </Heading>
 
                 <Text fontWeight="bold" fontSize="lg">
-                  Ongaku Staff - Active
+                  Administrador - Activo
                   <Badge
                     backgroundColor={theme.colors.successBorderHover.value}
                     marginLeft="10px"
@@ -67,24 +67,25 @@ export function UserProfile() {
                 </Text>
 
                 <Text fontSize="lg" marginTop="5px">
-                  Member since many years ago
+                  Miembro desde hace mucho tiempo.
                 </Text>
 
                 <Flex marginTop="10px" align="center">
                   <Text fontWeight="bold" marginRight="20px">
-                    <Highlight>0</Highlight> <a href="#playlists">Public Playlists</a>
+                    <a href="#playlists">Playlists: </a>
+                    <Highlight>0</Highlight>
                   </Text>
 
                   <Text fontWeight="bold">
-                    <Highlight>3</Highlight> <a href="#following">Following</a>
+                    <a href="#following">Siguiendo: </a> <Highlight>3</Highlight>
                   </Text>
                 </Flex>
                 <ButtonGroup gap="5px" margin="20px 0">
                   <Button onClick={onOpen} rightIcon={<Icon as={MdEdit} w="15px" h="15px" />}>
-                    Edit
+                    Editar Perfil
                   </Button>
                   <Button variant="accent" rightIcon={<Icon as={MdShare} w="15px" h="15px" />}>
-                    Share
+                    Compartir Perfil
                   </Button>
                 </ButtonGroup>
               </Box>
@@ -94,7 +95,7 @@ export function UserProfile() {
 
         <Box margin="40px" textAlign="center">
           <Heading marginTop="10px" id="following">
-            Following
+            Artistas que sigue
           </Heading>
           <Flex {...FLEX_PROPS}>
             {ARTISTS_IN_PROFILE.map((artist, index) => (
@@ -112,7 +113,7 @@ export function UserProfile() {
           </Flex>
 
           <Heading marginTop="40px">
-            <Highlight>Liked</Highlight> Playlists
+            Playlists que le <Highlight>gustaron</Highlight>
           </Heading>
           <Flex {...FLEX_PROPS}>
             {PLAYLISTS_IN_PROFILE.map((playlist, index) => (
@@ -129,10 +130,10 @@ export function UserProfile() {
           </Flex>
 
           <Heading marginTop="40px" id="playlists">
-            <Highlight>Public</Highlight> Playlists
+            <Highlight>Playlists</Highlight> propias
           </Heading>
 
-          <Text margin="20px 0">Nothing to see here, come back later!</Text>
+          <Text margin="20px 0">No hay nada aquí aún. ¡Vuelve luego!</Text>
         </Box>
         <Footer topMargin="40px" />
       </Box>

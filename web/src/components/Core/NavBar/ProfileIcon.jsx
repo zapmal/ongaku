@@ -13,7 +13,7 @@ import {
 import React from 'react';
 import { CgProfile } from 'react-icons/cg';
 import { FiLogOut } from 'react-icons/fi';
-import { MdGroups, MdMusicNote, MdAdminPanelSettings, MdOutlineWork } from 'react-icons/md';
+import { MdGroups, MdMusicNote, MdOutlineWork } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
 import { MENU_ITEM_PROPS } from '@/features/app';
@@ -21,7 +21,8 @@ import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
 
 export function ProfileIcon() {
-  const { role = {} } = useAuthStore((s) => s.entity);
+  // const { role = {} } = useAuthStore((s) => s.entity);
+  const role = 'ADMIN';
 
   return (
     <Menu isLazy>
@@ -66,7 +67,7 @@ function MenuItems({ group, role }) {
     const option = currentOption[role];
     return (
       option && (
-        <MenuOptionGroup key={index} title={group === 'management' ? 'Manage' : 'Account'}>
+        <MenuOptionGroup key={index} title={group === 'management' ? 'Administrar' : 'Cuenta'}>
           {option[group].map((m, index) => (
             <MenuItem
               key={index}
@@ -88,23 +89,23 @@ function MenuItems({ group, role }) {
 const options = {
   account: [
     {
-      text: 'View Profile',
+      text: 'Ver Perfil',
       to: '/user/zapmal',
       icon: CgProfile,
     },
     {
-      text: 'Logout',
+      text: 'Cerrar Sesión',
       icon: FiLogOut,
     },
   ],
   moderation: [
     {
-      text: 'Users, artists and managers',
+      text: 'Usuarios, artistas, etc',
       to: '/administration/entities',
       icon: MdGroups,
     },
     {
-      text: 'Songs, albums and metadata',
+      text: 'Canciones, albumes, etc ',
       to: '/administration/published-work',
       icon: MdMusicNote,
     },
@@ -120,7 +121,7 @@ const optionsPerRole = [
       account: options.account,
       management: [
         {
-          text: "Artist's work",
+          text: 'Trabajo del Artista',
           to: '/m/published-work',
           icon: MdOutlineWork,
         },
@@ -130,7 +131,7 @@ const optionsPerRole = [
   {
     ARTIST: {
       account: options.account,
-      management: [{ text: 'Published work', to: '/m/published-work', icon: MdOutlineWork }],
+      management: [{ text: 'Trabajos Publicados', to: '/m/published-work', icon: MdOutlineWork }],
     },
   },
   {
@@ -142,14 +143,7 @@ const optionsPerRole = [
   {
     ADMIN: {
       account: options.account,
-      management: [
-        ...options.moderation,
-        // {
-        //   text: 'Ongaku Staff',
-        //   to: '/administration/staff',
-        //   icon: MdAdminPanelSettings,
-        // },
-      ],
+      management: [...options.moderation],
     },
   },
 ];

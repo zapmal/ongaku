@@ -49,7 +49,7 @@ export function EditProfile({ isOpen, onClose }) {
               <Field
                 type="text"
                 name="fullName"
-                label="Name"
+                label="Nombre"
                 placeholder="Nick Powers"
                 css={{ marginBottom: '10px' }}
                 error={errors.fullName}
@@ -68,7 +68,7 @@ export function EditProfile({ isOpen, onClose }) {
                 type="password"
                 name="password"
                 placeholder="*********"
-                label="Password"
+                label="Contraseña"
                 css={{ marginBottom: '10px' }}
                 error={errors.password}
                 register={register}
@@ -77,7 +77,7 @@ export function EditProfile({ isOpen, onClose }) {
                 type="password"
                 name="passwordConfirmation"
                 placeholder="*********"
-                label="Password Confirmation"
+                label="Confirmación de Contraseña"
                 css={{ marginBottom: '10px' }}
                 error={errors.passwordConfirmation}
                 register={register}
@@ -85,7 +85,7 @@ export function EditProfile({ isOpen, onClose }) {
               <Field
                 type="file"
                 name="profilePicture"
-                label="Profile Picture"
+                label="Foto de Perfil"
                 // isDisabled={true}
                 // error={errors.cover}
                 register={register}
@@ -93,7 +93,7 @@ export function EditProfile({ isOpen, onClose }) {
             </ModalBody>
             <ModalFooter margin="0 auto">
               <Button variant="accent" type="submit">
-                Change
+                Cambiar
               </Button>
               <Text
                 textDecoration="underline"
@@ -103,7 +103,7 @@ export function EditProfile({ isOpen, onClose }) {
                 onClick={onClose}
                 _hover={{ cursor: 'pointer' }}
               >
-                Cancel
+                Cancelar
               </Text>
             </ModalFooter>
           </ModalContent>
@@ -114,14 +114,11 @@ export function EditProfile({ isOpen, onClose }) {
 }
 
 const schema = yup.object({
-  fullName: yup.string().required('This field is required.'),
-  password: yup
-    .string()
-    .min(8, 'Minimum eight (8) characters.')
-    .required('This field is required.'),
+  fullName: yup.string().required('Este campo es requerido'),
+  password: yup.string().min(8, 'Mínimo ocho (8) carácteres').required('Este campo es requerido'),
   passwordConfirmation: yup
     .string()
-    .required('This field is required.')
-    .oneOf([yup.ref('password'), null], 'Both passwords must match.'),
-  email: yup.string().email('You must enter a valid email.').required('This field is required.'),
+    .required('Este campo es requerido')
+    .oneOf([yup.ref('password'), null], 'Las contraseñas deben coincidir'),
+  email: yup.string().email('Debes ingresar un correo válido').required('Este campo es requerido'),
 });

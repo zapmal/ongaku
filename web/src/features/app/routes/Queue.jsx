@@ -24,17 +24,22 @@ export function Queue() {
             <Option
               icon={AiOutlinePlus}
               isLarge={true}
-              label="Add to playlist"
+              label="Agregar a Playlist"
               marginRight="40px"
             />
-            <Option icon={IoMdMicrophone} isLarge={true} label="Show Lyrics" marginRight="40px" />
+            <Option
+              icon={IoMdMicrophone}
+              isLarge={true}
+              label="Mostrar Líricas "
+              marginRight="40px"
+            />
             <OptionMenu isLarge={true} />
           </Box>
         </Box>
 
         <Box>
           <Text color="whiteAlpha.700" marginBottom="10px">
-            <Highlight>Queue</Highlight> · 10 songs · 37 min 45 sec
+            <Highlight>Cola</Highlight> · 10 canciones · 37 min 45 seg
           </Text>
           <Divider />
 

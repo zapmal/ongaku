@@ -58,19 +58,17 @@ function DeleteConfirmation({ isOpen, onClose }) {
       <AlertDialogOverlay>
         <AlertDialogContent>
           <AlertDialogHeader fontSize="lg" fontWeight="bold">
-            Confirmation
+            Confirmación
           </AlertDialogHeader>
 
-          <AlertDialogBody>
-            Are you sure? You can&apos;t undo this action afterwards.
-          </AlertDialogBody>
+          <AlertDialogBody>¿Estás seguro? Esta acción no es reversible.</AlertDialogBody>
 
           <AlertDialogFooter>
             <Button ref={cancelRef} onClick={onClose} variant="link">
-              Cancel
+              Cancelar
             </Button>
             <Button colorScheme="red" onClick={onClose} ml={3} variant="danger">
-              Delete
+              Borrar
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>

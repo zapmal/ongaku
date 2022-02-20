@@ -44,14 +44,14 @@ export function CreateNewPlaylist({ isOpen, onClose }) {
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalContent width={['75%', '80%']}>
             <ModalHeader>
-              <Heading fontSize="xl">Create a new Playlist</Heading>
+              <Heading fontSize="xl">Crea una nueva Playlist</Heading>
             </ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <Field
                 type="text"
                 name="name"
-                label="Playlist Name"
+                label="Nombre de la Playlist"
                 placeholder="OnlyBangers"
                 css={{ marginBottom: '10px' }}
                 error={errors.name}
@@ -60,7 +60,7 @@ export function CreateNewPlaylist({ isOpen, onClose }) {
               <Field
                 type="file"
                 name="cover"
-                label="Cover"
+                label="Portada"
                 css={{ marginBottom: '10px' }}
                 // isDisabled={true}
                 // error={errors.cover}
@@ -69,7 +69,7 @@ export function CreateNewPlaylist({ isOpen, onClose }) {
               <Field
                 type="file"
                 name="BackgroundImage"
-                label="Background Image"
+                label="Fondo"
                 // isDisabled={true}
                 // error={errors.cover}
                 register={register}
@@ -77,7 +77,7 @@ export function CreateNewPlaylist({ isOpen, onClose }) {
             </ModalBody>
             <ModalFooter margin="0 auto">
               <Button variant="accent" type="submit">
-                Create
+                Crear
               </Button>
               <Text
                 textDecoration="underline"
@@ -87,7 +87,7 @@ export function CreateNewPlaylist({ isOpen, onClose }) {
                 onClick={onClose}
                 _hover={{ cursor: 'pointer' }}
               >
-                Cancel
+                Cancelar
               </Text>
             </ModalFooter>
           </ModalContent>
@@ -98,5 +98,5 @@ export function CreateNewPlaylist({ isOpen, onClose }) {
 }
 
 const schema = yup.object({
-  name: yup.string().required('This field is required.'),
+  name: yup.string().required('Este campo es requerido'),
 });

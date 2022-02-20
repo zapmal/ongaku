@@ -40,14 +40,15 @@ export function Entities() {
     <>
       <Box paddingTop="10px">
         <Box margin="0px 20px" textAlign="center">
-          <Heading>Entity Administration</Heading>
+          <Heading>Administración de Entidades</Heading>
           <Text color="whiteAlpha.800" marginTop="10px">
-            Every action performed in this page is logged for future audits and security purposes.
+            Toda acción realizada en esta página es almacenada para auditorías o revisiones de
+            seguridad.
           </Text>
 
           <Flex justify="center" gap="10px" marginTop="20px">
             <Text fontSize="lg" marginRight="10px" color="whiteAlpha.800">
-              Filter by role:
+              Filtra por rol:
             </Text>
             {buttons.map(({ role }, index) => (
               <Button
@@ -76,11 +77,11 @@ export function Entities() {
               <Th color="inherit">id</Th>
               <Th color="inherit">Avatar</Th>
               <Th color="inherit">Email</Th>
-              <Th color="inherit">Username</Th>
-              <Th color="inherit">Full Name</Th>
-              <Th color="inherit">Password</Th>
-              <Th color="inherit">Birth date</Th>
-              <Th color="inherit">Options</Th>
+              <Th color="inherit">Nombre de Usuario</Th>
+              <Th color="inherit">Nombre</Th>
+              <Th color="inherit">Contraseña</Th>
+              <Th color="inherit">Fecha de Nacimiento</Th>
+              <Th color="inherit">Opciones</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -107,18 +108,18 @@ export function Entities() {
         {selectedRole === 'USER' && (
           <>
             <Heading margin={SUB_HEADER_MARGIN} textAlign="center">
-              Metadata Administration
+              Administración de metadatos
             </Heading>
             <Table {...TABLE_PROPS}>
               <Thead color={theme.colors.accentText.value}>
                 <Tr>
-                  <Th color="inherit">Created At</Th>
-                  <Th color="inherit">Updated At</Th>
-                  <Th color="inherit">Active</Th>
-                  <Th color="inherit">Ip Address</Th>
-                  <Th color="inherit">Verified Email</Th>
-                  <Th color="inherit">User ID</Th>
-                  <Th color="inherit">Options</Th>
+                  <Th color="inherit">Fecha de creación</Th>
+                  <Th color="inherit">Fecha de actualziación</Th>
+                  <Th color="inherit">Activo</Th>
+                  <Th color="inherit">Dirección IP</Th>
+                  <Th color="inherit">Correo Verificado</Th>
+                  <Th color="inherit">ID del Usuario</Th>
+                  <Th color="inherit">Opciones</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -126,9 +127,9 @@ export function Entities() {
                   <Tr key={index} {...TABLE_ROW_PROPS}>
                     <Td>{metadata.createdAt}</Td>
                     <Td>{metadata.updatedAt}</Td>
-                    <Td>{metadata.active ? 'Yes' : 'No'}</Td>
+                    <Td>{metadata.active ? 'Sí' : 'No'}</Td>
                     <Td>{metadata.ipAddress}</Td>
-                    <Td>{metadata.verifiedEmail ? 'Yes' : 'No'}</Td>
+                    <Td>{metadata.verifiedEmail ? 'Sí' : 'No'}</Td>
                     <Td>{metadata.userId}</Td>
                     <Td>
                       <Option type="edit" onClick={onEntityMetadataEditOpen} />

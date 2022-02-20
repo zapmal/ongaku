@@ -62,7 +62,7 @@ export function Home() {
       </Banner>
 
       <Heading margin="20px">
-        Recently <Highlight>Played</Highlight>
+        Reproducido <Highlight>Recientemente</Highlight>
       </Heading>
 
       <SimpleGrid column={6}>
@@ -94,10 +94,11 @@ export function Home() {
 
       <Box margin={SECTION_MARGIN}>
         <Heading>
-          <Highlight>Suggested</Highlight> Artists
+          <Highlight>Artistas</Highlight> Sugeridos
         </Heading>
         <Text color="whiteAlpha.800" marginTop="10px">
-          Based on your recent activity, we suggest a couple of artists that may fit your style.
+          Basandonos en tu actividad reciente, te sugerimos los siguientes artistas ya que comparten
+          tu estilo.
         </Text>
       </Box>
 
@@ -116,11 +117,10 @@ export function Home() {
 
       <Box margin={SECTION_MARGIN}>
         <Heading>
-          Perfect for <Highlight>you</Highlight>
+          Perfecto para <Highlight>ti</Highlight>
         </Heading>
         <Text color="whiteAlpha.800" marginTop="10px">
-          We base this one on your most listened artists and genres, you will probably love them{' '}
-          {';)'}
+          Esta recomendación viene de tus artistas y géneros más escuchados
         </Text>
 
         {PERFECT_FOR_YOU.map((artist, index) => (
@@ -140,10 +140,10 @@ export function Home() {
 
       <Box margin={SECTION_MARGIN}>
         <Heading>
-          <Highlight>Trending</Highlight>
+          <Highlight>Tendencias</Highlight>
         </Heading>
         <Text color="whiteAlpha.800" marginTop="10px">
-          Most listened artists, songs or playlists on the past 48 hours.
+          Artistas, canciones o playlists más escuchadas en las últimas 48 horas
         </Text>
       </Box>
 

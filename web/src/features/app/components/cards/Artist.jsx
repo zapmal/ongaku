@@ -84,7 +84,7 @@ export function ArtistCard({
           <Heading color={isHighlighted && theme.colors.accentText.value} fontSize="3xl">
             {name}
           </Heading>
-          <Text color="whiteAlpha.800">{amountOfFollowers} followers</Text>
+          <Text color="whiteAlpha.800">{amountOfFollowers} seguidores</Text>
         </>
       ) : (
         <>
@@ -93,12 +93,12 @@ export function ArtistCard({
             <Spacer />
             {badge && (
               <Badge bg={theme.colors.accentSolid.value} color="whiteAlpha.900" height="100%">
-                ARTIST
+                ARTISTA
               </Badge>
             )}
           </Flex>
           <Text color="whiteAlpha.700" fontSize="sm" textAlign="left">
-            {amountOfFollowers} followers
+            {amountOfFollowers} seguidores
           </Text>
         </>
       )}
@@ -109,14 +109,14 @@ export function ArtistCard({
 const hoverButtons = [
   {
     icon: MdAdd,
-    text: 'Follow Artist',
+    text: 'Seguir',
     position: {
       right: '40px',
     },
   },
   {
     icon: HiOutlineExternalLink,
-    text: 'Go to Page',
+    text: 'Ir a Página',
     position: {
       left: '40px',
     },

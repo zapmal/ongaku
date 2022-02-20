@@ -156,19 +156,19 @@ function OptionsButton({ type, mouseEventsHandlers }) {
           {...MENU_ITEM_PROPS}
           icon={<Icon as={MdOutlineQueue} w="15px" h="15px" marginTop="5px" />}
         >
-          Add to queue
+          Agregar a la cola
         </MenuItem>
         <MenuItem
           {...MENU_ITEM_PROPS}
           icon={<Icon as={MdOpenInNew} w="15px" h="15px" marginTop="5px" />}
         >
-          Open
+          Abrir
         </MenuItem>
 
         <MenuDivider />
         {type !== 'playlist' && (
           <>
-            <MenuOptionGroup title="Add to playlist">
+            <MenuOptionGroup title="Agregar a Playlist">
               <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
                 Big Boi tunes
               </MenuItem>
@@ -183,7 +183,7 @@ function OptionsButton({ type, mouseEventsHandlers }) {
           {...MENU_ITEM_PROPS}
           icon={<Icon as={FaScroll} w="15px" h="15px" marginTop="5px" />}
         >
-          Show credits
+          Mostrar Créditos
         </MenuItem>
       </MenuList>
     </Menu>

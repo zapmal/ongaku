@@ -28,8 +28,7 @@ apiClient.interceptors.response.use(
     if (error.response) {
       message = error.response.data.message || error.message || error;
     } else {
-      message = 'We could not process your request, try again later';
-      // message = 'Unknown error, please try again later';
+      message = 'No pudimos procesar tu solicitud, inténtalo de nuevo más tarde';
     }
 
     return Promise.reject(message);

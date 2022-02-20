@@ -26,7 +26,7 @@ export function Layout() {
       {false && (
         <CurrentRoomOverlay
           name="Buen Reguetón"
-          host="Ejemplo"
+          host="rick_y"
           activeUsers={5}
           userLimit={5}
           roomId="ADAD-139D"

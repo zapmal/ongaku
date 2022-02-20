@@ -35,14 +35,14 @@ enum Role {
 }
 
 model UserPlaylist {
-  id          Int      @id @default(autoincrement())
-  name        String?  @default("My Playlist") @db.VarChar(125)
-  image       String?
-  description String?  @db.VarChar(255)
-  likes       Float?   @default(0)
-  createdAt   DateTime @default(now()) @map("created_at") @db.Date
-  updatedAt   DateTime @updatedAt @map("updated_at") @db.Date
-  userId      Int      @map("user_id")
+  id         Int      @id @default(autoincrement())
+  name       String?  @default("My Playlist") @db.VarChar(125)
+  cover      String?
+  background String?
+  likes      Float?   @default(0)
+  createdAt  DateTime @default(now()) @map("created_at") @db.Date
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Date
+  userId     Int      @map("user_id")
 
   user            User              @relation(fields: [userId], references: [id])
   interaction     Interaction[]
@@ -163,6 +163,7 @@ model Album {
   song   Song[]
 
   @@map("album")
+  Interaction Interaction[]
 }
 
 model Song {
@@ -221,10 +222,12 @@ model Interaction {
   likedPlaylist  Boolean? @map("liked_playlist")
   followedArtist Boolean? @map("followed_artist")
   artistId       Int      @map("artist_id")
+  albumId        Int      @map("album_id")
   userId         Int      @map("user_id")
   songId         Int      @map("song_id")
   userPlaylistId Int      @map("user_playlist_id")
 
+  album        Album        @relation(fields: [albumId], references: [id])
   artist       Artist       @relation(fields: [artistId], references: [id])
   user         User         @relation(fields: [userId], references: [id])
   song         Song         @relation(fields: [songId], references: [id])

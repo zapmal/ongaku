@@ -10,12 +10,13 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": ".",
-      "paths": {
-         "@/*": ["src/*"],
-         "@features/*": ["src/features/*"],
-         "@internal/*": ["src/internal/*"],
-         "@utils/*": ["src/utils/*"]
-      },
-    "incremental": true,
+    "paths": {
+      "@/*": ["src/*"],
+      "@features/*": ["src/features/*"],
+      "@internal/*": ["src/internal/*"],
+      "@utils/*": ["src/utils/*"]
+    },
+    // "noEmit": false,
+    "incremental": true
   }
 }

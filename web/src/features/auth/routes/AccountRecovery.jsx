@@ -10,6 +10,7 @@ import {
   VStack,
   useDisclosure,
   ButtonGroup,
+  Spinner,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
@@ -19,12 +20,14 @@ import { BiSearchAlt } from 'react-icons/bi';
 import { Link as RouterLink } from 'react-router-dom';
 import * as yup from 'yup';
 
+import { sendRecoveryCode, changePassword } from '../api/recovery';
 import { Login } from '../components/Login';
 
 import { Footer } from '@/components/Core';
 import { Link, Button } from '@/components/Elements';
 import { Field, Checkbox } from '@/components/Form';
 import { Highlight } from '@/components/Utils';
+import { useSubmissionState } from '@/hooks/useSubmissionState';
 import { theme } from '@/stitches.config.js';
 
 const BOX_PROPS = {
@@ -54,7 +57,7 @@ export function AccountRecovery() {
   const [verificationCode, setVerificationCode] = useState(0);
   const [entityId, setEntityId] = useState(0);
 
-  const { nextStep, prevStep, _, activeStep } = useSteps({
+  const { nextStep, activeStep } = useSteps({
     initialStep: 0,
   });
 
@@ -133,6 +136,7 @@ export function AccountRecovery() {
 }
 
 function FirstStep({ nextStep, isArtist, setIsArtist, setVerificationCode, setEntityId }) {
+  const [submission, setSubmissionState] = useSubmissionState();
   const {
     register,
     control,
@@ -142,34 +146,71 @@ function FirstStep({ nextStep, isArtist, setIsArtist, setVerificationCode, setEn
     resolver: yupResolver(firstStepSchema),
     defaultValues: {
       email: '',
+      isArtist: false,
     },
   });
 
   const handleIsArtist = () => setIsArtist(!isArtist);
 
+  const onSubmit = async (data) => {
+    try {
+      setSubmissionState({ isSubmitting: true });
+
+      const response = await sendRecoveryCode(data);
+
+      setVerificationCode(response.code);
+      setEntityId(response.entityId);
+      console.log(response.code, response.entityId);
+
+      setSubmissionState({
+        status: 'success',
+        isSubmitting: false,
+        title: 'Success!',
+        message: `${response.message}`,
+      });
+
+      setTimeout(() => nextStep(), 3000);
+    } catch (error) {
+      setSubmissionState({
+        status: 'error',
+        isSubmitting: false,
+        title: 'Error',
+        message: error,
+      });
+    }
+  };
+
   return (
     <>
       <Heading {...HEADING_PROPS}>First, let&apos;s find your account</Heading>
       <Box padding="15px 60px">
-        <Field
-          type="text"
-          name="email"
-          label="Email"
-          placeholder="joemama@gmail.com"
-          error={errors.email}
-          register={register}
-        />
-        <Checkbox
-          name="isArtist"
-          text="Are you an artist?"
-          control={control}
-          onChangeHandler={handleIsArtist}
-          value={isArtist}
-          marginTop="15px"
-        />
-        <Button {...BUTTON_PROPS} rightIcon={<BiSearchAlt size={20} />}>
-          Search
-        </Button>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Field
+            type="text"
+            name="email"
+            label="Email"
+            placeholder="joemama@gmail.com"
+            error={errors.email}
+            isDisabled={submission.status != ''}
+            register={register}
+          />
+          <Checkbox
+            name="isArtist"
+            text="Are you an artist?"
+            control={control}
+            onChangeHandler={handleIsArtist}
+            value={isArtist}
+            marginTop="15px"
+            isDisabled={submission.status != ''}
+          />
+          {submission.isSubmitting ? (
+            <Spinner size="lg" />
+          ) : (
+            <Button {...BUTTON_PROPS} rightIcon={<BiSearchAlt size={20} />}>
+              Search
+            </Button>
+          )}
+        </form>
       </Box>
     </>
   );
@@ -183,8 +224,12 @@ function SecondStep({ nextStep, verificationCode }) {
   const [pinValue, setPinValue] = useState('');
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    console.log(pinValue);
+  }, [pinValue]);
+
   const handleCodeVerification = () => {
-    if (pinValue === verificationCode) {
+    if (pinValue == verificationCode) {
       nextStep();
       setError(null);
     } else {
@@ -218,58 +263,96 @@ function SecondStep({ nextStep, verificationCode }) {
 }
 
 function ThirdStep({ nextStep, isArtist, entityId }) {
+  const [submission, setSubmissionState] = useSubmissionState();
+
   const {
     register,
-    control,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(thirdStepSchema),
     defaultValues: {
-      password: '',
-      passwordConfirmation: '',
+      newPassword: '',
+      newPasswordConfirmation: '',
     },
   });
+
+  const onSubmit = async (data) => {
+    try {
+      setSubmissionState({ isSubmitting: true });
+      const newPassword = data.newPassword;
+
+      console.log(newPassword, entityId, isArtist);
+
+      const response = await changePassword({ newPassword, entityId, isArtist });
+
+      console.log(data);
+
+      setSubmissionState({
+        status: 'success',
+        isSubmitting: false,
+        title: 'Success!',
+        message: `${response.message}`,
+      });
+
+      setTimeout(() => nextStep(), 3000);
+    } catch (error) {
+      setSubmissionState({
+        status: 'error',
+        isSubmitting: false,
+        title: 'Error',
+        message: error,
+      });
+    }
+  };
 
   return (
     <>
       <Heading {...HEADING_PROPS}>Third and last, change the password</Heading>
       <Box padding="10px 130px">
-        <VStack>
-          <Field
-            type="text"
-            name="password"
-            label="Password"
-            placeholder="************"
-            error={errors.password}
-            register={register}
-          />
-          <Field
-            type="text"
-            name="passwordConfirmation"
-            label="Confirm Password"
-            placeholder="************"
-            error={errors.passwordConfirmation}
-            register={register}
-          />
-        </VStack>
-        <Button {...BUTTON_PROPS} rightIcon={<BiSearchAlt size={20} />}>
-          Search
-        </Button>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <VStack>
+            <Field
+              type="text"
+              name="newPassword"
+              label="Password"
+              placeholder="************"
+              error={errors.newPassword}
+              register={register}
+              isDisabled={submission.status != ''}
+            />
+            <Field
+              type="text"
+              name="newPasswordConfirmation"
+              label="Confirm Password"
+              placeholder="************"
+              error={errors.newPasswordConfirmation}
+              register={register}
+              isDisabled={submission.status != ''}
+            />
+          </VStack>
+          {submission.isSubmitting ? (
+            <Spinner size="lg" />
+          ) : (
+            <Button {...BUTTON_PROPS} rightIcon={<BiSearchAlt size={20} />}>
+              Search
+            </Button>
+          )}
+        </form>
       </Box>
     </>
   );
 }
 
 const thirdStepSchema = yup.object({
-  password: yup
+  newPassword: yup
     .string()
     .min(8, 'Minimum eight (8) characters.')
     .required('This field is required.'),
-  passwordConfirmation: yup
+  newPasswordConfirmation: yup
     .string()
     .required('This field is required.')
-    .oneOf([yup.ref('password'), null], 'Both passwords must match.'),
+    .oneOf([yup.ref('newPassword'), null], 'Both passwords must match.'),
 });
 
 function FourthStep() {

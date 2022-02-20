@@ -188,7 +188,7 @@ export class AuthService {
 
     const code = Math.floor(Math.random() * 899999 + 100000);
 
-    return { code, entityID: entity.id };
+    return { code, entityId: entity.id };
   }
 
   async changePassword(newPassword: string, entityID: number, isArtist: boolean) {

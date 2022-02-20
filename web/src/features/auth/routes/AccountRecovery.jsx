@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { BiSearchAlt } from 'react-icons/bi';
 import { Link as RouterLink } from 'react-router-dom';
@@ -27,7 +27,7 @@ import { Footer } from '@/components/Core';
 import { Link, Button } from '@/components/Elements';
 import { Field, Checkbox } from '@/components/Form';
 import { Highlight } from '@/components/Utils';
-import { useSubmissionState } from '@/hooks/useSubmissionState';
+import { useRequest } from '@/hooks';
 import { theme } from '@/stitches.config.js';
 
 const BOX_PROPS = {
@@ -52,18 +52,14 @@ const BUTTON_PROPS = {
 };
 
 export function AccountRecovery() {
-  const [stepState, setStepState] = useState(undefined);
+  const [stepState] = useState(undefined);
   const [isArtist, setIsArtist] = useState(false);
   const [verificationCode, setVerificationCode] = useState(0);
   const [entityId, setEntityId] = useState(0);
 
   const { nextStep, activeStep } = useSteps({
-    initialStep: 0,
+    initialStep: 3,
   });
-
-  useEffect(() => {
-    console.log(isArtist);
-  }, [isArtist]);
 
   return (
     <SimpleGrid>
@@ -79,11 +75,12 @@ export function AccountRecovery() {
 
       <VStack>
         <Heading marginTop="10px">
-          Recover the <Highlight>access</Highlight> to your account
+          Recupera el <Highlight>acceso</Highlight> a tu cuenta
         </Heading>
-        <Text padding="15px" width="40%" fontSize="lg" textAlign="center">
-          We&apos;ll walk you through the account recovery process, the only thing you need is{' '}
-          <Highlight>access to the email</Highlight> associated with the account.
+        <Text padding="15px" width="40%" textAlign="center">
+          Te guiaremos a través del proceso de recuperación, pero, ten en cuenta que necesitarás{' '}
+          <Highlight>obligatoriamente</Highlight> tener acceso al correo asociado con dicha cuenta
+          para que la recuperación sea exitosa.
         </Text>
       </VStack>
 
@@ -93,7 +90,7 @@ export function AccountRecovery() {
         padding="30px 20px 50px 30px"
         orientation="horizontal"
       >
-        <Step label="Search Email" description="Bear in mind that you have limited attempts">
+        <Step label="Buscar el Correo" description="Tendrás intentos limitados">
           <Box {...BOX_PROPS}>
             <FirstStep
               nextStep={nextStep}
@@ -105,29 +102,27 @@ export function AccountRecovery() {
           </Box>
         </Step>
         <Step
-          label="Enter Verification Code"
-          description="If you didn't receive it, wait and try again"
+          label="Ingresar el Código"
+          description="Si no lo recibiste, espera e intenta otra vez"
         >
           <Box {...BOX_PROPS}>
             <SecondStep nextStep={nextStep} verificationCode={verificationCode} />
           </Box>
         </Step>
-        <Step label="Change Password" description="Start using a password manager bud">
+        <Step label="Cambiar Contraseña" description="Usa un gestor de contraseñas!">
           <Box {...BOX_PROPS}>
             <ThirdStep nextStep={nextStep} isArtist={isArtist} entityId={entityId} />
           </Box>
         </Step>
-        <Step label="Done">
+        <Step label="Listo">
           <Box {...BOX_PROPS}>
             <FourthStep />
           </Box>
         </Step>
       </Steps>
 
-      <Box margin="auto" paddingTop="15px">
-        <Link to="/" variant="gray">
-          Go Back
-        </Link>
+      <Box margin="auto" paddingTop="15px" as={Link} to="/" variant="gray">
+        Volver
       </Box>
 
       <Footer topMargin="25px" />
@@ -136,12 +131,12 @@ export function AccountRecovery() {
 }
 
 function FirstStep({ nextStep, isArtist, setIsArtist, setVerificationCode, setEntityId }) {
-  const [submission, setSubmissionState] = useSubmissionState();
+  const [request, setRequestState] = useRequest();
   const {
     register,
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(firstStepSchema),
     defaultValues: {
@@ -154,26 +149,21 @@ function FirstStep({ nextStep, isArtist, setIsArtist, setVerificationCode, setEn
 
   const onSubmit = async (data) => {
     try {
-      setSubmissionState({ isSubmitting: true });
-
       const response = await sendRecoveryCode(data);
 
       setVerificationCode(response.code);
       setEntityId(response.entityId);
-      console.log(response.code, response.entityId);
 
-      setSubmissionState({
+      setRequestState({
         status: 'success',
-        isSubmitting: false,
-        title: 'Success!',
+        title: 'Éxito!',
         message: `${response.message}`,
       });
 
       setTimeout(() => nextStep(), 3000);
     } catch (error) {
-      setSubmissionState({
+      setRequestState({
         status: 'error',
-        isSubmitting: false,
         title: 'Error',
         message: error,
       });
@@ -182,7 +172,9 @@ function FirstStep({ nextStep, isArtist, setIsArtist, setVerificationCode, setEn
 
   return (
     <>
-      <Heading {...HEADING_PROPS}>First, let&apos;s find your account</Heading>
+      <Heading {...HEADING_PROPS}>
+        Encontremos tu <Highlight>cuenta</Highlight>
+      </Heading>
       <Box padding="15px 60px">
         <form onSubmit={handleSubmit(onSubmit)}>
           <Field
@@ -191,23 +183,23 @@ function FirstStep({ nextStep, isArtist, setIsArtist, setVerificationCode, setEn
             label="Email"
             placeholder="joemama@gmail.com"
             error={errors.email}
-            isDisabled={submission.status != ''}
+            isDisabled={request.status != ''}
             register={register}
           />
           <Checkbox
             name="isArtist"
-            text="Are you an artist?"
+            text="¿Eres un artista?"
             control={control}
             onChangeHandler={handleIsArtist}
             value={isArtist}
             marginTop="15px"
-            isDisabled={submission.status != ''}
+            isDisabled={request.status != ''}
           />
-          {submission.isSubmitting ? (
-            <Spinner size="lg" />
+          {isSubmitting ? (
+            <Spinner size="lg" display="block" margin="25px auto" />
           ) : (
             <Button {...BUTTON_PROPS} rightIcon={<BiSearchAlt size={20} />}>
-              Search
+              Buscar
             </Button>
           )}
         </form>
@@ -217,30 +209,28 @@ function FirstStep({ nextStep, isArtist, setIsArtist, setVerificationCode, setEn
 }
 
 const firstStepSchema = yup.object({
-  email: yup.string().email('You must enter a valid email').required('This field is required.'),
+  email: yup.string().email('Debes ingresar un correo válido').required('Este campo es requerido'),
 });
 
 function SecondStep({ nextStep, verificationCode }) {
   const [pinValue, setPinValue] = useState('');
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    console.log(pinValue);
-  }, [pinValue]);
-
   const handleCodeVerification = () => {
     if (pinValue == verificationCode) {
       nextStep();
       setError(null);
     } else {
-      setError('Wrong code, check your email and try again!');
+      setError('Código inválido, revisa tu correo e intenta otra vez');
     }
   };
 
   return (
     <>
-      <Heading {...HEADING_PROPS}>Second, did you receive a code?</Heading>
-      <Text margin="20px 0">Input the 6 digit code sent to *****ma@gmail.com</Text>
+      <Heading {...HEADING_PROPS}>
+        ¿Recibiste el <Highlight>código</Highlight>?
+      </Heading>
+      <Text margin="20px 0">Ingresa el código de 6 digitos que enviamos a tu correo</Text>
       <Box padding="0 110px">
         <HStack margin="10px" borderColor={error && theme.colors.dangerSolid.value}>
           <PinInput onChange={(value) => setPinValue(value)} focusBorderColor="pink.500">
@@ -255,7 +245,7 @@ function SecondStep({ nextStep, verificationCode }) {
         {error && <Text color={theme.colors.dangerSolid.value}>{error}</Text>}
 
         <Button {...BUTTON_PROPS} onClick={handleCodeVerification}>
-          Submit
+          Enviar
         </Button>
       </Box>
     </>
@@ -263,12 +253,12 @@ function SecondStep({ nextStep, verificationCode }) {
 }
 
 function ThirdStep({ nextStep, isArtist, entityId }) {
-  const [submission, setSubmissionState] = useSubmissionState();
+  const [submission, setSubmissionState] = useRequest();
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(thirdStepSchema),
     defaultValues: {
@@ -277,21 +267,13 @@ function ThirdStep({ nextStep, isArtist, entityId }) {
     },
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async ({ newPassword }) => {
     try {
-      setSubmissionState({ isSubmitting: true });
-      const newPassword = data.newPassword;
-
-      console.log(newPassword, entityId, isArtist);
-
       const response = await changePassword({ newPassword, entityId, isArtist });
-
-      console.log(data);
 
       setSubmissionState({
         status: 'success',
-        isSubmitting: false,
-        title: 'Success!',
+        title: 'Éxito!',
         message: `${response.message}`,
       });
 
@@ -299,7 +281,6 @@ function ThirdStep({ nextStep, isArtist, entityId }) {
     } catch (error) {
       setSubmissionState({
         status: 'error',
-        isSubmitting: false,
         title: 'Error',
         message: error,
       });
@@ -308,14 +289,14 @@ function ThirdStep({ nextStep, isArtist, entityId }) {
 
   return (
     <>
-      <Heading {...HEADING_PROPS}>Third and last, change the password</Heading>
+      <Heading {...HEADING_PROPS}>Ingresa tu nueva contraseña</Heading>
       <Box padding="10px 130px">
         <form onSubmit={handleSubmit(onSubmit)}>
           <VStack>
             <Field
               type="text"
               name="newPassword"
-              label="Password"
+              label="Contraseña"
               placeholder="************"
               error={errors.newPassword}
               register={register}
@@ -324,20 +305,14 @@ function ThirdStep({ nextStep, isArtist, entityId }) {
             <Field
               type="text"
               name="newPasswordConfirmation"
-              label="Confirm Password"
+              label="Nueva Contraseña"
               placeholder="************"
               error={errors.newPasswordConfirmation}
               register={register}
               isDisabled={submission.status != ''}
             />
           </VStack>
-          {submission.isSubmitting ? (
-            <Spinner size="lg" />
-          ) : (
-            <Button {...BUTTON_PROPS} rightIcon={<BiSearchAlt size={20} />}>
-              Search
-            </Button>
-          )}
+          {isSubmitting ? <Spinner size="lg" /> : <Button {...BUTTON_PROPS}>Enviar</Button>}
         </form>
       </Box>
     </>
@@ -347,12 +322,12 @@ function ThirdStep({ nextStep, isArtist, entityId }) {
 const thirdStepSchema = yup.object({
   newPassword: yup
     .string()
-    .min(8, 'Minimum eight (8) characters.')
-    .required('This field is required.'),
+    .min(8, 'Mínimo ocho (8) carácteres')
+    .required('Este campo es requerido'),
   newPasswordConfirmation: yup
     .string()
-    .required('This field is required.')
-    .oneOf([yup.ref('newPassword'), null], 'Both passwords must match.'),
+    .required('Este campo es requerido')
+    .oneOf([yup.ref('newPassword'), null], 'Las contraseñas deben coincidir'),
 });
 
 function FourthStep() {
@@ -361,20 +336,20 @@ function FourthStep() {
   return (
     <>
       <Heading {...HEADING_PROPS}>
-        <Highlight>Done!</Highlight>
+        <Highlight>Éxito</Highlight>
       </Heading>
       <Box padding="10px 5px">
         <Text width="100%" padding="0 20px">
-          <Highlight>Welcome back,</Highlight> now you can access and start using Ongaku at
-          it&apos;s fullest, start listening to your favorite artists, either by yourself or with
-          friends!
+          <Highlight>¡Bienvenido devuelta!</Highlight> ahora puedes entrar a Ongaku y empezar a
+          escuchar, disfrutar y compartir tus canciones y artistas favoritos con amigos, familia y
+          más.
         </Text>
         <ButtonGroup spacing="5" margin="20px">
           <Button variant="accent" padding="20px" onClick={onOpen}>
-            Log in
+            Iniciar Sesión
           </Button>
           <Button as={RouterLink} to="/" padding="20px">
-            Go Home
+            Ir a Inicio
           </Button>
         </ButtonGroup>
       </Box>

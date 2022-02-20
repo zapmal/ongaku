@@ -129,14 +129,14 @@ export class AuthController {
   @Post('send-recovery-code')
   @UsePipes(new JoiValidationPipe(recoveryCodeSchema))
   async sendAccountRecoveryCode(@Body() { email, isArtist }: SendRecoveryCodeDTO) {
-    const { code, entityID } = await this.auth.getRecoveryCode(email, isArtist);
+    const { code, entityId } = await this.auth.getRecoveryCode(email, isArtist);
     const status = await this.email.sendRecoveryCode(email, code);
 
     return {
       message: 'Success! Check your inbox for further instructions',
       status,
       code,
-      entityID,
+      entityId,
     };
   }
 

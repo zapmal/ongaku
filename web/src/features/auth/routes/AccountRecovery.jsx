@@ -58,7 +58,7 @@ export function AccountRecovery() {
   const [entityId, setEntityId] = useState(0);
 
   const { nextStep, activeStep } = useSteps({
-    initialStep: 3,
+    initialStep: 0,
   });
 
   return (

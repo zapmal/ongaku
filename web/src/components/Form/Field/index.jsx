@@ -59,7 +59,7 @@ export function Field(props) {
           })}
         >
           <Button rightIcon={<MdFileUpload />} isDisabled={props.isDisabled} {...props.css}>
-            Upload
+            Buscar
           </Button>
         </FileInput>
       ) : (

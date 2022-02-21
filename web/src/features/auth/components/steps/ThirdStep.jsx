@@ -13,8 +13,7 @@ export function ThirdStep() {
         </Heading>
         <Text padding="20px">
           Debes de revisar la bandeja principal de tu correo, te enviamos un link para la
-          verificación de tu cuenta. ¡Una vez verificada podrás usar Ongaku! Debes revisar tu correo
-          para verificarlo y poder usar Ongaku.
+          verificación de tu cuenta. ¡Una vez verificada podrás usar Ongaku!
         </Text>
         <Button marginLeft="20px" as={Link} to={'/welcome?type=artist'}>
           Ir a Ongaku

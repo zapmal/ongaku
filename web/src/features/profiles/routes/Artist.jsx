@@ -144,7 +144,7 @@ export function ArtistProfile() {
 
         <Box margin="60px 0">
           <Heading fontSize="xx-large" textAlign="center">
-            Nuevos albumes y singles
+            Nuevos Albumes, Singles y EPs
           </Heading>
           <Flex justify="center">
             {NEW_ALBUMS_AND_SINGLES.map((song, index) => (

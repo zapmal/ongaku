@@ -104,7 +104,7 @@ export function PublishedWork() {
         </Table>
 
         <Box textAlign="center" margin={SUB_HEADER_MARGIN}>
-          <Heading>Administración de Albumes, EP, Singles</Heading>
+          <Heading>Administración de Albumes, EP y Singles</Heading>
           <Button rightIcon={<Icon as={MdAdd} />} marginTop="20px" onClick={handleNewAlbumOpen}>
             Publicar nuevo
           </Button>

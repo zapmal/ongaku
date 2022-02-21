@@ -9,7 +9,7 @@ import { NavigationBar } from '../styles';
 import { Link } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
 
-const labels = ['Basic Information', 'Artistic Information', 'End'];
+const labels = ['Información Básica', 'Información Artística', 'Listo'];
 
 export function ArtistRegister() {
   const [stepState, setStepState] = useState(undefined);

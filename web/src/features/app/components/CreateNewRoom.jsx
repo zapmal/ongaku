@@ -82,7 +82,7 @@ export function CreateNewRoom({ isOpen, onClose }) {
                 control={control}
                 options={[...MUSIC_GENRES]}
                 name="genres"
-                placeholder="Selecciona los Géneros"
+                placeholder="Hip-Hop, Rap, etc"
                 error={errors.genres}
                 onChangeCallback={(value) => value.map((v) => v.value)}
                 isMulti

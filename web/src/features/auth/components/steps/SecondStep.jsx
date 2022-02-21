@@ -112,7 +112,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
               control={control}
               options={[...MUSIC_GENRES]}
               name="genres"
-              placeholder="Selecciona los Géneros"
+              placeholder="Hip-Hop, Rap, etc"
               error={errors.genres}
               onChangeCallback={(value) => value.map((v) => v.value)}
               isMulti
@@ -192,7 +192,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
               control={control}
               options={[...COUNTRIES]}
               name="country"
-              placeholder="Selecciona un País"
+              placeholder="Venezuela"
               error={errors.country}
               isDisabled={request.status != ''}
               onChangeCallback={(value) => value.value}

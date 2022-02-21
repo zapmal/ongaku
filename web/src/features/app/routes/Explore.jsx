@@ -57,7 +57,7 @@ export function Explore() {
       </SimpleGrid>
 
       <Heading fontSize="2xl" textAlign="center" margin="40px 0 10px 0">
-        <Highlight>Géneros</Highlight> para buscar canciones
+        <Highlight>Géneros</Highlight> para buscar
       </Heading>
 
       <Text color="whiteAlpha.800" textAlign="center" fontSize="sm">

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
-import { UserWelcome } from './UserWelcome';
+import { UserWelcome, ArtistWelcome } from './';
 
 export function Welcome() {
   const location = useLocation();
@@ -10,7 +10,7 @@ export function Welcome() {
   if (location.search.includes('user')) {
     pageToRender = <UserWelcome />;
   } else if (location.search.includes('artist')) {
-    pageToRender = <h1>Artist Welcome</h1>;
+    pageToRender = <ArtistWelcome />;
   } else {
     pageToRender = <Navigate to="/" />;
   }

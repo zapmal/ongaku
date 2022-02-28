@@ -27,7 +27,9 @@ function App() {
 
         const { entity = {} } = await apiClient.get('whoami');
         setEntity(entity);
+        localStorage.setItem('isLoggedIn', true);
       } catch (error) {
+        localStorage.removeItem('isLoggedIn');
         console.log('An error occured in the CSRF request or in the Auto-Login request.', error);
       }
     }

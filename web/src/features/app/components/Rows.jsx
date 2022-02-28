@@ -111,8 +111,10 @@ export function RoomRow({ name, activeUsers, userLimit, host, startedAt, genres,
   );
 }
 
-export function ArtistRow({ name, image, amountOfFollowers, to }) {
+export function ArtistRow({ name, avatar, amountOfFollowers }) {
   const [isHovered, mouseEventsHandlers] = useHover();
+  // eslint-disable-next-line no-unused-vars
+  const [_, artistLink] = getLink(name, name);
 
   return (
     <Flex align="center" margin="13px 0" width="75%">
@@ -120,13 +122,20 @@ export function ArtistRow({ name, image, amountOfFollowers, to }) {
         size="lg"
         transition="opacity 300ms ease-in-out"
         as={Link}
-        to={to}
-        src={image}
+        to={artistLink}
+        src={avatar}
         opacity={isHovered && 0.6}
         {...mouseEventsHandlers}
       />
-      <Box marginLeft="20px">
-        <Text color={theme.colors.accentText.value} fontSize="lg" fontWeight="bold">
+      <Box marginLeft="20px" textAlign="left">
+        <Text
+          color={theme.colors.accentText.value}
+          fontSize="lg"
+          fontWeight="bold"
+          underline={false}
+          as={Link}
+          to={`/artist/${artistLink}`}
+        >
           {name}
         </Text>
         <Text color="whiteAlpha.700" fontSize="sm" textAlign="left">
@@ -227,7 +236,7 @@ export function PlaylistRow({ name, author, cover, amountOfSongs }) {
 
       <Spacer />
 
-      <Options isHovered={isHovered} isLarge={true} duration="8:57 min" onlyHeart={true} />
+      <Options isHovered={isHovered} isLarge={true} onlyHeart={true} />
     </RowContainer>
   );
 }

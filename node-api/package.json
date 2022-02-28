@@ -14,7 +14,7 @@
     "start:dev": "NODE_ENV=development rm -rf dist && dotenv -e .env.development -- nest start --watch",
     "start:prod": "NODE_ENV=production dotenv -e .env.production -- node dist/main",
     "migrate": "dotenv -e .env.development -- npx prisma migrate dev --name postgres-init",
-    "seed": "dotenv -e .env.development -- ts-node src/config/seeders/initial.ts",
+    "seed": "dotenv -e .env.development -- ts-node src/config/seeders/entities.ts",
     "studio": "dotenv -e .env.development -- npx prisma studio",
     "lint": "eslint \"{src}/**/*.ts\" --fix"
   },
@@ -25,6 +25,7 @@
     "@nestjs/core": "^8.2.4",
     "@nestjs/mapped-types": "^1.0.1",
     "@nestjs/platform-express": "^8.2.4",
+    "@nestjs/serve-static": "^2.2.2",
     "@prisma/client": "^3.7.0",
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",

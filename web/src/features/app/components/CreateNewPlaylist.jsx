@@ -8,28 +8,57 @@ import {
   ModalCloseButton,
   Text,
   Heading,
+  Spinner,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useMutation, useQueryClient } from 'react-query';
 import * as yup from 'yup';
+
+import { createPlaylist } from '../api/playlist';
 
 import { Button } from '@/components/Elements';
 import { Field } from '@/components/Form';
+import { useRequest } from '@/hooks';
 
 export function CreateNewPlaylist({ isOpen, onClose }) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       name: '',
     },
   });
+  const [request, setRequestState] = useRequest();
 
-  const onSubmit = (data) => console.log(data);
+  const queryClient = useQueryClient();
+  const mutation = useMutation(createPlaylist, {
+    onSuccess: () => queryClient.invalidateQueries('playlists'),
+  });
+
+  const onSubmit = async (data) => {
+    try {
+      const response = await mutation.mutateAsync(data);
+
+      setRequestState({
+        status: 'success',
+        title: '¡Éxito!',
+        message: response.message,
+      });
+
+      onClose();
+    } catch (error) {
+      setRequestState({
+        status: 'error',
+        title: 'Error',
+        message: error,
+      });
+    }
+  };
 
   return (
     <>
@@ -55,6 +84,7 @@ export function CreateNewPlaylist({ isOpen, onClose }) {
                 placeholder="OnlyBangers"
                 css={{ marginBottom: '10px' }}
                 error={errors.name}
+                isDisabled={request.status != ''}
                 register={register}
               />
               <Field
@@ -62,33 +92,37 @@ export function CreateNewPlaylist({ isOpen, onClose }) {
                 name="cover"
                 label="Portada"
                 css={{ marginBottom: '10px' }}
-                // isDisabled={true}
-                // error={errors.cover}
+                isDisabled={request.status != ''}
                 register={register}
               />
               <Field
                 type="file"
-                name="BackgroundImage"
+                name="background"
                 label="Fondo"
-                // isDisabled={true}
-                // error={errors.cover}
+                isDisabled={request.status != ''}
                 register={register}
               />
             </ModalBody>
             <ModalFooter margin="0 auto">
-              <Button variant="accent" type="submit">
-                Crear
-              </Button>
-              <Text
-                textDecoration="underline"
-                fontSize="sm"
-                color="whiteAlpha.700"
-                margin="0 20px"
-                onClick={onClose}
-                _hover={{ cursor: 'pointer' }}
-              >
-                Cancelar
-              </Text>
+              {isSubmitting ? (
+                <Spinner size="lg" />
+              ) : (
+                <>
+                  <Button variant="accent" type="submit" isDisabled={request.status != ''}>
+                    Crear
+                  </Button>
+                  <Text
+                    textDecoration="underline"
+                    fontSize="sm"
+                    color="whiteAlpha.700"
+                    margin="0 20px"
+                    onClick={onClose}
+                    _hover={{ cursor: 'pointer' }}
+                  >
+                    Cancelar
+                  </Text>
+                </>
+              )}
             </ModalFooter>
           </ModalContent>
         </form>

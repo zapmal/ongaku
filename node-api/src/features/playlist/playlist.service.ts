@@ -2,6 +2,7 @@ import { storeImages } from '@/internal/helpers';
 import { PrismaService } from '@/internal/services';
 import {
   Injectable,
+  BadRequestException as BadRequest,
   InternalServerErrorException as InternalServerError,
   NotFoundException as NotFound,
   UnauthorizedException as Unauthorized,
@@ -44,20 +45,108 @@ export class PlaylistService {
     }
   }
 
-  async getAll(entityId: number) {
-    return await this.prisma.userPlaylist.findMany({
+  async likePlaylist(playlistId: number, entityId: number) {
+    if (!playlistId) {
+      throw new BadRequest('Hubo un error en tu solicitud, intentalo más tarde');
+    }
+
+    const foundPlaylist = await this.prisma.userPlaylist.findUnique({
       where: {
-        userId: entityId,
+        id: playlistId,
       },
       include: {
         interaction: {
           where: {
-            userId: entityId,
-            likedPlaylist: true,
+            userPlaylistId: playlistId,
+          },
+          select: {
+            id: true,
+            value: true,
           },
         },
       },
     });
+
+    if (!foundPlaylist?.id) {
+      throw new NotFound('La playlist a la que intentas darle like no existe');
+    }
+
+    const isLiked = Boolean(foundPlaylist.interaction[0]?.value);
+    const update = isLiked ? { decrement: 1 } : { increment: 1 };
+
+    const likeResult = await this.prisma.interaction.upsert({
+      where: { id: foundPlaylist.interaction[0]?.id || 0 },
+      update: {
+        value: !isLiked,
+        userPlaylist: {
+          update: {
+            likes: {
+              ...update,
+            },
+          },
+        },
+      },
+      create: {
+        value: !isLiked,
+        userId: entityId,
+        userPlaylistId: playlistId,
+      },
+    });
+
+    return likeResult.value;
+  }
+
+  async getAll(entityId: number) {
+    if (!entityId) {
+      throw new BadRequest('Hubo un error en tu solicitud, intentalo más tarde');
+    }
+
+    const playlists = await this.prisma.userPlaylist.findMany({
+      where: {
+        userId: entityId,
+      },
+      select: {
+        id: true,
+        cover: true,
+        name: true,
+        likes: true,
+        user: {
+          select: {
+            username: true,
+          },
+        },
+      },
+    });
+
+    const likedPlaylists = await this.prisma.interaction.findMany({
+      where: {
+        value: true,
+        userId: entityId,
+      },
+      include: {
+        userPlaylist: true,
+        user: {
+          select: {
+            username: true,
+          },
+        },
+      },
+    });
+
+    const parsedPlaylists = playlists.map(
+      ({ id, cover, name, likes, user: { username } }) => ({
+        id,
+        cover,
+        name,
+        likes,
+        username,
+      }),
+    );
+    const liked = likedPlaylists.map(({ user: { username }, userPlaylist }) => {
+      return { ...userPlaylist, username };
+    });
+
+    return { playlists: parsedPlaylists, liked };
   }
 
   async delete(playlistId: number, entityId: number, role: Role) {

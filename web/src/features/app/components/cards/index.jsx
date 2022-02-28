@@ -10,18 +10,21 @@ import {
   MenuItem,
   MenuDivider,
 } from '@chakra-ui/react';
-import React from 'react';
-import { FaScroll } from 'react-icons/fa';
+import React, { useState } from 'react';
+import { FaScroll, FaHeartBroken } from 'react-icons/fa';
 import { IoMdHeart } from 'react-icons/io';
 import { MdPlayArrow, MdMoreVert, MdOutlineQueue, MdOpenInNew } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 
 import { FADE_OUT_ANIMATION, MENU_ITEM_PROPS } from '../../constants';
 import { useHover } from '../../hooks/useHover';
 
 import { theme } from '@/stitches.config.js';
 
-export function Card({ cover, children, type, isLikedPlaylist = false, ...extraStyles }) {
+export function Card({ cover, children, type, notLikeable = false, to, ...extraStyles }) {
   const [isHovered, mouseEventsHandlers] = useHover();
+  // initial state comes from api
+  const [isLiked, setLiked] = useState(false);
 
   return (
     <Box
@@ -44,11 +47,13 @@ export function Card({ cover, children, type, isLikedPlaylist = false, ...extraS
       />
       {isHovered && (
         <Box animation={FADE_OUT_ANIMATION}>
-          {isLikedPlaylist
+          {notLikeable
             ? likedSongsPlaylistButtons.map((button, index) => (
                 <HoverButton
                   key={index}
                   button={button}
+                  to={to}
+                  notLikeable={notLikeable}
                   mouseEventsHandlers={mouseEventsHandlers}
                 />
               ))
@@ -56,12 +61,12 @@ export function Card({ cover, children, type, isLikedPlaylist = false, ...extraS
                 <HoverButton
                   key={index}
                   button={button}
+                  isLiked={isLiked}
+                  setLiked={setLiked}
                   mouseEventsHandlers={mouseEventsHandlers}
                 />
               ))}
-          {!isLikedPlaylist && (
-            <OptionsButton mouseEventsHandlers={mouseEventsHandlers} type={type} />
-          )}
+          {!notLikeable && <OptionsButton mouseEventsHandlers={mouseEventsHandlers} type={type} />}
         </Box>
       )}
       {children}
@@ -95,6 +100,7 @@ const hoverButtons = [
     },
   },
   {
+    altIcon: FaHeartBroken,
     icon: IoMdHeart,
     position: {
       bottom: '60px',
@@ -109,11 +115,23 @@ const ICON_BUTTON_PROPS = {
   height: '50px',
 };
 
-function HoverButton({ button, mouseEventsHandlers }) {
+function HoverButton({ button, isLiked, setLiked, notLikeable, to, mouseEventsHandlers }) {
+  const navigate = useNavigate();
+  const icon = button.altIcon && isLiked ? button.altIcon : button.icon;
+
+  const handleOnClick = () => {
+    if (notLikeable) {
+      navigate(`/view/${to}`);
+    } else {
+      setLiked(!isLiked);
+    }
+  };
+
   return (
     <IconButton
       borderRadius="50%"
-      icon={<Icon as={button.icon} w="35px" h="35px" />}
+      onClick={button.icon !== MdPlayArrow ? handleOnClick : () => {}}
+      icon={<Icon as={icon} w="35px" h="35px" />}
       backgroundColor={theme.colors.primaryBase.value}
       _hover={{
         backgroundColor: theme.colors.accentSolid.value,

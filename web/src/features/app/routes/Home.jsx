@@ -107,7 +107,7 @@ export function Home() {
           <ArtistCard
             key={index}
             name={artist.name}
-            image={artist.image}
+            avatar={artist.image}
             amountOfFollowers={artist.amountOfFollowers}
             isHighlighted={index % 2 === 0}
             to={artist.to}
@@ -164,7 +164,7 @@ export function Home() {
               <ArtistCard
                 key={index}
                 name={item.name}
-                image={item.image}
+                avatar={item.image}
                 amountOfFollowers={item.amountOfFollowers}
                 to={item.to}
                 size="sm"

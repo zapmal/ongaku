@@ -38,7 +38,7 @@ const sizes = {
 };
 
 export function ArtistCard({
-  image,
+  avatar,
   name,
   amountOfFollowers,
   isHighlighted,
@@ -57,7 +57,7 @@ export function ArtistCard({
       position="relative"
     >
       <Image
-        src={image}
+        src={avatar}
         width={sizes[size].width}
         height={sizes[size].height}
         borderRadius={sizes[size].borderRadius}

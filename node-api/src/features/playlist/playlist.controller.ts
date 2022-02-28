@@ -10,6 +10,7 @@ import {
   Get,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ConfigService } from '@nestjs/config';
@@ -21,8 +22,8 @@ import { RequestWithEntity } from '@/internal/interfaces';
 import { Role } from '@/internal/constants';
 
 import { PlaylistService } from './playlist.service';
-import { GetMyPlaylistsDTO, NewPlaylistDTO } from './playlist.dto';
-import { getMyPlaylistsSchema, newPlaylistSchema } from './playlist.schemas';
+import { LikePlaylistDTO, NewPlaylistDTO } from './playlist.dto';
+import { likePlaylistSchema, newPlaylistSchema } from './playlist.schemas';
 
 @Controller('playlist')
 export class PlaylistController {
@@ -62,23 +63,38 @@ export class PlaylistController {
 
     return {
       message: errorStoringImages
-        ? `${message}, pero ha ocurrido un error al subir la imágen, inténtelo de nuevo luego`
+        ? `${message}, pero ha ocurrido un error al subir una (o ambas) imágenes, inténtelo de nuevo luego`
         : message,
+    };
+  }
+
+  @Put('like')
+  @UseGuards(RoleGuard([Role.ADMIN, Role.USER]))
+  @UsePipes(new JoiValidationPipe(likePlaylistSchema))
+  async likePlaylist(
+    @Req() request: RequestWithEntity,
+    @Body() { playlistId }: LikePlaylistDTO,
+  ) {
+    const likedPlaylist = await this.playlist.likePlaylist(
+      playlistId,
+      Number(request.entity.id),
+    );
+
+    return {
+      message: likedPlaylist
+        ? 'Playlist agregada a tus favoritas exitosamente'
+        : 'La playlist ha sido removida de tus favoritos',
     };
   }
 
   @Get('all')
   @UseGuards(RoleGuard([Role.ADMIN, Role.USER]))
-  @UsePipes(new JoiValidationPipe(getMyPlaylistsSchema))
-  async getMyPlaylists(
-    @Req() request: RequestWithEntity,
-    @Body() { entityId }: GetMyPlaylistsDTO,
-  ) {
-    const playlists = await this.playlist.getAll(entityId);
+  async getMyPlaylists(@Req() request: RequestWithEntity) {
+    const playlists = await this.playlist.getAll(Number(request.entity.id));
 
     return {
       message: 'Playlists encontradas exitosamente',
-      playlists,
+      ...playlists,
     };
   }
 

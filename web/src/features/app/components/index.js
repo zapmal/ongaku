@@ -2,6 +2,7 @@ export * from './home/FeaturedArtist';
 export * from './home/PerfectForYou';
 export * from './Song';
 export * from './Rows';
+export * from './Status';
 export * from './CreateNewPlaylist';
 export * from './CreateNewRoom';
 

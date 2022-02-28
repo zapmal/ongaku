@@ -6,9 +6,17 @@ import { Card } from './index';
 import { Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 
-export function PlaylistCard({ cover, name, likes, amountOfSongs, author, badge = true }) {
+export function PlaylistCard({
+  cover,
+  name,
+  likes,
+  amountOfSongs,
+  author,
+  badge = true,
+  notLikeable = false,
+}) {
   return (
-    <Card cover={cover} type="playlist">
+    <Card cover={cover} type="playlist" notLikeable={notLikeable} to={name}>
       {badge && (
         <Badge marginTop="5px" position="absolute" top={1} left={1}>
           Playlist
@@ -45,7 +53,7 @@ export function PlaylistCard({ cover, name, likes, amountOfSongs, author, badge 
 
 export function LikedSongsPlaylist() {
   return (
-    <Card cover="/assets/images/static-admin-avatar.jpeg" type="playlist" isLikedPlaylist={true}>
+    <Card cover="/assets/images/static-admin-avatar.jpeg" type="playlist" notLikeable={true}>
       <Box align="center">
         <Text fontWeight="bold">Canciones Favoritas</Text>
         <Text color="whiteAlpha.700" fontSize="sm">

@@ -102,7 +102,7 @@ export function UserProfile() {
               <ArtistCard
                 key={index}
                 name={artist.name}
-                image={artist.image}
+                avatar={artist.image}
                 amountOfFollowers={artist.amountOfFollowers}
                 to={artist.to}
                 isHighlighted={index % 2 === 0}

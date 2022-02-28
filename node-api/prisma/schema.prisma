@@ -39,6 +39,7 @@ model UserPlaylist {
   name       String?  @default("My Playlist") @db.VarChar(125)
   cover      String?
   background String?
+  // Consider deleting this and only using aggregates
   likes      Float?   @default(0)
   createdAt  DateTime @default(now()) @map("created_at") @db.Date
   updatedAt  DateTime @updatedAt @map("updated_at") @db.Date
@@ -91,7 +92,8 @@ model Artist {
   password      String   @db.VarChar(255)
   verifiedEmail Boolean  @map("verified_email")
   role          Role     @default(ARTIST)
-  bandId        Int?     @map("band_id")
+  // remove unique please
+  bandId        Int?     @unique @map("band_id")
 
   band              Band?              @relation(fields: [bandId], references: [id])
   artistMetrics     ArtistMetrics?
@@ -162,8 +164,8 @@ model Album {
   artist Artist @relation(fields: [artistId], references: [id])
   song   Song[]
 
-  @@map("album")
   Interaction Interaction[]
+  @@map("album")
 }
 
 model Song {
@@ -177,7 +179,8 @@ model Song {
   artistId   Int     @map("artist_id")
 
   album           Album             @relation(fields: [albumId], references: [id])
-  artist          Artist[]          @relation(fields: [artistId], references: [id])
+  artist          Artist[]
+  // artist          Artist[]          @relation(fields: [artistId], references: [id])
   songMetadata    SongMetadata?
   songMetrics     SongMetrics?
   interaction     Interaction[]
@@ -217,29 +220,30 @@ model SongMetrics {
 
 model Interaction {
   id             Int      @id @default(autoincrement())
-  likedSong      Boolean? @map("liked_song")
-  likedAlbum     Boolean? @map("liked_album")
-  likedPlaylist  Boolean? @map("liked_playlist")
-  followedArtist Boolean? @map("followed_artist")
-  artistId       Int      @map("artist_id")
-  albumId        Int      @map("album_id")
-  userId         Int      @map("user_id")
-  songId         Int      @map("song_id")
-  userPlaylistId Int      @map("user_playlist_id")
+  value Boolean?  
+  // likedSong      Boolean? @map("liked_song")
+  // likedAlbum     Boolean? @map("liked_album")
+  // likedPlaylist  Boolean? @map("liked_playlist")
+  // followedArtist Boolean? @map("followed_artist")
+  artistId       Int?     @map("artist_id")
+  albumId        Int?     @map("album_id")
+  userId         Int?     @map("user_id")
+  songId         Int?     @map("song_id")
+  userPlaylistId Int?     @map("user_playlist_id")
 
-  album        Album        @relation(fields: [albumId], references: [id])
-  artist       Artist       @relation(fields: [artistId], references: [id])
-  user         User         @relation(fields: [userId], references: [id])
-  song         Song         @relation(fields: [songId], references: [id])
-  userPlaylist UserPlaylist @relation(fields: [userPlaylistId], references: [id])
+  album        Album?        @relation(fields: [albumId], references: [id])
+  artist       Artist?       @relation(fields: [artistId], references: [id])
+  user         User?         @relation(fields: [userId], references: [id])
+  song         Song?         @relation(fields: [songId], references: [id])
+  userPlaylist UserPlaylist? @relation(fields: [userPlaylistId], references: [id])
 
   @@map("interaction")
 }
 
 // Many-to-many table
 model SongsInPlaylist {
-  songId         Int @map("song_id")
-  userPlaylistId Int @map("user_playlist_id")
+  songId         Int @unique @map("song_id")
+  userPlaylistId Int @unique @map("user_playlist_id")
 
   song         Song         @relation(fields: [songId], references: [id])
   userPlaylist UserPlaylist @relation(fields: [userPlaylistId], references: [id])

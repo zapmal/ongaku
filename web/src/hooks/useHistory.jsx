@@ -9,10 +9,8 @@ export function useHistory(initialHistory = []) {
   const setHistory = (history) => {
     if (storedHistory.length >= 5) {
       const filteredHistory = [...storedHistory, history].slice(-5);
-      console.log('top', filteredHistory);
       setStoredHistory(filteredHistory);
     } else {
-      console.log('bot', history);
       setStoredHistory([...storedHistory, history]);
     }
   };

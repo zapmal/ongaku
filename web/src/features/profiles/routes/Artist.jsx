@@ -130,7 +130,7 @@ export function ArtistProfile() {
               <Box key={index}>
                 <ArtistRow
                   name={artist.name}
-                  image={artist.image}
+                  avatar={artist.image}
                   amountOfFollowers={artist.amountOfFollowers}
                   to={artist.to}
                   badge={false}

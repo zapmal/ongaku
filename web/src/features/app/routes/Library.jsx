@@ -1,18 +1,31 @@
-import { Box, Flex, Divider, Center, Text, SimpleGrid, useDisclosure } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Divider,
+  Center,
+  Text,
+  SimpleGrid,
+  Heading,
+  useDisclosure,
+} from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
+import { useQuery } from 'react-query';
 
+import { getMyPlaylists } from '../api/playlist';
 import {
   ArtistCard,
   PlaylistCard,
   LikedSongsPlaylist,
   SongCard,
   CreateNewPlaylist,
+  Status,
 } from '../components';
 import { ARTISTS_IN_LIBRARY, PLAYLISTS_IN_LIBRARY, ALBUMS_IN_LIBRARY } from '../constants';
 
 import { Footer } from '@/components/Core';
-import { Button } from '@/components/Elements';
+import { Button, Link } from '@/components/Elements';
+import { Highlight } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
 
 export function Library() {
@@ -49,7 +62,7 @@ export function Library() {
 
   return (
     <>
-      <Box minHeight="455px" maxHeight="700px" margin="0 20px 0 40px">
+      <Box minHeight="455px" maxHeight="100%" margin="0 20px 0 40px">
         <Flex gap={20} justify="center">
           <LibraryOption onClick={() => setSelected('artist')} selected={selected === 'artist'}>
             Artistas
@@ -89,11 +102,12 @@ export function Library() {
 }
 
 function Artists() {
+  console.log('Querying artists');
   return ARTISTS_IN_LIBRARY.map((artist, index) => (
     <Box margin="10px 0" key={index}>
       <ArtistCard
         name={artist.name}
-        image={artist.image}
+        avatar={artist.image}
         amountOfFollowers={artist.amountOfFollowers}
         to={artist.to}
         badge={false}
@@ -104,6 +118,7 @@ function Artists() {
 }
 
 function Albums() {
+  console.log('Querying albums');
   return ALBUMS_IN_LIBRARY.map((album, index) => (
     <Box margin="10px 0" key={index}>
       <SongCard
@@ -120,19 +135,45 @@ function Albums() {
 }
 
 function Playlists() {
-  return PLAYLISTS_IN_LIBRARY.map((playlist, index) => (
-    <Box margin="10px 0" key={index}>
-      <PlaylistCard
-        key={index}
-        cover={playlist.cover}
-        name={playlist.name}
-        likes={playlist.likes}
-        amountOfSongs={playlist.amountOfSongs}
-        author={playlist.author}
-        badge={false}
-      />
+  const { data, isLoading, isError, error } = useQuery('playlists', getMyPlaylists);
+
+  if (isLoading) {
+    return <Status status="loading" message="Loading playlists..." />;
+  }
+
+  if (isError) {
+    return <Status status="error" message={error} />;
+  }
+
+  return data.playlists.length === 0 ? (
+    <Box textAlign="center" position="absolute" top="200px">
+      <Heading fontSize="2xl">
+        No has creado o marcado como favorita ni una <Highlight>playlist</Highlight>
+      </Heading>
+      <Text color="whiteAlpha.700" marginTop="10px" fontSize="lg">
+        ¿Porqué no lo intentas?
+      </Text>
+      <Text color="whiteAlpha.700" marginTop="10px">
+        Presiona el botón que está arriba o visita la{' '}
+        <Link to="/explore">página de exploración</Link> para empezar.
+      </Text>
     </Box>
-  ));
+  ) : (
+    data.playlists.map((playlist, index) => (
+      <Box margin="10px 0" key={index}>
+        <PlaylistCard
+          key={index}
+          cover={`${import.meta.env.VITE_NODE_API_URL}/static/playlist/${playlist.cover}`}
+          name={playlist.name}
+          likes={playlist.likes}
+          amountOfSongs={0}
+          author={playlist.username}
+          badge={false}
+          notLikeable={true}
+        />
+      </Box>
+    ))
+  );
 }
 
 function LibraryOption({ selected, onClick, children }) {

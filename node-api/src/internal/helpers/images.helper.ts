@@ -2,7 +2,8 @@ import { BadRequestException as BadRequest } from '@nestjs/common';
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 
 import * as hash from 'object-hash';
-import { writeFile } from 'fs';
+import { writeFile, mkdirSync, existsSync } from 'fs';
+import { extname, join } from 'path';
 
 type MulterImageOptions = {
   fileFilter: MulterOptions['fileFilter'];
@@ -32,7 +33,11 @@ export const storeImages = (
 ) => {
   let errorStoringImages = false;
 
-  if (Object.keys(data).length === 0) {
+  if (!existsSync(destination)) {
+    mkdirSync(destination);
+  }
+
+  if (!data || Object.keys(data).length === 0) {
     errorStoringImages = true;
     return [{}, errorStoringImages];
   }
@@ -43,23 +48,31 @@ export const storeImages = (
     Object.keys(data).forEach((key) => {
       const image = data[key][0];
       const filename = hash(image.originalname);
+      const extension = extname(image.originalname);
+      const file = `${filename}${extension}`;
 
-      writeFile(`${destination}/${filename}`, image.buffer, (err) => {
-        if (err) errorStoringImages = true;
+      writeFile(`${destination}/${file}`, image.buffer, (err) => {
+        if (err) {
+          errorStoringImages = true;
+        }
       });
 
-      images[key] = filename.concat(`-${image.mimetype}`);
+      images[key] = file;
     });
 
     return [images, errorStoringImages];
   } else {
     const image = data[0];
     const filename = hash(image.originalname);
+    const extension = extname(image.originalname);
+    const file = `${filename}${extension}`;
 
-    writeFile(`${destination}/${filename}`, image.buffer, (err) => {
-      if (err) errorStoringImages = true;
+    writeFile(`${destination}/${file}`, image.buffer, (err) => {
+      if (err) {
+        errorStoringImages = true;
+      }
     });
 
-    return [filename.concat(`-${image.mimetype}`), errorStoringImages];
+    return [file, errorStoringImages];
   }
 };

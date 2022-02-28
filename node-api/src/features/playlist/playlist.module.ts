@@ -8,5 +8,6 @@ import { PlaylistController } from './playlist.controller';
 @Module({
   controllers: [PlaylistController],
   providers: [PlaylistService, PrismaService],
+  exports: [PlaylistService],
 })
 export class PlaylistModule {}

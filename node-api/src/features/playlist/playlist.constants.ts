@@ -1,4 +1,4 @@
 export const DEFAULT_PLAYLIST_IMAGES = {
-  background: 'default_background-image/jpg',
-  cover: 'default_background-image/jpg',
+  background: 'default_background.jpg',
+  cover: 'default_cover.jpg',
 };

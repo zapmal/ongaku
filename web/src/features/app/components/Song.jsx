@@ -145,10 +145,16 @@ export function Options({ isHovered, duration, streams, isLarge = false, onlyHea
 
       {isHovered && (
         <Box animation={FADE_OUT_ANIMATION} textAlign="left">
-          {!onlyHeart && <OptionMenu isLarge={isLarge} />}
-          <Option icon={IoMdHeartEmpty} isLarge={isLarge} />
+          {!onlyHeart && (
+            <>
+              <OptionMenu isLarge={isLarge} />
+              <Option icon={IoMdHeartEmpty} isLarge={isLarge} />
+            </>
+          )}
         </Box>
       )}
+
+      {onlyHeart && <Option icon={IoMdHeartEmpty} isLarge={isLarge} />}
 
       <Text
         color={theme.colors.primaryText.value}

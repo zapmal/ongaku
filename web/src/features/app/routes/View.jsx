@@ -19,7 +19,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { AiOutlineHeart } from 'react-icons/ai';
-import { MdShare, MdPlayArrow, MdPause } from 'react-icons/md';
+import { MdShare, MdPlayArrow, MdPause, MdDelete } from 'react-icons/md';
 
 import { Footer } from '@/components/Core';
 import { Banner, Link } from '@/components/Elements';
@@ -30,8 +30,14 @@ import { getLink } from '@/utils/getLink';
 const BUTTON_PROPS = {
   variant: 'outline',
   borderRadius: '5px',
-  _hover: { bg: theme.colors.accentSolidHover.value },
-  _active: { bg: theme.colors.accentSolidActive.value },
+  _hover: {
+    bg: theme.colors.accentSolidHover.value,
+    borderColor: 'transparent',
+  },
+  _active: {
+    bg: theme.colors.accentSolidActive.value,
+    borderColor: 'transparent',
+  },
 };
 
 const TABLE_ROW_PROPS = {
@@ -77,6 +83,18 @@ export function View() {
               />
               <Button {...BUTTON_PROPS} rightIcon={<Icon as={AiOutlineHeart} w="25px" h="25px" />}>
                 Like
+              </Button>
+              <Button
+                variant="outline"
+                borderColor={theme.colors.dangerSolid.value}
+                color={theme.colors.dangerSolid.value}
+                _hover={{
+                  backgroundColor: theme.colors.dangerSolidHover.value,
+                  color: '#ffffff',
+                }}
+                rightIcon={<Icon as={MdDelete} w="20px" h="20px" />}
+              >
+                Borrar
               </Button>
               <Button {...BUTTON_PROPS} rightIcon={<Icon as={MdShare} w="20px" h="20px" />}>
                 Compartir

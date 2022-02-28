@@ -39,7 +39,8 @@ export function IconWrapper({ variant, wrapped = false, size = 40, children }) {
 const Wrapper = styled('div', {
   padding: '$4',
   borderRadius: '20px',
-  width: '13%',
+  width: '14%',
+  height: '10%',
   transition: '200ms ease-in',
 
   '& *': {

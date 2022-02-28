@@ -39,7 +39,6 @@ model UserPlaylist {
   name       String?  @default("My Playlist") @db.VarChar(125)
   cover      String?
   background String?
-  // Consider deleting this and only using aggregates
   likes      Float?   @default(0)
   createdAt  DateTime @default(now()) @map("created_at") @db.Date
   updatedAt  DateTime @updatedAt @map("updated_at") @db.Date

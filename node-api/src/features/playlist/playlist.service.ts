@@ -57,6 +57,7 @@ export class PlaylistService {
       include: {
         interaction: {
           where: {
+            userId: entityId,
             userPlaylistId: playlistId,
           },
           select: {

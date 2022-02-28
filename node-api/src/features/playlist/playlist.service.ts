@@ -45,7 +45,7 @@ export class PlaylistService {
     }
   }
 
-  async likePlaylist(playlistId: number, entityId: number) {
+  async like(playlistId: number, entityId: number) {
     if (!playlistId) {
       throw new BadRequest('Hubo un error en tu solicitud, intentalo más tarde');
     }
@@ -96,7 +96,7 @@ export class PlaylistService {
     return likeResult.value;
   }
 
-  async getAll(entityId: number) {
+  async getLiked(entityId: number) {
     if (!entityId) {
       throw new BadRequest('Hubo un error en tu solicitud, intentalo más tarde');
     }

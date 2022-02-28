@@ -1,7 +1,7 @@
 import { apiClient } from '@/lib/api';
 
-export const getMyPlaylists = () => {
-  return apiClient.get('playlist/all');
+export const getLikedPlaylists = () => {
+  return apiClient.get('playlist/liked');
 };
 
 export const createPlaylist = (data) => {

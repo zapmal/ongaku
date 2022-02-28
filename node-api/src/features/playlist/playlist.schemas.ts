@@ -10,6 +10,6 @@ export const likePlaylistSchema = Joi.object({
   playlistId: Joi.number().required(),
 });
 
-export const getMyPlaylistsSchema = Joi.object({
+export const getLikedPlaylistsSchema = Joi.object({
   entityId: Joi.number().required(),
 });

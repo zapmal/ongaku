@@ -6,6 +6,6 @@ export class LikePlaylistDTO {
   playlistId: number;
 }
 
-export class GetMyPlaylistsDTO {
+export class getLikedPlaylistsDTO {
   entityId?: number;
 }

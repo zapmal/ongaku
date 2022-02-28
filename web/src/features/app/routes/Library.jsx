@@ -12,7 +12,7 @@ import React, { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { useQuery } from 'react-query';
 
-import { getMyPlaylists } from '../api/playlist';
+import { getLikedPlaylists } from '../api/playlist';
 import {
   ArtistCard,
   PlaylistCard,
@@ -135,7 +135,7 @@ function Albums() {
 }
 
 function Playlists() {
-  const { data, isLoading, isError, error } = useQuery('playlists', getMyPlaylists);
+  const { data, isLoading, isError, error } = useQuery('playlists', getLikedPlaylists);
 
   if (isLoading) {
     return <Status status="loading" message="Loading playlists..." />;

@@ -17,7 +17,7 @@ import { ConfigService } from '@nestjs/config';
 
 import { multerImageOptions } from '@/internal/helpers';
 import { JoiValidationPipe } from '@/internal/pipes';
-import { AuthGuard, RoleGuard } from '@/internal/guards';
+import { RoleGuard } from '@/internal/guards';
 import { RequestWithEntity } from '@/internal/interfaces';
 import { Role } from '@/internal/constants';
 
@@ -26,12 +26,12 @@ import { LikePlaylistDTO, NewPlaylistDTO } from './playlist.dto';
 import { likePlaylistSchema, newPlaylistSchema } from './playlist.schemas';
 
 @Controller('playlist')
+@UseGuards(RoleGuard([Role.ADMIN, Role.USER]))
 export class PlaylistController {
   constructor(private playlist: PlaylistService, private config: ConfigService) {}
 
   @Post('new')
   @UsePipes(new JoiValidationPipe(newPlaylistSchema))
-  @UseGuards(AuthGuard)
   @UseInterceptors(
     FileFieldsInterceptor(
       [
@@ -69,16 +69,9 @@ export class PlaylistController {
   }
 
   @Put('like')
-  @UseGuards(RoleGuard([Role.ADMIN, Role.USER]))
   @UsePipes(new JoiValidationPipe(likePlaylistSchema))
-  async likePlaylist(
-    @Req() request: RequestWithEntity,
-    @Body() { playlistId }: LikePlaylistDTO,
-  ) {
-    const likedPlaylist = await this.playlist.likePlaylist(
-      playlistId,
-      Number(request.entity.id),
-    );
+  async like(@Req() request: RequestWithEntity, @Body() { playlistId }: LikePlaylistDTO) {
+    const likedPlaylist = await this.playlist.like(playlistId, Number(request.entity.id));
 
     return {
       message: likedPlaylist
@@ -87,10 +80,9 @@ export class PlaylistController {
     };
   }
 
-  @Get('all')
-  @UseGuards(RoleGuard([Role.ADMIN, Role.USER]))
-  async getMyPlaylists(@Req() request: RequestWithEntity) {
-    const playlists = await this.playlist.getAll(Number(request.entity.id));
+  @Get('liked')
+  async getLiked(@Req() request: RequestWithEntity) {
+    const playlists = await this.playlist.getLiked(Number(request.entity.id));
 
     return {
       message: 'Playlists encontradas exitosamente',
@@ -99,7 +91,6 @@ export class PlaylistController {
   }
 
   @Delete(':id')
-  @UseGuards(RoleGuard([Role.ADMIN, Role.USER]))
   async delete(@Param() { id }, @Req() request: RequestWithEntity) {
     const entity = request.entity;
 

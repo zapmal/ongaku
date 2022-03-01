@@ -1,9 +1,7 @@
 import { SimpleGrid, Image, Box, Text, Divider } from '@chakra-ui/react';
 import React from 'react';
-import { AiOutlinePlus } from 'react-icons/ai';
-import { IoMdMicrophone } from 'react-icons/io';
 
-import { Option, OptionMenu, SongInQueue } from '../components';
+import { SongInQueue } from '../components';
 import { SONGS_IN_QUEUE } from '../constants';
 
 import { Highlight } from '@/components/Utils';
@@ -14,27 +12,21 @@ export function Queue() {
       <SimpleGrid columns={2} align="space-evenly" position="relative" margin="20px 50px">
         <Box width="550px">
           <Image
-            src="/assets/images/static-queue-ztd.jpg"
+            src="/assets/images/static-arknights-race.jpeg"
             width="inherit"
             height="400px"
             borderRadius="5px"
             sx={{ position: 'fixed', top: 20 }}
           />
-          <Box margin="10px" position="fixed" bottom="100px" left="210px">
-            <Option
-              icon={AiOutlinePlus}
-              isLarge={true}
-              label="Agregar a Playlist"
-              marginRight="40px"
-            />
-            <Option
-              icon={IoMdMicrophone}
-              isLarge={true}
-              label="Mostrar Líricas "
-              marginRight="40px"
-            />
-            <OptionMenu isLarge={true} />
-          </Box>
+          <Text
+            position="fixed"
+            bottom="120px"
+            left="290px"
+            color="whiteAlpha.700"
+            fontWeight="bold"
+          >
+            Portada
+          </Text>
         </Box>
 
         <Box>

@@ -16,7 +16,6 @@ import {
   Box,
 } from '@chakra-ui/react';
 import React from 'react';
-import { FaScroll } from 'react-icons/fa';
 import { IoMdHeartEmpty, IoMdRemoveCircleOutline } from 'react-icons/io';
 import { MdMoreVert, MdPlayArrow, MdPause } from 'react-icons/md';
 
@@ -242,12 +241,6 @@ export function OptionMenu({ isLarge = false, ...styles }) {
             OnlyPain Official Soundtrack
           </MenuItem>
         </MenuOptionGroup>
-
-        <MenuDivider />
-
-        <MenuItem {...MENU_ITEM_PROPS} icon={<Icon as={FaScroll} w="15px" h="15px" />}>
-          Mostrar créditos
-        </MenuItem>
       </MenuList>
     </Menu>
   );

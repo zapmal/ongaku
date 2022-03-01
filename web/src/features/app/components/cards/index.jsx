@@ -11,7 +11,7 @@ import {
   MenuDivider,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { FaScroll, FaHeartBroken } from 'react-icons/fa';
+import { FaHeartBroken } from 'react-icons/fa';
 import { IoMdHeart } from 'react-icons/io';
 import { MdPlayArrow, MdMoreVert, MdOutlineQueue, MdOpenInNew } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
@@ -194,15 +194,8 @@ function OptionsButton({ type, mouseEventsHandlers }) {
                 OnlyPain Official Soundtrack
               </MenuItem>
             </MenuOptionGroup>
-            <MenuDivider />
           </>
         )}
-        <MenuItem
-          {...MENU_ITEM_PROPS}
-          icon={<Icon as={FaScroll} w="15px" h="15px" marginTop="5px" />}
-        >
-          Mostrar Créditos
-        </MenuItem>
       </MenuList>
     </Menu>
   );

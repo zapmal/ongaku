@@ -27,7 +27,6 @@ export function PerfectForYou({
   image,
   description,
   genres,
-  monthlyListeners,
   followers,
   pageURL,
   youtubeChannelURL,
@@ -61,9 +60,9 @@ export function PerfectForYou({
           <Highlight>Géneros:</Highlight> {genres}
         </Text>
 
-        <Text {...TEXT_PROPS}>
+        {/* <Text {...TEXT_PROPS}>
           <Highlight>Audiencia Mensual:</Highlight> {monthlyListeners}
-        </Text>
+        </Text> */}
 
         <Text {...TEXT_PROPS}>
           <Highlight>Seguidores:</Highlight> {followers}

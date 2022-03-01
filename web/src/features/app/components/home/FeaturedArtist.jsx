@@ -16,8 +16,7 @@ export function FeaturedArtistInformation({ name, amountOfFollowers, description
           {name}
         </Heading>
         <Flex flexFlow="column">
-          <ActionButton>SEGUIR</ActionButton>
-          <ActionButton marginTop="10px">IR A PÁGINA</ActionButton>
+          <ActionButton marginTop="20px">IR A PÁGINA</ActionButton>
         </Flex>
       </Flex>
       <Text fontWeight="bold" paddingTop="10px">

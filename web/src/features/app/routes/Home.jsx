@@ -1,16 +1,9 @@
 import { Box, Heading, SimpleGrid, Flex, Text } from '@chakra-ui/react';
 import React from 'react';
 
-import {
-  SongCard,
-  PlaylistCard,
-  ArtistCard,
-  FeaturedArtistInformation,
-  PerfectForYou,
-} from '../components';
+import { SongCard, ArtistCard, FeaturedArtistInformation, PerfectForYou } from '../components';
 import {
   FEATURED_ARTIST,
-  RECENTLY_PLAYED,
   GRADIENTS,
   SECTION_MARGIN,
   SUB_SECTION_MARGIN,
@@ -61,44 +54,12 @@ export function Home() {
         </SimpleGrid>
       </Banner>
 
-      <Heading margin="20px">
-        Reproducido <Highlight>Recientemente</Highlight>
-      </Heading>
-
-      <SimpleGrid column={6}>
-        <Flex margin="20px">
-          {RECENTLY_PLAYED.map((item, index) =>
-            item.cardType === 'song' ? (
-              <SongCard
-                key={index}
-                cover={item.cover}
-                name={item.name}
-                isExplicit={item.isExplicit}
-                type={item.type}
-                authors={item.authors}
-                year={item.year}
-              />
-            ) : (
-              <PlaylistCard
-                key={index}
-                cover={item.cover}
-                name={item.name}
-                likes={item.likes}
-                amountOfSongs={item.amountOfSongs}
-                author={item.author}
-              />
-            )
-          )}
-        </Flex>
-      </SimpleGrid>
-
-      <Box margin={SECTION_MARGIN}>
+      <Box margin="0 20px">
         <Heading>
           <Highlight>Artistas</Highlight> Sugeridos
         </Heading>
-        <Text color="whiteAlpha.800" marginTop="10px">
-          Basandonos en tu actividad reciente, te sugerimos los siguientes artistas ya que comparten
-          tu estilo.
+        <Text color="whiteAlpha.800" margin="10px 0">
+          Artistas populares, nuevos o en tendencia que puede te gusten.
         </Text>
       </Box>
 
@@ -120,7 +81,8 @@ export function Home() {
           Perfecto para <Highlight>ti</Highlight>
         </Heading>
         <Text color="whiteAlpha.800" marginTop="10px">
-          Esta recomendación viene de tus artistas y géneros más escuchados
+          Es uno de los artistas más populares en la plataforma últimamente, probablemente se adapte
+          a tu estilo también {';)'}
         </Text>
 
         {PERFECT_FOR_YOU.map((artist, index) => (
@@ -143,7 +105,7 @@ export function Home() {
           <Highlight>Tendencias</Highlight>
         </Heading>
         <Text color="whiteAlpha.800" marginTop="10px">
-          Artistas, canciones o playlists más escuchadas en las últimas 48 horas
+          Artistas, canciones o playlists más escuchadas en las últimas 48 horas.
         </Text>
       </Box>
 

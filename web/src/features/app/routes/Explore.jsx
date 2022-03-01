@@ -3,11 +3,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { SongRow, ArtistRow } from '../components';
-import { NEW_ARTISTS, NEW_SONGS } from '../constants';
+import { NEW_ARTISTS, NEW_SONGS, POPULAR_TOPICS } from '../constants';
 
 import { Footer } from '@/components/Core';
 import { Highlight } from '@/components/Utils';
-import { MUSIC_GENRES } from '@/features/auth';
 import { getLink } from '@/utils/getLink';
 
 export function Explore() {
@@ -46,7 +45,6 @@ export function Explore() {
                 name={artist.name}
                 avatar={artist.image}
                 amountOfFollowers={artist.amountOfFollowers}
-                to={artist.to}
                 badge={false}
                 size="sm"
               />
@@ -57,17 +55,17 @@ export function Explore() {
       </SimpleGrid>
 
       <Heading fontSize="2xl" textAlign="center" margin="40px 0 10px 0">
-        <Highlight>Géneros</Highlight> para buscar
+        <Highlight>Tópicos</Highlight> recomendados para buscar
       </Heading>
 
       <Text color="whiteAlpha.800" textAlign="center" fontSize="sm">
-        Haz click en uno de los géneros para filtrar canciones que se adapten a tu estilo único.
+        Haz click en uno de los tópicos para realizar la búsqueda.
       </Text>
 
-      <SimpleGrid margin="0 20px 30px 20px" columns={Math.floor(MUSIC_GENRES.length / 2) - 2}>
-        {MUSIC_GENRES.map((genre, index) => {
+      <SimpleGrid margin="20px 30px" spacing="20px" columns={5}>
+        {POPULAR_TOPICS.map((topic, index) => {
           const randomNumber = Math.round(Math.random() * 5);
-          return <Genre name={genre.label} key={index} color={COLORS[randomNumber]} />;
+          return <Topic name={topic} key={index} color={COLORS[randomNumber]} />;
         })}
       </SimpleGrid>
 
@@ -78,20 +76,18 @@ export function Explore() {
 
 const COLORS = ['green', 'yellow', 'red', 'blue', 'pink', 'purple'];
 
-function Genre({ name, color }) {
+function Topic({ name, color }) {
   // eslint-disable-next-line no-unused-vars
   const [_, link] = getLink(name, name);
 
   return (
     <Box
       backgroundColor={`${color}.600`}
-      height="65px"
-      width="140px"
-      paddingTop="20px"
+      width="100%"
+      margin="5px"
+      padding="10px 0"
       borderRadius="5px"
-      fontSize="lg"
       textAlign="center"
-      margin="15px 10px"
       as={Link}
       fontWeight="bold"
       to={`/search?query=${link}`}

@@ -79,7 +79,6 @@ export function PublishedWork() {
               <Th color="inherit">id</Th>
               <Th color="inherit">Nombre</Th>
               <Th color="inherit">Longitud</Th>
-              <Th color="inherit">Líricas</Th>
               <Th color="inherit">Explicito</Th>
               <Th color="inherit">ID de Album</Th>
               <Th color="inherit">Opciones</Th>
@@ -91,7 +90,6 @@ export function PublishedWork() {
                 <Td>{song.id}</Td>
                 <Td>{song.name}</Td>
                 <Td>{song.length}</Td>
-                <Td>{song.lyrics ? 'Disponibles' : 'Inexistentes'}</Td>
                 <Td>{song.isExplicit ? 'Sí' : 'No'}</Td>
                 <Td>{song.albumId}</Td>
                 <Td>

@@ -205,7 +205,7 @@ export const TRENDING = [
   },
 ];
 export const SONGS_IN_QUEUE = [
-  { name: 'Morphogenetic Sorrow', authors: 'Shinji Hosoe', duration: '4:03' },
+  { name: 'Arknights Ost', authors: 'Dj Okawari', duration: '4:03' },
   { name: 'Blue Bird Lamentation', authors: 'Shinji Hosoe', duration: '3:33' },
   { name: 'INDUSTRY BABY', authors: 'Lil Nas X, Jack Harlow', duration: '2:22', isExplicit: true },
   { name: 'Watch Me', authors: 'The Phantoms', duration: '3:35' },
@@ -809,4 +809,24 @@ export const ALBUMS = [
     cover: '/assets/images/static-oh-my-god.jpg',
     artistId: 391,
   },
+];
+
+export const POPULAR_TOPICS = [
+  'Daddy Yankee',
+  'Soundtrack',
+  'Gura',
+  'Iverson',
+  'Shakira',
+  'DEMONDICE',
+  'DJ Okawari',
+  'BTS',
+  'TWICE',
+  'EXO',
+  'Imagine Dragons',
+  'Against the Current',
+  'Bea Miller',
+  'BLACKPINK',
+  'Micah Martin',
+  'Casey Edward',
+  'CHVRCHES',
 ];

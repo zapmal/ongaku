@@ -1,5 +1,4 @@
 import {
-  Textarea,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -15,7 +14,6 @@ import * as yup from 'yup';
 
 import { Button } from '@/components/Elements';
 import { Field, Checkbox } from '@/components/Form';
-import { theme } from '@/stitches.config.js';
 
 export function SongModal({ isOpen, onClose, shouldValidate }) {
   const {
@@ -28,7 +26,6 @@ export function SongModal({ isOpen, onClose, shouldValidate }) {
     defaultValues: {
       name: '',
       length: '',
-      lyrics: '',
       isExplicit: false,
       verifiedEmail: false,
     },
@@ -62,34 +59,14 @@ export function SongModal({ isOpen, onClose, shouldValidate }) {
               error={errors.name}
               register={register}
             />
-            <Field
-              type="text"
-              name="length"
-              label="Longitud (m:ss)"
-              placeholder="3:14, 1:15"
-              css={{ marginBottom: '10px' }}
-              error={errors.length}
-              register={register}
-            />
-            <Text fontWeight="bold" fontSize="sm" margin="10px 3px 15px">
-              Líricas
-            </Text>
-            <Textarea
-              name="lyrics"
-              placeholder="Líricas..."
-              resize="none"
-              marginBottom="10px"
-              borderColor={errors.lyrics && theme.colors.dangerSolid.value}
-              _hover={{
-                borderColor: theme.colors.accentSolid.value,
-              }}
-              focusBorderColor={theme.colors.accentSolid.value}
-              {...register('lyrics')}
-            />
-            {errors.lyrics && (
-              <Text marginBottom="10px" color={theme.colors.dangerSolid.value}>
-                {errors.lyrics.message}
-              </Text>
+            {shouldValidate && (
+              <Field
+                type="file"
+                name="song"
+                label="Archivo"
+                css={{ marginBottom: '10px' }}
+                register={register}
+              />
             )}
             <Checkbox
               name="isExplicit"
@@ -124,14 +101,10 @@ export function SongModal({ isOpen, onClose, shouldValidate }) {
 
 const schema = yup.object({
   name: yup.string().required('Este campo es requerido'),
-  length: yup.string().required('Este campo es requerido'),
-  lyrics: yup.string().required('Este campo es requerido'),
   isExplicit: yup.boolean().required('Este campo es requerido'),
 });
 
 const editSchema = yup.object({
   name: yup.string(),
-  length: yup.string(),
-  lyrics: yup.string(),
   isExplicit: yup.boolean(),
 });

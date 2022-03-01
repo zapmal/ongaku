@@ -53,6 +53,7 @@ export const storeImages = (
 
       writeFile(`${destination}/${file}`, image.buffer, (err) => {
         if (err) {
+          console.log('Error uploading images', err);
           errorStoringImages = true;
         }
       });
@@ -69,6 +70,7 @@ export const storeImages = (
 
     writeFile(`${destination}/${file}`, image.buffer, (err) => {
       if (err) {
+        console.log('Error uploading image', err);
         errorStoringImages = true;
       }
     });

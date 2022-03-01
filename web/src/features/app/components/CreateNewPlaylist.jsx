@@ -37,12 +37,17 @@ export function CreateNewPlaylist({ isOpen, onClose }) {
 
   const queryClient = useQueryClient();
   const mutation = useMutation(createPlaylist, {
-    onSuccess: () => queryClient.invalidateQueries('playlists'),
+    onSuccess: () => queryClient.invalidateQueries('library-playlists'),
   });
 
   const onSubmit = async (data) => {
+    const body = new FormData();
+    body.append('name', data.name);
+    body.append('cover', data.cover[0]);
+    body.append('background', data.background[0]);
+
     try {
-      const response = await mutation.mutateAsync(data);
+      const response = await mutation.mutateAsync(body);
 
       setRequestState({
         status: 'success',
@@ -70,7 +75,7 @@ export function CreateNewPlaylist({ isOpen, onClose }) {
         isCentered
       >
         <ModalOverlay />
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
           <ModalContent width={['75%', '80%']}>
             <ModalHeader>
               <Heading fontSize="xl">Crea una nueva Playlist</Heading>

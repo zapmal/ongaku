@@ -5,6 +5,7 @@ import { UserModule } from '@/features/user';
 import { AuthModule } from '@/features/auth';
 import { PlaylistModule } from '@/features/playlist';
 import { SearchModule } from '@/features/search';
+import { AlbumModule } from '@/features/album';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { SearchModule } from '@/features/search';
     AuthModule,
     PlaylistModule,
     SearchModule,
+    AlbumModule,
   ],
 })
 export class AppModule {}

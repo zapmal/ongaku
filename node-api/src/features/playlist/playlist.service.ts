@@ -2,7 +2,6 @@ import { storeImages } from '@/internal/helpers';
 import { PrismaService } from '@/internal/services';
 import {
   Injectable,
-  BadRequestException as BadRequest,
   InternalServerErrorException as InternalServerError,
   NotFoundException as NotFound,
   UnauthorizedException as Unauthorized,
@@ -40,68 +39,66 @@ export class PlaylistService {
       };
     } catch (error) {
       throw new InternalServerError(
-        'Something went wrong while trying to create the playlist, try again later',
+        'Ocurrió un error inesperado mientras creabamos la playlist, intentalo más tarde',
       );
     }
   }
 
   async like(playlistId: number, entityId: number) {
-    if (!playlistId) {
-      throw new BadRequest('Hubo un error en tu solicitud, intentalo más tarde');
-    }
-
-    const foundPlaylist = await this.prisma.userPlaylist.findUnique({
-      where: {
-        id: playlistId,
-      },
-      include: {
-        interaction: {
-          where: {
-            userId: entityId,
-            userPlaylistId: playlistId,
-          },
-          select: {
-            id: true,
-            value: true,
-          },
+    try {
+      const foundPlaylist = await this.prisma.userPlaylist.findUnique({
+        where: {
+          id: playlistId,
         },
-      },
-    });
-
-    if (!foundPlaylist?.id) {
-      throw new NotFound('La playlist a la que intentas darle like no existe');
-    }
-
-    const isLiked = Boolean(foundPlaylist.interaction[0]?.value);
-    const update = isLiked ? { decrement: 1 } : { increment: 1 };
-
-    const likeResult = await this.prisma.interaction.upsert({
-      where: { id: foundPlaylist.interaction[0]?.id || 0 },
-      update: {
-        value: !isLiked,
-        userPlaylist: {
-          update: {
-            likes: {
-              ...update,
+        include: {
+          interaction: {
+            where: {
+              userId: entityId,
+              userPlaylistId: playlistId,
+            },
+            select: {
+              id: true,
+              value: true,
             },
           },
         },
-      },
-      create: {
-        value: !isLiked,
-        userId: entityId,
-        userPlaylistId: playlistId,
-      },
-    });
+      });
 
-    return likeResult.value;
+      if (!foundPlaylist?.id) {
+        throw new NotFound('La playlist a la que intentas darle like no existe');
+      }
+
+      const isLiked = Boolean(foundPlaylist.interaction[0]?.value);
+      const update = isLiked ? { decrement: 1 } : { increment: 1 };
+
+      const likeResult = await this.prisma.interaction.upsert({
+        where: { id: foundPlaylist.interaction[0]?.id || 0 },
+        update: {
+          value: !isLiked,
+          userPlaylist: {
+            update: {
+              likes: {
+                ...update,
+              },
+            },
+          },
+        },
+        create: {
+          value: !isLiked,
+          userId: entityId,
+          userPlaylistId: playlistId,
+        },
+      });
+
+      return likeResult.value;
+    } catch (error) {
+      throw new InternalServerError(
+        'Ocurrió un error inesperado mientras registrabamos tu like, intentalo más tarde',
+      );
+    }
   }
 
   async getLiked(entityId: number) {
-    if (!entityId) {
-      throw new BadRequest('Hubo un error en tu solicitud, intentalo más tarde');
-    }
-
     const playlists = await this.prisma.userPlaylist.findMany({
       where: {
         userId: entityId,
@@ -123,6 +120,9 @@ export class PlaylistService {
       where: {
         value: true,
         userId: entityId,
+        artistId: null,
+        albumId: null,
+        songId: null,
       },
       include: {
         userPlaylist: true,
@@ -134,20 +134,7 @@ export class PlaylistService {
       },
     });
 
-    const parsedPlaylists = playlists.map(
-      ({ id, cover, name, likes, user: { username } }) => ({
-        id,
-        cover,
-        name,
-        likes,
-        username,
-      }),
-    );
-    const liked = likedPlaylists.map(({ user: { username }, userPlaylist }) => {
-      return { ...userPlaylist, username };
-    });
-
-    return { playlists: parsedPlaylists, liked };
+    return { playlists, likedPlaylists };
   }
 
   async delete(playlistId: number, entityId: number, role: Role) {

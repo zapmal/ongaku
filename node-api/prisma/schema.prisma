@@ -163,7 +163,7 @@ model Album {
   artist Artist @relation(fields: [artistId], references: [id])
   song   Song[]
 
-  Interaction Interaction[]
+  interaction Interaction[]
   @@map("album")
 }
 

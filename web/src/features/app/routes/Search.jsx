@@ -22,7 +22,6 @@ export function Search() {
 
   if (isError) throw new Error();
 
-  console.log(data);
   return (
     <Box width="80%" align="center" margin="0 auto">
       <Heading fontSize="3xl">
@@ -59,9 +58,9 @@ export function Search() {
             data.artists.map((artist, index) => (
               <ArtistRow
                 key={index}
-                name={artist.artisticName}
+                name={artist.band.name ? artist.band.name : artist.artisticName}
                 avatar={artist.avatar}
-                amountOfFollowers={artist.amountOfFollowers}
+                amountOfFollowers={artist.artistMetrics.followers}
                 badge={false}
               />
             ))

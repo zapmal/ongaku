@@ -10,8 +10,34 @@ export class SearchService {
 
     const artists = await this.prisma.artist.findMany({
       where: {
-        artisticName: {
-          contains: query,
+        OR: [
+          {
+            artisticName: {
+              contains: query,
+            },
+          },
+          {
+            band: {
+              name: {
+                contains: query,
+              },
+            },
+          },
+        ],
+      },
+      select: {
+        id: true,
+        artisticName: true,
+        avatar: true,
+        artistMetrics: {
+          select: {
+            followers: true,
+          },
+        },
+        band: {
+          select: {
+            name: true,
+          },
         },
       },
       take: SEARCH_LIMIT,

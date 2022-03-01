@@ -6,4 +6,4 @@ yarn-error.log
 .env.production
 
 src/config/seeders/user.ts
-uploads/*/**
+assets/*/**

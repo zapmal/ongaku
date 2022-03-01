@@ -112,21 +112,12 @@ export function RoomRow({ name, activeUsers, userLimit, host, startedAt, genres,
 }
 
 export function ArtistRow({ name, avatar, amountOfFollowers }) {
-  const [isHovered, mouseEventsHandlers] = useHover();
   // eslint-disable-next-line no-unused-vars
   const [_, artistLink] = getLink(name, name);
 
   return (
     <Flex align="center" margin="13px 0" width="75%">
-      <Avatar
-        size="lg"
-        transition="opacity 300ms ease-in-out"
-        as={Link}
-        to={artistLink}
-        src={avatar}
-        opacity={isHovered && 0.6}
-        {...mouseEventsHandlers}
-      />
+      <Avatar size="lg" transition="opacity 300ms ease-in-out" src={avatar} />
       <Box marginLeft="20px" textAlign="left">
         <Text
           color={theme.colors.accentText.value}

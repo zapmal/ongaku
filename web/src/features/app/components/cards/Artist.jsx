@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {
   Box,
   Image,
@@ -10,15 +11,19 @@ import {
   Tooltip,
   Badge,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { HiOutlineExternalLink } from 'react-icons/hi';
+import { IoMdCheckmark } from 'react-icons/io';
 import { MdAdd } from 'react-icons/md';
+import { useMutation, useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
 
+import { followArtist } from '../../api/artist';
 import { FADE_OUT_ANIMATION } from '../../constants';
 import { useHover } from '../../hooks/useHover';
 
 import { theme } from '@/stitches.config.js';
+import { getLink } from '@/utils/getLink';
 
 const sizes = {
   sm: {
@@ -42,11 +47,14 @@ export function ArtistCard({
   name,
   amountOfFollowers,
   isHighlighted,
-  to,
+  artistId,
+  isFollowed = false,
   size = 'lg',
   badge = true,
 }) {
   const [isHovered, mouseEventsHandlers] = useHover();
+  const [followed, setFollowed] = useState(isFollowed);
+  const [_, artistLink] = getLink(name, name);
 
   return (
     <Box
@@ -72,9 +80,11 @@ export function ArtistCard({
             <HoverButton
               key={index}
               button={button}
-              to={to}
+              to={artistLink}
               mouseEventsHandlers={mouseEventsHandlers}
               size={size}
+              isFollowed={followed}
+              artistId={artistId}
             />
           ))}
         </Box>
@@ -109,7 +119,9 @@ export function ArtistCard({
 const hoverButtons = [
   {
     icon: MdAdd,
+    altIcon: IoMdCheckmark,
     text: 'Seguir',
+    altText: 'Dejar de seguir',
     position: {
       right: '40px',
     },
@@ -123,19 +135,36 @@ const hoverButtons = [
   },
 ];
 
-function HoverButton({ button, size, to, mouseEventsHandlers }) {
-  const goToPageProps = to && button.text.includes('Page') && { as: Link, to };
+function HoverButton({ button, size, to, isFollowed, artistId, mouseEventsHandlers }) {
+  const goToPageProps = to && button.text.includes('Página') && { as: Link, to: `/artist/${to}` };
+  const icon = button.altIcon && isFollowed ? button.altIcon : button.icon;
+  const text = button.altText && isFollowed ? button.altText : button.text;
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation(followArtist, {
+    onSuccess: () => queryClient.invalidateQueries('library-artists'),
+  });
+
+  const handleOnClick = async () => {
+    try {
+      await mutation.mutateAsync({ artistId });
+    } catch (error) {
+      console.log('Error siguiendo al artista', error);
+    }
+  };
+
   return (
-    <Tooltip label={button.text}>
+    <Tooltip label={text}>
       <IconButton
         position="absolute"
         top={sizes[size].top}
+        onClick={button.altIcon === IoMdCheckmark ? handleOnClick : () => {}}
         {...goToPageProps}
         {...button.position}
         variant={button.variant}
         width="50px"
         height="50px"
-        icon={<Icon as={button.icon} w="35px" h="35px" />}
+        icon={<Icon as={icon} w="35px" h="35px" />}
         backgroundColor="transparent"
         _hover={{
           color: 'whiteAlpha.800',

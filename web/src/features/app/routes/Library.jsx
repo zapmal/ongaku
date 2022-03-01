@@ -12,6 +12,7 @@ import React, { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { useQuery } from 'react-query';
 
+import { getFollowedArtists } from '../api/artist';
 import { getLikedPlaylists } from '../api/playlist';
 import {
   ArtistCard,
@@ -23,7 +24,6 @@ import {
 } from '../components';
 import { ARTISTS_IN_LIBRARY, PLAYLISTS_IN_LIBRARY, ALBUMS_IN_LIBRARY } from '../constants';
 
-import { Footer } from '@/components/Core';
 import { Button, Link } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
@@ -94,7 +94,6 @@ export function Library() {
             {optionToRender}
           </SimpleGrid>
         )}
-        <Footer topMargin="25px" />
       </Box>
       {isOpen && <CreateNewPlaylist isOpen={isOpen} onClose={onClose} />}
     </>
@@ -102,19 +101,46 @@ export function Library() {
 }
 
 function Artists() {
-  console.log('Querying artists');
-  return ARTISTS_IN_LIBRARY.map((artist, index) => (
-    <Box margin="10px 0" key={index}>
-      <ArtistCard
-        name={artist.name}
-        avatar={artist.image}
-        amountOfFollowers={artist.amountOfFollowers}
-        to={artist.to}
-        badge={false}
-        size="sm"
-      />
+  const { data, isLoading, isError, error } = useQuery('library-artists', getFollowedArtists);
+
+  if (isLoading) {
+    return <Status status="loading" message="Buscadando a tus artistas seguidos..." />;
+  }
+
+  if (isError) {
+    return <Status status="error" message={error} />;
+  }
+
+  return data.length === 0 ? (
+    <Box textAlign="center" position="absolute" top="200px">
+      <Heading fontSize="2xl">
+        No has seguido a ningún <Highlight>artista</Highlight>
+      </Heading>
+      <Text color="whiteAlpha.700" marginTop="10px" fontSize="lg">
+        ¿Porqué no lo intentas?
+      </Text>
+      <Text color="whiteAlpha.700" marginTop="10px">
+        Presiona el botón que está arriba o visita la{' '}
+        <Link to="/explore">página de exploración</Link> para empezar.
+      </Text>
     </Box>
-  ));
+  ) : (
+    data.map((artist, index) => (
+      <Box margin="10px 0" key={index}>
+        <ArtistCard
+          name={artist.bandName ? artist.bandName : artist.artisticName}
+          avatar={`${import.meta.env.VITE_NODE_API_URL}/static/artist/${
+            artist.avatar || 'default_avatar.jpeg'
+          }`}
+          amountOfFollowers={artist.followers}
+          artistId={artist.id}
+          isFollowed={true}
+          badge={false}
+          size="sm"
+        />
+      </Box>
+    ))
+  );
 }
 
 function Albums() {
@@ -135,10 +161,10 @@ function Albums() {
 }
 
 function Playlists() {
-  const { data, isLoading, isError, error } = useQuery('playlists', getLikedPlaylists);
+  const { data, isLoading, isError, error } = useQuery('library-playlists', getLikedPlaylists);
 
   if (isLoading) {
-    return <Status status="loading" message="Loading playlists..." />;
+    return <Status status="loading" message="Buscando tus playlists..." />;
   }
 
   if (isError) {

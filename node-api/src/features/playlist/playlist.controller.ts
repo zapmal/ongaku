@@ -82,11 +82,27 @@ export class PlaylistController {
 
   @Get('liked')
   async getLiked(@Req() request: RequestWithEntity) {
-    const playlists = await this.playlist.getLiked(Number(request.entity.id));
+    const { playlists, likedPlaylists } = await this.playlist.getLiked(
+      Number(request.entity.id),
+    );
+
+    const parsedPlaylists = playlists.map(
+      ({ id, cover, name, likes, user: { username } }) => ({
+        id,
+        cover,
+        name,
+        likes,
+        username,
+      }),
+    );
+    const liked = likedPlaylists.map(({ user: { username }, userPlaylist }) => {
+      return { ...userPlaylist, username };
+    });
 
     return {
       message: 'Playlists encontradas exitosamente',
-      ...playlists,
+      playlists: [...parsedPlaylists],
+      liked,
     };
   }
 

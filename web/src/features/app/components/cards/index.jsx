@@ -15,7 +15,7 @@ import { FaHeartBroken } from 'react-icons/fa';
 import { IoMdHeart } from 'react-icons/io';
 import { MdPlayArrow, MdMoreVert, MdOutlineQueue, MdOpenInNew } from 'react-icons/md';
 import { useMutation, useQueryClient } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 import { likeAlbum } from '../../api/album';
 import { likePlaylist } from '../../api/playlist';
@@ -23,20 +23,22 @@ import { FADE_OUT_ANIMATION, MENU_ITEM_PROPS } from '../../constants';
 import { useHover } from '../../hooks/useHover';
 
 import { theme } from '@/stitches.config.js';
+import { getLink } from '@/utils/getLink';
 
 export function Card({
+  id,
+  to = '',
   cover,
-  children,
   type,
   notLikeable = false,
   isLiked,
-  id,
-  to,
+  children,
   ...extraStyles
 }) {
   const [isHovered, mouseEventsHandlers] = useHover();
-  // initial state comes from api
   const [liked, setLiked] = useState(isLiked);
+  // eslint-disable-next-line no-unused-vars
+  const [_, link] = getLink(to, to);
 
   return (
     <Box
@@ -64,7 +66,7 @@ export function Card({
                 <HoverButton
                   key={index}
                   button={button}
-                  to={to}
+                  to={link}
                   notLikeable={notLikeable}
                   mouseEventsHandlers={mouseEventsHandlers}
                 />
@@ -80,7 +82,9 @@ export function Card({
                   mouseEventsHandlers={mouseEventsHandlers}
                 />
               ))}
-          {!notLikeable && <OptionsButton mouseEventsHandlers={mouseEventsHandlers} type={type} />}
+          {!notLikeable && (
+            <OptionsButton mouseEventsHandlers={mouseEventsHandlers} type={type} to={link} />
+          )}
         </Box>
       )}
       {children}
@@ -176,7 +180,7 @@ function HoverButton({ button, liked, setLiked, notLikeable, to, id, type, mouse
 /**
  * This is intentionally missing some options that will *probably* be added in the future (i.e. deleting)
  */
-function OptionsButton({ type, mouseEventsHandlers }) {
+function OptionsButton({ type, to, mouseEventsHandlers }) {
   return (
     <Menu isLazy closeOnBlur={false} gutter={2} placement="left">
       <MenuButton
@@ -206,6 +210,8 @@ function OptionsButton({ type, mouseEventsHandlers }) {
         <MenuItem
           {...MENU_ITEM_PROPS}
           icon={<Icon as={MdOpenInNew} w="15px" h="15px" marginTop="5px" />}
+          as={Link}
+          to={`/view/${to}`}
         >
           Abrir
         </MenuItem>

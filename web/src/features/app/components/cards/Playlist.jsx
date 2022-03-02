@@ -7,15 +7,15 @@ import { Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 
 export function PlaylistCard({
+  id,
   cover,
   name,
   likes,
   amountOfSongs,
   author,
   isLiked,
-  badge = true,
-  id,
   notLikeable = false,
+  badge = true,
 }) {
   return (
     <Card

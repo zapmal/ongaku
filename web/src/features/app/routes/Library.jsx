@@ -114,10 +114,10 @@ function Artists() {
     data.map((artist, index) => (
       <Box margin="10px 0" key={index}>
         <ArtistCard
+          artistId={artist.id}
+          amountOfFollowers={artist.followers}
           name={artist.bandName ? artist.bandName : artist.artisticName}
           avatar={getImage('artist', artist.avatar, 'default_avatar.jpeg')}
-          amountOfFollowers={artist.followers}
-          artistId={artist.id}
           isFollowed={true}
           badge={false}
           size="sm"
@@ -145,13 +145,13 @@ function Albums() {
       <Box margin="10px 0" key={index}>
         <SongCard
           key={index}
-          cover={getImage('album', album.cover, 'default_album.jpg')}
-          name={album.name}
           id={album.id}
-          isExplicit={false}
+          name={album.name}
           type={album.releaseType}
           authors={album.artist.artisticName ? album.artist.artisticName : album.artist.bandName}
+          cover={getImage('album', album.cover, 'default_album.jpg')}
           year={dayjs(album.year).format('YYYY')}
+          isExplicit={false}
           isLiked={true}
         />
       </Box>
@@ -176,13 +176,13 @@ function Playlists() {
     data.playlists.map((playlist, index) => (
       <Box margin="10px 0" key={index}>
         <PlaylistCard
-          key={index}
           id={playlist.id}
-          cover={getImage('playlist', playlist.cover, 'default_cover.jpg')}
+          key={index}
           name={playlist.name}
           likes={playlist.likes}
-          amountOfSongs={0}
           author={playlist.username}
+          cover={getImage('playlist', playlist.cover, 'default_cover.jpg')}
+          amountOfSongs={0}
           badge={false}
           isLiked={true}
           notLikeable={true}

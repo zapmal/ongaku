@@ -117,7 +117,7 @@ function SongInformation({ name, isPlaying, isExplicit, authors, albumName, year
               return (
                 <React.Fragment key={index}>
                   {' - '}
-                  <Link to={`/album/${authorPath}`} underline={false} variant="gray">
+                  <Link to={`/view/${authorPath}`} underline={false} variant="gray">
                     {linkText}
                   </Link>
                   {' - '}

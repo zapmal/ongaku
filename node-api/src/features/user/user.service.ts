@@ -92,13 +92,49 @@ export class UserService {
     return user;
   }
 
-  getByUsername(username: string): Promise<User> {
-    const user = this.prisma.user.findFirst({
-      where: { username: username },
+  async getByUsername(username: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { username },
+      select: {
+        password: false,
+        id: true,
+        email: true,
+        username: true,
+        fullName: true,
+        avatar: true,
+        background: true,
+        role: true,
+        userMetadata: true,
+      },
     });
 
     if (!user) throw new UserNotFound();
 
     return user;
+  }
+
+  async getLikedAndFollowed(id: number) {
+    // return await this.prisma.user.findUnique({
+    //   where: { id },
+    //   select: {
+    //     userPlaylist: true,
+    //     interaction: {
+    //       where: {
+    //         OR: [
+    //           {
+    //             userPlaylistId: {
+    //               not: null,
+    //             },
+    //           },
+    //           {
+    //             artistId: {
+    //               not: null,
+    //             },
+    //           },
+    //         ],
+    //       },
+    //     },
+    //   },
+    // });
   }
 }

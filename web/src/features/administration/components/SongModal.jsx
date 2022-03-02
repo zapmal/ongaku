@@ -25,9 +25,8 @@ export function SongModal({ isOpen, onClose, shouldValidate }) {
     resolver: yupResolver(shouldValidate ? schema : editSchema),
     defaultValues: {
       name: '',
-      length: '',
+      collab: '',
       isExplicit: false,
-      verifiedEmail: false,
     },
   });
 
@@ -57,6 +56,16 @@ export function SongModal({ isOpen, onClose, shouldValidate }) {
               placeholder="Down Horrendous"
               css={{ marginBottom: '10px' }}
               error={errors.name}
+              register={register}
+            />
+            <Field
+              type="text"
+              name="collab"
+              label="Artistas que colaboraron en la canción (si aplica)"
+              placeholder="Lady Gaga, Don Omar, etc"
+              helperText="Los artistas deben ir separados por comas (,)"
+              css={{ marginBottom: '10px' }}
+              error={errors.collab}
               register={register}
             />
             {shouldValidate && (
@@ -101,10 +110,12 @@ export function SongModal({ isOpen, onClose, shouldValidate }) {
 
 const schema = yup.object({
   name: yup.string().required('Este campo es requerido'),
+  collab: yup.string(),
   isExplicit: yup.boolean().required('Este campo es requerido'),
 });
 
 const editSchema = yup.object({
   name: yup.string(),
+  collab: yup.string(),
   isExplicit: yup.boolean(),
 });

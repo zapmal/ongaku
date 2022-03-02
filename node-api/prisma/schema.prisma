@@ -14,6 +14,7 @@ model User {
   fullName  String   @map("full_name") @db.VarChar(255)
   password  String   @db.VarChar(255)
   avatar    String? // TODO: Default avatar.
+  background String?
   birthdate DateTime @db.Date
   role      Role     @default(USER)
 

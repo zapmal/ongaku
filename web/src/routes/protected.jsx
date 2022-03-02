@@ -66,7 +66,7 @@ export const protectedRoutes = [
             element: <Search />,
           },
           {
-            path: '/user/:name',
+            path: '/user/:username',
             element: <UserProfile />,
           },
           {
@@ -99,10 +99,8 @@ function VerifiedEmailWrapper() {
   const entity = useAuthStore((s) => s.entity);
   return (
     <>
-      {/* <React.Suspense fallback={<LoadingFallback />}> */}
       {!entity.verifiedEmail && <ResendVerificationEmail />}
       <Outlet />
-      {/* </React.Suspense> */}
     </>
   );
 }

@@ -1,29 +1,23 @@
-import { Box, Flex, Heading, Spacer, Text, SimpleGrid, useDisclosure } from '@chakra-ui/react';
-import { yupResolver } from '@hookform/resolvers/yup';
+import {
+  Box,
+  Flex,
+  Heading,
+  Spacer,
+  Text,
+  SimpleGrid,
+  useDisclosure,
+  Icon,
+} from '@chakra-ui/react';
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
+import { MdAdd } from 'react-icons/md';
 
 import { RoomRow, CreateNewRoom } from '../../components';
 import { PUBLIC_ROOMS } from '../../constants';
 
 import { Button } from '@/components/Elements';
-import { Field } from '@/components/Form';
 
 export function Rooms() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      roomName: '',
-    },
-  });
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const onSubmit = () => console.log('hey');
 
   return (
     <Box>
@@ -37,19 +31,7 @@ export function Rooms() {
 
         <Spacer />
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Flex gap="20px" margin="0 20px 40px 20px">
-            <Field
-              type="text"
-              name="roomName"
-              label="Buscar Sala"
-              placeholder="Sala de José"
-              error={errors.roomName}
-              register={register}
-            />
-          </Flex>
-        </form>
-        <Button variant="accent" onClick={onOpen}>
+        <Button variant="accent" onClick={onOpen} rightIcon={<Icon as={MdAdd} w="25px" h="25px" />}>
           Nueva Sala
         </Button>
       </Flex>
@@ -72,7 +54,3 @@ export function Rooms() {
     </Box>
   );
 }
-
-const schema = yup.object({
-  roomName: yup.string(),
-});

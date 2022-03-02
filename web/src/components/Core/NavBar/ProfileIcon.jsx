@@ -100,12 +100,12 @@ const options = {
   ],
   moderation: [
     {
-      text: 'Usuarios, artistas, etc',
+      text: 'Entidades',
       to: '/administration/entities',
       icon: MdGroups,
     },
     {
-      text: 'Canciones, albumes, etc ',
+      text: 'Trabajo publicado',
       to: '/administration/published-work',
       icon: MdMusicNote,
     },

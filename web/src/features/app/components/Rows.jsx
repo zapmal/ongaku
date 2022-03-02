@@ -122,7 +122,6 @@ export function ArtistRow({ name, avatar, amountOfFollowers }) {
         <Text
           color={theme.colors.accentText.value}
           fontSize="lg"
-          fontWeight="bold"
           underline={false}
           as={Link}
           to={`/artist/${artistLink}`}
@@ -161,7 +160,7 @@ export function AlbumRow({ name, cover, isExplicit, authors, type, year }) {
     <RowContainer isHovered={isHovered} cover={cover} mouseEventsHandlers={mouseEventsHandlers}>
       <Box marginLeft="10px" textAlign="left">
         <Text color={theme.colors.accentText.value}>
-          <Link to={`/album/${linkToAlbum}`} underline={false} color="inherit">
+          <Link to={`/view/${linkToAlbum}`} underline={false} color="inherit">
             {name}
           </Link>{' '}
           {isExplicit && (

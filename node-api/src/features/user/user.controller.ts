@@ -14,15 +14,24 @@ import {
 } from '@nestjs/common';
 
 import { JoiValidationPipe } from '@/internal/pipes';
-import { AuthGuard } from '@/internal/guards';
+import { RoleGuard } from '@/internal/guards';
+import { Role } from '@/internal/constants';
 
 import { UserService } from './user.service';
-import { UpdateUserDTO } from './user.dto';
-import { updateUserSchema } from './user.schemas';
+import { GetProfileDataDTO, UpdateUserDTO } from './user.dto';
+import { getProfileDataSchema, updateUserSchema } from './user.schemas';
+
+import { PlaylistService } from '../playlist/playlist.service';
+import { ArtistService } from '../artist/artist.service';
 
 @Controller('user')
+@UseGuards(RoleGuard([Role.ADMIN, Role.USER]))
 export class UserController {
-  constructor(private readonly user: UserService) {}
+  constructor(
+    private user: UserService,
+    private playlist: PlaylistService,
+    private artist: ArtistService,
+  ) {}
 
   @Get('all')
   async getAllUsers() {
@@ -35,16 +44,13 @@ export class UserController {
     return users;
   }
 
-  @Get(':id')
-  @UseGuards(AuthGuard)
-  async getUser(@Param('id', ParseIntPipe) id: number) {
-    const user = await this.user.getById(id);
+  @Get('profile/:username')
+  async getProfileData(@Param('username') username: string) {
+    const user = await this.user.getByUsername(username);
+    const playlists = await this.playlist.getLiked(user.id);
+    const followedArtists = await this.artist.getFollowed(user.id);
 
-    if (!user) {
-      throw new NotFound('Requested user was not found.');
-    }
-
-    return user;
+    return { user, playlists, followed: followedArtists };
   }
 
   @Delete(':id')

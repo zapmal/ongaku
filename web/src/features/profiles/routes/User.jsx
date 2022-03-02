@@ -9,28 +9,46 @@ import {
   ButtonGroup,
   HStack,
   useDisclosure,
+  SimpleGrid,
 } from '@chakra-ui/react';
-import React from 'react';
+import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
 import { MdEdit, MdShare } from 'react-icons/md';
+import { useNavigate, useParams } from 'react-router-dom';
 
+import { getProfileData } from '../api/user';
 import { EditProfile } from '../components';
+import { ROLES_SPANISH } from '../constants';
 
 import { Footer } from '@/components/Core';
 import { Banner, Button } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
-import {
-  ArtistCard,
-  PlaylistCard,
-  ARTIST_SEARCH_RESULT as ARTISTS_IN_PROFILE,
-  PLAYLISTS_SEARCH_RESULTS as PLAYLISTS_IN_PROFILE,
-  GRADIENTS,
-} from '@/features/app';
+import { ArtistCard, PlaylistCard, GRADIENTS } from '@/features/app';
 import { theme } from '@/stitches.config.js';
+import { getImage } from '@/utils/getImage';
 
 const FLEX_PROPS = { margin: '20px 10px', justify: 'center' };
 
 export function UserProfile() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const params = useParams();
+  const navigate = useNavigate();
+  const [{ user, playlists, followed }, setUser] = useState({
+    user: { userMetadata: {} },
+    playlists: { playlists: [], likedPlaylists: [] },
+    followed: [],
+  });
+
+  useEffect(() => {
+    getProfileData(params.username)
+      .then((response) => setUser(response))
+      .catch((error) => {
+        console.log(error);
+        navigate('/not-found');
+      });
+  }, [navigate, params.username]);
+
+  console.log(playlists);
 
   return (
     <>
@@ -49,16 +67,17 @@ export function UserProfile() {
 
               <Box paddingLeft="20px">
                 <Heading fontSize="xxx-large">
-                  Manuel Zapata{' '}
-                  <Badge fontSize="md" color="white" bg={theme.colors.accentSolid.value}>
-                    ADMIN
-                  </Badge>
+                  {user.fullName} <Badge fontSize="md">{ROLES_SPANISH[user.role]}</Badge>
                 </Heading>
 
                 <Text fontWeight="bold" fontSize="lg">
-                  Administrador - Activo
+                  {user.userMetadata.active ? 'Activo' : 'Inactivo'}
                   <Badge
-                    backgroundColor={theme.colors.successBorderHover.value}
+                    backgroundColor={
+                      user.userMetadata.active
+                        ? theme.colors.successBorderHover.value
+                        : theme.colors.dangerSolid.value
+                    }
                     marginLeft="10px"
                     width="10px"
                     height="10px"
@@ -67,17 +86,17 @@ export function UserProfile() {
                 </Text>
 
                 <Text fontSize="lg" marginTop="5px">
-                  Miembro desde hace mucho tiempo.
+                  Miembro desde hace {dayjs().from(user.userMetadata.createdAt, true)}
                 </Text>
 
                 <Flex marginTop="10px" align="center">
                   <Text fontWeight="bold" marginRight="20px">
                     <a href="#playlists">Playlists: </a>
-                    <Highlight>0</Highlight>
+                    <Highlight>{playlists.playlists.length}</Highlight>
                   </Text>
 
                   <Text fontWeight="bold">
-                    <a href="#following">Siguiendo: </a> <Highlight>3</Highlight>
+                    <a href="#following">Siguiendo: </a> <Highlight>{followed.length}</Highlight>
                   </Text>
                 </Flex>
                 <ButtonGroup gap="5px" margin="20px 0">
@@ -98,13 +117,12 @@ export function UserProfile() {
             Artistas que sigue
           </Heading>
           <Flex {...FLEX_PROPS}>
-            {ARTISTS_IN_PROFILE.map((artist, index) => (
+            {followed.map(({ artist }, index) => (
               <ArtistCard
                 key={index}
-                name={artist.name}
-                avatar={artist.image}
-                amountOfFollowers={artist.amountOfFollowers}
-                to={artist.to}
+                name={artist.artisticName ? artist.artisticName : artist.band.name}
+                avatar={getImage('artist', artist.avatar, 'default_avatar.jpeg')}
+                amountOfFollowers={artist.artistMetrics.followers}
                 isHighlighted={index % 2 === 0}
                 badge={false}
                 size="sm"
@@ -116,14 +134,14 @@ export function UserProfile() {
             Playlists que le <Highlight>gustaron</Highlight>
           </Heading>
           <Flex {...FLEX_PROPS}>
-            {PLAYLISTS_IN_PROFILE.map((playlist, index) => (
+            {playlists.likedPlaylists.map((playlist, index) => (
               <PlaylistCard
                 key={index}
-                cover={playlist.cover}
-                name={playlist.name}
-                likes={playlist.likes}
-                amountOfSongs={playlist.amountOfSongs}
-                author={playlist.author}
+                cover={getImage('playlist', playlist.userPlaylist.cover, 'default_cover.jpg')}
+                name={playlist.userPlaylist.name}
+                likes={playlist.userPlaylist.likes}
+                amountOfSongs={0}
+                author={playlist.user.username}
                 badge={false}
               />
             ))}
@@ -133,7 +151,21 @@ export function UserProfile() {
             <Highlight>Playlists</Highlight> propias
           </Heading>
 
-          <Text margin="20px 0">No hay nada aquí aún. ¡Vuelve luego!</Text>
+          <SimpleGrid columns={5} gap="30px" marginTop="20px">
+            {playlists.playlists.map((playlist, index) => (
+              <PlaylistCard
+                key={index}
+                cover={getImage('playlist', playlist.cover, 'default_cover.jpg')}
+                name={playlist.name}
+                likes={playlist.likes}
+                amountOfSongs={0}
+                author={playlist.user.username}
+                badge={false}
+              />
+            ))}
+          </SimpleGrid>
+
+          {/* <Text margin="20px 0">No hay nada aquí aún. ¡Vuelve luego!</Text> */}
         </Box>
         <Footer topMargin="40px" />
       </Box>

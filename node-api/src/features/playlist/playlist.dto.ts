@@ -7,5 +7,5 @@ export class LikePlaylistDTO {
 }
 
 export class getLikedPlaylistsDTO {
-  entityId?: number;
+  entityId: number;
 }

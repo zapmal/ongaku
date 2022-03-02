@@ -33,6 +33,10 @@ export class AlbumController {
     return likedAlbums.map(({ album }) => {
       return {
         ...album,
+        artist: {
+          artisticName: album.artist.artisticName,
+          bandName: album.artist.band.name,
+        },
       };
     });
   }

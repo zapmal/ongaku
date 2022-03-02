@@ -12,11 +12,20 @@ export function PlaylistCard({
   likes,
   amountOfSongs,
   author,
+  isLiked,
   badge = true,
+  id,
   notLikeable = false,
 }) {
   return (
-    <Card cover={cover} type="playlist" notLikeable={notLikeable} to={name}>
+    <Card
+      cover={cover}
+      type="playlist"
+      notLikeable={notLikeable}
+      to={name}
+      id={id}
+      isLiked={isLiked}
+    >
       {badge && (
         <Badge marginTop="5px" position="absolute" top={1} left={1}>
           Playlist

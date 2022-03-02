@@ -7,3 +7,7 @@ export const getLikedPlaylists = () => {
 export const createPlaylist = (data) => {
   return apiClient.post('playlist/new', data);
 };
+
+export const likePlaylist = (data) => {
+  return apiClient.put('playlist/like', data);
+};

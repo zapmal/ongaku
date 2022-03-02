@@ -14,17 +14,29 @@ import React, { useState } from 'react';
 import { FaHeartBroken } from 'react-icons/fa';
 import { IoMdHeart } from 'react-icons/io';
 import { MdPlayArrow, MdMoreVert, MdOutlineQueue, MdOpenInNew } from 'react-icons/md';
+import { useMutation, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
+import { likeAlbum } from '../../api/album';
+import { likePlaylist } from '../../api/playlist';
 import { FADE_OUT_ANIMATION, MENU_ITEM_PROPS } from '../../constants';
 import { useHover } from '../../hooks/useHover';
 
 import { theme } from '@/stitches.config.js';
 
-export function Card({ cover, children, type, notLikeable = false, to, ...extraStyles }) {
+export function Card({
+  cover,
+  children,
+  type,
+  notLikeable = false,
+  isLiked,
+  id,
+  to,
+  ...extraStyles
+}) {
   const [isHovered, mouseEventsHandlers] = useHover();
   // initial state comes from api
-  const [isLiked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(isLiked);
 
   return (
     <Box
@@ -61,8 +73,10 @@ export function Card({ cover, children, type, notLikeable = false, to, ...extraS
                 <HoverButton
                   key={index}
                   button={button}
-                  isLiked={isLiked}
+                  liked={liked}
                   setLiked={setLiked}
+                  id={id}
+                  type={type}
                   mouseEventsHandlers={mouseEventsHandlers}
                 />
               ))}
@@ -115,15 +129,28 @@ const ICON_BUTTON_PROPS = {
   height: '50px',
 };
 
-function HoverButton({ button, isLiked, setLiked, notLikeable, to, mouseEventsHandlers }) {
+function HoverButton({ button, liked, setLiked, notLikeable, to, id, type, mouseEventsHandlers }) {
   const navigate = useNavigate();
-  const icon = button.altIcon && isLiked ? button.altIcon : button.icon;
+  const icon = button.altIcon && liked ? button.altIcon : button.icon;
 
-  const handleOnClick = () => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation(type === 'playlist' ? likePlaylist : likeAlbum, {
+    onSuccess: () => queryClient.invalidateQueries('library-albums'),
+  });
+
+  const handleOnClick = async () => {
     if (notLikeable) {
       navigate(`/view/${to}`);
     } else {
-      setLiked(!isLiked);
+      try {
+        const data = type === 'playlist' ? { playlistId: id } : { albumId: id };
+
+        await mutation.mutateAsync(data);
+
+        setLiked(!liked);
+      } catch (error) {
+        console.log('Error al registrar el like/dislike', error);
+      }
     }
   };
 

@@ -64,8 +64,21 @@ export class AlbumService {
         songId: null,
         userPlaylistId: null,
       },
-      include: {
-        album: true,
+      select: {
+        album: {
+          include: {
+            artist: {
+              select: {
+                artisticName: true,
+                band: {
+                  select: {
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
   }

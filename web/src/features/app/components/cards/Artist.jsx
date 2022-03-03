@@ -23,6 +23,8 @@ import { FADE_OUT_ANIMATION } from '../../constants';
 import { useHover } from '../../hooks/useHover';
 
 import { theme } from '@/stitches.config.js';
+import { useAuthStore } from '@/stores/useAuthStore';
+import { useNotificationStore } from '@/stores/useNotificationStore';
 import { getLink } from '@/utils/getLink';
 
 const sizes = {
@@ -52,6 +54,8 @@ export function ArtistCard({
   size = 'lg',
   badge = true,
 }) {
+  const entity = useAuthStore((s) => s.entity);
+
   const [isHovered, mouseEventsHandlers] = useHover();
   const [followed, setFollowed] = useState(isFollowed);
   const [_, artistLink] = getLink(name, name);
@@ -85,6 +89,7 @@ export function ArtistCard({
               size={size}
               isFollowed={followed}
               artistId={artistId}
+              entityId={entity.id}
             />
           ))}
         </Box>
@@ -135,10 +140,12 @@ const hoverButtons = [
   },
 ];
 
-function HoverButton({ button, size, to, isFollowed, artistId, mouseEventsHandlers }) {
+function HoverButton({ button, size, to, isFollowed, artistId, entityId, mouseEventsHandlers }) {
   const goToPageProps = to && button.text.includes('Página') && { as: Link, to: `/artist/${to}` };
   const icon = button.altIcon && isFollowed ? button.altIcon : button.icon;
   const text = button.altText && isFollowed ? button.altText : button.text;
+
+  const addNotification = useNotificationStore((s) => s.addNotification);
 
   const queryClient = useQueryClient();
   const mutation = useMutation(followArtist, {
@@ -147,7 +154,15 @@ function HoverButton({ button, size, to, isFollowed, artistId, mouseEventsHandle
 
   const handleOnClick = async () => {
     try {
-      await mutation.mutateAsync({ artistId });
+      if (entityId === artistId) {
+        addNotification({
+          title: 'Error',
+          status: 'error',
+          message: 'No te puedes seguir a ti mismo',
+        });
+      } else {
+        await mutation.mutateAsync({ artistId });
+      }
     } catch (error) {
       console.log('Error al cambiar el seguimiento del artista', error);
     }

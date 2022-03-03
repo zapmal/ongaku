@@ -1,4 +1,13 @@
-import { Controller, Req, UsePipes, Body, Put, UseGuards, Get } from '@nestjs/common';
+import {
+  Controller,
+  Req,
+  Param,
+  UsePipes,
+  Body,
+  Put,
+  UseGuards,
+  Get,
+} from '@nestjs/common';
 
 import { RequestWithEntity } from '@/internal/interfaces';
 import { JoiValidationPipe } from '@/internal/pipes';
@@ -24,6 +33,13 @@ export class AlbumController {
         ? 'Album agregado a tus favoritos exitosamente'
         : 'El album ha sido removido de tus favoritos',
     };
+  }
+
+  @Get('liked/:id')
+  async isLiked(@Req() request: RequestWithEntity, @Param('id') albumId) {
+    const isLiked = await this.album.isLiked(Number(albumId), Number(request.entity.id));
+
+    return { isLiked };
   }
 
   @Get('liked')

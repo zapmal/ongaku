@@ -10,15 +10,15 @@ import {
   MenuItem,
   MenuDivider,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaHeartBroken } from 'react-icons/fa';
 import { IoMdHeart } from 'react-icons/io';
 import { MdPlayArrow, MdMoreVert, MdOutlineQueue, MdOpenInNew } from 'react-icons/md';
 import { useMutation, useQueryClient } from 'react-query';
 import { useNavigate, Link } from 'react-router-dom';
 
-import { likeAlbum } from '../../api/album';
-import { likePlaylist } from '../../api/playlist';
+import { likeAlbum, isAlbumLiked } from '../../api/album';
+import { likePlaylist, isPlaylistLiked } from '../../api/playlist';
 import { FADE_OUT_ANIMATION, MENU_ITEM_PROPS } from '../../constants';
 import { useHover } from '../../hooks/useHover';
 
@@ -39,6 +39,30 @@ export function Card({
   const [liked, setLiked] = useState(isLiked);
   // eslint-disable-next-line no-unused-vars
   const [_, link] = getLink(to, to);
+
+  useEffect(() => {
+    if (isHovered && !notLikeable && !isLiked) {
+      if (type === 'playlist') {
+        isPlaylistLiked({ playlistId: id })
+          .then((response) => {
+            console.log('Querying "isPlaylistLiked"');
+            setLiked(response.isLiked);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        isAlbumLiked({ albumId: id })
+          .then((response) => {
+            console.log('Querying "isAlbumLiked"');
+            setLiked(response.isLiked);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    }
+  }, [id, isHovered, isLiked, notLikeable, type]);
 
   return (
     <Box

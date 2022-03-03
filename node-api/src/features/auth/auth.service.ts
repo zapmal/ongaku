@@ -148,6 +148,7 @@ export class AuthService {
         id: entity.id,
         email: entity.email,
         role: entity.role,
+        username: entity['username'],
         verifiedEmail,
       },
     };

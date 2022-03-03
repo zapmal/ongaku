@@ -75,8 +75,8 @@ export class UserService {
     return user;
   }
 
-  getByEmail(email: string): Promise<User> {
-    const user = this.prisma.user.findFirst({
+  async getByEmail(email: string): Promise<User> {
+    const user = await this.prisma.user.findFirst({
       where: { email: email },
       include: {
         userMetadata: {

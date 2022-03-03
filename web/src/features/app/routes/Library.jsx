@@ -184,7 +184,6 @@ function Playlists() {
           cover={getImage('playlist', playlist.cover, 'default_cover.jpg')}
           amountOfSongs={0}
           badge={false}
-          isLiked={true}
           notLikeable={true}
         />
       </Box>

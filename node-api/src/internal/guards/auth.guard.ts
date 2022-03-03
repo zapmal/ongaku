@@ -41,6 +41,7 @@ export class AuthGuard implements CanActivate {
     request.entity = {
       id: entity.id,
       email: entity.email,
+      username: entity.username,
       verifiedEmail: entity.verifiedEmail,
       role: entity.role,
     };

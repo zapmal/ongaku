@@ -22,31 +22,39 @@ import { ROLES_SPANISH } from '../constants';
 
 import { Footer } from '@/components/Core';
 import { Banner, Button } from '@/components/Elements';
-import { Highlight } from '@/components/Utils';
+import { Highlight, Spinner } from '@/components/Utils';
 import { ArtistCard, PlaylistCard, GRADIENTS } from '@/features/app';
 import { theme } from '@/stitches.config.js';
+import { useAuthStore } from '@/stores/useAuthStore';
 import { getImage } from '@/utils/getImage';
 
 const FLEX_PROPS = { margin: '20px 10px', justify: 'center' };
 
 export function UserProfile() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const entity = useAuthStore((s) => s.entity);
   const params = useParams();
   const navigate = useNavigate();
-  const [{ user, playlists, followed }, setUser] = useState({
+  const [{ user, playlists, followed, isLoading }, setUser] = useState({
     user: { userMetadata: {} },
     playlists: { playlists: [], likedPlaylists: [] },
     followed: [],
+    isLoading: true,
   });
 
   useEffect(() => {
     getProfileData(params.username)
-      .then((response) => setUser(response))
+      .then((response) => setUser({ isLoading: false, ...response }))
       .catch((error) => {
         console.log(error);
+        setUser((data) => ({ ...data, isLoading: false }));
         navigate('/not-found');
       });
   }, [navigate, params.username]);
+
+  if (isLoading) {
+    return <Spinner paddingBottom="100%" />;
+  }
 
   console.log(playlists);
 
@@ -100,9 +108,11 @@ export function UserProfile() {
                   </Text>
                 </Flex>
                 <ButtonGroup gap="5px" margin="20px 0">
-                  <Button onClick={onOpen} rightIcon={<Icon as={MdEdit} w="15px" h="15px" />}>
-                    Editar Perfil
-                  </Button>
+                  {entity.id === user.id && (
+                    <Button onClick={onOpen} rightIcon={<Icon as={MdEdit} w="15px" h="15px" />}>
+                      Editar Perfil
+                    </Button>
+                  )}
                   <Button variant="accent" rightIcon={<Icon as={MdShare} w="15px" h="15px" />}>
                     Compartir Perfil
                   </Button>
@@ -117,55 +127,71 @@ export function UserProfile() {
             Artistas que sigue
           </Heading>
           <Flex {...FLEX_PROPS}>
-            {followed.map(({ artist }, index) => (
-              <ArtistCard
-                key={index}
-                name={artist.artisticName ? artist.artisticName : artist.band.name}
-                avatar={getImage('artist', artist.avatar, 'default_avatar.jpeg')}
-                amountOfFollowers={artist.artistMetrics.followers}
-                isHighlighted={index % 2 === 0}
-                badge={false}
-                size="sm"
-              />
-            ))}
+            {followed.length === 0 ? (
+              <Text margin="20px 0">No hay nada aquí aún. ¡Vuelve luego!</Text>
+            ) : (
+              followed.map(({ artist }, index) => (
+                <ArtistCard
+                  key={index}
+                  artistId={artist.id}
+                  name={artist.artisticName ? artist.artisticName : artist.band.name}
+                  avatar={getImage('artist', artist.avatar, 'default_avatar.jpeg')}
+                  amountOfFollowers={artist.artistMetrics.followers}
+                  isHighlighted={index % 2 === 0}
+                  badge={false}
+                  isFollowed={entity.username === user.username}
+                  size="sm"
+                />
+              ))
+            )}
           </Flex>
 
           <Heading marginTop="40px">
             Playlists que le <Highlight>gustaron</Highlight>
           </Heading>
           <Flex {...FLEX_PROPS}>
-            {playlists.likedPlaylists.map((playlist, index) => (
-              <PlaylistCard
-                key={index}
-                cover={getImage('playlist', playlist.userPlaylist.cover, 'default_cover.jpg')}
-                name={playlist.userPlaylist.name}
-                likes={playlist.userPlaylist.likes}
-                amountOfSongs={0}
-                author={playlist.user.username}
-                badge={false}
-              />
-            ))}
+            {playlists.likedPlaylists.length === 0 ? (
+              <Text margin="20px 0">No hay nada aquí aún. ¡Vuelve luego!</Text>
+            ) : (
+              playlists.likedPlaylists.map((playlist, index) => (
+                <PlaylistCard
+                  id={playlist.userPlaylistId}
+                  key={index}
+                  cover={getImage('playlist', playlist.userPlaylist.cover, 'default_cover.jpg')}
+                  name={playlist.userPlaylist.name}
+                  likes={playlist.userPlaylist.likes}
+                  amountOfSongs={0}
+                  author={playlist.user.username}
+                  badge={false}
+                  notLikeable={playlist.user.username === entity.username}
+                />
+              ))
+            )}
           </Flex>
 
           <Heading marginTop="40px" id="playlists">
             <Highlight>Playlists</Highlight> propias
           </Heading>
 
-          <SimpleGrid columns={5} gap="30px" marginTop="20px">
-            {playlists.playlists.map((playlist, index) => (
-              <PlaylistCard
-                key={index}
-                cover={getImage('playlist', playlist.cover, 'default_cover.jpg')}
-                name={playlist.name}
-                likes={playlist.likes}
-                amountOfSongs={0}
-                author={playlist.user.username}
-                badge={false}
-              />
-            ))}
-          </SimpleGrid>
-
-          {/* <Text margin="20px 0">No hay nada aquí aún. ¡Vuelve luego!</Text> */}
+          {playlists.playlists.length === 0 ? (
+            <Text margin="20px 0">No hay nada aquí aún. ¡Vuelve luego!</Text>
+          ) : (
+            <SimpleGrid columns={5} gap="30px" marginTop="20px">
+              {playlists.playlists.map((playlist, index) => (
+                <PlaylistCard
+                  key={index}
+                  id={playlist.id}
+                  cover={getImage('playlist', playlist.cover, 'default_cover.jpg')}
+                  name={playlist.name}
+                  likes={playlist.likes}
+                  amountOfSongs={0}
+                  author={playlist.user.username}
+                  badge={false}
+                  notLikeable={playlist.user.username === user.username}
+                />
+              ))}
+            </SimpleGrid>
+          )}
         </Box>
         <Footer topMargin="40px" />
       </Box>

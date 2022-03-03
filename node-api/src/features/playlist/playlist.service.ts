@@ -2,6 +2,7 @@ import { storeImages } from '@/internal/helpers';
 import { PrismaService } from '@/internal/services';
 import {
   Injectable,
+  BadRequestException as BadRequest,
   InternalServerErrorException as InternalServerError,
   NotFoundException as NotFound,
   UnauthorizedException as Unauthorized,
@@ -135,6 +136,26 @@ export class PlaylistService {
     });
 
     return { playlists, likedPlaylists };
+  }
+
+  async isLiked(playlistId: number, entityId: number) {
+    if (!playlistId) throw new BadRequest('La solicitud está errada, falta información');
+
+    const playlist = await this.prisma.userPlaylist.findUnique({
+      where: { id: playlistId },
+      select: {
+        interaction: {
+          where: { userId: entityId, value: true },
+          select: {
+            value: true,
+          },
+        },
+      },
+    });
+
+    if (!playlist) throw new NotFound('La playlist no existe');
+
+    return playlist.interaction.length === 0 ? false : playlist.interaction[0].value;
   }
 
   async delete(playlistId: number, entityId: number, role: Role) {

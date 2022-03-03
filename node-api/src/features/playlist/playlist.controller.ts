@@ -106,6 +106,16 @@ export class PlaylistController {
     };
   }
 
+  @Get('liked/:id')
+  async isLiked(@Req() request: RequestWithEntity, @Param('id') playlistId) {
+    const isLiked = await this.playlist.isLiked(
+      Number(playlistId),
+      Number(request.entity.id),
+    );
+
+    return { isLiked };
+  }
+
   @Delete(':id')
   async delete(@Param() { id }, @Req() request: RequestWithEntity) {
     const entity = request.entity;

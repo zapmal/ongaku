@@ -117,7 +117,7 @@ function Artists() {
           artistId={artist.id}
           amountOfFollowers={artist.followers}
           name={artist.bandName ? artist.bandName : artist.artisticName}
-          avatar={getImage('artist', artist.avatar, 'default_avatar.jpeg')}
+          avatar={getImage('artist', artist.avatar, 'default_avatar.png')}
           isFollowed={true}
           badge={false}
           size="sm"
@@ -149,7 +149,7 @@ function Albums() {
           name={album.name}
           type={album.releaseType}
           authors={album.artist.artisticName ? album.artist.artisticName : album.artist.bandName}
-          cover={getImage('album', album.cover, 'default_album.jpg')}
+          cover={getImage('album', album.cover, 'default_album.png')}
           year={dayjs(album.year).format('YYYY')}
           isExplicit={false}
           isLiked={true}

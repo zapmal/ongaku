@@ -4,7 +4,8 @@ import React from 'react';
 export function Banner({ image, children, ...extraStyles }) {
   return (
     <Box
-      bg={`url(/assets/images/${image})`}
+      // bg={`url(/assets/images/${image})`}
+      bg={`url(${image})`}
       bgRepeat="round"
       height="700px"
       width="100%"

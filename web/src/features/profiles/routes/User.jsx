@@ -23,7 +23,7 @@ import { ROLES_SPANISH } from '../constants';
 import { Footer } from '@/components/Core';
 import { Banner, Button } from '@/components/Elements';
 import { Highlight, Spinner } from '@/components/Utils';
-import { ArtistCard, PlaylistCard, GRADIENTS } from '@/features/app';
+import { ArtistCard, PlaylistCard } from '@/features/app';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { getImage } from '@/utils/getImage';
@@ -56,17 +56,20 @@ export function UserProfile() {
     return <Spinner paddingBottom="100%" />;
   }
 
-  console.log(playlists);
-
   return (
     <>
       <Box>
-        <Banner image="static-user-profile-banner.jpg" height="700px">
-          <Flex bg={GRADIENTS.bottom} height="100%" justify="flex-start" align="self-end">
+        <Banner image={getImage('user', user.background, 'default_background.svg')} height="500px">
+          <Flex
+            bg={`linear-gradient(0, ${theme.colors.primaryBase.value} 5%, rgba(255, 255, 255, .1) 60%)`}
+            height="100%"
+            justify="flex-start"
+            align="self-end"
+          >
             <HStack>
               <Image
                 marginLeft="40px"
-                src="/assets/images/static-admin-avatar.jpeg"
+                src={getImage('user', user.avatar, 'default_avatar.svg')}
                 w="300px"
                 h="300px"
                 objectFit="cover"
@@ -75,7 +78,8 @@ export function UserProfile() {
 
               <Box paddingLeft="20px">
                 <Heading fontSize="xxx-large">
-                  {user.fullName} <Badge fontSize="md">{ROLES_SPANISH[user.role]}</Badge>
+                  {user.fullName}{' '}
+                  {entity.id === user.id && <Badge fontSize="md">{ROLES_SPANISH[user.role]}</Badge>}
                 </Heading>
 
                 <Text fontWeight="bold" fontSize="lg">
@@ -135,7 +139,7 @@ export function UserProfile() {
                   key={index}
                   artistId={artist.id}
                   name={artist.artisticName ? artist.artisticName : artist.band.name}
-                  avatar={getImage('artist', artist.avatar, 'default_avatar.jpeg')}
+                  avatar={getImage('artist', artist.avatar, 'default_avatar.png')}
                   amountOfFollowers={artist.artistMetrics.followers}
                   isHighlighted={index % 2 === 0}
                   badge={false}

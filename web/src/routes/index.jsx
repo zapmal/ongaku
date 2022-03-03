@@ -18,20 +18,22 @@ export function AppRoutes() {
    * content.
    */
   let shouldWait = false;
+  let timeoutId = 0;
   const localIsLoggedIn = Boolean(localStorage.getItem('isLoggedIn'));
 
   if (localIsLoggedIn && !isLoggedIn()) {
     shouldWait = true;
 
-    setTimeout(() => {
+    timeoutId = setTimeout(() => {
       logout();
       window.location.assign('/');
-    }, 20000);
+    }, 10000);
   }
 
   const routes = isLoggedIn() ? protectedRoutes : publicRoutes;
-
   const element = useRoutes([...sharedRoutes, ...routes]);
+
+  if (!shouldWait) clearTimeout(timeoutId);
 
   return shouldWait ? <Spinner /> : element;
 }

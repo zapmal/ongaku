@@ -1,7 +1,7 @@
 import { apiClient } from '@/lib/api';
 
 export const updateProfileData = (data) => {
-  return apiClient.put('user/profile', data);
+  return apiClient.put('user/edit', data);
 };
 
 export const getProfileData = (data) => {

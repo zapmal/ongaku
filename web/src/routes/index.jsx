@@ -8,7 +8,7 @@ import { Spinner } from '@/components/Utils';
 import { useAuthStore } from '@/stores/useAuthStore';
 
 export function AppRoutes() {
-  const [isLoggedIn, logout] = useAuthStore((s) => [s.isLoggedIn, s.logout]);
+  const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   /**
    * On initial render, the value of isLoggedIn that comes from the
    * store is false, which in turn renders the "Not Found" page for a brief
@@ -18,22 +18,14 @@ export function AppRoutes() {
    * content.
    */
   let shouldWait = false;
-  let timeoutId = 0;
   const localIsLoggedIn = Boolean(localStorage.getItem('isLoggedIn'));
 
   if (localIsLoggedIn && !isLoggedIn()) {
     shouldWait = true;
-
-    timeoutId = setTimeout(() => {
-      logout();
-      window.location.assign('/');
-    }, 10000);
   }
 
   const routes = isLoggedIn() ? protectedRoutes : publicRoutes;
   const element = useRoutes([...sharedRoutes, ...routes]);
 
-  if (!shouldWait) clearTimeout(timeoutId);
-
-  return shouldWait ? <Spinner /> : element;
+  return shouldWait && !localIsLoggedIn ? <Spinner /> : element;
 }

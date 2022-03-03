@@ -199,7 +199,16 @@ export function UserProfile() {
         </Box>
         <Footer topMargin="40px" />
       </Box>
-      {isOpen && <EditProfile isOpen={isOpen} onClose={onClose} />}
+      {isOpen && (
+        <EditProfile
+          isOpen={isOpen}
+          onClose={onClose}
+          id={user.id}
+          fullName={user.fullName}
+          email={user.email}
+          username={user.username}
+        />
+      )}
     </>
   );
 }

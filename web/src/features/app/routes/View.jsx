@@ -23,8 +23,9 @@ import { MdShare, MdPlayArrow, MdPause, MdDelete } from 'react-icons/md';
 
 import { Footer } from '@/components/Core';
 import { Banner, Link } from '@/components/Elements';
-import { GRADIENTS, NEW_SONGS, OptionMenu } from '@/features/app';
+import { NEW_SONGS, OptionMenu } from '@/features/app';
 import { theme } from '@/stitches.config.js';
+import { getImage } from '@/utils/getImage';
 import { getLink } from '@/utils/getLink';
 
 const BUTTON_PROPS = {
@@ -48,8 +49,19 @@ const TABLE_ROW_PROPS = {
 export function View() {
   return (
     <Box>
-      <Banner image="static-background-image-view.png" height="100%" bgRepeat="cover">
-        <Flex align="flex-end" justify="flex-start" height="400px" bg={GRADIENTS.bottom}>
+      <Banner
+        image={getImage('view', null, 'default.svg')}
+        backgroundColor={theme.colors.primaryBg.value}
+        height="100%"
+        bgRepeat="no-repeat"
+        bgPosition="right"
+      >
+        <Flex
+          align="flex-end"
+          justify="flex-start"
+          height="400px"
+          bg={`linear-gradient(0, ${theme.colors.primaryBase.value} 5%, rgba(255,255,255,0) 40%)`}
+        >
           <SimpleGrid margin="20px">
             <Heading fontSize="xxx-large" letterSpacing="2px">
               <HStack fontSize="sm" letterSpacing="initial">

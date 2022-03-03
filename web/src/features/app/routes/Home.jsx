@@ -20,7 +20,7 @@ import { Highlight } from '@/components/Utils';
 export function Home() {
   return (
     <>
-      <Banner image="static-featured-artist-gidle.webp">
+      <Banner image="/assets/images/static-featured-artist-gidle.webp">
         <SimpleGrid
           gridAutoFlow="column"
           alignItems="end"

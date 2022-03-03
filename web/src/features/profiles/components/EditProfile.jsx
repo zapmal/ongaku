@@ -6,31 +6,59 @@ import {
   ModalBody,
   ModalCloseButton,
   Text,
+  Spinner,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
+import { updateProfileData } from '../api/user';
+
 import { Button } from '@/components/Elements';
 import { Field } from '@/components/Form';
+import { useRequest } from '@/hooks';
 
-export function EditProfile({ isOpen, onClose }) {
+export function EditProfile({ isOpen, onClose, id, fullName, email, username }) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      fullName: '',
-      email: '',
+      fullName: fullName,
+      email: email,
       password: '',
       passwordConfirmation: '',
     },
   });
+  const [request, setRequestState] = useRequest();
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = async (data) => {
+    const body = new FormData();
+    body.append('id', id);
+    body.append('fullName', data.fullName);
+    body.append('email', data.email);
+    body.append('password', data.password);
+    body.append('avatar', data.avatar[0]);
+
+    try {
+      const response = await updateProfileData(body);
+      setRequestState({
+        status: 'success',
+        title: '¡Éxito!',
+        message: response.message,
+      });
+      window.location.assign(`/user/${username}`);
+    } catch (error) {
+      setRequestState({
+        status: 'error',
+        title: 'Error',
+        message: error,
+      });
+    }
+  };
 
   return (
     <>
@@ -42,7 +70,7 @@ export function EditProfile({ isOpen, onClose }) {
         isCentered
       >
         <ModalOverlay />
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
           <ModalContent>
             <ModalCloseButton />
             <ModalBody>
@@ -53,6 +81,7 @@ export function EditProfile({ isOpen, onClose }) {
                 placeholder="Nick Powers"
                 css={{ marginBottom: '10px' }}
                 error={errors.fullName}
+                isDisabled={request.status != ''}
                 register={register}
               />
               <Field
@@ -62,6 +91,7 @@ export function EditProfile({ isOpen, onClose }) {
                 placeholder="nick@powers.com"
                 css={{ marginBottom: '10px' }}
                 error={errors.email}
+                isDisabled={request.status != ''}
                 register={register}
               />
               <Field
@@ -71,6 +101,7 @@ export function EditProfile({ isOpen, onClose }) {
                 label="Contraseña"
                 css={{ marginBottom: '10px' }}
                 error={errors.password}
+                isDisabled={request.status != ''}
                 register={register}
               />
               <Field
@@ -80,31 +111,37 @@ export function EditProfile({ isOpen, onClose }) {
                 label="Confirmación de Contraseña"
                 css={{ marginBottom: '10px' }}
                 error={errors.passwordConfirmation}
+                isDisabled={request.status != ''}
                 register={register}
               />
               <Field
                 type="file"
-                name="profilePicture"
+                name="avatar"
                 label="Foto de Perfil"
-                // isDisabled={true}
-                // error={errors.cover}
+                isDisabled={request.status != ''}
                 register={register}
               />
             </ModalBody>
             <ModalFooter margin="0 auto">
-              <Button variant="accent" type="submit">
-                Cambiar
-              </Button>
-              <Text
-                textDecoration="underline"
-                fontSize="sm"
-                color="whiteAlpha.700"
-                margin="0 20px"
-                onClick={onClose}
-                _hover={{ cursor: 'pointer' }}
-              >
-                Cancelar
-              </Text>
+              {isSubmitting ? (
+                <Spinner size="lg" />
+              ) : (
+                <>
+                  <Button variant="accent" type="submit">
+                    Cambiar
+                  </Button>
+                  <Text
+                    textDecoration="underline"
+                    fontSize="sm"
+                    color="whiteAlpha.700"
+                    margin="0 20px"
+                    onClick={onClose}
+                    _hover={{ cursor: 'pointer' }}
+                  >
+                    Cancelar
+                  </Text>
+                </>
+              )}
             </ModalFooter>
           </ModalContent>
         </form>
@@ -114,11 +151,10 @@ export function EditProfile({ isOpen, onClose }) {
 }
 
 const schema = yup.object({
-  fullName: yup.string().required('Este campo es requerido'),
-  password: yup.string().min(8, 'Mínimo ocho (8) carácteres').required('Este campo es requerido'),
+  fullName: yup.string(),
+  password: yup.string(),
   passwordConfirmation: yup
     .string()
-    .required('Este campo es requerido')
     .oneOf([yup.ref('password'), null], 'Las contraseñas deben coincidir'),
-  email: yup.string().email('Debes ingresar un correo válido').required('Este campo es requerido'),
+  email: yup.string().email('Debes ingresar un correo válido'),
 });

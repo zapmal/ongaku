@@ -37,7 +37,7 @@ export function PlaylistCard({
         </Text>
         <Spacer />
         <Text fontWeight="bold" fontSize="sm">
-          {likes} likes
+          {likes === 1 ? '1 like' : `${likes} likes`}
         </Text>
       </Flex>
 

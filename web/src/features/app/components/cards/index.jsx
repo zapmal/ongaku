@@ -9,6 +9,7 @@ import {
   MenuOptionGroup,
   MenuItem,
   MenuDivider,
+  Spinner,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { FaHeartBroken } from 'react-icons/fa';
@@ -37,29 +38,33 @@ export function Card({
 }) {
   const [isHovered, mouseEventsHandlers] = useHover();
   const [liked, setLiked] = useState(isLiked);
+  const [isLoading, setLoading] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [_, link] = getLink(to, to);
 
   useEffect(() => {
     if (isHovered && !notLikeable && !isLiked) {
+      setLoading(true);
       if (type === 'playlist') {
         isPlaylistLiked({ playlistId: id })
           .then((response) => {
-            console.log('Querying "isPlaylistLiked"');
+            console.log('Querying isPlaylistLiked');
             setLiked(response.isLiked);
           })
           .catch((error) => {
             console.log(error);
-          });
+          })
+          .finally(() => setLoading(false));
       } else {
         isAlbumLiked({ albumId: id })
           .then((response) => {
-            console.log('Querying "isAlbumLiked"');
+            console.log('Querying isAlbumLiked');
             setLiked(response.isLiked);
           })
           .catch((error) => {
             console.log(error);
-          });
+          })
+          .finally(() => setLoading(false));
       }
     }
   }, [id, isHovered, isLiked, notLikeable, type]);
@@ -86,7 +91,7 @@ export function Card({
       {isHovered && (
         <Box animation={FADE_OUT_ANIMATION}>
           {notLikeable
-            ? likedSongsPlaylistButtons.map((button, index) => (
+            ? notLikeablePlaylistButtons.map((button, index) => (
                 <HoverButton
                   key={index}
                   button={button}
@@ -98,6 +103,7 @@ export function Card({
             : hoverButtons.map((button, index) => (
                 <HoverButton
                   key={index}
+                  isLoading={isLoading}
                   button={button}
                   liked={liked}
                   setLiked={setLiked}
@@ -116,7 +122,7 @@ export function Card({
   );
 }
 
-const likedSongsPlaylistButtons = [
+const notLikeablePlaylistButtons = [
   {
     icon: MdOpenInNew,
     position: {
@@ -157,7 +163,17 @@ const ICON_BUTTON_PROPS = {
   height: '50px',
 };
 
-function HoverButton({ button, liked, setLiked, notLikeable, to, id, type, mouseEventsHandlers }) {
+function HoverButton({
+  button,
+  liked,
+  setLiked,
+  notLikeable,
+  isLoading,
+  to,
+  id,
+  type,
+  mouseEventsHandlers,
+}) {
   const navigate = useNavigate();
   const icon = button.altIcon && liked ? button.altIcon : button.icon;
 
@@ -186,7 +202,7 @@ function HoverButton({ button, liked, setLiked, notLikeable, to, id, type, mouse
     <IconButton
       borderRadius="50%"
       onClick={button.icon !== MdPlayArrow ? handleOnClick : () => {}}
-      icon={<Icon as={icon} w="35px" h="35px" />}
+      icon={<Icon as={isLoading ? Spinner : icon} w="35px" h="35px" />}
       backgroundColor={theme.colors.primaryBase.value}
       _hover={{
         backgroundColor: theme.colors.accentSolid.value,

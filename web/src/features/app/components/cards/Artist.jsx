@@ -113,7 +113,7 @@ export function ArtistCard({
             )}
           </Flex>
           <Text color="whiteAlpha.700" fontSize="sm" textAlign="left">
-            {amountOfFollowers} seguidores
+            {amountOfFollowers === 1 ? '1 seguidor' : `${amountOfFollowers} seguidores`}
           </Text>
         </>
       )}

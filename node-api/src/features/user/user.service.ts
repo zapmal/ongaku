@@ -1,11 +1,14 @@
 import {
+  BadRequestException as BadRequest,
   Injectable,
   InternalServerErrorException as InternalServerError,
 } from '@nestjs/common';
 import { Prisma, User, UserMetadata } from '@prisma/client';
+import { hash } from 'bcrypt';
 
 import { PrismaService } from '@/internal/services';
 import { PrismaError } from '@/internal/constants';
+import { storeImages } from '@/internal/helpers';
 
 import { UserNotFound } from './user.exceptions';
 
@@ -25,11 +28,32 @@ export class UserService {
     }
   }
 
-  async update(id: number, newUserData: Prisma.UserUpdateInput): Promise<User> {
+  async update(
+    id: number,
+    newUserData: Prisma.UserUpdateInput,
+    avatar?: { file: Express.Multer.File; path: string },
+  ) {
+    let passwordUpdate = {};
+
+    if (newUserData.password) {
+      passwordUpdate = { password: await hash(newUserData.password as string, 10) };
+    }
+
+    let avatarUpdate = {};
+
     try {
+      if (avatar) {
+        const [image] = storeImages(avatar.file, avatar.path);
+        avatarUpdate = { avatar: image };
+      }
+
       return await this.prisma.user.update({
         where: { id },
-        data: newUserData,
+        data: {
+          ...newUserData,
+          ...passwordUpdate,
+          ...avatarUpdate,
+        },
       });
     } catch (error) {
       this.handleIdSearchError(error);
@@ -57,16 +81,20 @@ export class UserService {
     ) {
       throw new UserNotFound();
     }
+    console.log(error);
     throw new InternalServerError('Something went wrong, try again later');
   }
 
-  getById(id: number): Promise<{ id: number; email: string; fullName: string }> {
-    const user = this.prisma.user.findUnique({
+  async getById(id: number) {
+    if (!id) throw new BadRequest('La solicitud está errada, falta información');
+
+    const user = await this.prisma.user.findUnique({
       where: { id },
       select: {
         id: true,
         email: true,
         fullName: true,
+        avatar: true,
       },
     });
 
@@ -111,30 +139,5 @@ export class UserService {
     if (!user) throw new UserNotFound();
 
     return user;
-  }
-
-  async getLikedAndFollowed(id: number) {
-    // return await this.prisma.user.findUnique({
-    //   where: { id },
-    //   select: {
-    //     userPlaylist: true,
-    //     interaction: {
-    //       where: {
-    //         OR: [
-    //           {
-    //             userPlaylistId: {
-    //               not: null,
-    //             },
-    //           },
-    //           {
-    //             artistId: {
-    //               not: null,
-    //             },
-    //           },
-    //         ],
-    //       },
-    //     },
-    //   },
-    // });
   }
 }

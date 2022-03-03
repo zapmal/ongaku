@@ -3,7 +3,7 @@ import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer
 
 import * as hash from 'object-hash';
 import { writeFile, mkdirSync, existsSync } from 'fs';
-import { extname, join } from 'path';
+import { extname } from 'path';
 
 type MulterImageOptions = {
   fileFilter: MulterOptions['fileFilter'];
@@ -63,7 +63,7 @@ export const storeImages = (
 
     return [images, errorStoringImages];
   } else {
-    const image = data[0];
+    const image = data as Express.Multer.File;
     const filename = hash(image.originalname);
     const extension = extname(image.originalname);
     const file = `${filename}${extension}`;

@@ -5,6 +5,9 @@ export const getProfileDataSchema = Joi.object({
 });
 
 export const updateUserSchema = Joi.object({
+  id: Joi.number().required(),
   fullName: Joi.string(),
   email: Joi.string().email(),
+  password: Joi.string(),
+  avatar: Joi.any(),
 });

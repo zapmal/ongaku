@@ -1,4 +1,4 @@
-import { Box, Heading, Text, Wrap, WrapItem, Center } from '@chakra-ui/react';
+import { Box, Heading, Text, Center, SimpleGrid } from '@chakra-ui/react';
 import React from 'react';
 import { FiMusic } from 'react-icons/fi';
 import { MdOutlineContactMail, MdOutlineSecurity, MdOutlineExplicit } from 'react-icons/md';
@@ -18,7 +18,7 @@ export function ArtistWelcome() {
       </Box>
       <Box textAlign="center" paddingLeft={['30px', 0]}>
         <Heading paddingTop={['30px', 0]} fontSize={['3xl', '4xl']}>
-          Bienvenido, <Highlight>BTS</Highlight>
+          Bienvenido
         </Heading>
         <Text margin={['20px 20px', '20px 0']} fontSize={['xl', 'lg']}>
           Podr&aacute;s empezar tu trabajo en <Highlight>Ongaku</Highlight> una vez que confirmemos
@@ -35,7 +35,7 @@ export function ArtistWelcome() {
         <Text
           fontSize="sm"
           color={theme.colors.primaryText.value}
-          marginTop="30px"
+          marginTop="10px"
           marginBottom={['20px', 0]}
         >
           Los derechos le pertenecen a sus respectivos autores.
@@ -47,20 +47,18 @@ export function ArtistWelcome() {
 
 function BulletList() {
   return (
-    <Wrap marginLeft={['30px', '15%']} marginTop="60px" maxWidth="1250px" spacing="20px">
+    <SimpleGrid columns={2} marginLeft="80px" marginTop="40px" spacing="20px">
       {bulletPoints.map((bulletPoint, index) => (
-        <WrapItem key={index}>
-          <Center w={['400px', '610px']}>
-            <BulletPoint
-              key={index}
-              Icon={bulletPoint.icon}
-              title={bulletPoint.title}
-              content={bulletPoint.content}
-            />
-          </Center>
-        </WrapItem>
+        <Center w="600px" key={index}>
+          <BulletPoint
+            key={index}
+            Icon={bulletPoint.icon}
+            title={bulletPoint.title}
+            content={bulletPoint.content}
+          />
+        </Center>
       ))}
-    </Wrap>
+    </SimpleGrid>
   );
 }
 

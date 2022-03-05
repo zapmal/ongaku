@@ -53,6 +53,8 @@ export function UserProfile() {
       });
   }, [navigate, params.username]);
 
+  console.log(user);
+
   if (isLoading) {
     return <Spinner paddingBottom="100%" />;
   }

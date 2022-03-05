@@ -26,6 +26,7 @@ import { Highlight } from '@/components/Utils';
 import { useRequest } from '@/hooks';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { getLink } from '@/utils/getLink';
 
 const responsivePaddings = ['25%', '32%', '15%', '20%', '12%'];
 
@@ -51,8 +52,12 @@ export function UserRegister() {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
+    const { username, ...userData } = data;
+    // eslint-disable-next-line no-unused-vars
+    const [_, linkUsername] = getLink(username, username);
+
     try {
-      const response = await registerUser(data);
+      const response = await registerUser({ ...userData, username: linkUsername });
       setEntity(response.user);
 
       setRequestState({
@@ -62,7 +67,7 @@ export function UserRegister() {
       });
 
       localStorage.setItem('isLoggedIn', true);
-      setTimeout(() => navigate('/'), 8000);
+      navigate('/');
     } catch (error) {
       setRequestState({
         status: 'error',

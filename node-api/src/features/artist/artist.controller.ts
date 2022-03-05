@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Put, Req, UseGuards, UsePipes } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Put,
+  Req,
+  UseGuards,
+  UsePipes,
+} from '@nestjs/common';
 
 import { Role } from '@/internal/constants';
 import { RoleGuard } from '@/internal/guards';
@@ -26,6 +35,22 @@ export class ArtistController {
         followers: artist.artistMetrics.followers,
       };
     });
+  }
+
+  @Get('profile/:name')
+  async getProfileData(@Param('name') name: string) {
+    // const user = await this.user.getByUsername(username);
+    // const playlists = await this.playlist.getLiked(user.id);
+    // const followedArtists = await this.artist.getFollowed(user.id);
+
+    // return { user, playlists, followed: followedArtists };
+    return {
+      d: 'tu',
+      // artist,
+      // popularSongs,
+      // recommendation,
+      // albums,
+    };
   }
 
   @Put('follow')

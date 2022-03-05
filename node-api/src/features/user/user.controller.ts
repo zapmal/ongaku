@@ -29,7 +29,7 @@ import { ArtistService } from '../artist/artist.service';
 
 import { RequestWithEntity } from '@/internal/interfaces';
 import { multerImageOptions } from '@/internal/helpers';
-import { unlink } from 'fs';
+import { existsSync, unlink } from 'fs';
 import { ConfigService } from '@nestjs/config';
 
 @Controller('user')
@@ -87,12 +87,11 @@ export class UserController {
     if (request.entity.id !== Number(newUserData.id)) {
       throw new Unauthorized('No tienes permiso para realizar esta acción');
     }
-
-    const { avatar } = await this.user.getById(Number(newUserData.id));
+    const { avatar: existingAvatar } = await this.user.getById(Number(newUserData.id));
     const path = `${this.config.get('UPLOADED_FILES_DESTINATION')}/user`;
 
-    if (avatar) {
-      unlink(`${path}/${avatar}`, (error) => {
+    if (existingAvatar && existsSync(`${path}/${existingAvatar}`) && newAvatar) {
+      unlink(`${path}/${existingAvatar}`, (error) => {
         if (error) {
           throw new InternalServerError(
             'Ocurrió un error de nuestro lado mientras actualizabamos tu perfil',
@@ -102,7 +101,7 @@ export class UserController {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id, ...data } = newUserData;
+    const { id, avatar, ...data } = newUserData;
     await this.user.update(Number(newUserData.id), data, {
       file: newAvatar,
       path,

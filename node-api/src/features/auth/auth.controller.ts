@@ -64,7 +64,7 @@ export class AuthController {
     await this.email.sendVerificationEmail(user.email);
 
     return {
-      message: 'Account created successfully',
+      message: 'Cuenta creada exitosamente',
       user,
     };
   }
@@ -102,7 +102,7 @@ export class AuthController {
     response.cookie('token', token, { ...cookieOptions });
 
     return {
-      message: 'Logged in successfully',
+      message: 'Sesión iniciada exitosamente',
       entity,
     };
   }

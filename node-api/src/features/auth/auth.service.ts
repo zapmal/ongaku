@@ -130,13 +130,13 @@ export class AuthService {
     const entity: Entity = await this.getEntity(credentials.email, credentials.isArtist);
 
     if (!entity) {
-      throw new BadRequest('Wrong credentials provided');
+      throw new BadRequest('Una o ambas credenciales son incorrectas');
     }
 
     const passwordsMatch = await compare(credentials.password, entity.password);
 
     if (!passwordsMatch) {
-      throw new BadRequest('Wrong credentials provided');
+      throw new BadRequest('Una o ambas credenciales son incorrectas');
     }
 
     const verifiedEmail = credentials.isArtist

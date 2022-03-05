@@ -29,8 +29,6 @@ export function EditProfile({ isOpen, onClose, id, fullName, email, username }) 
     defaultValues: {
       fullName: fullName,
       email: email,
-      password: '',
-      passwordConfirmation: '',
     },
   });
   const [request, setRequestState] = useRequest();
@@ -40,14 +38,12 @@ export function EditProfile({ isOpen, onClose, id, fullName, email, username }) 
     body.append('id', id);
     body.append('fullName', data.fullName);
     body.append('email', data.email);
-    body.append('password', data.password);
     body.append('avatar', data.avatar[0]);
 
     try {
       const response = await updateProfileData(body);
       setRequestState({
         status: 'success',
-        title: '¡Éxito!',
         message: response.message,
       });
       window.location.assign(`/user/${username}`);
@@ -95,26 +91,6 @@ export function EditProfile({ isOpen, onClose, id, fullName, email, username }) 
                 register={register}
               />
               <Field
-                type="password"
-                name="password"
-                placeholder="*********"
-                label="Contraseña"
-                css={{ marginBottom: '10px' }}
-                error={errors.password}
-                isDisabled={request.status != ''}
-                register={register}
-              />
-              <Field
-                type="password"
-                name="passwordConfirmation"
-                placeholder="*********"
-                label="Confirmación de Contraseña"
-                css={{ marginBottom: '10px' }}
-                error={errors.passwordConfirmation}
-                isDisabled={request.status != ''}
-                register={register}
-              />
-              <Field
                 type="file"
                 name="avatar"
                 label="Foto de Perfil"
@@ -152,9 +128,5 @@ export function EditProfile({ isOpen, onClose, id, fullName, email, username }) 
 
 const schema = yup.object({
   fullName: yup.string(),
-  password: yup.string(),
-  passwordConfirmation: yup
-    .string()
-    .oneOf([yup.ref('password'), null], 'Las contraseñas deben coincidir'),
   email: yup.string().email('Debes ingresar un correo válido'),
 });

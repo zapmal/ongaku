@@ -4,7 +4,6 @@ import {
   InternalServerErrorException as InternalServerError,
 } from '@nestjs/common';
 import { Prisma, User, UserMetadata } from '@prisma/client';
-import { hash } from 'bcrypt';
 
 import { PrismaService } from '@/internal/services';
 import { PrismaError } from '@/internal/constants';
@@ -33,16 +32,10 @@ export class UserService {
     newUserData: Prisma.UserUpdateInput,
     avatar?: { file: Express.Multer.File; path: string },
   ) {
-    let passwordUpdate = {};
-
-    if (newUserData.password) {
-      passwordUpdate = { password: await hash(newUserData.password as string, 10) };
-    }
-
     let avatarUpdate = {};
 
     try {
-      if (avatar) {
+      if (avatar.file) {
         const [image] = storeImages(avatar.file, avatar.path);
         avatarUpdate = { avatar: image };
       }
@@ -51,7 +44,6 @@ export class UserService {
         where: { id },
         data: {
           ...newUserData,
-          ...passwordUpdate,
           ...avatarUpdate,
         },
       });

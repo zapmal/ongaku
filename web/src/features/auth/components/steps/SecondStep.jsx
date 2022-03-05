@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useDisclosure, Wrap, WrapItem, Box, Text, Center, Spinner } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useState, useEffect } from 'react';
@@ -13,6 +14,7 @@ import { Field, Select, Checkbox } from '@/components/Form';
 import { useRequest } from '@/hooks';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { getLink } from '@/utils/getLink';
 
 export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
   const {
@@ -40,15 +42,19 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
   const [isBand, setIsBand] = useState(false);
 
   const onSubmit = async (data) => {
-    const { members, labels, isBand, bandName, ...artistData } = data;
+    const { members, labels, isBand, bandName, artisticName, ...artistData } = data;
+    const [_, bandNameLink] = getLink(bandName, bandName);
+    const [__, artisticNameLink] = getLink(artisticName, artisticName);
+
     const conditionalData = isBand
       ? {
           members: members.split(','),
           labels: labels.split(','),
-          bandName,
+          bandName: bandNameLink,
         }
       : {
           labels: labels.split(','),
+          artisticName: artisticNameLink,
         };
 
     try {

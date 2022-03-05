@@ -119,14 +119,92 @@ export class ArtistService {
     return artist;
   }
 
-  getByArtisticName(artisticName: string): Promise<Artist> {
-    const artist = this.prisma.artist.findFirst({
-      where: { artisticName },
+  async getByName(name: string) {
+    const artist = await this.prisma.artist.findFirst({
+      where: {
+        OR: [
+          {
+            artisticName: name,
+          },
+          {
+            band: {
+              name: name,
+            },
+          },
+        ],
+      },
+      include: {
+        artistMetrics: {
+          select: {
+            followers: true,
+          },
+        },
+        artistInformation: {
+          select: {
+            biography: true,
+            coverImage: true,
+            officialWebsite: true,
+          },
+        },
+      },
     });
 
     if (!artist) throw new ArtistNotFound();
 
     return artist;
+  }
+
+  async getByGenre(artistId: number, genre: string) {
+    return await this.prisma.artist.findMany({
+      where: {
+        genres: {
+          hasSome: genre,
+        },
+        NOT: {
+          OR: [{ id: artistId }, { bandId: artistId }],
+        },
+      },
+      include: {
+        band: true,
+      },
+      take: 4,
+    });
+  }
+
+  async getPopularSongs(id: number) {
+    return await this.prisma.song.findMany({
+      where: {
+        artistId: id,
+        songMetrics: {
+          playCount: {
+            gt: 50,
+          },
+        },
+      },
+      include: {
+        artist: {
+          include: {
+            band: true,
+          },
+        },
+      },
+      take: 5,
+    });
+  }
+
+  async getAlbums(id: number) {
+    return await this.prisma.album.findMany({
+      where: {
+        artistId: id,
+      },
+      include: {
+        artist: {
+          include: {
+            band: true,
+          },
+        },
+      },
+    });
   }
 
   async update(id: number, newArtistData: Prisma.ArtistUpdateInput): Promise<Artist> {

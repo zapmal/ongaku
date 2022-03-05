@@ -65,8 +65,8 @@ export function EditArtistProfile({ isOpen, onClose }) {
               />
               <Field
                 type="file"
-                name="biographyImage"
-                label="Imágen para la Biografía"
+                name="avatar"
+                label="Avatar"
                 css={{ marginBottom: '10px' }}
                 // isDisabled={true}
                 // error={errors.cover}

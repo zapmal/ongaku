@@ -19,7 +19,7 @@ import { Link } from 'react-router-dom';
 import { MENU_ITEM_PROPS } from '@/features/app';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
-import { getImage } from '@/utils/getImage';
+// import { getImage } from '@/utils/getImage';
 
 export function ProfileIcon() {
   // const { role = {} } = useAuthStore((s) => s.entity);
@@ -28,7 +28,8 @@ export function ProfileIcon() {
   return (
     <Menu isLazy>
       <MenuButton margin="10px" _hover={{ opacity: '.8' }}>
-        <Avatar src={getImage('user', null, 'default_avatar.svg')}>
+        <Avatar src="/assets/images/static-admin-avatar.jpeg">
+          {/* <Avatar src={getImage('user', null, 'default_avatar.svg')}> */}
           <AvatarBadge
             as={Badge}
             bg={theme.colors.accentSolid.value}

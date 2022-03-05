@@ -1,6 +1,5 @@
 import {
   Box,
-  IconButton,
   Button as ChakraButton,
   Divider,
   SimpleGrid,
@@ -8,15 +7,14 @@ import {
   HStack,
   Heading,
   Flex,
-  Image,
   Text,
   Icon,
   Link,
   useDisclosure,
 } from '@chakra-ui/react';
 import React from 'react';
-import { FiTwitter, FiInstagram } from 'react-icons/fi';
-import { MdAdd, MdShare, MdEdit, MdVerifiedUser } from 'react-icons/md';
+import { FiExternalLink } from 'react-icons/fi';
+import { MdAdd, MdShare, MdEdit } from 'react-icons/md';
 
 import { EditArtistProfile } from '../components';
 
@@ -26,13 +24,13 @@ import {
   SongRow,
   SongCard,
   ArtistRow,
-  TRANSPARENT_ICON_PROPS,
   NEW_ALBUMS_AND_SINGLES,
   GRADIENTS,
   NEW_ARTISTS,
   NEW_SONGS,
 } from '@/features/app';
 import { theme } from '@/stitches.config.js';
+import { copyURL } from '@/utils/copyURL';
 
 const HIGHLIGHT_PROPS = {
   fontSize: 'lg',
@@ -57,40 +55,31 @@ export function ArtistProfile() {
   return (
     <>
       <Box>
-        <Banner image="static-artist-banner.jpeg" height="700px">
+        <Banner image="/assets/images/static-artist-banner.jpeg" height="700px">
           <Flex align="center" justify="center" height="100%" bg={GRADIENTS.bottom}>
             <VStack marginTop="150px">
               <Heading fontSize="xxx-large" letterSpacing="4px">
                 Arknights
               </Heading>
-              <HStack fontWeight="bold" fontSize="lg">
-                <Icon as={MdVerifiedUser} color="cyan.300" w="25px" h="25px" />
-                <Text>Artista Verificado</Text>
-              </HStack>
-              <Text fontWeight="bold" fontSize="lg" color="whiteAlpha.900">
-                Audiencia mensual: 3,001,828
+              <Text fontWeight="bold" fontSize="lg">
+                Seguidores: 3,001,828
               </Text>
-              <HStack>
-                <IconButton
-                  {...TRANSPARENT_ICON_PROPS}
-                  as={Link}
-                  isExternal
-                  href="https://twitter.com/Arknights_EN"
-                  icon={<Icon as={FiTwitter} w="25px" h="25px" />}
-                />
-                <IconButton
-                  {...TRANSPARENT_ICON_PROPS}
-                  as={Link}
-                  isExternal
-                  href="https://instagram.com/arknights_messenger"
-                  icon={<Icon as={FiInstagram} w="25px" h="25px" />}
-                />
+              <HStack fontWeight="bold" fontSize="lg">
+                <Link isExternal href="https://arknights.official.com">
+                  SITIO WEB OFICIAL
+                </Link>
+                <Icon as={FiExternalLink} w="20px" h="20px" />
               </HStack>
               <HStack>
                 <ChakraButton {...BUTTON_PROPS} rightIcon={<Icon as={MdAdd} w="25px" h="25px" />}>
                   Seguir
                 </ChakraButton>
-                <ChakraButton {...BUTTON_PROPS} rightIcon={<Icon as={MdShare} w="20px" h="20px" />}>
+                <ChakraButton
+                  // onClick={() => copyURL(`artist/${artist.artisticName}`)}
+                  onClick={() => copyURL(`artist/`)}
+                  {...BUTTON_PROPS}
+                  rightIcon={<Icon as={MdShare} w="20px" h="20px" />}
+                >
                   Compartir
                 </ChakraButton>
                 {/* isArtist or isManager */}
@@ -114,7 +103,6 @@ export function ArtistProfile() {
                   cover={song.cover}
                   isExplicit={song.isExplicit}
                   authors={song.authors}
-                  streams="1,333,334"
                   albumName={song.albumName}
                   year={song.year}
                   duration={song.duration}
@@ -162,39 +150,27 @@ export function ArtistProfile() {
           </Flex>
         </Box>
 
-        <SimpleGrid columns={2} align="center" margin="20px">
-          <Image
-            src="/assets/images/static-artist-about-banner.jpg"
-            height="500px"
-            borderRadius="10px"
-          />
-          <Box textAlign="left" margin="0 30px" color="whiteAlpha.700">
-            <Heading fontSize="xx-large" color={theme.colors.accentText.value} margin="10px 0">
-              Acerca de Arknights
-            </Heading>
-            <Text>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vitae non asperiores fugit
-              quaerat dicta reiciendis neque aliquam sit temporibus, numquam culpa modi error quo
-              cum voluptas nobis rem repellat! Quibusdam fugit veritatis quisquam, nulla repellat
-              accusamus dolore sequi natus labore aliquam neque alias, fugiat temporibus tempora
-              suscipit qui numquam ea corrupti explicabo, non doloremque animi ipsa iure
-              necessitatibus! Quia nulla ab aliquam vel aspernatur, explicabo, vitae assumenda saepe
-              sunt asperiores illum nostrum laboriosam, earum consequatur? Quis excepturi maiores
-              architecto mollitia hic ratione voluptatibus, nihil quam, possimus doloribus non modi
-              ea esse odio dolore. Recusandae eos unde sunt minima quaerat quam.
-            </Text>
+        <Box align="center" margin="0 30px" color="whiteAlpha.700">
+          <Heading fontSize="xx-large" color={theme.colors.accentText.value} margin="10px 0">
+            Acerca de Arknights
+          </Heading>
+          <Text width="80%">
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vitae non asperiores fugit
+            quaerat dicta reiciendis neque aliquam sit temporibus, numquam culpa modi error quo cum
+            voluptas nobis rem repellat! Quibusdam fugit veritatis quisquam, nulla repellat
+            accusamus dolore sequi natus labore aliquam neque alias, fugiat temporibus tempora
+            suscipit qui numquam ea corrupti explicabo, non doloremque animi ipsa iure
+            necessitatibus! Quia nulla ab aliquam vel aspernatur, explicabo, vitae assumenda saepe
+            sunt asperiores illum nostrum laboriosam, earum consequatur? Quis excepturi maiores
+            architecto mollitia hic ratione voluptatibus, nihil quam, possimus doloribus non modi ea
+            esse odio dolore. Recusandae eos unde sunt minima quaerat quam.
+          </Text>
 
-            <HStack marginTop="20px">
-              <Text {...HIGHLIGHT_PROPS}>Géneros: </Text>
-              <Text {...TEXT_PROPS}>Electropop, synth-pop-alternative, rock, post-hardcore</Text>
-            </HStack>
-
-            <HStack marginTop="5px">
-              <Text {...HIGHLIGHT_PROPS}>Seguidores: </Text>
-              <Text {...TEXT_PROPS}>6,000,311 </Text>
-            </HStack>
+          <Box marginTop="20px">
+            <Text {...HIGHLIGHT_PROPS}>Géneros: </Text>
+            <Text {...TEXT_PROPS}>Electropop, synth-pop-alternative, rock, post-hardcore</Text>
           </Box>
-        </SimpleGrid>
+        </Box>
 
         <Footer topMargin="40px" />
       </Box>

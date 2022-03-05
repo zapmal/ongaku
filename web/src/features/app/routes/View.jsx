@@ -25,6 +25,7 @@ import { Footer } from '@/components/Core';
 import { Banner, Link } from '@/components/Elements';
 import { NEW_SONGS, OptionMenu } from '@/features/app';
 import { theme } from '@/stitches.config.js';
+import { copyURL } from '@/utils/copyURL';
 import { getImage } from '@/utils/getImage';
 import { getLink } from '@/utils/getLink';
 
@@ -108,7 +109,12 @@ export function View() {
               >
                 Borrar
               </Button>
-              <Button {...BUTTON_PROPS} rightIcon={<Icon as={MdShare} w="20px" h="20px" />}>
+              <Button
+                // onClick={() => copyURL(`view/${data.name}`)}
+                onClick={() => copyURL(`view/`)}
+                {...BUTTON_PROPS}
+                rightIcon={<Icon as={MdShare} w="20px" h="20px" />}
+              >
                 Compartir
               </Button>
             </HStack>

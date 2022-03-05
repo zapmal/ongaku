@@ -541,18 +541,6 @@ export const ARTIST_SEARCH_RESULT = [
     image: '/assets/images/static-artist-yung-iverson.jpg',
     to: '/artist/yung-iverson',
   },
-  {
-    name: 'The Gentlemen',
-    amountOfFollowers: '750,379',
-    image: '/assets/images/static-artist-gentlemen.jpg',
-    to: '/artist/the-gentlemen',
-  },
-  {
-    name: 'Yung Iverson',
-    amountOfFollowers: '102,838',
-    image: '/assets/images/static-artist-yung-iverson.jpg',
-    to: '/artist/yung-iverson',
-  },
 ];
 
 export const SONGS_SEARCH_RESULT = [
@@ -566,43 +554,17 @@ export const SONGS_SEARCH_RESULT = [
     duration: '3:11',
   },
   {
-    name: 'Kawaki wo Ameku',
+    name: 'Kawaki wo Ameku Remix',
     isExplicit: false,
     cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
     authors: 'Minami',
     albumName: 'Kawaki wo Ameku',
-    year: 2019,
+    year: 2020,
     duration: '3:11',
   },
 ];
 
 export const ALBUMS_SEARCH_RESULTS = [
-  {
-    name: 'Kawaki wo Ameku',
-    isExplicit: false,
-    type: 'EP',
-    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
-    authors: 'Minami',
-    year: 2019,
-  },
-
-  {
-    name: 'Kawaki wo Ameku',
-    isExplicit: false,
-    type: 'EP',
-    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
-    authors: 'Minami',
-    year: 2019,
-  },
-  {
-    name: 'Kawaki wo Ameku',
-    isExplicit: false,
-    type: 'EP',
-    cover: '/assets/images/static-trending-kawaki-wo-ameku.jpg',
-    authors: 'Minami',
-    year: 2019,
-  },
-
   {
     name: 'Kawaki wo Ameku',
     isExplicit: false,

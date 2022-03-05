@@ -114,9 +114,10 @@ export function RoomRow({ name, activeUsers, userLimit, host, startedAt, genres,
 export function ArtistRow({ name, avatar, amountOfFollowers }) {
   // eslint-disable-next-line no-unused-vars
   const [_, artistLink] = getLink(name, name);
+  const [isHovered, mouseEventsHandlers] = useHover();
 
   return (
-    <Flex align="center" margin="13px 0" width="75%">
+    <Flex align="center" margin="13px 0" width="75%" {...mouseEventsHandlers}>
       <Avatar size="lg" transition="opacity 300ms ease-in-out" src={avatar} />
       <Box marginLeft="20px" textAlign="left">
         <Text
@@ -134,19 +135,23 @@ export function ArtistRow({ name, avatar, amountOfFollowers }) {
       </Box>
 
       <Spacer />
-      <Tooltip label={`Sigue a ${name}`}>
-        <IconButton
-          icon={<Icon as={MdAdd} />}
-          variant="outline"
-          _hover={{
-            color: 'whiteAlpha.800',
-          }}
-          _active={{
-            color: theme.colors.accentSolidActive.value,
-            borderColor: theme.colors.accentSolidActive.value,
-          }}
-        />
-      </Tooltip>
+      {isHovered && (
+        <Box animation={FADE_OUT_ANIMATION}>
+          <Tooltip label={`Sigue a ${name}`}>
+            <IconButton
+              icon={<Icon as={MdAdd} />}
+              variant="outline"
+              _hover={{
+                color: 'whiteAlpha.800',
+              }}
+              _active={{
+                color: theme.colors.accentSolidActive.value,
+                borderColor: theme.colors.accentSolidActive.value,
+              }}
+            />
+          </Tooltip>
+        </Box>
+      )}
     </Flex>
   );
 }

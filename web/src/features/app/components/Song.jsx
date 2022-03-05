@@ -34,13 +34,11 @@ export function SongRow({
   albumName,
   year,
   duration,
-  streams,
   width = '75%',
 }) {
   const [isHovered, mouseEventsHandlers] = useHover();
 
   return (
-    // change width for streams usage
     <Flex align="center" margin="15px 0" width={width} {...mouseEventsHandlers}>
       {isHovered ? (
         <Box animation={FADE_OUT_ANIMATION}>
@@ -58,7 +56,7 @@ export function SongRow({
         year={year}
       />
 
-      <Options isHovered={isHovered} streams={streams} duration={duration} isLarge={true} />
+      <Options isHovered={isHovered} duration={duration} isLarge={true} />
     </Flex>
   );
 }
@@ -133,15 +131,9 @@ function SongInformation({ name, isPlaying, isExplicit, authors, albumName, year
   );
 }
 
-export function Options({ isHovered, duration, streams, isLarge = false, onlyHeart = false }) {
+export function Options({ isHovered, duration, isLarge = false, onlyHeart = false }) {
   return (
     <>
-      {streams && !isHovered && (
-        <Text marginRight="10px" fontSize="sm" color={theme.colors.primaryText.value}>
-          {streams} streams
-        </Text>
-      )}
-
       {isHovered && (
         <Box animation={FADE_OUT_ANIMATION} textAlign="left">
           {!onlyHeart && (

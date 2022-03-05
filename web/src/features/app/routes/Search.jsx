@@ -8,6 +8,7 @@ import { ArtistRow, SongRow, AlbumRow, PlaylistRow, Status } from '../components
 import { ALBUMS_SEARCH_RESULTS, SONGS_SEARCH_RESULT } from '../constants';
 
 import { Highlight } from '@/components/Utils';
+import { getImage } from '@/utils/getImage';
 
 const DIVIDER_WIDTH = '75%';
 const HEADING_PROPS = {
@@ -67,16 +68,20 @@ export function Search() {
           )}
           <Heading {...HEADING_PROPS}>Albumes, Singles y EPs</Heading>
           <Divider width={DIVIDER_WIDTH} />
-          {ALBUMS_SEARCH_RESULTS.map((album, index) => (
-            <AlbumRow
-              key={index}
-              name={album.name}
-              cover={album.cover}
-              authors={album.authors}
-              type={album.type}
-              year={album.year}
-            />
-          ))}
+          {[].length === 0 ? (
+            <NothingFound section="playlists" />
+          ) : (
+            ALBUMS_SEARCH_RESULTS.map((album, index) => (
+              <AlbumRow
+                key={index}
+                name={album.name}
+                cover={album.cover}
+                authors={album.authors}
+                type={album.type}
+                year={album.year}
+              />
+            ))
+          )}
           <Heading {...HEADING_PROPS}>Playlists</Heading>
           <Divider width={DIVIDER_WIDTH} />
           {data.playlists.length === 0 ? (
@@ -86,7 +91,7 @@ export function Search() {
               <PlaylistRow
                 key={index}
                 name={playlist.name}
-                cover={`${import.meta.env.VITE_NODE_API_URL}/static/playlist/${playlist.cover}`}
+                cover={getImage('playlist', playlist.cover, 'default_cover.jpg')}
                 author="example"
                 amountOfSongs="32"
                 // author={playlist.author}

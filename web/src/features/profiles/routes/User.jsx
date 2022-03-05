@@ -26,6 +26,7 @@ import { Highlight, Spinner } from '@/components/Utils';
 import { ArtistCard, PlaylistCard } from '@/features/app';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { copyURL } from '@/utils/copyURL';
 import { getImage } from '@/utils/getImage';
 
 const FLEX_PROPS = { margin: '20px 10px', justify: 'center' };
@@ -117,7 +118,11 @@ export function UserProfile() {
                       Editar Perfil
                     </Button>
                   )}
-                  <Button variant="accent" rightIcon={<Icon as={MdShare} w="15px" h="15px" />}>
+                  <Button
+                    onClick={() => copyURL(`user/${user.username}`)}
+                    variant="accent"
+                    rightIcon={<Icon as={MdShare} w="15px" h="15px" />}
+                  >
                     Compartir Perfil
                   </Button>
                 </ButtonGroup>

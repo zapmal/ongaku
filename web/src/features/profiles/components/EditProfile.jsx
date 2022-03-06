@@ -11,6 +11,7 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useMutation, useQueryClient } from 'react-query';
 import * as yup from 'yup';
 
 import { updateProfileData } from '../api/user';
@@ -32,6 +33,12 @@ export function EditProfile({ isOpen, onClose, id, fullName, email, username }) 
     },
   });
   const [request, setRequestState] = useRequest();
+  const queryClient = useQueryClient();
+  const mutation = useMutation(updateProfileData, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(`profile-${username}`);
+    },
+  });
 
   const onSubmit = async (data) => {
     const body = new FormData();
@@ -41,12 +48,12 @@ export function EditProfile({ isOpen, onClose, id, fullName, email, username }) 
     body.append('avatar', data.avatar[0]);
 
     try {
-      const response = await updateProfileData(body);
+      const response = await mutation.mutateAsync(body);
       setRequestState({
         status: 'success',
         message: response.message,
       });
-      window.location.assign(`/user/${username}`);
+      onClose();
     } catch (error) {
       setRequestState({
         status: 'error',

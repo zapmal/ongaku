@@ -91,7 +91,7 @@ export function Search() {
               <PlaylistRow
                 key={index}
                 name={playlist.name}
-                cover={getImage('playlist', playlist.cover, 'default_cover.jpg')}
+                cover={getImage('playlist', playlist.cover, 'default/default_cover.jpg')}
                 author="example"
                 amountOfSongs="32"
                 // author={playlist.author}

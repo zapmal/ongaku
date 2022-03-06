@@ -7,29 +7,64 @@ import {
   ModalBody,
   ModalCloseButton,
   Text,
+  Spinner,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useMutation, useQueryClient } from 'react-query';
 import * as yup from 'yup';
+
+import { updateProfileData } from '../api/artist';
 
 import { Button } from '@/components/Elements';
 import { Field } from '@/components/Form';
+import { useRequest } from '@/hooks';
 
-export function EditArtistProfile({ isOpen, onClose }) {
+export function EditArtistProfile({ isOpen, onClose, id, name, officialWebsite, biography }) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      officialWebsite: '',
-      biography: '',
+      officialWebsite: officialWebsite,
+      biography: biography,
+    },
+  });
+  const [request, setRequestState] = useRequest();
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation(updateProfileData, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(`artist-${name}`);
     },
   });
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = async (data) => {
+    const body = new FormData();
+    body.append('id', id);
+    body.append('officialWebsite', data.officialWebsite);
+    body.append('biography', data.biography);
+    body.append('cover', data.cover[0]);
+    body.append('avatar', data.avatar[0]);
+
+    try {
+      const response = await mutation.mutateAsync(body);
+      setRequestState({
+        status: 'success',
+        message: response.message,
+      });
+      onClose();
+    } catch (error) {
+      setRequestState({
+        status: 'error',
+        title: 'Error',
+        message: error,
+      });
+    }
+  };
 
   return (
     <>
@@ -53,14 +88,14 @@ export function EditArtistProfile({ isOpen, onClose }) {
                 css={{ marginBottom: '10px' }}
                 error={errors.officialWebsite}
                 register={register}
+                isDisabled={request.status != ''}
               />
               <Field
                 type="file"
-                name="coverImage"
+                name="cover"
                 label="Portada"
                 css={{ marginBottom: '10px' }}
-                // isDisabled={true}
-                // error={errors.cover}
+                isDisabled={request.status != ''}
                 register={register}
               />
               <Field
@@ -68,8 +103,7 @@ export function EditArtistProfile({ isOpen, onClose }) {
                 name="avatar"
                 label="Avatar"
                 css={{ marginBottom: '10px' }}
-                // isDisabled={true}
-                // error={errors.cover}
+                isDisabled={request.status != ''}
                 register={register}
               />
               <Text fontWeight="bold" fontSize="sm" margin="10px 3px 15px">
@@ -77,6 +111,7 @@ export function EditArtistProfile({ isOpen, onClose }) {
               </Text>
               <Textarea
                 name="biography"
+                isDisabled={request.status != ''}
                 placeholder="Biografía"
                 resize="none"
                 marginBottom="10px"
@@ -84,19 +119,25 @@ export function EditArtistProfile({ isOpen, onClose }) {
               />
             </ModalBody>
             <ModalFooter margin="0 auto">
-              <Button variant="accent" type="submit">
-                Cambiar
-              </Button>
-              <Text
-                textDecoration="underline"
-                fontSize="sm"
-                color="whiteAlpha.700"
-                margin="0 20px"
-                onClick={onClose}
-                _hover={{ cursor: 'pointer' }}
-              >
-                Cancelar
-              </Text>
+              {isSubmitting ? (
+                <Spinner size="lg" />
+              ) : (
+                <>
+                  <Button variant="accent" type="submit">
+                    Cambiar
+                  </Button>
+                  <Text
+                    textDecoration="underline"
+                    fontSize="sm"
+                    color="whiteAlpha.700"
+                    margin="0 20px"
+                    onClick={onClose}
+                    _hover={{ cursor: 'pointer' }}
+                  >
+                    Cancelar
+                  </Text>
+                </>
+              )}
             </ModalFooter>
           </ModalContent>
         </form>

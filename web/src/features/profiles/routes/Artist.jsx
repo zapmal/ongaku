@@ -13,7 +13,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
-import React, { useState } from 'react';
+import React from 'react';
 import { FiExternalLink } from 'react-icons/fi';
 import { MdAdd, MdShare, MdEdit, MdCheck } from 'react-icons/md';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -26,7 +26,7 @@ import { EditArtistProfile } from '../components';
 import { Footer } from '@/components/Core';
 import { Banner } from '@/components/Elements';
 import { Spinner, Highlight } from '@/components/Utils';
-import { SongRow, SongCard, ArtistRow, GRADIENTS, NEW_ARTISTS, NEW_SONGS } from '@/features/app';
+import { SongRow, SongCard, ArtistRow, NEW_ARTISTS, NEW_SONGS } from '@/features/app';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { copyURL } from '@/utils/copyURL';
@@ -73,7 +73,10 @@ export function ArtistProfile() {
 
   const { data: followedArtists, isLoading: isLoadingFollowedArtists } = useQuery(
     'library-artists',
-    getFollowedArtists
+    getFollowedArtists,
+    {
+      initialData: [],
+    }
   );
   const mutation = useMutation(followArtist, {
     onSuccess: () => {
@@ -81,28 +84,42 @@ export function ArtistProfile() {
       queryClient.invalidateQueries(`artist-${params?.name}`);
     },
   });
-  const [followed, setFollowed] = useState(
-    () => followedArtists?.filter((followed) => followed.id === artist.id).length !== 0
-  );
 
   const handleOnClick = async () => {
     try {
       await mutation.mutateAsync({ artistId: artist.id });
-      setFollowed(!followed);
     } catch (error) {
       console.log('Error al cambiar el seguimiento del artista', error);
     }
   };
 
-  if (isLoadingProfile || isLoadingFollowedArtists) {
+  if (isLoadingProfile && isLoadingFollowedArtists) {
     return <Spinner paddingBottom="100%" />;
   }
 
   return (
     <>
       <Box>
-        <Banner image="/assets/images/static-artist-banner.jpeg" height="700px">
-          <Flex align="center" justify="center" height="100%" bg={GRADIENTS.bottom}>
+        <Banner
+          image={getImage(
+            'artist',
+            artist.artistInformation?.coverImage,
+            'default/default_cover.svg'
+          )}
+          bgRepeat="no-repeat"
+          bgPosition="top"
+          height="700px"
+        >
+          <Flex
+            align="center"
+            justify="center"
+            height="100%"
+            bg={
+              artist.artistInformation?.coverImage
+                ? `linear-gradient(0, ${theme.colors.primaryBase.value} 5%, rgba(255,255,255,0) 40%)`
+                : `linear-gradient(0, ${theme.colors.primaryBase.value} 5%, rgba(255, 255, 255, 0.1) 40%)`
+            }
+          >
             <VStack marginTop="150px">
               <Heading fontSize="xxx-large" letterSpacing="4px">
                 {artist.artisticName ? artist.artisticName : artist.band?.name}{' '}
@@ -131,7 +148,8 @@ export function ArtistProfile() {
                       Editar Perfil
                     </ChakraButton>
                   ))}
-                {artist.id !== entity.id && followed ? (
+                {artist.id !== entity.id &&
+                followedArtists?.filter((followed) => followed.id === artist.id).length === 1 ? (
                   <ChakraButton
                     {...BUTTON_PROPS}
                     rightIcon={<Icon as={MdCheck} w="25px" h="25px" />}
@@ -225,7 +243,7 @@ export function ArtistProfile() {
                 <Box margin="30px 0" key={index}>
                   <SongCard
                     id={entry.id}
-                    cover={getImage('album', entry.cover, 'default_album.png')}
+                    cover={getImage('album', entry.cover, 'default/default_album.png')}
                     name={entry.name}
                     isExplicit={false}
                     type={entry.releaseType}
@@ -253,17 +271,7 @@ export function ArtistProfile() {
             <Highlight>{artist.artisticName ? artist.artisticName : artist.band?.name}</Highlight>
           </Heading>
           {artist.artistInformation?.biography ? (
-            <Text width="80%">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vitae non asperiores fugit
-              quaerat dicta reiciendis neque aliquam sit temporibus, numquam culpa modi error quo
-              cum voluptas nobis rem repellat! Quibusdam fugit veritatis quisquam, nulla repellat
-              accusamus dolore sequi natus labore aliquam neque alias, fugiat temporibus tempora
-              suscipit qui numquam ea corrupti explicabo, non doloremque animi ipsa iure
-              necessitatibus! Quia nulla ab aliquam vel aspernatur, explicabo, vitae assumenda saepe
-              sunt asperiores illum nostrum laboriosam, earum consequatur? Quis excepturi maiores
-              architecto mollitia hic ratione voluptatibus, nihil quam, possimus doloribus non modi
-              ea esse odio dolore. Recusandae eos unde sunt minima quaerat quam.
-            </Text>
+            <Text width="80%">{artist.artistInformation?.biography}</Text>
           ) : (
             <Text fontSize="large">Este artista no ha subido su biografía.</Text>
           )}
@@ -308,7 +316,16 @@ export function ArtistProfile() {
 
         <Footer topMargin="40px" />
       </Box>
-      {isOpen && <EditArtistProfile isOpen={isOpen} onClose={onClose} />}
+      {isOpen && (
+        <EditArtistProfile
+          isOpen={isOpen}
+          onClose={onClose}
+          id={artist.id}
+          name={artist.artisticName ? artist.artisticName : artist.band?.name}
+          officialWebsite={artist.artistInformation?.officialWebsite}
+          biography={artist.artistInformation?.biography}
+        />
+      )}
     </>
   );
 }

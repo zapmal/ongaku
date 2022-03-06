@@ -57,7 +57,10 @@ export function UserProfile() {
   return (
     <>
       <Box>
-        <Banner image={getImage('user', user.background, 'default_background.svg')} height="500px">
+        <Banner
+          image={getImage('user', user.background, 'default/default_background.svg')}
+          height="500px"
+        >
           <Flex
             bg={`linear-gradient(0, ${theme.colors.primaryBase.value} 5%, rgba(255, 255, 255, .1) 60%)`}
             height="100%"
@@ -67,7 +70,7 @@ export function UserProfile() {
             <HStack>
               <Image
                 marginLeft="40px"
-                src={getImage('user', user.avatar, 'default_avatar.svg')}
+                src={getImage('user', user.avatar, 'default/default_avatar.svg')}
                 w="300px"
                 h="300px"
                 objectFit="cover"
@@ -141,7 +144,7 @@ export function UserProfile() {
                   key={index}
                   artistId={artist.id}
                   name={artist.artisticName ? artist.artisticName : artist.band.name}
-                  avatar={getImage('artist', artist.avatar, 'default_avatar.png')}
+                  avatar={getImage('artist', artist.avatar, 'default/default_avatar.png')}
                   amountOfFollowers={artist.artistMetrics.followers}
                   isHighlighted={index % 2 === 0}
                   badge={false}
@@ -163,7 +166,11 @@ export function UserProfile() {
                 <PlaylistCard
                   id={playlist.userPlaylistId}
                   key={index}
-                  cover={getImage('playlist', playlist.userPlaylist.cover, 'default_cover.jpg')}
+                  cover={getImage(
+                    'playlist',
+                    playlist.userPlaylist.cover,
+                    'default/default_cover.jpg'
+                  )}
                   name={playlist.userPlaylist.name}
                   likes={playlist.userPlaylist.likes}
                   amountOfSongs={0}
@@ -187,7 +194,7 @@ export function UserProfile() {
                 <PlaylistCard
                   key={index}
                   id={playlist.id}
-                  cover={getImage('playlist', playlist.cover, 'default_cover.jpg')}
+                  cover={getImage('playlist', playlist.cover, 'default/default_cover.jpg')}
                   name={playlist.name}
                   likes={playlist.likes}
                   amountOfSongs={0}

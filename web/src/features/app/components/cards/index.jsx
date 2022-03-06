@@ -201,6 +201,7 @@ function HoverButton({
   return (
     <IconButton
       borderRadius="50%"
+      isDisabled={mutation.isLoading}
       onClick={button.icon !== MdPlayArrow ? handleOnClick : () => {}}
       icon={<Icon as={isLoading ? Spinner : icon} w="35px" h="35px" />}
       backgroundColor={theme.colors.primaryBase.value}

@@ -74,7 +74,9 @@ export class UserService {
       throw new UserNotFound();
     }
     console.log(error);
-    throw new InternalServerError('Something went wrong, try again later');
+    throw new InternalServerError(
+      'Ocurrió un error de nuestro lado, intentalo de nuevo luego',
+    );
   }
 
   async getById(id: number) {

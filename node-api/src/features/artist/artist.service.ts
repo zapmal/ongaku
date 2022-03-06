@@ -2,6 +2,7 @@ import {
   NotFoundException as NotFound,
   Injectable,
   InternalServerErrorException as InternalServerError,
+  BadRequestException as BadRequest,
 } from '@nestjs/common';
 import { Prisma, Artist } from '@prisma/client';
 
@@ -9,6 +10,8 @@ import { PrismaService } from '@/internal/services';
 import { PrismaError } from '@/internal/constants';
 
 import { ArtistNotFound } from './artist.exceptions';
+import { DEFAULT_ARTIST_IMAGES } from './artist.constants';
+import { storeImages } from '@/internal/helpers';
 
 @Injectable()
 export class ArtistService {
@@ -162,6 +165,26 @@ export class ArtistService {
     return artist;
   }
 
+  async getImagesById(id: number) {
+    if (!id) throw new BadRequest('La solicitud está errada, falta información');
+
+    const artist = await this.prisma.artist.findUnique({
+      where: { id },
+      select: {
+        avatar: true,
+        artistInformation: {
+          select: {
+            coverImage: true,
+          },
+        },
+      },
+    });
+
+    if (!artist) throw new ArtistNotFound();
+
+    return artist;
+  }
+
   async getByGenre(artistId: number, genre: string) {
     return await this.prisma.artist.findMany({
       where: {
@@ -229,6 +252,61 @@ export class ArtistService {
         throw new ArtistNotFound();
       }
       throw new InternalServerError('Something went wrong, try again later');
+    }
+  }
+
+  async updateInformation(
+    id: number,
+    newArtistData: any,
+    uploadedImages?: Array<Express.Multer.File>,
+    path?: string,
+  ): Promise<any> {
+    let avatar = {};
+    let newArtistDataWithCover = { ...newArtistData };
+
+    try {
+      if (uploadedImages['avatar']) {
+        const [image] = storeImages(uploadedImages['avatar'][0], path);
+        avatar = {
+          avatar: image || DEFAULT_ARTIST_IMAGES.avatar,
+        };
+      }
+
+      if (uploadedImages['cover']) {
+        const [image] = storeImages(uploadedImages['cover'][0], path);
+        newArtistDataWithCover = {
+          ...newArtistData,
+          coverImage: image || DEFAULT_ARTIST_IMAGES.cover,
+        };
+      }
+
+      return await this.prisma.artist.update({
+        where: { id },
+        data: {
+          ...avatar,
+          artistInformation: {
+            upsert: {
+              create: {
+                ...newArtistDataWithCover,
+              },
+              update: {
+                ...newArtistDataWithCover,
+              },
+            },
+          },
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === PrismaError.RecordDoesNotExist
+      ) {
+        throw new ArtistNotFound();
+      }
+      console.log(error);
+      throw new InternalServerError(
+        'Ocurrió un error de nuestro lado, intentalo de nuevo luego',
+      );
     }
   }
 }

@@ -51,7 +51,7 @@ export function View() {
   return (
     <Box>
       <Banner
-        image={getImage('view', null, 'default.svg')}
+        image={getImage('view', null, 'default/default.svg')}
         backgroundColor={theme.colors.primaryBg.value}
         height="100%"
         bgRepeat="no-repeat"

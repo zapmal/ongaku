@@ -108,6 +108,8 @@ function Artists() {
     return <Status status="error" message={error} />;
   }
 
+  console.log(data);
+
   return data.length === 0 ? (
     <EmptySection message="No has seguido a ningún artista" />
   ) : (
@@ -117,7 +119,7 @@ function Artists() {
           artistId={artist.id}
           amountOfFollowers={artist.followers}
           name={artist.bandName ? artist.bandName : artist.artisticName}
-          avatar={getImage('artist', artist.avatar, 'default_avatar.png')}
+          avatar={getImage('artist', artist.avatar, 'default/default_avatar.png')}
           isFollowed={true}
           badge={false}
           size="sm"
@@ -149,7 +151,7 @@ function Albums() {
           name={album.name}
           type={album.releaseType}
           authors={album.artist.artisticName ? album.artist.artisticName : album.artist.bandName}
-          cover={getImage('album', album.cover, 'default_album.png')}
+          cover={getImage('album', album.cover, 'default/default_album.png')}
           year={dayjs(album.year).format('YYYY')}
           isExplicit={false}
           isLiked={true}
@@ -181,7 +183,7 @@ function Playlists() {
           name={playlist.name}
           likes={playlist.likes}
           author={playlist.username}
-          cover={getImage('playlist', playlist.cover, 'default_cover.jpg')}
+          cover={getImage('playlist', playlist.cover, 'default/default_cover.jpg')}
           amountOfSongs={0}
           badge={false}
           notLikeable={true}

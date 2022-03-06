@@ -29,7 +29,7 @@ export function ProfileIcon() {
     <Menu isLazy>
       <MenuButton margin="10px" _hover={{ opacity: '.8' }}>
         <Avatar src="/assets/images/static-admin-avatar.jpeg">
-          {/* <Avatar src={getImage('user', null, 'default_avatar.svg')}> */}
+          {/* <Avatar src={getImage('user', null, 'default/default_avatar.svg')}> */}
           <AvatarBadge
             as={Badge}
             bg={theme.colors.accentSolid.value}

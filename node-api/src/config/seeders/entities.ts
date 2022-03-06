@@ -59,10 +59,12 @@ async function main() {
   // Artist, verified email.
   const iverson = await prisma.artist.upsert({
     where: { email: 'yungiverson@gmail.com' },
-    update: {},
+    update: {
+      country: 'VE',
+    },
     create: {
       email: 'yungiverson@gmail.com',
-      country: 'Venezuela',
+      country: 'VE',
       artisticName: 'iverson',
       genres: ['rap', 'raro'],
       yearsActive: 4,
@@ -75,11 +77,13 @@ async function main() {
   // Artist (group), verified email.
   const bts = await prisma.artist.upsert({
     where: { email: 'contact@btsbighit.com' },
-    update: {},
+    update: {
+      country: 'KR',
+    },
     create: {
       email: 'contact@btsbighit.com',
       password: await hash('password', 10),
-      country: 'Korea',
+      country: 'KR',
       labels: ['BigHit'],
       genres: ['pop', 'rap'],
       yearsActive: 2,

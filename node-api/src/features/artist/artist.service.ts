@@ -133,7 +133,15 @@ export class ArtistService {
           },
         ],
       },
-      include: {
+      select: {
+        yearsActive: true,
+        artisticName: true,
+        country: true,
+        labels: true,
+        genres: true,
+        id: true,
+        email: true,
+        band: true,
         artistMetrics: {
           select: {
             followers: true,

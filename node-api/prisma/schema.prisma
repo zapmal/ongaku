@@ -221,10 +221,6 @@ model SongMetrics {
 model Interaction {
   id             Int      @id @default(autoincrement())
   value Boolean?  
-  // likedSong      Boolean? @map("liked_song")
-  // likedAlbum     Boolean? @map("liked_album")
-  // likedPlaylist  Boolean? @map("liked_playlist")
-  // followedArtist Boolean? @map("followed_artist")
   artistId       Int?     @map("artist_id")
   albumId        Int?     @map("album_id")
   userId         Int?     @map("user_id")

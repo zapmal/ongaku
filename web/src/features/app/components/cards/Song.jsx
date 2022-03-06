@@ -7,9 +7,19 @@ import { Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 import { getLink } from '@/utils/getLink';
 
-export function SongCard({ id, cover, name, isExplicit, type, authors, isLiked, year }) {
+export function SongCard({
+  id,
+  cover,
+  name,
+  isExplicit,
+  type,
+  authors,
+  isLiked,
+  notLikeable = false,
+  year,
+}) {
   return (
-    <Card cover={cover} type="song" id={id} isLiked={isLiked} to={name}>
+    <Card cover={cover} type="song" id={id} isLiked={isLiked} to={name} notLikeable={notLikeable}>
       <Flex justify="end">
         <Text fontWeight="bold" wordBreak="break-word">
           {name}

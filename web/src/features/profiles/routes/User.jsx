@@ -12,8 +12,9 @@ import {
   SimpleGrid,
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { MdEdit, MdShare } from 'react-icons/md';
+import { useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { getProfileData } from '../api/user';
@@ -36,24 +37,18 @@ export function UserProfile() {
   const entity = useAuthStore((s) => s.entity);
   const params = useParams();
   const navigate = useNavigate();
-  const [{ user, playlists, followed, isLoading }, setUser] = useState({
-    user: { userMetadata: {} },
-    playlists: { playlists: [], likedPlaylists: [] },
-    followed: [],
-    isLoading: true,
+
+  const {
+    data: { user, playlists, followed },
+    isLoading,
+  } = useQuery(`profile-${params?.username}`, () => getProfileData(params?.username), {
+    initialData: {
+      user: { userMetadata: {} },
+      playlists: { playlists: [], likedPlaylists: [] },
+      followed: [],
+    },
+    onError: () => navigate('/not-found'),
   });
-
-  useEffect(() => {
-    getProfileData(params.username)
-      .then((response) => setUser({ isLoading: false, ...response }))
-      .catch((error) => {
-        console.log(error);
-        setUser((data) => ({ ...data, isLoading: false }));
-        navigate('/not-found');
-      });
-  }, [navigate, params.username]);
-
-  console.log(user);
 
   if (isLoading) {
     return <Spinner paddingBottom="100%" />;

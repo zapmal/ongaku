@@ -12,25 +12,25 @@ import {
   Link,
   useDisclosure,
 } from '@chakra-ui/react';
-import React from 'react';
+import dayjs from 'dayjs';
+import React, { useState } from 'react';
 import { FiExternalLink } from 'react-icons/fi';
-import { MdAdd, MdShare, MdEdit } from 'react-icons/md';
+import { MdAdd, MdShare, MdEdit, MdCheck } from 'react-icons/md';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useNavigate, useParams } from 'react-router-dom';
 
+import { getFollowedArtists, followArtist } from '../../app/api/artist';
+import { getProfileData } from '../api/artist';
 import { EditArtistProfile } from '../components';
 
 import { Footer } from '@/components/Core';
-import { Banner, Button } from '@/components/Elements';
-import {
-  SongRow,
-  SongCard,
-  ArtistRow,
-  NEW_ALBUMS_AND_SINGLES,
-  GRADIENTS,
-  NEW_ARTISTS,
-  NEW_SONGS,
-} from '@/features/app';
+import { Banner } from '@/components/Elements';
+import { Spinner, Highlight } from '@/components/Utils';
+import { SongRow, SongCard, ArtistRow, GRADIENTS, NEW_ARTISTS, NEW_SONGS } from '@/features/app';
 import { theme } from '@/stitches.config.js';
+import { useAuthStore } from '@/stores/useAuthStore';
 import { copyURL } from '@/utils/copyURL';
+import { getImage } from '@/utils/getImage';
 
 const HIGHLIGHT_PROPS = {
   fontSize: 'lg',
@@ -45,12 +45,58 @@ const TEXT_PROPS = {
 const BUTTON_PROPS = {
   variant: 'outline',
   borderRadius: '5px',
-  _hover: { bg: theme.colors.accentSolidHover.value },
+  _hover: { bg: theme.colors.accentSolidHover.value, borderColor: 'transparent' },
   _active: { bg: theme.colors.accentSolidActive.value },
 };
 
 export function ArtistProfile() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const entity = useAuthStore((s) => s.entity);
+  const params = useParams();
+  const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
+  const {
+    data: { artist, popularSongs, recommendation, albums },
+    isLoading: isLoadingProfile,
+  } = useQuery(`artist-${params?.name}`, () => getProfileData(params?.name), {
+    initialData: {
+      artist: {},
+      popularSongs: [],
+      recommendation: [],
+      albums: [],
+    },
+    onError: () => {
+      navigate('/not-found');
+    },
+  });
+
+  const { data: followedArtists, isLoading: isLoadingFollowedArtists } = useQuery(
+    'library-artists',
+    getFollowedArtists
+  );
+  const mutation = useMutation(followArtist, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('library-artists');
+      queryClient.invalidateQueries(`artist-${params?.name}`);
+    },
+  });
+  const [followed, setFollowed] = useState(
+    () => followedArtists?.filter((followed) => followed.id === artist.id).length !== 0
+  );
+
+  const handleOnClick = async () => {
+    try {
+      await mutation.mutateAsync({ artistId: artist.id });
+      setFollowed(!followed);
+    } catch (error) {
+      console.log('Error al cambiar el seguimiento del artista', error);
+    }
+  };
+
+  if (isLoadingProfile || isLoadingFollowedArtists) {
+    return <Spinner paddingBottom="100%" />;
+  }
 
   return (
     <>
@@ -59,116 +105,204 @@ export function ArtistProfile() {
           <Flex align="center" justify="center" height="100%" bg={GRADIENTS.bottom}>
             <VStack marginTop="150px">
               <Heading fontSize="xxx-large" letterSpacing="4px">
-                Arknights
+                {artist.artisticName ? artist.artisticName : artist.band?.name}{' '}
+                {getFlagEmoji(artist.country)}
               </Heading>
               <Text fontWeight="bold" fontSize="lg">
-                Seguidores: 3,001,828
+                {artist.artistMetrics?.followers}{' '}
+                {artist.artistMetrics?.followers === 1 ? 'seguidor' : 'seguidores'}
               </Text>
-              <HStack fontWeight="bold" fontSize="lg">
-                <Link isExternal href="https://arknights.official.com">
-                  SITIO WEB OFICIAL
-                </Link>
-                <Icon as={FiExternalLink} w="20px" h="20px" />
-              </HStack>
+              {artist.artistInformation?.officialWebsite && (
+                <HStack fontWeight="bold" fontSize="lg">
+                  <Link isExternal href="https://arknights.official.com">
+                    SITIO WEB OFICIAL
+                  </Link>
+                  <Icon as={FiExternalLink} w="20px" h="20px" />
+                </HStack>
+              )}
               <HStack>
-                <ChakraButton {...BUTTON_PROPS} rightIcon={<Icon as={MdAdd} w="25px" h="25px" />}>
-                  Seguir
-                </ChakraButton>
+                {artist.id === entity.id ||
+                  (entity.role === 'ADMIN' && (
+                    <ChakraButton
+                      {...BUTTON_PROPS}
+                      rightIcon={<Icon as={MdEdit} />}
+                      onClick={onOpen}
+                    >
+                      Editar Perfil
+                    </ChakraButton>
+                  ))}
+                {artist.id !== entity.id && followed ? (
+                  <ChakraButton
+                    {...BUTTON_PROPS}
+                    rightIcon={<Icon as={MdCheck} w="25px" h="25px" />}
+                    onClick={handleOnClick}
+                    isDisabled={mutation.isLoading}
+                  >
+                    Siguiendo
+                  </ChakraButton>
+                ) : (
+                  <ChakraButton
+                    {...BUTTON_PROPS}
+                    rightIcon={<Icon as={MdAdd} w="25px" h="25px" />}
+                    onClick={handleOnClick}
+                    isDisabled={mutation.isLoading}
+                  >
+                    Seguir
+                  </ChakraButton>
+                )}
                 <ChakraButton
-                  // onClick={() => copyURL(`artist/${artist.artisticName}`)}
-                  onClick={() => copyURL(`artist/`)}
+                  onClick={() =>
+                    copyURL(
+                      `artist/${artist.artisticName ? artist.artisticName : artist.band.name}`
+                    )
+                  }
                   {...BUTTON_PROPS}
                   rightIcon={<Icon as={MdShare} w="20px" h="20px" />}
                 >
                   Compartir
                 </ChakraButton>
-                {/* isArtist or isManager */}
-                {true && (
-                  <Button variant="accent" rightIcon={<Icon as={MdEdit} />} onClick={onOpen}>
-                    Editar Perfil
-                  </Button>
-                )}
               </HStack>
             </VStack>
           </Flex>
         </Banner>
 
-        <SimpleGrid columns={2} align="center">
+        <SimpleGrid columns={recommendation.length === 0 ? 1 : 2} align="center">
           <Box>
             <Heading fontSize="xx-large">Canciones Populares</Heading>
-            {NEW_SONGS.map((song, index) => (
-              <Box key={index}>
-                <SongRow
-                  name={song.name}
-                  cover={song.cover}
-                  isExplicit={song.isExplicit}
-                  authors={song.authors}
-                  albumName={song.albumName}
-                  year={song.year}
-                  duration={song.duration}
-                  width="90%"
-                />
-                <Divider width="90%" />
-              </Box>
-            ))}
+            {popularSongs.length === 0 ? (
+              <Text fontSize="large" color="whiteAlpha.700" marginTop="10px">
+                Este artista no tiene canciones populares, por ahora.
+              </Text>
+            ) : (
+              NEW_SONGS.map((song, index) => (
+                <Box key={index}>
+                  <SongRow
+                    name={song.name}
+                    cover={song.cover}
+                    isExplicit={song.isExplicit}
+                    authors={song.authors}
+                    albumName={song.albumName}
+                    year={song.year}
+                    duration={song.duration}
+                    width="90%"
+                  />
+                  <Divider width="90%" />
+                </Box>
+              ))
+            )}
           </Box>
-          <Box>
-            <Heading fontSize="xx-large">A los fans también les gusta</Heading>
-            {NEW_ARTISTS.map((artist, index) => (
-              <Box key={index}>
-                <ArtistRow
-                  name={artist.name}
-                  avatar={artist.image}
-                  amountOfFollowers={artist.amountOfFollowers}
-                  to={artist.to}
-                  badge={false}
-                  size="sm"
-                />
-                <Divider width="75%" />
-              </Box>
-            ))}
-          </Box>
+          {recommendation.length !== 0 && (
+            <Box>
+              <Heading fontSize="xx-large">A los fans también les gusta</Heading>
+              {NEW_ARTISTS.map((artist, index) => (
+                <Box key={index}>
+                  <ArtistRow
+                    name={artist.name}
+                    avatar={artist.image}
+                    amountOfFollowers={artist.amountOfFollowers}
+                    to={artist.to}
+                    badge={false}
+                    size="sm"
+                  />
+                  <Divider width="75%" />
+                </Box>
+              ))}
+            </Box>
+          )}
         </SimpleGrid>
 
-        <Box margin="60px 0">
+        <Box margin="40px 0">
           <Heading fontSize="xx-large" textAlign="center">
             Nuevos Albumes, Singles y EPs
           </Heading>
-          <Flex justify="center">
-            {NEW_ALBUMS_AND_SINGLES.map((song, index) => (
-              <Box margin="30px 0" key={index}>
-                <SongCard
-                  cover={song.cover}
-                  name={song.name}
-                  isExplicit={song.isExplicit}
-                  type={song.type}
-                  authors={song.authors}
-                  year={song.year}
-                />
-              </Box>
-            ))}
-          </Flex>
+          {albums.length === 0 ? (
+            <Text fontSize="large" color="whiteAlpha.700" marginTop="10px" textAlign="center">
+              Este artista no ha publicado nada, por ahora.
+            </Text>
+          ) : (
+            <Flex justify="center">
+              {albums.map((entry, index) => (
+                <Box margin="30px 0" key={index}>
+                  <SongCard
+                    id={entry.id}
+                    cover={getImage('album', entry.cover, 'default_album.png')}
+                    name={entry.name}
+                    isExplicit={false}
+                    type={entry.releaseType}
+                    authors={
+                      entry.artist.length
+                        ? entry.artist
+                            .map((a) => (a.artisticName ? a.artisticName : a.band.name))
+                            .toString()
+                        : entry.artist.artisticName
+                        ? entry.artist.artisticName
+                        : entry.artist.band.name
+                    }
+                    year={dayjs(entry.year).format('YYYY')}
+                    notLikeable={artist.id === entity.id}
+                  />
+                </Box>
+              ))}
+            </Flex>
+          )}
         </Box>
 
         <Box align="center" margin="0 30px" color="whiteAlpha.700">
-          <Heading fontSize="xx-large" color={theme.colors.accentText.value} margin="10px 0">
-            Acerca de Arknights
+          <Heading fontSize="xx-large" color="white" margin="10px 0">
+            Acerca de{' '}
+            <Highlight>{artist.artisticName ? artist.artisticName : artist.band?.name}</Highlight>
           </Heading>
-          <Text width="80%">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vitae non asperiores fugit
-            quaerat dicta reiciendis neque aliquam sit temporibus, numquam culpa modi error quo cum
-            voluptas nobis rem repellat! Quibusdam fugit veritatis quisquam, nulla repellat
-            accusamus dolore sequi natus labore aliquam neque alias, fugiat temporibus tempora
-            suscipit qui numquam ea corrupti explicabo, non doloremque animi ipsa iure
-            necessitatibus! Quia nulla ab aliquam vel aspernatur, explicabo, vitae assumenda saepe
-            sunt asperiores illum nostrum laboriosam, earum consequatur? Quis excepturi maiores
-            architecto mollitia hic ratione voluptatibus, nihil quam, possimus doloribus non modi ea
-            esse odio dolore. Recusandae eos unde sunt minima quaerat quam.
-          </Text>
+          {artist.artistInformation?.biography ? (
+            <Text width="80%">
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vitae non asperiores fugit
+              quaerat dicta reiciendis neque aliquam sit temporibus, numquam culpa modi error quo
+              cum voluptas nobis rem repellat! Quibusdam fugit veritatis quisquam, nulla repellat
+              accusamus dolore sequi natus labore aliquam neque alias, fugiat temporibus tempora
+              suscipit qui numquam ea corrupti explicabo, non doloremque animi ipsa iure
+              necessitatibus! Quia nulla ab aliquam vel aspernatur, explicabo, vitae assumenda saepe
+              sunt asperiores illum nostrum laboriosam, earum consequatur? Quis excepturi maiores
+              architecto mollitia hic ratione voluptatibus, nihil quam, possimus doloribus non modi
+              ea esse odio dolore. Recusandae eos unde sunt minima quaerat quam.
+            </Text>
+          ) : (
+            <Text fontSize="large">Este artista no ha subido su biografía.</Text>
+          )}
 
           <Box marginTop="20px">
             <Text {...HIGHLIGHT_PROPS}>Géneros: </Text>
-            <Text {...TEXT_PROPS}>Electropop, synth-pop-alternative, rock, post-hardcore</Text>
+            <Text {...TEXT_PROPS}>
+              {artist.genres?.map((genre, index) => {
+                const displayGenre = genre.toUpperCase();
+                return artist.genres.length !== index + 1 ? `${displayGenre}, ` : displayGenre;
+              })}
+            </Text>
+
+            {artist.band?.members && (
+              <>
+                <Text {...HIGHLIGHT_PROPS} marginTop="10px">
+                  Miembros:
+                </Text>
+                <Text {...TEXT_PROPS}>
+                  {artist.band?.members.map((member, index) => {
+                    return artist.band.members.length !== index + 1 ? `${member}, ` : member;
+                  })}
+                </Text>
+              </>
+            )}
+
+            <Text {...HIGHLIGHT_PROPS} marginTop="10px">
+              Discográfica(s):
+            </Text>
+            <Text {...TEXT_PROPS}>
+              {artist.labels?.map((label, index) => {
+                return artist.labels.length !== index + 1 ? `${label}, ` : label;
+              })}
+            </Text>
+
+            <Text {...HIGHLIGHT_PROPS} marginTop="10px">
+              Años Activo(s):
+            </Text>
+            <Text {...TEXT_PROPS}>{artist.yearsActive}</Text>
           </Box>
         </Box>
 
@@ -178,3 +312,12 @@ export function ArtistProfile() {
     </>
   );
 }
+
+const getFlagEmoji = (countryCode = 'VE') => {
+  const codePoints = countryCode
+    .toUpperCase()
+    .split('')
+    .map((char) => 127397 + char.charCodeAt());
+
+  return String.fromCodePoint(...codePoints);
+};

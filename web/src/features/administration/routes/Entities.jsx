@@ -42,8 +42,8 @@ export function Entities() {
         <Box margin="0px 20px" textAlign="center">
           <Heading>Administración de Entidades</Heading>
           <Text color="whiteAlpha.800" marginTop="10px">
-            Toda acción realizada en esta página es almacenada para auditorías o revisiones de
-            seguridad.
+            Las acciones realizadas en esta página son irreversibles, tomelo en cuenta al hacer
+            alguna.
           </Text>
 
           <Flex justify="center" gap="10px" marginTop="20px">
@@ -79,7 +79,6 @@ export function Entities() {
               <Th color="inherit">Email</Th>
               <Th color="inherit">Nombre de Usuario</Th>
               <Th color="inherit">Nombre</Th>
-              <Th color="inherit">Contraseña</Th>
               <Th color="inherit">Fecha de Nacimiento</Th>
               <Th color="inherit">Opciones</Th>
             </Tr>
@@ -94,7 +93,6 @@ export function Entities() {
                 <Td>{entity.email}</Td>
                 <Td>{entity.username}</Td>
                 <Td>{entity.fullName}</Td>
-                <Td maxWidth="80px">{entity.password}</Td>
                 <Td>{entity.birthdate}</Td>
                 <Td>
                   <Option type="edit" onClick={onEntityEditOpen} />
@@ -160,12 +158,6 @@ const buttons = [
     role: 'ADMIN',
   },
   {
-    role: 'MOD',
-  },
-  {
     role: 'ARTIST',
-  },
-  {
-    role: 'MANAGER',
   },
 ];

@@ -14,10 +14,10 @@ export function UserWelcome() {
       <NavigationBar />
       <Box textAlign="center">
         <Heading paddingTop={['30px', 0]} fontSize={['3xl', '4xl']}>
-          Bienvenido, <Highlight>usuario</Highlight>
+          Bienvenido
         </Heading>
         <Text padding="25px" fontSize={['md', 'lg']} lineHeight={2}>
-          ¿Quieres una recomendación, un buen inicio? Revisa nuestro conjunto de{' '}
+          ¿Quieres un buen inicio? Revisa nuestro conjunto de{' '}
           <Highlight>artistas recomendados</Highlight>
         </Text>
 
@@ -67,22 +67,6 @@ function RecommendedArtists() {
           }}
         >
           Ir a Página
-        </Button>
-        <Button
-          size="sm"
-          variant="outline"
-          as={RouterLink}
-          to={artist.page}
-          _hover={{
-            borderColor: artist.solidColor,
-            color: artist.solidColor,
-          }}
-          _active={{
-            color: artist.activeColor,
-            borderColor: artist.activeColor,
-          }}
-        >
-          Seguir
         </Button>
       </ButtonGroup>
     </ArtistCard>

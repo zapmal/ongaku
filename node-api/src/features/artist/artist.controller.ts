@@ -94,9 +94,12 @@ export class ArtistController {
     @UploadedFiles()
     uploadedImages: Array<Express.Multer.File>,
   ) {
-    // if (request.entity.id !== Number(newArtistData.id)) {
-    //   throw new Unauthorized('No tienes permiso para realizar esta acción');
-    // }
+    if (
+      request.entity.id !== Number(newArtistData.id) ||
+      request.entity.role !== Role.ADMIN
+    ) {
+      throw new Unauthorized('No tienes permiso para realizar esta acción');
+    }
     const images = await this.artist.getImagesById(Number(newArtistData.id));
     const path = `${this.config.get('UPLOADED_FILES_DESTINATION')}/artist`;
 

@@ -20,9 +20,10 @@ export function ArtistWelcome() {
         <Heading paddingTop={['30px', 0]} fontSize={['3xl', '4xl']}>
           Bienvenido
         </Heading>
-        <Text margin={['20px 20px', '20px 0']} fontSize={['xl', 'lg']}>
-          Podr&aacute;s empezar tu trabajo en <Highlight>Ongaku</Highlight> una vez que confirmemos
-          tu registro. Mientras, aqu&iacute; hay unas reglas que deben conocer.
+        <Text margin="20px auto" fontSize={['xl', 'lg']} width="80%">
+          Aquí tienes información que te será vital en los primeros momentos de uso de la
+          aplicación, lee con cuidado y accede a <Highlight>Ongaku</Highlight> haciendo click en el
+          botón de Entendido al terminar.
         </Text>
       </Box>
 
@@ -64,24 +65,23 @@ function BulletList() {
 
 const bulletPoints = [
   {
-    title: 'Puedes asociar a un manager',
-    content: `Envía a ongaku.official@gmail.com la información del manager (cuenta) junto con la tuya para que la reunión sea exitosa.
-      `,
-    icon: MdOutlineContactMail,
-  },
-  {
-    title: 'Robo de propiedad intelectual',
-    content: `Si se detecta, u otro usuario reporta que lo publicado es robado y/o fraude; la cuenta será desactivada sin previo aviso.`,
+    title: 'Respecto a las publicaciones',
+    content: `Estas son manejadas en el módulo administrativo que es accesible a través de tu icono en la esquina superior izquierda, es visible una vez salgas de esta página.`,
     icon: MdOutlineSecurity,
   },
   {
-    title: 'No bloqueamos contenido explícito',
-    content: `Si tu trabajo incluye álbumes, canciones o singles de carácter explícito; se manejará y expondrá a la audiencia adecuada.`,
+    title: 'Más información sobre ti',
+    content: `Puedes ir a tu perfil y agregar información extra como un avatar, una portada, biografía y sitio web oficial.`,
+    icon: MdOutlineContactMail,
+  },
+  {
+    title: 'Está permitido el contenido explicito',
+    content: `Permitimos la publicación de ese tipo de trabajos a pesar de que no son para todo el público.`,
     icon: MdOutlineExplicit,
   },
   {
-    title: 'Puedes disfrutar de la plataforma',
-    content: `Tu cuenta es la de un artista, pero eso no evita que puedas usar Ongaku y todas sus características como si fueses un usuario normal. `,
+    title: 'Puedes disfrutar usar la plataforma',
+    content: `Pero tu cuenta al ser la de un artista, está limitada en características, lo que significa que tienes acceso parcial a la plataforma.`,
     icon: FiMusic,
   },
 ];

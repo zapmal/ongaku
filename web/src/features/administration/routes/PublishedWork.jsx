@@ -64,8 +64,8 @@ export function PublishedWork() {
         <Box margin="0 20px" textAlign="center">
           <Heading>Administración de Canciones</Heading>
           <Text color="whiteAlpha.800" marginTop="10px">
-            Toda acción realizada en esta página es almacenada para auditorías o revisiones de
-            seguridad.
+            Las acciones realizadas en esta página son irreversibles, tomelo en cuenta al hacer
+            alguna.
           </Text>
 
           <Button rightIcon={<Icon as={MdAdd} />} marginTop="20px" onClick={handleNewSongOpen}>

@@ -98,10 +98,6 @@ export function ChooseUserType() {
         <Text width="40%" marginBottom="5px">
           Esta decisión no puede ser cambiada en el futuro.{' '}
         </Text>
-        <Text>
-          Para aplicar como manager envia un correo a ongaku.official@gmail.com con tu cuenta
-          (USUARIO) e información sobre el artista que administrarás.
-        </Text>
       </VStack>
 
       {isOpen && <Login isOpen={isOpen} onClose={onClose} />}

@@ -43,12 +43,10 @@ export class UserController {
   ) {}
 
   @Get('all')
-  async getAllUsers() {
+  async getAll() {
     const users = await this.user.getAll();
 
-    if (!users) {
-      throw new NotFound('There are no users in the system.');
-    }
+    if (!users) throw new NotFound('No hay usuarios registrados en el sistema');
 
     return users;
   }
@@ -84,7 +82,10 @@ export class UserController {
     @UploadedFile()
     newAvatar: Express.Multer.File,
   ) {
-    if (request.entity.id !== Number(newUserData.id)) {
+    if (
+      request.entity.role === Role.USER &&
+      request.entity.id !== Number(newUserData.id)
+    ) {
       throw new Unauthorized('No tienes permiso para realizar esta acción');
     }
     const { avatar: existingAvatar } = await this.user.getById(Number(newUserData.id));
@@ -101,11 +102,24 @@ export class UserController {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id, avatar, ...data } = newUserData;
-    await this.user.update(Number(newUserData.id), data, {
-      file: newAvatar,
-      path,
-    });
+    const { id, avatar, isAdminEdit, ipAddress, active, verifiedEmail, ...data } =
+      newUserData;
+
+    if (isAdminEdit === 'true') {
+      console.log({ id, aaa: eval(active), verifiedEmail });
+      const a = await this.user.updateMetadata(Number(id), {
+        ipAddress,
+        active: active === 'true',
+        verifiedEmail: verifiedEmail === 'true',
+      });
+
+      console.log(a);
+    } else {
+      await this.user.update(Number(id), data, {
+        file: newAvatar,
+        path,
+      });
+    }
 
     return { message: 'Actualizado exitosamente' };
   }

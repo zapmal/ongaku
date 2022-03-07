@@ -14,19 +14,10 @@ export function Queue() {
           <Image
             src="/assets/images/static-arknights-race.jpeg"
             width="inherit"
-            height="400px"
+            height="420px"
             borderRadius="5px"
-            sx={{ position: 'fixed', top: 20 }}
+            sx={{ position: 'fixed', top: '80px' }}
           />
-          <Text
-            position="fixed"
-            bottom="120px"
-            left="290px"
-            color="whiteAlpha.700"
-            fontWeight="bold"
-          >
-            Portada
-          </Text>
         </Box>
 
         <Box>

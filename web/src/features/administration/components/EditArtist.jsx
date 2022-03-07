@@ -14,44 +14,48 @@ import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
 import * as yup from 'yup';
 
-import { editUser } from '../api/entities';
+import { editArtist } from '../api/entities';
 
 import { Button } from '@/components/Elements';
 import { Field } from '@/components/Form';
 import { useRequest } from '@/hooks';
-import { getLink } from '@/utils/getLink';
 
-export function EditEntity({ isOpen, onClose, entity }) {
+export function EditArtist({ isOpen, onClose, artist }) {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      email: entity.email,
-      username: entity.username,
-      fullName: entity.fullName,
+      email: artist.email,
+      artisticName: artist.artisticName ? artist.artisticName : artist?.band?.name,
+      members: artist?.band?.members.map((m) => m).toString(),
+      yearsActive: artist.yearsActive,
+      labels: artist.labels.map((l) => l).toString(),
     },
   });
+
   const [request, setRequestState] = useRequest();
 
   const queryClient = useQueryClient();
-  const mutation = useMutation(editUser, {
+  const mutation = useMutation(editArtist, {
     onSuccess: () => {
-      queryClient.invalidateQueries('admin-users');
+      queryClient.invalidateQueries('admin-artists');
     },
   });
 
   const onSubmit = async (data) => {
-    // eslint-disable-next-line no-unused-vars
-    const [_, username] = getLink(data.username, data.username);
-
     const body = new FormData();
-    body.append('id', entity.id);
+    body.append('id', artist.id);
     body.append('email', data.email);
-    body.append('username', username);
-    body.append('fullName', data.fullName);
+    body.append('yearsActive', data.yearsActive);
+    body.append('labels', data.labels);
+
+    if (data.members) {
+      body.append('members', data.members);
+    }
+    body.append('artisticName', data.artisticName);
     body.append('isAdminEdit', true);
 
     try {
@@ -89,29 +93,47 @@ export function EditEntity({ isOpen, onClose, entity }) {
               label="Email"
               placeholder="theuser@gmail.com"
               css={{ marginBottom: '10px' }}
-              error={errors.email}
-              isDisabled={request.status !== ''}
               register={register}
+              isDisabled={request.status !== ''}
             />
             <Field
               type="text"
-              name="username"
-              label="Nombre de Usuario"
-              placeholder="Amazi_ngUser_11"
+              name="labels"
+              label="Discográfica(s)"
+              placeholder="BigHit, EC0, etc"
               css={{ marginBottom: '10px' }}
-              error={errors.username}
-              isDisabled={request.status !== ''}
               register={register}
+              isDisabled={request.status !== ''}
             />
             <Field
               type="text"
-              name="fullName"
-              label="Nombre Completo"
-              placeholder="Amazi Use"
+              name="artisticName"
+              label="Nombre Artístico"
+              placeholder="The JAzzy"
               css={{ marginBottom: '10px' }}
-              error={errors.fullName}
-              isDisabled={request.status !== ''}
               register={register}
+              isDisabled={request.status !== ''}
+            />
+            {artist?.band?.members && (
+              <Field
+                type="text"
+                helperText="Debe separarlo por comas (,)"
+                name="members"
+                label="Miembros"
+                placeholder="JOe, Mia, Ma"
+                css={{ marginBottom: '10px' }}
+                register={register}
+                isDisabled={request.status !== ''}
+              />
+            )}
+            <Field
+              type="number"
+              name="yearsActive"
+              label="Años Activo"
+              placeholder="3, 4, 0"
+              css={{ marginBottom: '10px' }}
+              register={register}
+              isDisabled={request.status !== ''}
             />
           </ModalBody>
           <ModalFooter margin="0 auto">
@@ -143,7 +165,8 @@ export function EditEntity({ isOpen, onClose, entity }) {
 
 const schema = yup.object({
   email: yup.string().email('Debes proveer un email válido'),
-  username: yup.string(),
-  fullName: yup.string(),
-  password: yup.string(),
+  artisticName: yup.string().nullable(),
+  members: yup.string().nullable(),
+  yearsActive: yup.number(),
+  labels: yup.string(),
 });

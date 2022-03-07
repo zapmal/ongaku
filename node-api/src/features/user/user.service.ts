@@ -2,6 +2,7 @@ import {
   BadRequestException as BadRequest,
   Injectable,
   InternalServerErrorException as InternalServerError,
+  NotFoundException as NotFound,
 } from '@nestjs/common';
 import { Prisma, User, UserMetadata } from '@prisma/client';
 
@@ -15,8 +16,16 @@ import { UserNotFound } from './user.exceptions';
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  getAll(): Promise<User[]> {
-    return this.prisma.user.findMany();
+  async getAll() {
+    const users = await this.prisma.user.findMany({
+      include: {
+        userMetadata: true,
+      },
+    });
+
+    if (!users) throw new NotFound('No se encontraron usuarios registrados');
+
+    return users;
   }
 
   async delete(id: number): Promise<User> {

@@ -69,13 +69,25 @@ export function SongModal({ isOpen, onClose, shouldValidate }) {
               register={register}
             />
             {shouldValidate && (
-              <Field
-                type="file"
-                name="song"
-                label="Archivo"
-                css={{ marginBottom: '10px' }}
-                register={register}
-              />
+              <>
+                <Field
+                  type="number"
+                  name="albumID"
+                  label="ID del Album"
+                  placeholder="13, 15, 1"
+                  helperText="La ID del album, visible en la tabla inferior"
+                  css={{ marginBottom: '10px' }}
+                  error={errors.albumId}
+                  register={register}
+                />
+                <Field
+                  type="file"
+                  name="song"
+                  label="Archivo"
+                  css={{ marginBottom: '10px' }}
+                  register={register}
+                />
+              </>
             )}
             <Checkbox
               name="isExplicit"
@@ -111,6 +123,7 @@ export function SongModal({ isOpen, onClose, shouldValidate }) {
 const schema = yup.object({
   name: yup.string().required('Este campo es requerido'),
   collab: yup.string(),
+  albumId: yup.number().required('Este campo es requerido'),
   isExplicit: yup.boolean().required('Este campo es requerido'),
 });
 

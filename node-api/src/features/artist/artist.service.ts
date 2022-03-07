@@ -17,6 +17,19 @@ import { storeImages } from '@/internal/helpers';
 export class ArtistService {
   constructor(private prisma: PrismaService) {}
 
+  async getAll() {
+    const artists = await this.prisma.artist.findMany({
+      include: {
+        band: true,
+        artistInformation: true,
+      },
+    });
+
+    if (!artists) throw new NotFound('No se encontraron artistas registrados');
+
+    return artists;
+  }
+
   async follow(artistId: number, entityId: number) {
     try {
       const foundArtist = await this.prisma.artist.findUnique({
@@ -251,7 +264,10 @@ export class ArtistService {
       ) {
         throw new ArtistNotFound();
       }
-      throw new InternalServerError('Something went wrong, try again later');
+      console.log(error);
+      throw new InternalServerError(
+        'Ocurrió un error de nuestro lado, intentalo de nuevo luego',
+      );
     }
   }
 

@@ -8,6 +8,7 @@ import {
   UseGuards,
   UsePipes,
   InternalServerErrorException as InternalServerError,
+  UnauthorizedException as Unauthorized,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
@@ -29,6 +30,11 @@ import { existsSync, unlink } from 'fs';
 @UseGuards(RoleGuard([Role.ADMIN, Role.USER, Role.ARTIST]))
 export class ArtistController {
   constructor(private artist: ArtistService, private config: ConfigService) {}
+
+  @Get('all')
+  async getAll() {
+    return await this.artist.getAll();
+  }
 
   @Get('followed')
   async getFollowed(@Req() request: RequestWithEntity) {
@@ -95,8 +101,8 @@ export class ArtistController {
     uploadedImages: Array<Express.Multer.File>,
   ) {
     if (
-      request.entity.id !== Number(newArtistData.id) ||
-      request.entity.role !== Role.ADMIN
+      request.entity.id !== Number(newArtistData.id) &&
+      request.entity.role === Role.ARTIST
     ) {
       throw new Unauthorized('No tienes permiso para realizar esta acción');
     }
@@ -132,13 +138,38 @@ export class ArtistController {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id, avatar, cover, ...data } = newArtistData;
-    const updated = await this.artist.updateInformation(
-      Number(newArtistData.id),
-      data,
-      uploadedImages,
-      path,
-    );
+    const { id, avatar, cover, members, labels, yearsActive, isAdminEdit, ...data } =
+      newArtistData;
+    let updated = {};
+
+    if (isAdminEdit === 'true') {
+      let bandData = {};
+      if (members) {
+        bandData = {
+          artisticName: '',
+          band: {
+            update: {
+              members: members.split(','),
+              name: data.artisticName,
+            },
+          },
+        };
+      }
+
+      updated = await this.artist.update(Number(id), {
+        ...data,
+        ...bandData,
+        labels: labels.split(','),
+        yearsActive: Number(yearsActive),
+      });
+    } else {
+      updated = await this.artist.updateInformation(
+        Number(newArtistData.id),
+        data,
+        uploadedImages,
+        path,
+      );
+    }
 
     return { message: 'Actualizado exitosamente', updated };
   }

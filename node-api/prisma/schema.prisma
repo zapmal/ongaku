@@ -45,7 +45,7 @@ model UserPlaylist {
   updatedAt  DateTime @updatedAt @map("updated_at") @db.Date
   userId     Int      @map("user_id")
 
-  user            User              @relation(fields: [userId], references: [id])
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   interaction     Interaction[]
   songsInPlaylist SongsInPlaylist[]
 
@@ -61,7 +61,7 @@ model UserMetadata {
   verifiedEmail Boolean  @map("verified_email")
   userId        Int      @unique @map("user_id")
 
-  user User? @relation(fields: [userId], references: [id])
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("user_metadata")
 }
@@ -75,7 +75,7 @@ model UserMetrics {
   favoriteArtists      Json?   @map("favorite_artists")
   userId               Int     @unique @map("user_id")
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("user_metrics")
 }
@@ -95,7 +95,7 @@ model Artist {
   // remove unique please
   bandId        Int?     @unique @map("band_id")
 
-  band              Band?              @relation(fields: [bandId], references: [id])
+  band              Band?              @relation(fields: [bandId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   artistMetrics     ArtistMetrics?
   artistInformation ArtistInformation?
   manager           Manager?
@@ -120,8 +120,8 @@ model Manager {
   userId   Int? @unique @map("user_id")
   artistId Int? @unique @map("artist_id")
 
-  artist            Artist?            @relation(fields: [artistId], references: [id])
-  user              User?              @relation(fields: [userId], references: [id])
+  artist            Artist?            @relation(fields: [artistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user              User?              @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   artistInformation ArtistInformation?
 
   @@map("manager")
@@ -136,8 +136,8 @@ model ArtistInformation {
   artistId        Int     @unique @map("artist_id")
   managerId       Int?    @unique @map("manager_id")
 
-  manager Manager? @relation(fields: [managerId], references: [id])
-  artist  Artist?  @relation(fields: [artistId], references: [id])
+  manager Manager? @relation(fields: [managerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  artist  Artist?  @relation(fields: [artistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("artist_information")
 }
@@ -148,7 +148,7 @@ model ArtistMetrics {
   followers        Float? @default(0)
   artistId         Int    @unique @map("artist_id")
 
-  artist Artist? @relation(fields: [artistId], references: [id])
+  artist Artist? @relation(fields: [artistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("artist_metrics")
 }
@@ -161,7 +161,7 @@ model Album {
   cover       String
   artistId    Int      @map("artist_id")
 
-  artist Artist @relation(fields: [artistId], references: [id])
+  artist Artist @relation(fields: [artistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   song   Song[]
 
   interaction Interaction[]
@@ -178,7 +178,7 @@ model Song {
   albumId    Int     @map("album_id")
   artistId   Int     @map("artist_id")
 
-  album           Album             @relation(fields: [albumId], references: [id])
+  album           Album             @relation(fields: [albumId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   artist          Artist[]
   // artist          Artist[]          @relation(fields: [artistId], references: [id])
   songMetadata    SongMetadata?
@@ -200,7 +200,7 @@ model SongMetadata {
   uploadedAt  DateTime @default(now()) @map("uploaded_at") @db.Date
   songId      Int      @unique @map("song_id")
 
-  song Song @relation(fields: [songId], references: [id])
+  song Song @relation(fields: [songId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("song_metadata")
 }
@@ -227,11 +227,11 @@ model Interaction {
   songId         Int?     @map("song_id")
   userPlaylistId Int?     @map("user_playlist_id")
 
-  album        Album?        @relation(fields: [albumId], references: [id])
-  artist       Artist?       @relation(fields: [artistId], references: [id])
-  user         User?         @relation(fields: [userId], references: [id])
-  song         Song?         @relation(fields: [songId], references: [id])
-  userPlaylist UserPlaylist? @relation(fields: [userPlaylistId], references: [id])
+  album        Album?        @relation(fields: [albumId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  artist       Artist?       @relation(fields: [artistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user         User?         @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  song         Song?         @relation(fields: [songId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userPlaylist UserPlaylist? @relation(fields: [userPlaylistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("interaction")
 }
@@ -241,8 +241,8 @@ model SongsInPlaylist {
   songId         Int @unique @map("song_id")
   userPlaylistId Int @unique @map("user_playlist_id")
 
-  song         Song         @relation(fields: [songId], references: [id])
-  userPlaylist UserPlaylist @relation(fields: [userPlaylistId], references: [id])
+  song         Song         @relation(fields: [songId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userPlaylist UserPlaylist @relation(fields: [userPlaylistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([songId, userPlaylistId])
   @@map("songs_in_playlist")

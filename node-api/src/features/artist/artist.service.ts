@@ -325,4 +325,20 @@ export class ArtistService {
       );
     }
   }
+
+  async delete(id: number): Promise<Artist> {
+    const artistExists = await this.getImagesById(id);
+
+    if (!artistExists) {
+      throw new NotFound('El artista no existe');
+    }
+
+    try {
+      return await this.prisma.artist.delete({ where: { id } });
+    } catch (error) {
+      throw new InternalServerError(
+        'Ocurrió un error de nuestro lado, intentalo de nuevo luego',
+      );
+    }
+  }
 }

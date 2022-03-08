@@ -52,7 +52,6 @@ export function EditEntity({ isOpen, onClose, entity }) {
     body.append('email', data.email);
     body.append('username', username);
     body.append('fullName', data.fullName);
-    body.append('isAdminEdit', true);
 
     try {
       const response = await mutation.mutateAsync(body);

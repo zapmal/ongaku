@@ -62,16 +62,10 @@ export class UserController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteUser(@Param('id', ParseIntPipe) id: number) {
-    const userExists = await this.user.getById(id);
-
-    if (!userExists) {
-      throw new NotFound('Requested user was not found.');
-    }
-
+  async delete(@Param('id', ParseIntPipe) id: number) {
     await this.user.delete(id);
 
-    return { message: 'User successfully erased from the system.' };
+    return { message: 'Usuario eliminado exitosamente' };
   }
 
   @Put('edit')
@@ -102,18 +96,15 @@ export class UserController {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id, avatar, isAdminEdit, ipAddress, active, verifiedEmail, ...data } =
+    const { id, avatar, isMetadataEdit, ipAddress, active, verifiedEmail, ...data } =
       newUserData;
 
-    if (isAdminEdit === 'true') {
-      console.log({ id, aaa: eval(active), verifiedEmail });
-      const a = await this.user.updateMetadata(Number(id), {
+    if (isMetadataEdit === 'true') {
+      await this.user.updateMetadata(Number(id), {
         ipAddress,
         active: active === 'true',
         verifiedEmail: verifiedEmail === 'true',
       });
-
-      console.log(a);
     } else {
       await this.user.update(Number(id), data, {
         file: newAvatar,

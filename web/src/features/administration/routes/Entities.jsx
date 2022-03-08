@@ -149,7 +149,7 @@ export function Entities() {
                     <Td>{user.fullName}</Td>
                     <Td>
                       <Option type="edit" onClick={() => handleEntityEdit(user)} />
-                      <Option type="delete" />
+                      <Option type="delete" itemType="user" id={user.id} />
                     </Td>
                   </Tr>
                 ))}
@@ -172,7 +172,6 @@ export function Entities() {
               </Thead>
               <Tbody>
                 {current?.map(({ userMetadata }, index) => {
-                  console.log(userMetadata);
                   return (
                     Object.keys(userMetadata || {}).length !== 0 && (
                       <Tr key={index} {...TABLE_ROW_PROPS}>
@@ -187,7 +186,6 @@ export function Entities() {
                             type="edit"
                             onClick={() => handleEntityMetadataEdit(userMetadata)}
                           />
-                          <Option type="delete" />
                         </Td>
                       </Tr>
                     )
@@ -245,7 +243,7 @@ export function Entities() {
                   </Td>
                   <Td>
                     <Option type="edit" onClick={() => handleArtistEdit(artist)} />
-                    <Option type="delete" />
+                    <Option type="delete" itemType="artist" id={artist.id} />
                   </Td>
                 </Tr>
               ))}

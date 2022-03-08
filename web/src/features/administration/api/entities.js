@@ -15,3 +15,11 @@ export const editUser = (data) => {
 export const editArtist = (data) => {
   return apiClient.put('artist/edit', data);
 };
+
+export const deleteUser = (id) => {
+  return apiClient.delete(`user/${id}`);
+};
+
+export const deleteArtist = (id) => {
+  return apiClient.delete(`artist/${id}`);
+};

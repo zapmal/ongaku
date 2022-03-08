@@ -11,6 +11,10 @@ import {
   UnauthorizedException as Unauthorized,
   UploadedFiles,
   UseInterceptors,
+  Delete,
+  HttpStatus,
+  HttpCode,
+  ParseIntPipe,
 } from '@nestjs/common';
 
 import { Role } from '@/internal/constants';
@@ -172,5 +176,13 @@ export class ArtistController {
     }
 
     return { message: 'Actualizado exitosamente', updated };
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    await this.artist.delete(id);
+
+    return { message: 'Artista eliminado exitosamente' };
   }
 }

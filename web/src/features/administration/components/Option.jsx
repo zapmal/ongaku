@@ -10,11 +10,16 @@ import {
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { FiTrash, FiEdit } from 'react-icons/fi';
+import { useMutation, useQueryClient } from 'react-query';
+
+import { deleteUser, deleteArtist } from '../api/entities';
 
 import { Button } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
+import { useAuthStore } from '@/stores/useAuthStore';
+import { useNotificationStore } from '@/stores/useNotificationStore';
 
-export function Option({ type, onClick }) {
+export function Option({ type, onClick, id, itemType }) {
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => setIsOpen(false);
 
@@ -40,21 +45,51 @@ export function Option({ type, onClick }) {
         _hover={{ bg: theme.colors.dangerSolidHover.value }}
         _active={{ bg: theme.colors.dangerSolidActive.value }}
       />
-      {isOpen && <DeleteConfirmation isOpen={isOpen} onClose={onClose} />}
+      {isOpen && <DeleteConfirmation isOpen={isOpen} onClose={onClose} id={id} type={itemType} />}
     </>
   );
 }
 
-function DeleteConfirmation({ isOpen, onClose }) {
-  const cancelRef = React.useRef();
+const deleteMutations = {
+  user: deleteUser,
+  artist: deleteArtist,
+  // 'album': deleteAlbum,
+  // 'song': deleteSong,
+};
+
+function DeleteConfirmation({ isOpen, onClose, id, type }) {
+  const queryClient = useQueryClient();
+  const entity = useAuthStore((s) => s.entity);
+  const addNotification = useNotificationStore((s) => s.addNotification);
+  const mutation = useMutation(deleteMutations[type], {
+    onSuccess: () => {
+      if (type === 'user') queryClient.invalidateQueries('admin-users');
+      if (type === 'artist') queryClient.invalidateQueries('admin-artists');
+      // if (type === 'song') queryClient.invalidateQueries('admin-songs');
+      // if (type === 'album') queryClient.invalidateQueries('admin-albums');
+    },
+  });
+
+  const handleOnClick = async () => {
+    try {
+      if (entity.id === id) {
+        addNotification({
+          title: 'Error',
+          status: 'error',
+          message: 'No te puedes borrar a ti mismo',
+        });
+      } else {
+        await mutation.mutateAsync(id);
+      }
+    } catch (error) {
+      console.log('Error al intentar eliminar', error);
+    } finally {
+      onClose();
+    }
+  };
 
   return (
-    <AlertDialog
-      isOpen={isOpen}
-      leastDestructiveRef={cancelRef}
-      onClose={onClose}
-      isCentered={true}
-    >
+    <AlertDialog isOpen={isOpen} onClose={onClose} isCentered={true}>
       <AlertDialogOverlay>
         <AlertDialogContent>
           <AlertDialogHeader fontSize="lg" fontWeight="bold">
@@ -64,10 +99,10 @@ function DeleteConfirmation({ isOpen, onClose }) {
           <AlertDialogBody>¿Estás seguro? Esta acción no es reversible.</AlertDialogBody>
 
           <AlertDialogFooter>
-            <Button ref={cancelRef} onClick={onClose} variant="link">
+            <Button onClick={onClose} variant="link">
               Cancelar
             </Button>
-            <Button colorScheme="red" onClick={onClose} ml={3} variant="danger">
+            <Button colorScheme="red" ml={3} variant="danger" onClick={handleOnClick}>
               Borrar
             </Button>
           </AlertDialogFooter>

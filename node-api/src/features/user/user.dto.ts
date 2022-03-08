@@ -1,6 +1,6 @@
 export class UpdateUserDTO {
   id: number;
-  isAdminEdit?: string;
+  isMetadataEdit?: string;
   ipAddress?: string;
   active?: string;
   verifiedEmail?: string;

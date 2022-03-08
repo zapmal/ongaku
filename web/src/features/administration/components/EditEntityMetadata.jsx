@@ -56,7 +56,7 @@ export function EditEntityMetadata({ isOpen, onClose, metadata }) {
     body.append('active', data.active);
     body.append('ipAddress', data.ipAddress);
     body.append('verifiedEmail', data.verifiedEmail);
-    body.append('isAdminEdit', true);
+    body.append('isMetadataEdit', true);
 
     try {
       const response = await mutation.mutateAsync(body);

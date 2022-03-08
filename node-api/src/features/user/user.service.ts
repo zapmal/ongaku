@@ -29,6 +29,12 @@ export class UserService {
   }
 
   async delete(id: number): Promise<User> {
+    const userExists = await this.getById(id);
+
+    if (!userExists) {
+      throw new NotFound('El usuario no existe');
+    }
+
     try {
       return await this.prisma.user.delete({ where: { id } });
     } catch (error) {

@@ -65,8 +65,7 @@ export class SongController {
     await this.song.update(
       Number(id),
       data,
-      collaborators &&
-        collaborators.split(',').map((collaborator) => collaborator.trim()),
+      collaborators.split(',').map((collaborator) => collaborator.trim()),
     );
 
     return { message: 'Actualizado exitosamente' };

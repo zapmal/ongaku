@@ -241,7 +241,13 @@ function OptionsButton({ type, to, mouseEventsHandlers }) {
           backgroundColor: 'transparent',
         }}
       />
-      <MenuList bg={theme.colors.primaryBase.value} {...mouseEventsHandlers} marginTop="10px">
+      <MenuList
+        bg={theme.colors.primaryBase.value}
+        {...mouseEventsHandlers}
+        marginTop="10px"
+        maxHeight="300px"
+        overflowY="auto"
+      >
         <MenuItem
           {...MENU_ITEM_PROPS}
           icon={<Icon as={MdOutlineQueue} w="15px" h="15px" marginTop="5px" />}
@@ -262,7 +268,49 @@ function OptionsButton({ type, to, mouseEventsHandlers }) {
           <>
             <MenuOptionGroup title="Agregar a Playlist">
               <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
+                OnlyPain Official Soundtrack
+              </MenuItem>
+              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
+                OnlyPain Official Soundtrack
+              </MenuItem>
+              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
+                OnlyPain Official Soundtrack
+              </MenuItem>
+              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
+                OnlyPain Official Soundtrack
+              </MenuItem>
+              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
+                OnlyPain Official Soundtrack
+              </MenuItem>
+              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
+                OnlyPain Official Soundtrack
+              </MenuItem>
+              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
+                OnlyPain Official Soundtrack
+              </MenuItem>
+              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
+                OnlyPain Official Soundtrack
+              </MenuItem>
+              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
+                OnlyPain Official Soundtrack
+              </MenuItem>
+              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
                 Big Boi tunes
+              </MenuItem>
+              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
+                OnlyPain Official Soundtrack
+              </MenuItem>
+              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
+                OnlyPain Official Soundtrack
+              </MenuItem>
+              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
+                OnlyPain Official Soundtrack
+              </MenuItem>
+              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
+                OnlyPain Official Soundtrack
+              </MenuItem>
+              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
+                OnlyPain Official Soundtrack
               </MenuItem>
               <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
                 OnlyPain Official Soundtrack

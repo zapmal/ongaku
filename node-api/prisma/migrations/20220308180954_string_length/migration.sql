@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "song" ALTER COLUMN "length" SET DATA TYPE TEXT;

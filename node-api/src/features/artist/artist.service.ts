@@ -25,7 +25,9 @@ export class ArtistService {
       },
     });
 
-    if (!artists) throw new NotFound('No se encontraron artistas registrados');
+    if (artists.length === 0) {
+      throw new NotFound('No se encontraron artistas registrados');
+    }
 
     return artists;
   }

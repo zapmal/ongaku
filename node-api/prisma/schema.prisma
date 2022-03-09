@@ -8,15 +8,15 @@ generator client {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique @db.VarChar(125)
-  username  String   @unique @db.VarChar(125)
-  fullName  String   @map("full_name") @db.VarChar(255)
-  password  String   @db.VarChar(255)
-  avatar    String? // TODO: Default avatar.
+  id         Int      @id @default(autoincrement())
+  email      String   @unique @db.VarChar(125)
+  username   String   @unique @db.VarChar(125)
+  fullName   String   @map("full_name") @db.VarChar(255)
+  password   String   @db.VarChar(255)
+  avatar     String? // TODO: Default avatar.
   background String?
-  birthdate DateTime @db.Date
-  role      Role     @default(USER)
+  birthdate  DateTime @db.Date
+  role       Role     @default(USER)
 
   userMetadata UserMetadata?
   userMetrics  UserMetrics?
@@ -169,14 +169,14 @@ model Album {
 }
 
 model Song {
-  id         Int     @id @default(autoincrement())
-  name       String  @db.VarChar(125)
-  length     Float
-  lyrics     String?
-  isExplicit Boolean @default(false) @map("is_explicit")
-  path       String
-  albumId    Int     @map("album_id")
-  artistId   Int     @map("artist_id")
+  id            Int      @id @default(autoincrement())
+  name          String   @db.VarChar(125)
+  collaborators String[] 
+  lyrics        String?
+  isExplicit    Boolean  @default(false) @map("is_explicit")
+  path          String
+  albumId       Int      @map("album_id")
+  artistId      Int      @map("artist_id")
 
   album           Album             @relation(fields: [albumId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   artist          Artist[]
@@ -220,7 +220,7 @@ model SongMetrics {
 
 model Interaction {
   id             Int      @id @default(autoincrement())
-  value Boolean?  
+  value          Boolean?
   artistId       Int?     @map("artist_id")
   albumId        Int?     @map("album_id")
   userId         Int?     @map("user_id")
@@ -238,8 +238,8 @@ model Interaction {
 
 // Many-to-many table
 model SongsInPlaylist {
-  songId         Int @unique @map("song_id")
-  userPlaylistId Int @unique @map("user_playlist_id")
+  songId         Int @map("song_id")
+  userPlaylistId Int @map("user_playlist_id")
 
   song         Song         @relation(fields: [songId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userPlaylist UserPlaylist @relation(fields: [userPlaylistId], references: [id], onDelete: Cascade, onUpdate: Cascade)

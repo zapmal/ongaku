@@ -74,6 +74,20 @@ async function main() {
     },
   });
 
+  const extraArtist = await prisma.artist.upsert({
+    where: { email: 'artist@fodder.com' },
+    update: {},
+    create: {
+      email: 'artist@fodder.com',
+      password: await hash('password', 10),
+      country: 'VE',
+      labels: ['TuMAdre'],
+      genres: ['rap'],
+      yearsActive: 1,
+      verifiedEmail: true,
+    },
+  });
+
   // Artist (group), verified email.
   const bts = await prisma.artist.upsert({
     where: { email: 'contact@btsbighit.com' },
@@ -90,7 +104,7 @@ async function main() {
       verifiedEmail: true,
       band: {
         create: {
-          name: 'BTS',
+          name: 'bts',
           members: ['Jimin', 'SUGA', 'RM'],
         },
       },

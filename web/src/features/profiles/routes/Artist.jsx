@@ -31,6 +31,7 @@ import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { copyURL } from '@/utils/copyURL';
 import { getImage } from '@/utils/getImage';
+import { getName } from '@/utils/getName';
 
 const HIGHLIGHT_PROPS = {
   fontSize: 'lg',
@@ -122,7 +123,7 @@ export function ArtistProfile() {
           >
             <VStack marginTop="150px">
               <Heading fontSize="xxx-large" letterSpacing="4px">
-                {artist.artisticName ? artist.artisticName : artist.band?.name}{' '}
+                {getName(artist.artisticName ? artist.artisticName : artist.band?.name)}{' '}
                 {getFlagEmoji(artist.country)}
               </Heading>
               <Text fontWeight="bold" fontSize="lg">
@@ -198,7 +199,7 @@ export function ArtistProfile() {
                     name={song.name}
                     cover={song.cover}
                     isExplicit={song.isExplicit}
-                    authors={song.authors}
+                    authors={song.authors} // wrong
                     albumName={song.albumName}
                     year={song.year}
                     duration={song.duration}
@@ -250,11 +251,13 @@ export function ArtistProfile() {
                     authors={
                       entry.artist.length
                         ? entry.artist
-                            .map((a) => (a.artisticName ? a.artisticName : a.band.name))
+                            .map((a) =>
+                              a.artisticName ? getName(a.artisticName) : getName(a.band.name)
+                            )
                             .toString()
                         : entry.artist.artisticName
-                        ? entry.artist.artisticName
-                        : entry.artist.band.name
+                        ? getName(entry.artist.artisticName)
+                        : getName(entry.artist.band.name)
                     }
                     year={dayjs(entry.year).format('YYYY')}
                     notLikeable={artist.id === entity.id}
@@ -268,7 +271,9 @@ export function ArtistProfile() {
         <Box align="center" margin="0 30px" color="whiteAlpha.700">
           <Heading fontSize="xx-large" color="white" margin="10px 0">
             Acerca de{' '}
-            <Highlight>{artist.artisticName ? artist.artisticName : artist.band?.name}</Highlight>
+            <Highlight>
+              {getName(artist.artisticName ? artist.artisticName : artist.band?.name)}
+            </Highlight>
           </Heading>
           {artist.artistInformation?.biography ? (
             <Text width="80%">{artist.artistInformation?.biography}</Text>
@@ -321,7 +326,7 @@ export function ArtistProfile() {
           isOpen={isOpen}
           onClose={onClose}
           id={artist.id}
-          name={artist.artisticName ? artist.artisticName : artist.band?.name}
+          name={getName(artist.artisticName ? artist.artisticName : artist.band?.name)}
           officialWebsite={artist.artistInformation?.officialWebsite}
           biography={artist.artistInformation?.biography}
         />

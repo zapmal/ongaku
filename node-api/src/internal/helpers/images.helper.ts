@@ -26,6 +26,22 @@ export const multerImageOptions: MulterImageOptions = {
   },
 };
 
+// export const multerImageOptions: MulterImageOptions = {
+//   fileFilter: (request, file, callback) => {
+//     if (
+//       !file.mimetype.includes('image') ||
+//       !file.originalname.match(/\.(jpg|jpeg|png|webp)$/)
+//     ) {
+//       return callback(new BadRequest('You must provide a valid image'), false);
+//     }
+//     callback(null, true);
+//   },
+//   limits: {
+//     fileSize: Math.pow(1024, 2), // 1MB
+//     files: 2,
+//   },
+// };
+
 export const storeImages = (
   data: Express.Multer.File | Array<Express.Multer.File>,
   destination: string,

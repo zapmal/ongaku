@@ -12,18 +12,37 @@ import {
   Tbody,
   useDisclosure,
 } from '@chakra-ui/react';
+import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
+import { useQuery } from 'react-query';
 
+import { getAllAlbums, getAllSongs } from '../api/work';
 import { Option, SongModal, AlbumModal } from '../components';
 import { SUB_HEADER_MARGIN, TABLE_PROPS, TABLE_ROW_PROPS } from '../constants';
 
 import { Footer } from '@/components/Core';
 import { Button } from '@/components/Elements';
-import { SONGS, ALBUMS } from '@/features/app';
+import { Spinner } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
+import { getImage } from '@/utils/getImage';
+import { getName } from '@/utils/getName';
 
 export function PublishedWork() {
+  // const entity = useAuthStore((s) => s.entity); -- para filtrar por las canciones
+  // del ARTISTA cuando este inicie sesión
+  const {
+    data: songs,
+    isLoading: isLoadingSongs,
+    isSongsError,
+  } = useQuery('admin-songs', getAllSongs);
+  const {
+    data: albums,
+    isLoading: isLoadingAlbums,
+    isAlbumsError,
+  } = useQuery('admin-albums', getAllAlbums);
+  const [toEdit, setToEdit] = useState({});
+
   const {
     isOpen: isSongModalOpen,
     onClose: onSongModalClose,
@@ -31,8 +50,9 @@ export function PublishedWork() {
   } = useDisclosure();
   const [shouldValidateSong, setShouldValidateSong] = useState(false);
 
-  const handleEditSongOpen = () => {
+  const handleEditSongOpen = (song) => {
     onSongModalOpen();
+    setToEdit(song);
     setShouldValidateSong(false);
   };
 
@@ -48,8 +68,9 @@ export function PublishedWork() {
   } = useDisclosure();
   const [shouldValidateAlbum, setShouldValidateAlbum] = useState(false);
 
-  const handleEditAlbumOpen = () => {
+  const handleEditAlbumOpen = (album) => {
     onAlbumModalOpen();
+    setToEdit(album);
     setShouldValidateAlbum(false);
   };
 
@@ -57,6 +78,12 @@ export function PublishedWork() {
     onAlbumModalOpen();
     setShouldValidateAlbum(true);
   };
+
+  if (isLoadingSongs || isLoadingAlbums) {
+    return <Spinner paddingBottom="100%" />;
+  }
+
+  if (isSongsError || isAlbumsError) throw new Error();
 
   return (
     <>
@@ -78,27 +105,37 @@ export function PublishedWork() {
             <Tr>
               <Th color="inherit">id</Th>
               <Th color="inherit">Nombre</Th>
-              <Th color="inherit">Longitud</Th>
+              <Th color="inherit">Colaboradores</Th>
               <Th color="inherit">Explicito</Th>
               <Th color="inherit">ID de Album</Th>
               <Th color="inherit">Opciones</Th>
             </Tr>
           </Thead>
-          <Tbody>
-            {SONGS.map((song, index) => (
-              <Tr key={index} {...TABLE_ROW_PROPS}>
-                <Td>{song.id}</Td>
-                <Td>{song.name}</Td>
-                <Td>{song.length}</Td>
-                <Td>{song.isExplicit ? 'Sí' : 'No'}</Td>
-                <Td>{song.albumId}</Td>
-                <Td>
-                  <Option type="edit" onClick={handleEditSongOpen} />
-                  <Option type="delete" />
-                </Td>
-              </Tr>
-            ))}
-          </Tbody>
+          {songs?.length !== 0 && (
+            <Tbody>
+              {songs?.map((song, index) => (
+                <Tr key={index} {...TABLE_ROW_PROPS}>
+                  <Td>{song.id}</Td>
+                  <Td>{song.name}</Td>
+                  <Td>
+                    {song?.collaborators.length !== 0
+                      ? song?.collaborators.map((collaborator, index) => {
+                          return song?.collaborators.length !== index + 1
+                            ? `${getName(collaborator)}, `
+                            : getName(collaborator);
+                        })
+                      : 'Ninguno'}
+                  </Td>
+                  <Td>{song.isExplicit ? 'Sí' : 'No'}</Td>
+                  <Td>{song.albumId}</Td>
+                  <Td>
+                    <Option type="edit" onClick={() => handleEditSongOpen(song)} />
+                    <Option type="delete" itemType="song" id={song.id} />
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          )}
         </Table>
 
         <Box textAlign="center" margin={SUB_HEADER_MARGIN}>
@@ -119,27 +156,32 @@ export function PublishedWork() {
               <Th color="inherit">Opciones</Th>
             </Tr>
           </Thead>
-          <Tbody>
-            {ALBUMS.map((album, index) => (
-              <Tr key={index} {...TABLE_ROW_PROPS}>
-                <Td>{album.id}</Td>
-                <Td>
-                  <Image src={album.cover} w="50px" h="50px" borderRadius="5px" />
-                </Td>
-                <Td>{album.name}</Td>
-                <Td>{album.year}</Td>
-                <Td>{album.releaseType}</Td>
-                <Td>{album.artistId}</Td>
-                <Td>
-                  <Option type="edit" onClick={handleEditAlbumOpen} />
-                  <Option type="delete" />
-                </Td>
-              </Tr>
-            ))}
-          </Tbody>
+          {albums.length !== 0 && (
+            <Tbody>
+              {albums?.map((album, index) => (
+                <Tr key={index} {...TABLE_ROW_PROPS}>
+                  <Td>{album.id}</Td>
+                  <Td>
+                    <Image
+                      src={getImage('album', album.cover, 'default_cover.png')}
+                      w="50px"
+                      h="50px"
+                      borderRadius="5px"
+                    />
+                  </Td>
+                  <Td>{getName(album.name)}</Td>
+                  <Td>{dayjs(album.year).add(1, 'day').format('YYYY')}</Td>
+                  <Td>{album.releaseType}</Td>
+                  <Td>{album.artistId}</Td>
+                  <Td>
+                    <Option type="edit" onClick={() => handleEditAlbumOpen(album)} />
+                    <Option type="delete" itemType="album" id={album.id} />
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          )}
         </Table>
-
-        {/* Song metadata administration is postponed. */}
 
         <Footer topMargin="30px" />
       </Box>
@@ -148,6 +190,7 @@ export function PublishedWork() {
           isOpen={isSongModalOpen}
           onClose={onSongModalClose}
           shouldValidate={shouldValidateSong}
+          song={toEdit}
         />
       )}
       {isAlbumModalOpen && (
@@ -155,6 +198,7 @@ export function PublishedWork() {
           isOpen={isAlbumModalOpen}
           onClose={onAlbumModalClose}
           shouldValidate={shouldValidateAlbum}
+          album={toEdit}
         />
       )}
     </>

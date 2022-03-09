@@ -19,6 +19,8 @@ import { editArtist } from '../api/entities';
 import { Button } from '@/components/Elements';
 import { Field } from '@/components/Form';
 import { useRequest } from '@/hooks';
+import { getLink } from '@/utils/getLink';
+import { getName } from '@/utils/getName';
 
 export function EditArtist({ isOpen, onClose, artist }) {
   const {
@@ -29,7 +31,7 @@ export function EditArtist({ isOpen, onClose, artist }) {
     resolver: yupResolver(schema),
     defaultValues: {
       email: artist.email,
-      artisticName: artist.artisticName ? artist.artisticName : artist?.band?.name,
+      artisticName: getName(artist.artisticName ? artist.artisticName : artist?.band?.name),
       members: artist?.band?.members.map((m) => m).toString(),
       yearsActive: artist.yearsActive,
       labels: artist.labels.map((l) => l).toString(),
@@ -55,7 +57,10 @@ export function EditArtist({ isOpen, onClose, artist }) {
     if (data.members) {
       body.append('members', data.members);
     }
-    body.append('artisticName', data.artisticName);
+
+    // eslint-disable-next-line no-unused-vars
+    const [_, artisticName] = getLink(data.artisticName, data.artisticName);
+    body.append('artisticName', artisticName);
     body.append('isAdminEdit', true);
 
     try {

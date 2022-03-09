@@ -13,6 +13,7 @@ import { FiTrash, FiEdit } from 'react-icons/fi';
 import { useMutation, useQueryClient } from 'react-query';
 
 import { deleteUser, deleteArtist } from '../api/entities';
+import { deleteAlbum, deleteSong } from '../api/work';
 
 import { Button } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
@@ -53,8 +54,8 @@ export function Option({ type, onClick, id, itemType }) {
 const deleteMutations = {
   user: deleteUser,
   artist: deleteArtist,
-  // 'album': deleteAlbum,
-  // 'song': deleteSong,
+  album: deleteAlbum,
+  song: deleteSong,
 };
 
 function DeleteConfirmation({ isOpen, onClose, id, type }) {
@@ -65,14 +66,14 @@ function DeleteConfirmation({ isOpen, onClose, id, type }) {
     onSuccess: () => {
       if (type === 'user') queryClient.invalidateQueries('admin-users');
       if (type === 'artist') queryClient.invalidateQueries('admin-artists');
-      // if (type === 'song') queryClient.invalidateQueries('admin-songs');
-      // if (type === 'album') queryClient.invalidateQueries('admin-albums');
+      if (type === 'album') queryClient.invalidateQueries('admin-albums');
+      if (type === 'song') queryClient.invalidateQueries('admin-songs');
     },
   });
 
   const handleOnClick = async () => {
     try {
-      if (entity.id === id) {
+      if ((type === 'user' || type === 'artist') && entity.id === id) {
         addNotification({
           title: 'Error',
           status: 'error',

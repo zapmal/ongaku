@@ -44,11 +44,7 @@ export class UserController {
 
   @Get('all')
   async getAll() {
-    const users = await this.user.getAll();
-
-    if (!users) throw new NotFound('No hay usuarios registrados en el sistema');
-
-    return users;
+    return await this.user.getAll();
   }
 
   @Get('profile/:username')

@@ -26,6 +26,7 @@ import { Footer } from '@/components/Core';
 import { Spinner } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
 import { getImage } from '@/utils/getImage';
+import { getName } from '@/utils/getName';
 
 export function Entities() {
   const {
@@ -225,7 +226,9 @@ export function Entities() {
                     />
                   </Td>
                   <Td fontSize="sm">{artist.email}</Td>
-                  <Td>{artist?.artisticName ? artist?.artisticName : artist?.band?.name}</Td>
+                  <Td>
+                    {getName(artist?.artisticName ? artist?.artisticName : artist?.band?.name)}
+                  </Td>
                   <Td fontSize="sm">
                     {artist?.band
                       ? artist?.band?.members?.map((member, index) => {

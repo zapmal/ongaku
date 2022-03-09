@@ -28,6 +28,7 @@ import {
 import { Button, Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 import { getImage } from '@/utils/getImage';
+import { getName } from '@/utils/getName';
 
 export function Library() {
   const [selected, setSelected] = useState('artist');
@@ -82,15 +83,9 @@ export function Library() {
           </Center>
         )}
 
-        {/* {numberOfColumns <= 4 ? (
-          <Flex justify="center" gap="20px">
-            {optionToRender}
-          </Flex>
-        ) : ( */}
         <SimpleGrid columns={4} justifyItems="center">
           {optionToRender}
         </SimpleGrid>
-        {/* )} */}
       </Box>
       {isOpen && <CreateNewPlaylist isOpen={isOpen} onClose={onClose} />}
     </>
@@ -118,7 +113,7 @@ function Artists() {
         <ArtistCard
           artistId={artist.id}
           amountOfFollowers={artist.followers}
-          name={artist.bandName ? artist.bandName : artist.artisticName}
+          name={getName(artist.bandName ? artist.bandName : artist.artisticName)}
           avatar={getImage('artist', artist.avatar, 'default/default_avatar.png')}
           isFollowed={true}
           badge={false}
@@ -150,7 +145,10 @@ function Albums() {
           id={album.id}
           name={album.name}
           type={album.releaseType}
-          authors={album.artist.artisticName ? album.artist.artisticName : album.artist.bandName}
+          // authors="official bts, IVerson, yoa"
+          authors={getName(
+            album.artist.artisticName ? album.artist.artisticName : album.artist.bandName
+          )}
           cover={getImage('album', album.cover, 'default/default_album.png')}
           year={dayjs(album.year).format('YYYY')}
           isExplicit={false}

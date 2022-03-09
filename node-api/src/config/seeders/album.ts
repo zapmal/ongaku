@@ -3,7 +3,6 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  // Regular user, no verified email.
   const btsAlbum = await prisma.album.upsert({
     where: { id: 1 },
     update: {},

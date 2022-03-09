@@ -23,7 +23,7 @@ export class UserService {
       },
     });
 
-    if (!users) throw new NotFound('No se encontraron usuarios registrados');
+    if (users.length === 0) throw new NotFound('No se encontraron usuarios registrados');
 
     return users;
   }

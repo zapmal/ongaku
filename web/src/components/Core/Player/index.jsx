@@ -13,12 +13,17 @@ import {
   SliderFilledTrack,
   SliderThumb,
   Tooltip,
+  Spinner,
 } from '@chakra-ui/react';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+import { saveAs } from 'file-saver';
 import React from 'react';
 import { AiOutlineHeart, AiOutlineDownload } from 'react-icons/ai';
 import { FiChevronsUp } from 'react-icons/fi';
 import {
   MdPlayArrow,
+  MdPause,
   MdRepeat,
   MdShuffle,
   MdVolumeUp,
@@ -26,10 +31,15 @@ import {
   MdSkipNext,
 } from 'react-icons/md';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { useAudioPlayer, useAudioPosition } from 'react-use-audio-player';
 
 import { Link } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
+import { useNotificationStore } from '@/stores/useNotificationStore';
+import { useQueueStore } from '@/stores/useQueueStore';
+
+dayjs.extend(duration);
 
 const DIVIDER_PROPS = {
   orientation: 'vertical',
@@ -40,11 +50,47 @@ const SONG_DATA_PROPS = {
   color: 'whiteAlpha.800',
 };
 
+const PATH = import.meta.env.VITE_NODE_API_URL;
+
 export function Player() {
+  const addNotification = useNotificationStore((s) => s.addNotification);
+  const [queue, remove] = useQueueStore((s) => [s.queue, s.remove]);
+  // const unsub = useQueueStore.subscribe(
+  //   (s) => s.queue,
+  //   (queue) => console.log('sub!', queue)
+  // );
+
   const { pathname } = useLocation();
+  const { togglePlayPause, error, loading, volume, playing, ready } = useAudioPlayer({
+    autoplay: false,
+    src: `${PATH}/static/song/7a73b245f63d6b41eee3c5cc428818325cb3cab1.mp3`,
+    // src: `${PATH}/static/song/36f787caee409ce916a1da0fb276af1ecc1348a5.mp3`,
+    html5: true,
+    format: ['mp3'],
+  });
+  // const [controlsEnabled, setControlsEnabled] = useState(true);
+
+  const handleDownload = () => {
+    saveAs(`${PATH}/static/song/7a73b245f63d6b41eee3c5cc428818325cb3cab1.mp3`);
+  };
 
   return (
     <Box sx={{ position: 'sticky', bottom: 0 }} zIndex={1} height="100px" overflow="hidden">
+      {/* <button
+        onClick={() => {
+          remove(queue.getHeadNode().getData());
+        }}
+      >
+        haha{' '}
+      </button>
+      <button
+        style={{ marginLeft: '30px' }}
+        onClick={() => {
+          console.log('showing!', queue);
+        }}
+      >
+        showing
+      </button> */}
       <Flex
         align="center"
         bg={theme.colors.primaryBase.value}
@@ -113,8 +159,30 @@ export function Player() {
               borderRadius="50%"
               marginLeft="5px"
               marginRight="5px"
+              onClick={
+                ready
+                  ? togglePlayPause
+                  : () => {
+                      if (error) {
+                        addNotification({
+                          title: 'Error',
+                          status: 'error',
+                          message: 'No pudimos reproducir la canción, intentalo de nuevo luego',
+                        });
+                      }
+                    }
+              }
               icon={
-                <Icon as={MdPlayArrow} w="30px" h="30px" color={theme.colors.primaryBase.value} />
+                loading ? (
+                  <Spinner color="black" />
+                ) : (
+                  <Icon
+                    as={playing ? MdPause : MdPlayArrow}
+                    w="30px"
+                    h="30px"
+                    color={theme.colors.primaryBase.value}
+                  />
+                )
               }
             />
 
@@ -122,34 +190,25 @@ export function Player() {
             <IconButton icon={MdRepeat} size="sm" />
           </Flex>
 
-          <Flex align="center" height="25px">
-            <Spacer />
-
-            <Text marginRight="10px" fontSize="sm">
-              0:00
-            </Text>
-
-            <Slider colorScheme="pink" width="450px">
-              <SliderTrack>
-                <SliderFilledTrack />
-              </SliderTrack>
-              <SliderThumb />
-            </Slider>
-
-            <Text marginLeft="10px" fontSize="sm">
-              3:40
-            </Text>
-
-            <Spacer />
-
-            <Divider {...DIVIDER_PROPS} marginBottom="42px" />
-          </Flex>
+          <ProgressBar />
         </SimpleGrid>
 
         <Flex margin="0 auto" align="center" width="320px">
-          <IconButton icon={AiOutlineDownload} size="md" marginLeft="15px" />
+          <IconButton
+            icon={AiOutlineDownload}
+            size="md"
+            marginLeft="15px"
+            onClick={handleDownload}
+          />
           <IconButton icon={AiOutlineHeart} size="md" marginRight="20px" />
-          <Slider colorScheme="pink">
+          <Slider
+            colorScheme="pink"
+            onChangeEnd={(v) => volume(v / 100)}
+            defaultValue={() => {
+              volume(1);
+              return 100;
+            }}
+          >
             <SliderTrack>
               <SliderFilledTrack />
             </SliderTrack>
@@ -199,5 +258,51 @@ function IconButton({ icon, size, ...extraStyles }) {
       }}
       {...extraStyles}
     />
+  );
+}
+
+function ProgressBar() {
+  const { percentComplete, duration, seek, position } = useAudioPosition({ highRefreshRate: true });
+
+  const goToPosition = React.useCallback(
+    (percentage) => {
+      seek(duration * percentage);
+    },
+    [duration, seek]
+  );
+
+  return (
+    <Flex align="center" height="25px">
+      <Spacer />
+
+      <Text marginRight="10px" fontSize="sm">
+        {position !== 0
+          ? Math.ceil(position % 60) < 10
+            ? `${Math.floor(position / 60)}:0${Math.ceil(position % 60)}`
+            : `${Math.floor(position / 60)}:${Math.ceil(position % 60)}`
+          : '0:00'}
+      </Text>
+
+      <Slider
+        name="progress"
+        colorScheme="pink"
+        width="450px"
+        onChange={(v) => goToPosition(v / 100)}
+        value={Math.round(percentComplete)}
+      >
+        <SliderTrack>
+          <SliderFilledTrack />
+        </SliderTrack>
+        <SliderThumb />
+      </Slider>
+
+      <Text marginLeft="10px" fontSize="sm">
+        {duration !== 0 ? `${Math.floor(duration / 60)}:${Math.ceil(duration % 60)}` : '0:00'}
+      </Text>
+
+      <Spacer />
+
+      <Divider {...DIVIDER_PROPS} marginBottom="42px" />
+    </Flex>
   );
 }

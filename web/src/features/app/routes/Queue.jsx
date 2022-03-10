@@ -1,12 +1,14 @@
-import { SimpleGrid, Image, Box, Text, Divider } from '@chakra-ui/react';
-import React from 'react';
+import { SimpleGrid, Image, Box, Text, Divider, Heading } from '@chakra-ui/react';
+import React, { useState } from 'react';
 
 import { SongInQueue } from '../components';
-import { SONGS_IN_QUEUE } from '../constants';
 
 import { Highlight } from '@/components/Utils';
+import { useQueueStore } from '@/stores/useQueueStore';
 
 export function Queue() {
+  const queue = useQueueStore((s) => s.queue);
+
   return (
     <>
       <SimpleGrid columns={2} align="space-evenly" position="relative" margin="20px 50px">
@@ -22,24 +24,45 @@ export function Queue() {
 
         <Box>
           <Text color="whiteAlpha.700" marginBottom="10px">
-            <Highlight>Cola</Highlight> · 10 canciones · 37 min 45 seg
+            <Highlight>Cola</Highlight> · {queue.getSize()} canciones
           </Text>
           <Divider />
 
-          {SONGS_IN_QUEUE.map((song, index) => (
-            <div key={index}>
-              <SongInQueue
-                name={song.name}
-                authors={song.authors}
-                duration={song.duration}
-                itemNumber={index + 1}
-                isPlaying={index === 0}
-                isExplicit={song.isExplicit}
-              />
+          {queue.isEmpty() ? (
+            <Box paddingBottom="100%" textAlign="center">
+              <Heading fontSize="lg" margin="10px">
+                La cola está vacia
+              </Heading>
+            </Box>
+          ) : (
+            <div style={{ paddingBottom: '100%' }}>
+              {queue.toArray().map((data, index) => {
+                const author = data.artist.artisticName
+                  ? data.artist.artisticName
+                  : data.artist.band.name;
 
-              {SONGS_IN_QUEUE.length !== index + 1 && <Divider />}
+                return (
+                  <div key={index}>
+                    <SongInQueue
+                      // id={data.id}
+                      song={data}
+                      name={data.name}
+                      isExplicit={data.isExplicit}
+                      isPlaying={index === 0}
+                      authors={`${author}${
+                        data.collaborators.filter((v) => v !== '').length !== 0
+                          ? `,${data.collaborators.join(',')}`
+                          : ''
+                      }`}
+                      itemNumber={index + 1}
+                    />
+
+                    {queue.getSize() !== index + 1 && <Divider />}
+                  </div>
+                );
+              })}
             </div>
-          ))}
+          )}
         </Box>
       </SimpleGrid>
     </>

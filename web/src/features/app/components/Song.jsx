@@ -24,7 +24,9 @@ import { useHover } from '../hooks/useHover';
 
 import { Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
+import { useQueueStore } from '@/stores/useQueueStore';
 import { getLink } from '@/utils/getLink';
+import { getName } from '@/utils/getName';
 
 export function SongRow({
   name,
@@ -61,7 +63,7 @@ export function SongRow({
   );
 }
 
-export function SongInQueue({ isPlaying, itemNumber, name, authors, duration, isExplicit }) {
+export function SongInQueue({ song, isPlaying, itemNumber, name, authors, duration, isExplicit }) {
   const [isHovered, mouseEventsHandlers] = useHover();
 
   return (
@@ -83,7 +85,7 @@ export function SongInQueue({ isPlaying, itemNumber, name, authors, duration, is
         authors={authors}
       />
 
-      <Options isHovered={isHovered} duration={duration} />
+      <Options isHovered={isHovered} duration={duration} song={song} />
     </Flex>
   );
 }
@@ -101,11 +103,12 @@ function SongInformation({ name, isPlaying, isExplicit, authors, albumName, year
           )}
         </Text>
         <Text fontSize="xs" color={theme.colors.primaryText.value}>
-          {authors.split(',').map((a, index) => {
-            const [linkText, authorPath] = getLink(a, authors);
+          {authors.split(',').map((author, index) => {
             return (
-              <Link to={`/artist/${authorPath}`} key={index} underline={false} variant="gray">
-                {linkText}
+              <Link to={`/artist/${author}`} key={index} underline={false} variant="gray">
+                {authors.split(',').length !== index + 1
+                  ? `${getName(author.trim())}, `
+                  : getName(author.trim())}
               </Link>
             );
           })}
@@ -131,14 +134,14 @@ function SongInformation({ name, isPlaying, isExplicit, authors, albumName, year
   );
 }
 
-export function Options({ isHovered, duration, isLarge = false, onlyHeart = false }) {
+export function Options({ song, isHovered, duration, isLarge = false, onlyHeart = false }) {
   return (
     <>
       {isHovered && (
         <Box animation={FADE_OUT_ANIMATION} textAlign="left">
           {!onlyHeart && (
             <>
-              <OptionMenu isLarge={isLarge} />
+              <OptionMenu isLarge={isLarge} song={song} />
               <Option icon={IoMdHeartEmpty} isLarge={isLarge} />
             </>
           )}
@@ -196,8 +199,10 @@ export function Option({ icon, label, isLarge = false, ...styles }) {
   return label ? <Tooltip label={label}>{iconButton}</Tooltip> : iconButton;
 }
 
-export function OptionMenu({ isLarge = false, ...styles }) {
+export function OptionMenu({ song, isLarge = false, ...styles }) {
+  const remove = useQueueStore((s) => s.remove);
   const dimensions = isLarge && { ...DIMENSIONS };
+
   return (
     <Menu isLazy placement="top-end" gutter={2} {...styles}>
       <MenuButton
@@ -218,6 +223,7 @@ export function OptionMenu({ isLarge = false, ...styles }) {
             <MenuItem
               {...MENU_ITEM_PROPS}
               icon={<Icon as={IoMdRemoveCircleOutline} w="15px" h="15px" marginTop="5px" />}
+              onClick={() => remove(song)}
             >
               Remover de la cola
             </MenuItem>

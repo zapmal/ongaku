@@ -24,6 +24,7 @@ import { FADE_OUT_ANIMATION, MENU_ITEM_PROPS } from '../../constants';
 import { useHover } from '../../hooks/useHover';
 
 import { theme } from '@/stitches.config.js';
+import { useQueueStore } from '@/stores/useQueueStore';
 import { getLink } from '@/utils/getLink';
 
 export function Card({
@@ -39,17 +40,20 @@ export function Card({
   const [isHovered, mouseEventsHandlers] = useHover();
   const [liked, setLiked] = useState(isLiked);
   const [isLoading, setLoading] = useState(false);
+  const [songs, setSongs] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [_, link] = getLink(to, to);
 
   useEffect(() => {
-    if (isHovered && !notLikeable && !isLiked) {
+    // if (isHovered && !notLikeable && !isLiked) {
+    if (isHovered && !notLikeable) {
       setLoading(true);
       if (type === 'playlist') {
         isPlaylistLiked({ playlistId: id })
           .then((response) => {
             console.log('Querying isPlaylistLiked');
             setLiked(response.isLiked);
+            // setSongs(response.songs),
           })
           .catch((error) => {
             console.log(error);
@@ -60,6 +64,7 @@ export function Card({
           .then((response) => {
             console.log('Querying isAlbumLiked');
             setLiked(response.isLiked);
+            setSongs(response.songs);
           })
           .catch((error) => {
             console.log(error);
@@ -98,17 +103,19 @@ export function Card({
                   to={link}
                   notLikeable={notLikeable}
                   mouseEventsHandlers={mouseEventsHandlers}
+                  songs={songs}
                 />
               ))
             : hoverButtons.map((button, index) => (
                 <HoverButton
+                  id={id}
+                  type={type}
+                  songs={songs}
                   key={index}
                   isLoading={isLoading}
                   button={button}
                   liked={liked}
                   setLiked={setLiked}
-                  id={id}
-                  type={type}
                   mouseEventsHandlers={mouseEventsHandlers}
                 />
               ))}
@@ -164,14 +171,15 @@ const ICON_BUTTON_PROPS = {
 };
 
 function HoverButton({
+  id,
+  to,
+  type,
+  songs,
   button,
   liked,
   setLiked,
   notLikeable,
   isLoading,
-  to,
-  id,
-  type,
   mouseEventsHandlers,
 }) {
   const navigate = useNavigate();
@@ -182,7 +190,9 @@ function HoverButton({
     onSuccess: () => queryClient.invalidateQueries('library-albums'),
   });
 
-  const handleOnClick = async () => {
+  const add = useQueueStore((s) => s.add);
+
+  const handleOnLikeClick = async () => {
     if (notLikeable) {
       navigate(`/view/${to}`);
     } else {
@@ -198,11 +208,13 @@ function HoverButton({
     }
   };
 
+  const handleOnPlayClick = () => add(songs);
+
   return (
     <IconButton
       borderRadius="50%"
       isDisabled={mutation.isLoading}
-      onClick={button.icon !== MdPlayArrow ? handleOnClick : () => {}}
+      onClick={button.icon !== MdPlayArrow ? handleOnLikeClick : handleOnPlayClick}
       icon={<Icon as={isLoading ? Spinner : icon} w="35px" h="35px" />}
       backgroundColor={theme.colors.primaryBase.value}
       _hover={{

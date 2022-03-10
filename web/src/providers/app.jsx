@@ -6,6 +6,7 @@ import { MdCached } from 'react-icons/md';
 import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter as Router } from 'react-router-dom';
+// import { AudioPlayerProvider } from 'react-use-audio-player';
 
 import { Button } from '@/components/Elements';
 import { Notifications } from '@/components/Notifications';
@@ -63,12 +64,12 @@ export const AppProvider = ({ children }) => {
         <ErrorBoundary FallbackComponent={ErrorFallback}>
           <QueryClientProvider client={queryClient}>
             {process.env.NODE_ENV !== 'test' && <ReactQueryDevtools />}
-            {/* <AuthProvider> */}
+            {/* <AudioPlayerProvider> */}
             <Router>
               <Notifications />
               {children}
             </Router>
-            {/* </AuthProvider> */}
+            {/* </AudioPlayerProvider> */}
           </QueryClientProvider>
         </ErrorBoundary>
       </React.Suspense>

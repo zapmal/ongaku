@@ -171,7 +171,7 @@ model Album {
 model Song {
   id            Int      @id @default(autoincrement())
   name          String   @db.VarChar(125)
-  collaborators String[] 
+  collaborators String[]
   lyrics        String?
   isExplicit    Boolean  @default(false) @map("is_explicit")
   path          String
@@ -179,8 +179,8 @@ model Song {
   artistId      Int      @map("artist_id")
 
   album           Album             @relation(fields: [albumId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  artist          Artist[]
-  // artist          Artist[]          @relation(fields: [artistId], references: [id])
+  artist          Artist            @relation(fields: [artistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // artist          Artist[]
   songMetadata    SongMetadata?
   songMetrics     SongMetrics?
   interaction     Interaction[]

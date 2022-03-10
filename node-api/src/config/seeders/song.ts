@@ -15,26 +15,26 @@ async function main() {
     },
   });
 
-  await prisma.song.update({
-    where: {
-      id: 7,
-    },
-    data: {
-      artist: {
-        connect: [{ id: 1 }, { id: 3 }, { id: 2}],
-      },
-    },
-  });
+  // await prisma.song.update({
+  //   where: {
+  //     id: 7,
+  //   },
+  //   data: {
+  //     artist: {
+  //       connect: [{ id: 1 }, { id: 3 }, { id: 2}],
+  //     },
+  //   },
+  // });
 
-  const query = await prisma.song.findUnique({
-    where: { id: 7 },
-    include: {
-      artist: true,
-    },
-  });
+  // const query = await prisma.song.findUnique({
+  //   where: { id: 7 },
+  //   include: {
+  //     artist: true,
+  //   },
+  // });
   console.log({ fSong });
 
-  console.log({ ...query });
+  // console.log({ ...query });
 }
 
 main()

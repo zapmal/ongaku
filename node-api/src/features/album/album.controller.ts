@@ -57,9 +57,7 @@ export class AlbumController {
 
   @Get('liked/:id')
   async isLiked(@Req() request: RequestWithEntity, @Param('id') albumId) {
-    const isLiked = await this.album.isLiked(Number(albumId), Number(request.entity.id));
-
-    return { isLiked };
+    return await this.album.isLiked(Number(albumId), Number(request.entity.id));
   }
 
   @Get('liked')

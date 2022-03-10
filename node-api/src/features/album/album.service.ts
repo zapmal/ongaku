@@ -157,12 +157,26 @@ export class AlbumService {
             value: true,
           },
         },
+        cover: true,
+        // artist: true,
+        song: {
+          include: {
+            artist: {
+              include: {
+                band: true,
+              },
+            },
+          },
+        },
       },
     });
 
     if (!album) throw new NotFound('El album no existe');
 
-    return album.interaction.length === 0 ? false : album.interaction[0].value;
+    return {
+      isLiked: album.interaction.length === 0 ? false : album.interaction[0].value,
+      songs: album.song,
+    };
   }
 
   async getLiked(entityId: number) {

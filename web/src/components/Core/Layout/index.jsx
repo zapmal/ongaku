@@ -1,8 +1,9 @@
 import { Box } from '@chakra-ui/react';
 import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
+import { AudioPlayerProvider } from 'react-use-audio-player';
 
-import { CurrentRoomOverlay } from '../../../features/app/components/CurrentRoomOverlay';
+// import { CurrentRoomOverlay } from '../../../features/app/components/CurrentRoomOverlay';
 
 import { NavigationBar, Player } from '@/components/Core';
 import { Spinner } from '@/components/Utils';
@@ -19,11 +20,12 @@ export function Layout() {
 
   return (
     <React.Suspense fallback={<Spinner />}>
-      <NavigationBar />
-      <Box {...hasTopMargin}>
-        <Outlet />
-      </Box>
-      {false && (
+      <AudioPlayerProvider>
+        <NavigationBar />
+        <Box {...hasTopMargin}>
+          <Outlet />
+        </Box>
+        {/* {false && (
         <CurrentRoomOverlay
           name="Buen Reguetón"
           host="rick_y"
@@ -31,8 +33,9 @@ export function Layout() {
           userLimit={5}
           roomId="ADAD-139D"
         />
-      )}
-      <Player />
+      )} */}
+        <Player />
+      </AudioPlayerProvider>
     </React.Suspense>
   );
 }

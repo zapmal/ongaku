@@ -192,17 +192,19 @@ export function Player() {
               icon={MdShuffle}
               isDisabled={controlsEnabled}
               onClick={store.shuffle}
-              // onClick={store.clearQueue}
               size="sm"
             />
             <IconButton
               icon={MdSkipPrevious}
               isDisabled={
                 controlsEnabled ||
-                (!store.queue.isEmpty() && !store.queue.getHeadNode().hasPrev()) ||
+                (!store.queue.isEmpty() && !store.queue.find(store.currentlyPlaying).prev) ||
                 shouldRepeat
               }
-              onClick={() => console.log('previous')}
+              onClick={() => {
+                const prev = store.queue.find(store.currentlyPlaying).prev;
+                store.setCurrentlyPlaying(prev.data);
+              }}
               size="md"
               marginLeft="5px"
             />

@@ -19,7 +19,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { AiOutlineHeart } from 'react-icons/ai';
-import { MdShare, MdPlayArrow, MdPause, MdDelete } from 'react-icons/md';
+import { MdShare, MdPause, MdDelete } from 'react-icons/md';
 
 import { Footer } from '@/components/Core';
 import { Banner, Link } from '@/components/Elements';

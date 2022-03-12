@@ -80,6 +80,11 @@ export class AlbumController {
     return await this.album.getAll();
   }
 
+  @Get(':id')
+  async getByIdWithSongs(@Param('id', ParseIntPipe) id: number) {
+    return await this.album.getById(id);
+  }
+
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id', ParseIntPipe) id: number) {

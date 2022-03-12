@@ -14,12 +14,17 @@ import {
 import React, { useEffect, useState } from 'react';
 import { FaHeartBroken } from 'react-icons/fa';
 import { IoMdHeart } from 'react-icons/io';
-import { MdPlayArrow, MdMoreVert, MdOutlineQueue, MdOpenInNew } from 'react-icons/md';
-import { useMutation, useQueryClient } from 'react-query';
+import { MdPlayArrow, MdMoreVert, MdOpenInNew } from 'react-icons/md';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate, Link } from 'react-router-dom';
 
 import { likeAlbum, isAlbumLiked } from '../../api/album';
-import { likePlaylist, isPlaylistLiked } from '../../api/playlist';
+import {
+  likePlaylist,
+  isPlaylistLiked,
+  getLikedPlaylists,
+  addAlbumToPlaylist,
+} from '../../api/playlist';
 import { FADE_OUT_ANIMATION, MENU_ITEM_PROPS } from '../../constants';
 import { useHover } from '../../hooks/useHover';
 
@@ -45,8 +50,7 @@ export function Card({
   const [_, link] = getLink(to, to);
 
   useEffect(() => {
-    // if (isHovered && !notLikeable && !isLiked) {
-    if (isHovered && !notLikeable) {
+    if (isHovered && !notLikeable && id) {
       setLoading(true);
       if (type === 'playlist') {
         isPlaylistLiked({ playlistId: id })
@@ -98,8 +102,10 @@ export function Card({
           {notLikeable
             ? notLikeablePlaylistButtons.map((button, index) => (
                 <HoverButton
+                  id={id}
                   key={index}
                   button={button}
+                  type={type}
                   to={link}
                   notLikeable={notLikeable}
                   mouseEventsHandlers={mouseEventsHandlers}
@@ -120,7 +126,12 @@ export function Card({
                 />
               ))}
           {!notLikeable && (
-            <OptionsButton mouseEventsHandlers={mouseEventsHandlers} type={type} to={link} />
+            <OptionsButton
+              mouseEventsHandlers={mouseEventsHandlers}
+              type={type}
+              to={link}
+              id={id}
+            />
           )}
         </Box>
       )}
@@ -194,7 +205,7 @@ function HoverButton({
 
   const handleOnLikeClick = async () => {
     if (notLikeable) {
-      navigate(`/view/${to}`);
+      navigate(`/view?id=${id}&type=${type === 'playlist' ? 'playlist' : 'album'}`);
     } else {
       try {
         const data = type === 'playlist' ? { playlistId: id } : { albumId: id };
@@ -230,10 +241,18 @@ function HoverButton({
   );
 }
 
-/**
- * This is intentionally missing some options that will *probably* be added in the future (i.e. deleting)
- */
-function OptionsButton({ type, to, mouseEventsHandlers }) {
+function OptionsButton({ id, type, to, mouseEventsHandlers }) {
+  const { data, isLoading, isError } = useQuery('library-playlists', getLikedPlaylists);
+  const mutation = useMutation(addAlbumToPlaylist);
+
+  const handleClick = async (playlistId) => {
+    try {
+      await mutation.mutateAsync({ playlistId, albumId: id });
+    } catch (error) {
+      console.log('Error al intentar agregar las canciones', error);
+    }
+  };
+
   return (
     <Menu isLazy closeOnBlur={false} gutter={2} placement="left">
       <MenuButton
@@ -262,15 +281,9 @@ function OptionsButton({ type, to, mouseEventsHandlers }) {
       >
         <MenuItem
           {...MENU_ITEM_PROPS}
-          icon={<Icon as={MdOutlineQueue} w="15px" h="15px" marginTop="5px" />}
-        >
-          Agregar a la cola
-        </MenuItem>
-        <MenuItem
-          {...MENU_ITEM_PROPS}
           icon={<Icon as={MdOpenInNew} w="15px" h="15px" marginTop="5px" />}
           as={Link}
-          to={`/view/${to}`}
+          to={`/view?id=${id}&type=${type === 'playlist' ? 'playlits' : 'album'}`}
         >
           Abrir
         </MenuItem>
@@ -279,54 +292,30 @@ function OptionsButton({ type, to, mouseEventsHandlers }) {
         {type !== 'playlist' && (
           <>
             <MenuOptionGroup title="Agregar a Playlist">
-              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
-                OnlyPain Official Soundtrack
-              </MenuItem>
-              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
-                OnlyPain Official Soundtrack
-              </MenuItem>
-              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
-                OnlyPain Official Soundtrack
-              </MenuItem>
-              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
-                OnlyPain Official Soundtrack
-              </MenuItem>
-              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
-                OnlyPain Official Soundtrack
-              </MenuItem>
-              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
-                OnlyPain Official Soundtrack
-              </MenuItem>
-              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
-                OnlyPain Official Soundtrack
-              </MenuItem>
-              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
-                OnlyPain Official Soundtrack
-              </MenuItem>
-              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
-                OnlyPain Official Soundtrack
-              </MenuItem>
-              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
-                Big Boi tunes
-              </MenuItem>
-              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
-                OnlyPain Official Soundtrack
-              </MenuItem>
-              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
-                OnlyPain Official Soundtrack
-              </MenuItem>
-              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
-                OnlyPain Official Soundtrack
-              </MenuItem>
-              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
-                OnlyPain Official Soundtrack
-              </MenuItem>
-              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
-                OnlyPain Official Soundtrack
-              </MenuItem>
-              <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
-                OnlyPain Official Soundtrack
-              </MenuItem>
+              {isLoading ? (
+                <Box marginTop="10px" textAlign="center">
+                  <Spinner />
+                </Box>
+              ) : isError ? (
+                <MenuItem {...MENU_ITEM_PROPS} fontSize="sm" isDisabled={true}>
+                  Ha ocurrido un error
+                </MenuItem>
+              ) : data.playlists.length === 0 ? (
+                <MenuItem {...MENU_ITEM_PROPS} fontSize="sm" isDisabled={true}>
+                  No tienes playlists
+                </MenuItem>
+              ) : (
+                data.playlists.map((playlist, index) => (
+                  <MenuItem
+                    key={index}
+                    {...MENU_ITEM_PROPS}
+                    fontSize="sm"
+                    onClick={() => handleClick(playlist.id)}
+                  >
+                    {playlist.name}
+                  </MenuItem>
+                ))
+              )}
             </MenuOptionGroup>
           </>
         )}

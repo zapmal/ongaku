@@ -22,8 +22,18 @@ import { RequestWithEntity } from '@/internal/interfaces';
 import { Role } from '@/internal/constants';
 
 import { PlaylistService } from './playlist.service';
-import { LikePlaylistDTO, NewPlaylistDTO } from './playlist.dto';
-import { likePlaylistSchema, newPlaylistSchema } from './playlist.schemas';
+import {
+  AddAlbumToPlaylistDTO,
+  AddSongToPlaylistDTO,
+  LikePlaylistDTO,
+  NewPlaylistDTO,
+} from './playlist.dto';
+import {
+  addAlbumToPlaylistSchema,
+  addSongToPlaylistSchema,
+  likePlaylistSchema,
+  newPlaylistSchema,
+} from './playlist.schemas';
 
 @Controller('playlist')
 @UseGuards(RoleGuard([Role.ADMIN, Role.USER]))
@@ -116,14 +126,27 @@ export class PlaylistController {
     return { isLiked };
   }
 
+  @Get(':id')
+  async getByIdWithSongs(@Param() { id }) {
+    return await this.playlist.getById(Number(id));
+  }
+
   @Delete(':id')
   async delete(@Param() { id }, @Req() request: RequestWithEntity) {
     const entity = request.entity;
 
     await this.playlist.delete(Number(id), Number(entity.id), entity.role as Role);
+  }
 
-    return {
-      message: 'Prueba',
-    };
+  @Post('add-album')
+  @UsePipes(new JoiValidationPipe(addAlbumToPlaylistSchema))
+  async addAlbumToPlaylist(@Body() { playlistId, albumId }: AddAlbumToPlaylistDTO) {
+    return await this.playlist.addAlbum(playlistId, albumId);
+  }
+
+  @Post('add-song')
+  @UsePipes(new JoiValidationPipe(addSongToPlaylistSchema))
+  async addSongToPlaylist(@Body() { playlistId, songId }: AddSongToPlaylistDTO) {
+    return await this.playlist.addAlbum(playlistId, songId);
   }
 }

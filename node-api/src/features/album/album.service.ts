@@ -20,6 +20,14 @@ export class AlbumService {
 
     const album = await this.prisma.album.findUnique({
       where: { id },
+      include: {
+        artist: {
+          include: {
+            band: true,
+          },
+        },
+        song: true,
+      },
     });
 
     if (!album) throw new NotFound('El Album/Ep/Single no existe');

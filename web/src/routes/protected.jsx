@@ -74,7 +74,7 @@ export const protectedRoutes = [
             element: <ArtistProfile />,
           },
           {
-            path: '/view/:name',
+            path: '/view',
             element: <View />,
           },
           {

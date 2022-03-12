@@ -20,14 +20,22 @@ import {
 import React from 'react';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { MdShare, MdPause, MdDelete } from 'react-icons/md';
+import { useQuery } from 'react-query';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+
+import { getAlbum } from '../api/album';
+import { getPlaylist } from '../api/playlist';
 
 import { Footer } from '@/components/Core';
 import { Banner, Link } from '@/components/Elements';
-import { NEW_SONGS, OptionMenu } from '@/features/app';
+import { Spinner } from '@/components/Utils';
+import { OptionMenu } from '@/features/app';
 import { theme } from '@/stitches.config.js';
+import { useAuthStore } from '@/stores/useAuthStore';
 import { copyURL } from '@/utils/copyURL';
 import { getImage } from '@/utils/getImage';
 import { getLink } from '@/utils/getLink';
+import { getName } from '@/utils/getName';
 
 const BUTTON_PROPS = {
   variant: 'outline',
@@ -48,10 +56,40 @@ const TABLE_ROW_PROPS = {
 };
 
 export function View() {
+  const entity = useAuthStore((s) => s.entity);
+
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const type = searchParams.get('type');
+  const id = searchParams.get('id');
+
+  const { data, isLoading } = useQuery(
+    `view-${type}-${id}`,
+    () => (type === 'playlist' ? getPlaylist(id) : getAlbum(id)),
+    {
+      // initialData: {
+      //   user: { userMetadata: {} },
+      //   playlists: { playlists: [], likedPlaylists: [] },
+      //   followed: [],
+      // },
+      onError: () => navigate('/not-found'),
+    }
+  );
+
+  console.log(data);
+
+  if (isLoading) {
+    return <Spinner paddingBottom="100%" />;
+  }
+
   return (
     <Box>
       <Banner
-        image={getImage('view', null, 'default/default.svg')}
+        image={getImage(
+          type === 'playlist' ? 'playlist' : 'view',
+          type === 'playlist' ? data.background : null,
+          'default/default.svg'
+        )}
         backgroundColor={theme.colors.primaryBg.value}
         height="100%"
         bgRepeat="no-repeat"
@@ -66,57 +104,76 @@ export function View() {
           <SimpleGrid margin="20px">
             <Heading fontSize="xxx-large" letterSpacing="2px">
               <HStack fontSize="sm" letterSpacing="initial">
-                <Avatar src="/assets/images/static-user-1.png" />
-                <Link to="/user/verox" underline={false} fontWeight="bold">
-                  Verox
+                <Avatar
+                  src={getImage(
+                    type === 'playlist' ? 'user' : 'artist',
+                    type === 'playlist' ? data?.user.avatar : data?.artist.avatar,
+                    'default/default_avatar.svg'
+                  )}
+                />
+                <Link
+                  to={
+                    type === 'playlist'
+                      ? `/user/${data?.user.username}`
+                      : `/artist/${
+                          data?.artist?.artisticName
+                            ? data?.artist?.artisticName
+                            : data?.artist?.band?.name
+                        }`
+                  }
+                  underline={false}
+                  fontWeight="bold"
+                >
+                  {type === 'playlist'
+                    ? getName(data?.user.username)
+                    : data?.artist?.artisticName
+                    ? getName(data?.artist?.artisticName)
+                    : getName(data?.artist?.band?.name)}
                 </Link>
               </HStack>
-              Gaming
+              {data.name}
             </Heading>
 
             <HStack color="whiteAlpha.800" marginTop="5px">
-              <Text fontWeight="bold">PLAYLIST</Text>
-              <Text>
-                {' - '}33 canciones {' - '}
+              <Text fontWeight="bold">
+                {type.toUpperCase()}{' '}
+                {type === 'album' && (
+                  <>
+                    {' - '}
+                    {data.releaseType.toUpperCase()}
+                    {' - '}
+                  </>
+                )}
               </Text>
-              {/* <Text>7 hr 33 min {' - '}</Text>
-              <Text>42 likes</Text> */}
+              <Text>
+                {type === 'playlist' ? data.songsInPlaylist?.length : data.song?.length} canciones{' '}
+              </Text>
             </HStack>
 
             <HStack marginTop="30px">
-              {/* <IconButton
-                bg="whiteAlpha.900"
-                borderRadius="50%"
-                w="70px"
-                h="70px"
-                backgroundColor={theme.colors.accentSolid.value}
-                icon={<Icon as={MdPlayArrow} w="50px" h="50px" color="whiteAlpha.900" />}
-                _hover={{ backgroundColor: theme.colors.accentSolidHover.value }}
-                _active={{ backgroundColor: theme.colors.accentSolidActive.value }}
-              /> */}
-              {/* <Button {...BUTTON_PROPS} rightIcon={<Icon as={AiOutlineHeart} w="25px" h="25px" />}>
-                Like
-              </Button> */}
               <Button
-                variant="outline"
-                borderColor={theme.colors.dangerSolid.value}
-                color={theme.colors.dangerSolid.value}
-                _hover={{
-                  backgroundColor: theme.colors.dangerSolidHover.value,
-                  color: '#ffffff',
-                }}
-                rightIcon={<Icon as={MdDelete} w="20px" h="20px" />}
-              >
-                Borrar
-              </Button>
-              <Button
-                // onClick={() => copyURL(`view/${data.name}`)}
-                onClick={() => copyURL(`view/`)}
+                onClick={() => copyURL(`view?id=${id}&type=${type}`)}
                 {...BUTTON_PROPS}
                 rightIcon={<Icon as={MdShare} w="20px" h="20px" />}
               >
                 Compartir
               </Button>
+              {(entity.id === data?.artist?.id ||
+                entity.id === data?.user?.id ||
+                entity.role === 'ADMIN') && (
+                <Button
+                  variant="outline"
+                  borderColor={theme.colors.dangerSolid.value}
+                  color={theme.colors.dangerSolid.value}
+                  _hover={{
+                    backgroundColor: theme.colors.dangerSolidHover.value,
+                    color: '#ffffff',
+                  }}
+                  rightIcon={<Icon as={MdDelete} w="20px" h="20px" />}
+                >
+                  Borrar
+                </Button>
+              )}
             </HStack>
           </SimpleGrid>
         </Flex>
@@ -125,72 +182,119 @@ export function View() {
         <Thead color={theme.colors.accentText.value}>
           <Tr>
             <Th>#</Th>
-            <Th>Portada</Th>
+            {type === 'playlist' && <Th>Portada</Th>}
             <Th>Nombre</Th>
-            <Th>Autor(es)</Th>
-            <Th>Album</Th>
-            <Th>Duración</Th>
+            <Th>{type === 'playlist' ? 'Autor(es)' : 'Colaboradores'}</Th>
+            {type === 'playlist' && <Th>Album</Th>}
             <Th>Opciones</Th>
           </Tr>
         </Thead>
         <Tbody>
-          {NEW_SONGS.map((song, index) => {
-            // eslint-disable-next-line no-unused-vars
-            const [_, albumLink] = getLink(song.albumName, song.albumName);
+          {data.songsInPlaylist?.length === 0 && data.song?.length === 0
+            ? 'NUTing'
+            : data.songsInPlaylist?.length
+            ? data.songsInPlaylist.map(({ song }, index) => {
+                // eslint-disable-next-line no-unused-vars
+                const [_, albumLink] = getLink(song.album.name, song.album.name);
 
-            return (
-              <Tr key={index} {...TABLE_ROW_PROPS}>
-                <Td>
-                  {/* This should be "isPlaying?" */}
-                  {index === 0 ? (
-                    <Icon
-                      as={MdPause}
-                      w="25px"
-                      h="25px"
-                      color="whiteAlpha.900"
-                      _hover={{ cursor: 'pointer' }}
-                    />
-                  ) : (
-                    index + 1
-                  )}
-                </Td>
-                <Td>
-                  <Image src={song.cover} w="50px" h="50px" borderRadius="5px" />
-                </Td>
-                <Td>{song.name}</Td>
-                <Td>
-                  {song.authors.split(',').map((author, index) => {
-                    const [linkText, authorLink] = getLink(author, song.authors);
-                    return (
+                return (
+                  <Tr key={index} {...TABLE_ROW_PROPS}>
+                    <Td>
+                      {/* This should be "isPlaying?" */}
+                      {index === 0 ? (
+                        <Icon
+                          as={MdPause}
+                          w="25px"
+                          h="25px"
+                          color="whiteAlpha.900"
+                          _hover={{ cursor: 'pointer' }}
+                        />
+                      ) : (
+                        index + 1
+                      )}
+                    </Td>
+                    <Td>
+                      <Image
+                        src={getImage('album', song.album.cover, 'default/default_album.png')}
+                        w="50px"
+                        h="50px"
+                        borderRadius="5px"
+                      />
+                    </Td>
+                    <Td>{song.name}</Td>
+                    <Td>
+                      {song.artist.artisticName
+                        ? getName(song.artist.artisticName)
+                        : getName(song.artist.band.name)}
+                      {song?.collaborators[0] !== '' && ', '}
+                      {song?.collaborators.map((collaborator, index) => {
+                        return song?.collaborators.length !== index + 1
+                          ? `${getName(collaborator)}, `
+                          : getName(collaborator);
+                      })}
+                    </Td>
+                    <Td>
                       <Link
-                        to={`/artist/${authorLink}`}
-                        key={index}
+                        to={`/view?id=${song.albumId}&type=album`}
                         underline={false}
                         variant="gray"
                       >
-                        {linkText}
+                        {song.album.name}
                       </Link>
-                    );
-                  })}
-                </Td>
-                <Td>
-                  <Link to={`/view/${albumLink}`} underline={false} variant="gray">
-                    {song.albumName}
-                  </Link>
-                </Td>
-                <Td>{song.duration}</Td>
-                <Td>
-                  <IconButton
-                    icon={<Icon as={AiOutlineHeart} w="25px" h="25px" />}
-                    variant="ghost"
-                    _hover={{ backgroundColor: 'transparent' }}
-                    _active={{ color: theme.colors.accentSolid.value }}
-                  />
-                  <OptionMenu isLarge={true} />
-                </Td>
-              </Tr>
-            );
-          })}
+                    </Td>
+                    <Td color="white">
+                      <IconButton
+                        icon={<Icon as={AiOutlineHeart} w="25px" h="25px" />}
+                        variant="ghost"
+                        _hover={{ backgroundColor: 'transparent' }}
+                        _active={{ color: theme.colors.accentSolid.value }}
+                      />
+                      <OptionMenu isLarge={true} />
+                    </Td>
+                  </Tr>
+                );
+              })
+            : data.song?.length
+            ? data.song.map((song, index) => {
+                return (
+                  <Tr key={index} {...TABLE_ROW_PROPS}>
+                    <Td>
+                      {/* This should be "isPlaying?" */}
+                      {index === 0 ? (
+                        <Icon
+                          as={MdPause}
+                          w="25px"
+                          h="25px"
+                          color="whiteAlpha.900"
+                          _hover={{ cursor: 'pointer' }}
+                        />
+                      ) : (
+                        index + 1
+                      )}
+                    </Td>
+                    <Td>{song.name}</Td>
+                    <Td>
+                      {song?.collaborators[0] !== ''
+                        ? song?.collaborators.map((collaborator, index) => {
+                            return song?.collaborators.length !== index + 1
+                              ? `${getName(collaborator)}, `
+                              : getName(collaborator);
+                          })
+                        : 'Ninguno'}
+                    </Td>
+                    <Td>
+                      <IconButton
+                        icon={<Icon as={AiOutlineHeart} w="25px" h="25px" />}
+                        variant="ghost"
+                        _hover={{ backgroundColor: 'transparent' }}
+                        _active={{ color: theme.colors.accentSolid.value }}
+                      />
+                      <OptionMenu isLarge={true} />
+                    </Td>
+                  </Tr>
+                );
+              })
+            : null}
         </Tbody>
       </Table>
 

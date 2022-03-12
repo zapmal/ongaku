@@ -103,8 +103,6 @@ function Artists() {
     return <Status status="error" message={error} />;
   }
 
-  console.log(data);
-
   return data.length === 0 ? (
     <EmptySection message="No has seguido a ningún artista" />
   ) : (

@@ -158,6 +158,36 @@ export class PlaylistService {
     return playlist.interaction.length === 0 ? false : playlist.interaction[0].value;
   }
 
+  async getById(id: number) {
+    if (!id) throw new BadRequest('La solicitud está errada, falta información');
+
+    const playlist = await this.prisma.userPlaylist.findUnique({
+      where: { id },
+      include: {
+        user: true,
+        songsInPlaylist: {
+          include: {
+            song: {
+              include: {
+                artist: {
+                  select: {
+                    artisticName: true,
+                    band: { select: { name: true } },
+                  },
+                },
+                album: { select: { cover: true, name: true } },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!playlist) throw new NotFound('El Album/Ep/Single no existe');
+
+    return playlist;
+  }
+
   async delete(playlistId: number, entityId: number, role: Role) {
     const playlist = await this.prisma.userPlaylist.findUnique({
       where: { id: playlistId },
@@ -179,5 +209,88 @@ export class PlaylistService {
     } else {
       throw new Unauthorized('No tienes permiso para borrar esta playlist');
     }
+  }
+
+  async addSong(playlistId: number, songId: number) {
+    const songExists = await this.prisma.song.findUnique({
+      where: { id: songId },
+    });
+
+    if (!songExists) {
+      throw new NotFound('La canción no existe');
+    }
+
+    const isInPlaylist = await this.prisma.songsInPlaylist.findFirst({
+      where: {
+        songId,
+        userPlaylistId: playlistId,
+      },
+    });
+
+    if (isInPlaylist) {
+      throw new BadRequest('La canción ya está en la playlist');
+    }
+
+    const songInPlaylist = await this.prisma.songsInPlaylist.create({
+      data: {
+        songId,
+        userPlaylistId: playlistId,
+      },
+    });
+
+    return songInPlaylist;
+  }
+
+  async addAlbum(playlistId: number, albumId: number) {
+    const playlistExists = await this.prisma.userPlaylist.findUnique({
+      where: {
+        id: playlistId,
+      },
+    });
+
+    if (!playlistExists) {
+      throw new NotFound('La playlist no existe');
+    }
+
+    const songs = await this.prisma.album.findUnique({
+      where: { id: albumId },
+      include: {
+        song: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    if (songs.song.length === 0) {
+      throw new BadRequest('El album no contiene ninguna canción, no puede ser agregado');
+    }
+
+    const condition = songs.song.map((song) => ({
+      songId: song.id,
+    }));
+
+    const isInPlaylist = await this.prisma.songsInPlaylist.findMany({
+      where: {
+        AND: condition,
+      },
+    });
+
+    if (isInPlaylist.length !== 0) {
+      throw new BadRequest('El album ya está en la playlist');
+    }
+
+    const data = songs.song.map((song) => ({
+      songId: song.id,
+      userPlaylistId: playlistId,
+    }));
+
+    const count = await this.prisma.songsInPlaylist.createMany({
+      data: data,
+      skipDuplicates: true,
+    });
+
+    return count;
   }
 }

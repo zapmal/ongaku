@@ -13,3 +13,13 @@ export const likePlaylistSchema = Joi.object({
 export const getLikedPlaylistsSchema = Joi.object({
   entityId: Joi.number().required(),
 });
+
+export const addAlbumToPlaylistSchema = Joi.object({
+  playlistId: Joi.number().required(),
+  albumId: Joi.number().required(),
+});
+
+export const addSongToPlaylistSchema = Joi.object({
+  playlistId: Joi.number().required(),
+  songId: Joi.number().required(),
+});

@@ -15,3 +15,15 @@ export const createPlaylist = (data) => {
 export const likePlaylist = (data) => {
   return apiClient.put('playlist/like', data);
 };
+
+export const addAlbumToPlaylist = (data) => {
+  return apiClient.post('playlist/add-album', data);
+};
+
+export const addSongToPlaylist = (data) => {
+  return apiClient.post('playlist/add-song', data);
+};
+
+export const getPlaylist = (id) => {
+  return apiClient.get(`playlist/${id}`);
+};

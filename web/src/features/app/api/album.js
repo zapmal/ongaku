@@ -11,3 +11,7 @@ export const isAlbumLiked = (data) => {
 export const likeAlbum = (data) => {
   return apiClient.put('album/like', data);
 };
+
+export const getAlbum = (id) => {
+  return apiClient.get(`album/${id}`);
+};

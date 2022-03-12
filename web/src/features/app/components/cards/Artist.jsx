@@ -22,6 +22,7 @@ import { followArtist } from '../../api/artist';
 import { FADE_OUT_ANIMATION } from '../../constants';
 import { useHover } from '../../hooks/useHover';
 
+import { Link as CustomLink } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useNotificationStore } from '@/stores/useNotificationStore';
@@ -73,12 +74,12 @@ export function ArtistCard({
         width={sizes[size].width}
         height={sizes[size].height}
         borderRadius={sizes[size].borderRadius}
-        opacity={isHovered && 0.6}
+        opacity={isHovered && size !== 'lg' && 0.6}
         transition="opacity 300ms ease-in-out"
         objectFit="cover"
         {...mouseEventsHandlers}
       />
-      {isHovered && (
+      {isHovered && size !== 'lg' && (
         <Box animation={FADE_OUT_ANIMATION}>
           {hoverButtons.map((button, index) => (
             <HoverButton
@@ -96,7 +97,13 @@ export function ArtistCard({
       )}
       {size === 'lg' ? (
         <>
-          <Heading color={isHighlighted && theme.colors.accentText.value} fontSize="3xl">
+          <Heading
+            color={isHighlighted && theme.colors.accentText.value}
+            as={CustomLink}
+            to={`/artist/${artistLink}`}
+            underline={false}
+            fontSize="3xl"
+          >
             {name}
           </Heading>
           <Text color="whiteAlpha.800">{amountOfFollowers} seguidores</Text>

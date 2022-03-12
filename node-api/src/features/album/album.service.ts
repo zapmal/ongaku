@@ -157,10 +157,9 @@ export class AlbumService {
             value: true,
           },
         },
-        cover: true,
-        // artist: true,
         song: {
           include: {
+            album: true,
             artist: {
               include: {
                 band: true,

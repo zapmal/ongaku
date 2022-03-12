@@ -18,17 +18,17 @@ import {
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import { saveAs } from 'file-saver';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AiOutlineHeart, AiOutlineDownload } from 'react-icons/ai';
 import { FiChevronsUp } from 'react-icons/fi';
 import {
   MdPlayArrow,
   MdPause,
   MdRepeat,
-  MdShuffle,
   MdVolumeUp,
   MdSkipPrevious,
   MdSkipNext,
+  MdShuffle,
 } from 'react-icons/md';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { useAudioPlayer, useAudioPosition } from 'react-use-audio-player';
@@ -38,6 +38,8 @@ import { Highlight } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
 import { useNotificationStore } from '@/stores/useNotificationStore';
 import { useQueueStore } from '@/stores/useQueueStore';
+import { getImage } from '@/utils/getImage';
+import { getName } from '@/utils/getName';
 
 dayjs.extend(duration);
 
@@ -54,43 +56,52 @@ const PATH = import.meta.env.VITE_NODE_API_URL;
 
 export function Player() {
   const addNotification = useNotificationStore((s) => s.addNotification);
-  const [queue, remove] = useQueueStore((s) => [s.queue, s.remove]);
-  // const unsub = useQueueStore.subscribe(
-  //   (s) => s.queue,
-  //   (queue) => console.log('sub!', queue)
-  // );
+  const store = useQueueStore();
+
+  const [controlsEnabled, setControlsEnabled] = useState(store.queue.isEmpty());
+  const [shouldRepeat, setRepeat] = useState(false);
 
   const { pathname } = useLocation();
-  const { togglePlayPause, error, loading, volume, playing, ready } = useAudioPlayer({
+  const { togglePlayPause, error, loading, volume, playing, ready, ended, play } = useAudioPlayer({
     autoplay: false,
-    src: `${PATH}/static/song/7a73b245f63d6b41eee3c5cc428818325cb3cab1.mp3`,
-    // src: `${PATH}/static/song/36f787caee409ce916a1da0fb276af1ecc1348a5.mp3`,
+    src: `${PATH}/static/song/${store.currentlyPlaying?.path}`,
     html5: true,
     format: ['mp3'],
   });
-  // const [controlsEnabled, setControlsEnabled] = useState(true);
+
+  useEffect(() => {
+    if (ended) {
+      const currentlyPlayingNode = store.queue.find(store.currentlyPlaying);
+
+      if (currentlyPlayingNode.next) {
+        store.setCurrentlyPlaying(currentlyPlayingNode.next.data);
+      } else if (
+        store.queue.getHeadNode() &&
+        store.queue.getHeadNode().getData() !== currentlyPlayingNode.getData()
+      ) {
+        store.setCurrentlyPlaying(store.queue.getHeadNode().getData());
+      } else {
+        store.setCurrentlyPlaying({ artist: {}, album: {} });
+        store.removeHeadNode();
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ended]);
 
   const handleDownload = () => {
-    saveAs(`${PATH}/static/song/7a73b245f63d6b41eee3c5cc428818325cb3cab1.mp3`);
+    saveAs(`${PATH}/static/song/${store.currentlyPlaying.path}`);
   };
+
+  useEffect(() => {
+    setControlsEnabled(store.queue.isEmpty());
+
+    if (ended && shouldRepeat) {
+      play();
+    }
+  }, [shouldRepeat, store, ended, play]);
 
   return (
     <Box sx={{ position: 'sticky', bottom: 0 }} zIndex={1} height="100px" overflow="hidden">
-      {/* <button
-        onClick={() => {
-          remove(queue.getHeadNode().getData());
-        }}
-      >
-        haha{' '}
-      </button>
-      <button
-        style={{ marginLeft: '30px' }}
-        onClick={() => {
-          console.log('showing!', queue);
-        }}
-      >
-        showing
-      </button> */}
       <Flex
         align="center"
         bg={theme.colors.primaryBase.value}
@@ -101,47 +112,73 @@ export function Player() {
             <Tooltip label="Haz click para ir a la cola">
               <Box as={RouterLink} to="/queue">
                 <Image
-                  src="/assets/images/static-queue-ztd.jpg"
+                  src={getImage('album', store.currentlyPlaying.cover, 'default/default_album.png')}
                   width="100px"
                   height="100px"
                   _hover={{
                     cursor: 'pointer',
                   }}
                 />
-                <Icon
-                  transition="all 300ms ease-in"
-                  as={FiChevronsUp}
-                  w="25px"
-                  h="25px"
-                  position="absolute"
-                  left="70px"
-                  top="5px"
-                  _hover={{
-                    color: theme.colors.accentSolidHover.value,
-                    cursor: 'pointer',
-                    transform: 'scale(1.2)',
-                  }}
-                />
+                {store.currentlyPlaying.cover && (
+                  <Icon
+                    transition="all 300ms ease-in"
+                    as={FiChevronsUp}
+                    w="25px"
+                    h="25px"
+                    position="absolute"
+                    left="70px"
+                    top="5px"
+                    _hover={{
+                      color: theme.colors.accentSolidHover.value,
+                      cursor: 'pointer',
+                      transform: 'scale(1.2)',
+                    }}
+                  />
+                )}
               </Box>
             </Tooltip>
           )}
           <Flex flexFlow="column" justify="center" margin="0 10px" height="100px">
-            <Box>
-              <Text color={theme.colors.accentSolid.value} fontSize="sm" fontWeight="bold">
-                Morphogenetic Sorrow
-              </Text>
+            {!store.queue.isEmpty() ? (
+              <Box>
+                <Text color={theme.colors.accentSolid.value} fontSize="sm" fontWeight="bold">
+                  {store.currentlyPlaying?.name}
+                </Text>
 
-              <Text {...SONG_DATA_PROPS}>
-                De:{' '}
-                <Link variant="gray" to="/artist/shinji-hosoe" underline={false}>
-                  Shinji Hosoe
-                </Link>
-              </Text>
+                <Text {...SONG_DATA_PROPS}>
+                  De:{' '}
+                  <Link
+                    variant="gray"
+                    to={`/artist/${
+                      store.currentlyPlaying?.artist?.artisticName
+                        ? store.currentlyPlaying?.artist.artisticName
+                        : store.currentlyPlaying?.artist?.band?.name
+                    }`}
+                    underline={false}
+                  >
+                    {getName(
+                      store.currentlyPlaying?.artist.artisticName
+                        ? store.currentlyPlaying.artist.artisticName
+                        : store.currentlyPlaying.artist?.band?.name
+                    )}
+                  </Link>
+                </Text>
 
-              <Text {...SONG_DATA_PROPS}>
-                Album: <Highlight>Zero Escape Official OST</Highlight>
-              </Text>
-            </Box>
+                <Text {...SONG_DATA_PROPS}>
+                  Album:{' '}
+                  {store.currentlyPlaying?.album?.name && (
+                    <Highlight>{store.currentlyPlaying.album.name}</Highlight>
+                  )}
+                </Text>
+              </Box>
+            ) : (
+              <Box>
+                <Text fontSize="sm">No hay nada en cola</Text>
+                <Text fontSize="sm" fontWeight="bold" color={theme.colors.accentSolid.value}>
+                  Por ahora {';)'}
+                </Text>
+              </Box>
+            )}
           </Flex>
 
           <Spacer />
@@ -151,14 +188,31 @@ export function Player() {
 
         <SimpleGrid width="700px">
           <Flex justify="center" marginBottom="5px">
-            <IconButton icon={MdShuffle} size="sm" />
-            <IconButton icon={MdSkipPrevious} size="md" marginLeft="5px" />
+            <IconButton
+              icon={MdShuffle}
+              isDisabled={controlsEnabled}
+              onClick={store.shuffle}
+              // onClick={store.clearQueue}
+              size="sm"
+            />
+            <IconButton
+              icon={MdSkipPrevious}
+              isDisabled={
+                controlsEnabled ||
+                (!store.queue.isEmpty() && !store.queue.getHeadNode().hasPrev()) ||
+                shouldRepeat
+              }
+              onClick={() => console.log('previous')}
+              size="md"
+              marginLeft="5px"
+            />
 
             <ChakraIconButton
               bg="whiteAlpha.900"
               borderRadius="50%"
               marginLeft="5px"
               marginRight="5px"
+              isDisabled={controlsEnabled}
               onClick={
                 ready
                   ? togglePlayPause
@@ -186,23 +240,56 @@ export function Player() {
               }
             />
 
-            <IconButton icon={MdSkipNext} size="md" marginRight="5px" />
-            <IconButton icon={MdRepeat} size="sm" />
+            <IconButton
+              icon={MdSkipNext}
+              isDisabled={
+                controlsEnabled ||
+                (!store.queue.isEmpty() && !store.queue.find(store.currentlyPlaying).next) ||
+                shouldRepeat
+              }
+              onClick={() => {
+                if (store.currentlyPlaying === store.queue.getHeadNode().getData()) {
+                  store.removeHeadNode();
+                  store.setCurrentlyPlaying(store.queue.getHeadNode().getData());
+                } else {
+                  const currentlyPlaying = store.queue.find(store.currentlyPlaying);
+                  store.setCurrentlyPlaying(currentlyPlaying.next.data);
+                  store.queue.removeNode(store.queue.find(store.currentlyPlaying).getData());
+                }
+              }}
+              size="md"
+              marginRight="5px"
+            />
+            <IconButton
+              icon={MdRepeat}
+              isDisabled={controlsEnabled}
+              backgroundColor={shouldRepeat && theme.colors.accentSolid.value}
+              transparentOnAction={false}
+              onClick={() => setRepeat(!shouldRepeat)}
+              size="sm"
+            />
           </Flex>
 
-          <ProgressBar />
+          <ProgressBar controlsEnabled={controlsEnabled} />
         </SimpleGrid>
 
         <Flex margin="0 auto" align="center" width="320px">
           <IconButton
             icon={AiOutlineDownload}
+            isDisabled={controlsEnabled}
+            onClick={handleDownload}
             size="md"
             marginLeft="15px"
-            onClick={handleDownload}
           />
-          <IconButton icon={AiOutlineHeart} size="md" marginRight="20px" />
+          <IconButton
+            icon={AiOutlineHeart}
+            isDisabled={controlsEnabled}
+            size="md"
+            marginRight="20px"
+          />
           <Slider
             colorScheme="pink"
+            isDisabled={controlsEnabled}
             onChangeEnd={(v) => volume(v / 100)}
             defaultValue={() => {
               volume(1);
@@ -232,7 +319,19 @@ const iconButtonSizes = {
   },
 };
 
-function IconButton({ icon, size, ...extraStyles }) {
+function IconButton({ icon, size, transparentOnAction = true, ...extraStyles }) {
+  const shouldGoTransparent = transparentOnAction
+    ? {
+        _hover: { bg: 'transparent' },
+        _active: {
+          bg: 'transparent',
+        },
+      }
+    : {
+        _hover: { bg: theme.colors.accentSolidHover.value },
+        _active: { bg: theme.colors.accentSolidActive.value },
+      };
+
   return (
     <ChakraIconButton
       variant="ghost"
@@ -246,22 +345,17 @@ function IconButton({ icon, size, ...extraStyles }) {
             color: 'whiteAlpha.700',
           }}
           _active={{
-            color: theme.colors.accentSolidActive.value,
+            color: transparentOnAction ? theme.colors.accentSolidActive.value : 'white',
           }}
         />
       }
-      _hover={{
-        bg: 'transparent',
-      }}
-      _active={{
-        bg: 'transparent',
-      }}
+      {...shouldGoTransparent}
       {...extraStyles}
     />
   );
 }
 
-function ProgressBar() {
+function ProgressBar({ controlsEnabled }) {
   const { percentComplete, duration, seek, position } = useAudioPosition({ highRefreshRate: true });
 
   const goToPosition = React.useCallback(
@@ -287,6 +381,7 @@ function ProgressBar() {
         name="progress"
         colorScheme="pink"
         width="450px"
+        isDisabled={controlsEnabled}
         onChange={(v) => goToPosition(v / 100)}
         value={Math.round(percentComplete)}
       >

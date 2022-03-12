@@ -79,12 +79,12 @@ export function View() {
               <Text>
                 {' - '}33 canciones {' - '}
               </Text>
-              <Text>7 hr 33 min {' - '}</Text>
-              <Text>42 likes</Text>
+              {/* <Text>7 hr 33 min {' - '}</Text>
+              <Text>42 likes</Text> */}
             </HStack>
 
-            <HStack marginTop="10px">
-              <IconButton
+            <HStack marginTop="30px">
+              {/* <IconButton
                 bg="whiteAlpha.900"
                 borderRadius="50%"
                 w="70px"
@@ -93,10 +93,10 @@ export function View() {
                 icon={<Icon as={MdPlayArrow} w="50px" h="50px" color="whiteAlpha.900" />}
                 _hover={{ backgroundColor: theme.colors.accentSolidHover.value }}
                 _active={{ backgroundColor: theme.colors.accentSolidActive.value }}
-              />
-              <Button {...BUTTON_PROPS} rightIcon={<Icon as={AiOutlineHeart} w="25px" h="25px" />}>
+              /> */}
+              {/* <Button {...BUTTON_PROPS} rightIcon={<Icon as={AiOutlineHeart} w="25px" h="25px" />}>
                 Like
-              </Button>
+              </Button> */}
               <Button
                 variant="outline"
                 borderColor={theme.colors.dangerSolid.value}

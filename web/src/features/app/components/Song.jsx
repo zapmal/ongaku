@@ -18,12 +18,14 @@ import {
 import React from 'react';
 import { IoMdHeartEmpty, IoMdRemoveCircleOutline } from 'react-icons/io';
 import { MdMoreVert, MdPlayArrow, MdPause } from 'react-icons/md';
+import { useAudioPlayer } from 'react-use-audio-player';
 
 import { MENU_ITEM_PROPS, FADE_OUT_ANIMATION } from '../constants';
 import { useHover } from '../hooks/useHover';
 
 import { Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
+import { useNotificationStore } from '@/stores/useNotificationStore';
 import { useQueueStore } from '@/stores/useQueueStore';
 import { getLink } from '@/utils/getLink';
 import { getName } from '@/utils/getName';
@@ -65,12 +67,29 @@ export function SongRow({
 
 export function SongInQueue({ song, isPlaying, itemNumber, name, authors, duration, isExplicit }) {
   const [isHovered, mouseEventsHandlers] = useHover();
+  const { playing, togglePlayPause, error, ready } = useAudioPlayer();
+  const addNotification = useNotificationStore((s) => s.addNotification);
 
   return (
     <Flex align="center" margin="10px 0" {...mouseEventsHandlers}>
-      {isPlaying || isHovered ? (
-        <Box animation={FADE_OUT_ANIMATION}>
-          <IconButton icon={isPlaying ? MdPause : MdPlayArrow} w="20px" h="20px" />
+      {isPlaying ? (
+        <Box
+          animation={FADE_OUT_ANIMATION}
+          onClick={
+            ready
+              ? togglePlayPause
+              : () => {
+                  if (error) {
+                    addNotification({
+                      title: 'Error',
+                      status: 'error',
+                      message: 'No pudimos reproducir la canción, intentalo de nuevo luego',
+                    });
+                  }
+                }
+          }
+        >
+          <IconButton icon={playing ? MdPause : MdPlayArrow} w="20px" h="20px" />
         </Box>
       ) : (
         <Text color="whiteAlpha.700" width="20px" margin="5px 6.1px" textAlign="center">
@@ -85,7 +104,7 @@ export function SongInQueue({ song, isPlaying, itemNumber, name, authors, durati
         authors={authors}
       />
 
-      <Options isHovered={isHovered} duration={duration} song={song} />
+      <Options isHovered={isHovered} duration={duration} song={song} onlyHeart={isPlaying} />
     </Flex>
   );
 }
@@ -224,6 +243,7 @@ export function OptionMenu({ song, isLarge = false, ...styles }) {
               {...MENU_ITEM_PROPS}
               icon={<Icon as={IoMdRemoveCircleOutline} w="15px" h="15px" marginTop="5px" />}
               onClick={() => remove(song)}
+              fontSize="sm"
             >
               Remover de la cola
             </MenuItem>

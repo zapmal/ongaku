@@ -27,6 +27,7 @@ import {
   AddSongToPlaylistDTO,
   LikePlaylistDTO,
   NewPlaylistDTO,
+  RemoveSongFromPlaylistDTO,
 } from './playlist.dto';
 import {
   addAlbumToPlaylistSchema,
@@ -147,6 +148,13 @@ export class PlaylistController {
   @Post('add-song')
   @UsePipes(new JoiValidationPipe(addSongToPlaylistSchema))
   async addSongToPlaylist(@Body() { playlistId, songId }: AddSongToPlaylistDTO) {
-    return await this.playlist.addAlbum(playlistId, songId);
+    return await this.playlist.addSong(playlistId, songId);
+  }
+
+  @Put('remove-song')
+  async removeSongFromPlaylist(
+    @Body() { playlistId, songId }: RemoveSongFromPlaylistDTO,
+  ) {
+    await this.playlist.removeSong(Number(playlistId), Number(songId));
   }
 }

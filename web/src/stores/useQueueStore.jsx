@@ -23,14 +23,22 @@ export const useQueueStore = create(
     },
     setCurrentlyPlaying: (song) => set({ currentlyPlaying: song }),
     remove: (song) => {
+      const currentlyPlaying = get().currentlyPlaying;
       get().queue.removeNode(song);
+
+      if (song === currentlyPlaying) {
+        if (get().queue.getHeadNode()) {
+          set({ currentlyPlaying: get().queue.getHeadNode().getData() });
+        } else {
+          set({ currentlyPlaying: { artist: {}, album: {} } });
+        }
+      }
 
       set({ queue: get().queue });
     },
     removeHeadNode: () => {
       get().queue.removeFirst();
 
-      // set({ queue: get().queue, currentlyPlaying: get().queue.getHeadNode().getData() });
       set({ queue: get().queue });
     },
     shuffle: () => {

@@ -14,12 +14,15 @@ import {
   Spacer,
   Badge,
   Box,
+  Spinner,
 } from '@chakra-ui/react';
 import React from 'react';
 import { IoMdHeartEmpty, IoMdRemoveCircleOutline } from 'react-icons/io';
 import { MdMoreVert, MdPlayArrow, MdPause } from 'react-icons/md';
+import { useQuery, useMutation } from 'react-query';
 import { useAudioPlayer } from 'react-use-audio-player';
 
+import { addSongToPlaylist, getLikedPlaylists } from '../api/playlist';
 import { MENU_ITEM_PROPS, FADE_OUT_ANIMATION } from '../constants';
 import { useHover } from '../hooks/useHover';
 
@@ -104,7 +107,7 @@ export function SongInQueue({ song, isPlaying, itemNumber, name, authors, durati
         authors={authors}
       />
 
-      <Options isHovered={isHovered} duration={duration} song={song} onlyHeart={isPlaying} />
+      <Options isHovered={isHovered} duration={duration} song={song} noHeart={true} />
     </Flex>
   );
 }
@@ -153,7 +156,14 @@ function SongInformation({ name, isPlaying, isExplicit, authors, albumName, year
   );
 }
 
-export function Options({ song, isHovered, duration, isLarge = false, onlyHeart = false }) {
+export function Options({
+  song,
+  isHovered,
+  duration,
+  isLarge = false,
+  onlyHeart = false,
+  noHeart = false,
+}) {
   return (
     <>
       {isHovered && (
@@ -161,13 +171,13 @@ export function Options({ song, isHovered, duration, isLarge = false, onlyHeart 
           {!onlyHeart && (
             <>
               <OptionMenu isLarge={isLarge} song={song} />
-              <Option icon={IoMdHeartEmpty} isLarge={isLarge} />
+              {!noHeart && <Option icon={IoMdHeartEmpty} isLarge={isLarge} />}
             </>
           )}
         </Box>
       )}
 
-      {onlyHeart && <Option icon={IoMdHeartEmpty} isLarge={isLarge} />}
+      {onlyHeart && !noHeart && <Option icon={IoMdHeartEmpty} isLarge={isLarge} />}
 
       <Text
         color={theme.colors.primaryText.value}
@@ -219,8 +229,19 @@ export function Option({ icon, label, isLarge = false, ...styles }) {
 }
 
 export function OptionMenu({ song, isLarge = false, ...styles }) {
+  const { data, isLoading, isError } = useQuery('library-playlists', getLikedPlaylists);
   const remove = useQueueStore((s) => s.remove);
   const dimensions = isLarge && { ...DIMENSIONS };
+
+  const mutation = useMutation(addSongToPlaylist);
+
+  const handleClick = async (playlistId) => {
+    try {
+      await mutation.mutateAsync({ playlistId, songId: song.id });
+    } catch (error) {
+      console.log('Error al intentar agregar las canciones', error);
+    }
+  };
 
   return (
     <Menu isLazy placement="top-end" gutter={2} {...styles}>
@@ -235,8 +256,7 @@ export function OptionMenu({ song, isLarge = false, ...styles }) {
           color: theme.colors.accentSolidActive.value,
         }}
       />
-      <MenuList bg={theme.colors.primaryBase.value}>
-        {/* Big one is currently playing, so no need to remove from queue */}
+      <MenuList bg={theme.colors.primaryBase.value} maxHeight="300px" overflowY="auto">
         {!isLarge && (
           <>
             <MenuItem
@@ -252,12 +272,30 @@ export function OptionMenu({ song, isLarge = false, ...styles }) {
         )}
 
         <MenuOptionGroup title="Agregar a Playlist">
-          <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
-            Big Boi tunes
-          </MenuItem>
-          <MenuItem {...MENU_ITEM_PROPS} fontSize="sm">
-            OnlyPain Official Soundtrack
-          </MenuItem>
+          {isLoading ? (
+            <Box marginTop="10px" textAlign="center">
+              <Spinner />
+            </Box>
+          ) : isError ? (
+            <MenuItem {...MENU_ITEM_PROPS} fontSize="sm" isDisabled={true}>
+              Ha ocurrido un error
+            </MenuItem>
+          ) : data.playlists.length === 0 ? (
+            <MenuItem {...MENU_ITEM_PROPS} fontSize="sm" isDisabled={true}>
+              No tienes playlists
+            </MenuItem>
+          ) : (
+            data.playlists.map((playlist, index) => (
+              <MenuItem
+                key={index}
+                {...MENU_ITEM_PROPS}
+                fontSize="sm"
+                onClick={() => handleClick(playlist.id)}
+              >
+                {playlist.name}
+              </MenuItem>
+            ))
+          )}
         </MenuOptionGroup>
       </MenuList>
     </Menu>

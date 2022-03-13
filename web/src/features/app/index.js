@@ -6,3 +6,4 @@ export * from './components/Status';
 export * from './components/cards/Playlist';
 export * from './components/Rows';
 export * from './components/Song';
+export * from './api/playlist';

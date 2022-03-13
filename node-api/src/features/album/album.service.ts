@@ -168,6 +168,14 @@ export class AlbumService {
         song: {
           include: {
             album: true,
+            interaction: {
+              where: {
+                albumId: undefined,
+                userPlaylistId: undefined,
+                artistId: undefined,
+                userId: entityId,
+              },
+            },
             artist: {
               include: {
                 band: true,

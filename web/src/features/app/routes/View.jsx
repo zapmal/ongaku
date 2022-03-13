@@ -1,7 +1,6 @@
 import {
   Box,
   Image,
-  IconButton,
   Button,
   Avatar,
   SimpleGrid,
@@ -16,22 +15,29 @@ import {
   Th,
   Td,
   Tbody,
+  IconButton,
 } from '@chakra-ui/react';
 import React from 'react';
-import { AiOutlineHeart } from 'react-icons/ai';
-import { MdShare, MdPause, MdDelete } from 'react-icons/md';
+import { MdShare, MdPause, MdDelete, MdRemoveCircle, MdPlayArrow } from 'react-icons/md';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useAudioPlayer } from 'react-use-audio-player';
 
 import { deleteAlbum, getAlbum } from '../api/album';
-import { deletePlaylist, getPlaylist } from '../api/playlist';
+import {
+  deletePlaylist,
+  getLikedSongs,
+  getPlaylist,
+  likeSong,
+  removeFromPlaylist,
+} from '../api/playlist';
 
 import { Footer } from '@/components/Core';
 import { Banner, Link } from '@/components/Elements';
 import { Spinner } from '@/components/Utils';
-import { OptionMenu } from '@/features/app';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { useQueueStore } from '@/stores/useQueueStore';
 import { copyURL } from '@/utils/copyURL';
 import { getImage } from '@/utils/getImage';
 import { getName } from '@/utils/getName';
@@ -51,20 +57,27 @@ const BUTTON_PROPS = {
 
 const TABLE_ROW_PROPS = {
   color: 'whiteAlpha.700',
-  fontSize: 'sm',
 };
 
 export function View() {
   const entity = useAuthStore((s) => s.entity);
+  const currentlyPlaying = useQueueStore((s) => s.currentlyPlaying);
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const type = searchParams.get('type');
   const id = searchParams.get('id');
+  const isLiked = searchParams.get('liked');
 
   const { data, isLoading } = useQuery(
     `view-${type}-${id}`,
-    () => (type === 'playlist' ? getPlaylist(id) : getAlbum(id)),
+    () => {
+      if (isLiked === 'true' && !id) {
+        return getLikedSongs();
+      } else {
+        return type === 'playlist' ? getPlaylist(id) : getAlbum(id);
+      }
+    },
     {
       onError: () => navigate('/not-found'),
     }
@@ -85,6 +98,24 @@ export function View() {
     }
   };
 
+  const removalMutation = useMutation(isLiked === 'true' ? likeSong : removeFromPlaylist, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(`view-${type}-${id}`);
+    },
+  });
+
+  const handleRemove = async (songId) => {
+    try {
+      const data = isLiked === 'true' ? { songId } : { playlistId: id, songId };
+
+      await removalMutation.mutateAsync(data);
+    } catch (error) {
+      console.log('Error al intentar remover', error);
+    }
+  };
+
+  const { playing, togglePlayPause } = useAudioPlayer();
+
   if (isLoading) {
     return <Spinner paddingBottom="100%" />;
   }
@@ -93,7 +124,7 @@ export function View() {
     <Box>
       <Banner
         image={getImage(
-          type === 'playlist' ? 'playlist' : 'view',
+          type === 'playlist' && id ? 'playlist' : 'view',
           type === 'playlist' ? data.background : null,
           'default/default.svg'
         )}
@@ -114,7 +145,7 @@ export function View() {
                 <Avatar
                   src={getImage(
                     type === 'playlist' ? 'user' : 'artist',
-                    type === 'playlist' ? data?.user.avatar : data?.artist.avatar,
+                    type === 'playlist' ? data?.user?.avatar : data?.artist.avatar,
                     'default/default_avatar.svg'
                   )}
                 />
@@ -143,7 +174,7 @@ export function View() {
 
             <HStack color="whiteAlpha.800" marginTop="5px">
               <Text fontWeight="bold">
-                {type.toUpperCase()}{' '}
+                {id && type.toUpperCase()}{' '}
                 {type === 'album' && (
                   <>
                     {' - '}
@@ -158,30 +189,33 @@ export function View() {
             </HStack>
 
             <HStack marginTop="30px">
-              <Button
-                onClick={() => copyURL(`view?id=${id}&type=${type}`)}
-                {...BUTTON_PROPS}
-                rightIcon={<Icon as={MdShare} w="20px" h="20px" />}
-              >
-                Compartir
-              </Button>
-              {(entity.id === data?.artist?.id ||
-                entity.id === data?.user?.id ||
-                entity.role === 'ADMIN') && (
+              {id && (
                 <Button
-                  variant="outline"
-                  onClick={handleOnClick}
-                  borderColor={theme.colors.dangerSolid.value}
-                  color={theme.colors.dangerSolid.value}
-                  _hover={{
-                    backgroundColor: theme.colors.dangerSolidHover.value,
-                    color: '#ffffff',
-                  }}
-                  rightIcon={<Icon as={MdDelete} w="20px" h="20px" />}
+                  onClick={() => copyURL(`view?id=${id}&type=${type}`)}
+                  {...BUTTON_PROPS}
+                  rightIcon={<Icon as={MdShare} w="20px" h="20px" />}
                 >
-                  Borrar
+                  Compartir
                 </Button>
               )}
+              {id &&
+                (entity.id === data?.artist?.id ||
+                  entity.id === data?.user?.id ||
+                  entity.role === 'ADMIN') && (
+                  <Button
+                    variant="outline"
+                    onClick={handleOnClick}
+                    borderColor={theme.colors.dangerSolid.value}
+                    color={theme.colors.dangerSolid.value}
+                    _hover={{
+                      backgroundColor: theme.colors.dangerSolidHover.value,
+                      color: '#ffffff',
+                    }}
+                    rightIcon={<Icon as={MdDelete} w="20px" h="20px" />}
+                  >
+                    Borrar
+                  </Button>
+                )}
             </HStack>
           </SimpleGrid>
         </Flex>
@@ -194,7 +228,8 @@ export function View() {
             <Th>Nombre</Th>
             <Th>{type === 'playlist' ? 'Autor(es)' : 'Colaboradores'}</Th>
             {type === 'playlist' && <Th>Album</Th>}
-            <Th>Opciones</Th>
+            <Th>¿Es Explicito?</Th>
+            {type !== 'album' && <Th>Opciones</Th>}
           </Tr>
         </Thead>
         <Tbody>
@@ -205,10 +240,10 @@ export function View() {
                 return (
                   <Tr key={index} {...TABLE_ROW_PROPS}>
                     <Td>
-                      {/* This should be "isPlaying?" */}
-                      {index === 0 ? (
+                      {currentlyPlaying.id === song.id ? (
                         <Icon
-                          as={MdPause}
+                          as={playing ? MdPause : MdPlayArrow}
+                          onClick={togglePlayPause}
                           w="25px"
                           h="25px"
                           color="whiteAlpha.900"
@@ -247,14 +282,16 @@ export function View() {
                         {song.album.name}
                       </Link>
                     </Td>
+                    <Td>{song.isExplicit ? 'Sí' : 'No'}</Td>
                     <Td color="white">
                       <IconButton
-                        icon={<Icon as={AiOutlineHeart} w="25px" h="25px" />}
+                        icon={<Icon as={MdRemoveCircle} w="25px" h="25px" />}
+                        onClick={() => handleRemove(song.id)}
                         variant="ghost"
+                        color={theme.colors.dangerSolid.value}
                         _hover={{ backgroundColor: 'transparent' }}
                         _active={{ color: theme.colors.accentSolid.value }}
                       />
-                      <OptionMenu isLarge={true} />
                     </Td>
                   </Tr>
                 );
@@ -287,15 +324,7 @@ export function View() {
                           })
                         : 'Ninguno'}
                     </Td>
-                    <Td>
-                      <IconButton
-                        icon={<Icon as={AiOutlineHeart} w="25px" h="25px" />}
-                        variant="ghost"
-                        _hover={{ backgroundColor: 'transparent' }}
-                        _active={{ color: theme.colors.accentSolid.value }}
-                      />
-                      <OptionMenu isLarge={true} />
-                    </Td>
+                    <Td>{song.isExplicit ? 'Sí' : 'No'}</Td>
                   </Tr>
                 );
               })

@@ -16,17 +16,20 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
+  UsePipes,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 import { Role } from '@/internal/constants';
 import { RoleGuard } from '@/internal/guards';
+import { JoiValidationPipe } from '@/internal/pipes';
 
-import { UpdateSongDTO, NewSongDTO } from './song.dto';
+import { UpdateSongDTO, NewSongDTO, LikeSongDTO } from './song.dto';
 import { SongService } from './song.service';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { AlbumService } from '../album/album.service';
 import { ArtistService } from '../artist/artist.service';
-import { ConfigService } from '@nestjs/config';
+import { likeSongSchema } from './song.schemas';
 
 @Controller('song')
 @UseGuards(RoleGuard([Role.ADMIN, Role.ARTIST]))
@@ -37,6 +40,37 @@ export class SongController {
     private artist: ArtistService,
     private config: ConfigService,
   ) {}
+
+  @Put('like')
+  @UsePipes(new JoiValidationPipe(likeSongSchema))
+  async like(@Req() request: RequestWithEntity, @Body() { songId }: LikeSongDTO) {
+    const likedSong = await this.song.like(songId, Number(request.entity.id));
+
+    return {
+      message: likedSong
+        ? 'Canción agregada a tus favoritos exitosamente'
+        : 'La canción ha sido removida de tus favoritos',
+    };
+  }
+
+  @Get('liked/:id')
+  async isLiked(@Req() request: RequestWithEntity, @Param('id') songId) {
+    return await this.song.isLiked(Number(songId), Number(request.entity.id));
+  }
+
+  @Get('liked')
+  async getLiked(@Req() request: RequestWithEntity) {
+    const [user, likedSongs] = await this.song.getLiked(Number(request.entity.id));
+
+    return {
+      user,
+      name: 'Canciones Favoritas',
+      background: null,
+      songsInPlaylist: likedSongs.map(({ value, song }) => ({
+        song: { ...song, isLiked: value },
+      })),
+    };
+  }
 
   @Get('all')
   async getAll(@Body() { artistId }: { artistId: number }) {

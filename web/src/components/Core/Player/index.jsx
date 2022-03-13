@@ -19,7 +19,7 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import { saveAs } from 'file-saver';
 import React, { useEffect, useState } from 'react';
-import { AiOutlineHeart, AiOutlineDownload } from 'react-icons/ai';
+import { AiOutlineHeart, AiFillHeart, AiOutlineDownload } from 'react-icons/ai';
 import { FiChevronsUp } from 'react-icons/fi';
 import {
   MdPlayArrow,
@@ -30,11 +30,13 @@ import {
   MdSkipNext,
   MdShuffle,
 } from 'react-icons/md';
+import { useMutation } from 'react-query';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { useAudioPlayer, useAudioPosition } from 'react-use-audio-player';
 
 import { Link } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
+import { likeSong } from '@/features/app';
 import { theme } from '@/stitches.config.js';
 import { useNotificationStore } from '@/stores/useNotificationStore';
 import { useQueueStore } from '@/stores/useQueueStore';
@@ -59,6 +61,11 @@ export function Player() {
   const store = useQueueStore();
 
   const [controlsEnabled, setControlsEnabled] = useState(store.queue.isEmpty());
+  const [isLiked, setLiked] = useState(
+    store.currentlyPlaying.interaction.length !== 0
+      ? store.currentlyPlaying.interaction[0]?.value
+      : false
+  );
   const [shouldRepeat, setRepeat] = useState(false);
 
   const { pathname } = useLocation();
@@ -90,6 +97,17 @@ export function Player() {
 
   const handleDownload = () => {
     saveAs(`${PATH}/static/song/${store.currentlyPlaying.path}`);
+  };
+
+  const likeMutation = useMutation(likeSong);
+
+  const handleLike = async (songId) => {
+    try {
+      await likeMutation.mutateAsync({ songId });
+      setLiked(!isLiked);
+    } catch (error) {
+      console.log('Error al intentar remover', error);
+    }
   };
 
   useEffect(() => {
@@ -204,6 +222,9 @@ export function Player() {
               onClick={() => {
                 const prev = store.queue.find(store.currentlyPlaying).prev;
                 store.setCurrentlyPlaying(prev.data);
+                setLiked(
+                  prev.data.interaction.length !== 0 ? prev.data.interaction[0].value : false
+                );
               }}
               size="md"
               marginLeft="5px"
@@ -220,10 +241,14 @@ export function Player() {
                   ? togglePlayPause
                   : () => {
                       if (error) {
+                        setTimeout(() => {
+                          store.remove(store.currentlyPlaying);
+                        }, 3000);
                         addNotification({
                           title: 'Error',
                           status: 'error',
-                          message: 'No pudimos reproducir la canción, intentalo de nuevo luego',
+                          message:
+                            'No pudimos reproducir la canción, se removerá de la cola. Intentalo de nuevo luego',
                         });
                       }
                     }
@@ -253,10 +278,21 @@ export function Player() {
                 if (store.currentlyPlaying === store.queue.getHeadNode().getData()) {
                   store.removeHeadNode();
                   store.setCurrentlyPlaying(store.queue.getHeadNode().getData());
+                  setLiked(
+                    store.queue.getHeadNode().getData().interaction.length !== 0
+                      ? store.queue.getHeadNode().getData().interaction[0].value
+                      : false
+                  );
                 } else {
                   const currentlyPlaying = store.queue.find(store.currentlyPlaying);
                   store.setCurrentlyPlaying(currentlyPlaying.next.data);
                   store.queue.removeNode(store.queue.find(store.currentlyPlaying).getData());
+
+                  setLiked(
+                    currentlyPlaying.next.data.interaction.length !== 0
+                      ? currentlyPlaying.next.data.inteaction.value
+                      : false
+                  );
                 }
               }}
               size="md"
@@ -284,8 +320,12 @@ export function Player() {
             marginLeft="15px"
           />
           <IconButton
-            icon={AiOutlineHeart}
-            isDisabled={controlsEnabled}
+            icon={isLiked ? AiFillHeart : AiOutlineHeart}
+            isLiked={isLiked}
+            onClick={() => {
+              handleLike(store.currentlyPlaying.id);
+            }}
+            isDisabled={controlsEnabled || likeMutation.isLoading}
             size="md"
             marginRight="20px"
           />
@@ -321,7 +361,7 @@ const iconButtonSizes = {
   },
 };
 
-function IconButton({ icon, size, transparentOnAction = true, ...extraStyles }) {
+function IconButton({ icon, size, transparentOnAction = true, isLiked, ...extraStyles }) {
   const shouldGoTransparent = transparentOnAction
     ? {
         _hover: { bg: 'transparent' },
@@ -342,9 +382,9 @@ function IconButton({ icon, size, transparentOnAction = true, ...extraStyles }) 
           as={icon}
           w={iconButtonSizes[size].w}
           h={iconButtonSizes[size].h}
-          color="whiteAlpha.800"
+          color={isLiked ? theme.colors.accentSolid.value : 'whiteAlpha.800'}
           _hover={{
-            color: 'whiteAlpha.700',
+            color: isLiked ? theme.colors.accentSolidHover.value : 'whiteAlpha.700',
           }}
           _active={{
             color: transparentOnAction ? theme.colors.accentSolidActive.value : 'white',

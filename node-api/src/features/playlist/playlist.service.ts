@@ -241,6 +241,26 @@ export class PlaylistService {
     return songInPlaylist;
   }
 
+  async removeSong(playlistId: number, songId: number) {
+    const isInPlaylist = await this.prisma.songsInPlaylist.findFirst({
+      where: {
+        songId,
+        userPlaylistId: playlistId,
+      },
+    });
+
+    if (!isInPlaylist) {
+      throw new BadRequest('La canción que intentas borrar no está en la playlist');
+    }
+
+    return await this.prisma.songsInPlaylist.deleteMany({
+      where: {
+        songId,
+        userPlaylistId: playlistId,
+      },
+    });
+  }
+
   async addAlbum(playlistId: number, albumId: number) {
     const playlistExists = await this.prisma.userPlaylist.findUnique({
       where: {

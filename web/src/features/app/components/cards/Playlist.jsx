@@ -62,7 +62,12 @@ export function PlaylistCard({
 
 export function LikedSongsPlaylist() {
   return (
-    <Card cover="/assets/images/static-admin-avatar.jpeg" type="playlist" notLikeable={true}>
+    <Card
+      cover="/assets/images/static-admin-avatar.jpeg"
+      type="playlist"
+      notLikeable={true}
+      isLikedSongsPlaylist={true}
+    >
       <Box align="center">
         <Text fontWeight="bold">Canciones Favoritas</Text>
         <Text color="whiteAlpha.700" fontSize="sm">

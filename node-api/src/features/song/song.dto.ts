@@ -14,3 +14,7 @@ export class NewSongDTO {
   albumId?: number;
   artistId: number;
 }
+
+export class LikeSongDTO {
+  songId: number;
+}

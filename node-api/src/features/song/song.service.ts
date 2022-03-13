@@ -136,6 +136,103 @@ export class SongService {
 
     return [file, error];
   }
+
+  async like(songId: number, entityId: number) {
+    try {
+      const foundSong = await this.prisma.song.findUnique({
+        where: {
+          id: songId,
+        },
+        include: {
+          interaction: {
+            where: {
+              userId: entityId,
+              songId: songId,
+            },
+            select: {
+              id: true,
+              value: true,
+            },
+          },
+        },
+      });
+
+      if (!foundSong?.id) {
+        throw new NotFound('La canción a la que intentas darle like no existe');
+      }
+
+      const isLiked = Boolean(foundSong.interaction[0]?.value);
+
+      const likeResult = await this.prisma.interaction.upsert({
+        where: { id: foundSong.interaction[0]?.id || 0 },
+        update: {
+          value: !isLiked,
+        },
+        create: {
+          value: !isLiked,
+          userId: entityId,
+          songId: songId,
+        },
+      });
+
+      return likeResult.value;
+    } catch (error) {
+      throw new InternalServerError(
+        'Ocurrió un error inesperado mientras registrabamos tu like, intentalo más tarde',
+      );
+    }
+  }
+
+  async isLiked(songId: number, entityId: number) {
+    if (!songId) throw new BadRequest('La solicitud está errada, falta información');
+
+    const song = await this.prisma.song.findUnique({
+      where: { id: songId },
+      include: {
+        interaction: {
+          where: { userId: entityId, value: true },
+          select: {
+            value: true,
+          },
+        },
+      },
+    });
+
+    if (!song) throw new NotFound('La canción no existe');
+
+    return {
+      song: song,
+      isLiked: song.interaction.length === 0 ? false : song.interaction[0].value,
+    };
+  }
+
+  async getLiked(entityId: number): Promise<any> {
+    const likedSongs = await this.prisma.interaction.findMany({
+      where: {
+        value: true,
+        userId: entityId,
+        artistId: null,
+        albumId: null,
+        userPlaylistId: null,
+      },
+      include: {
+        song: {
+          include: {
+            album: true,
+            artist: {
+              include: { band: true },
+            },
+          },
+        },
+      },
+    });
+
+    const user = await this.prisma.user.findUnique({ where: { id: entityId } });
+
+    if (!user) throw new NotFound('El usuario no existe');
+
+    return [user, likedSongs];
+  }
 }
 
 /// for authors query maybe(?)

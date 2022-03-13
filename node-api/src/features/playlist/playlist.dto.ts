@@ -19,3 +19,8 @@ export class AddSongToPlaylistDTO {
   playlistId: number;
   songId: number;
 }
+
+export class RemoveSongFromPlaylistDTO {
+  playlistId: number;
+  songId: number;
+}

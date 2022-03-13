@@ -24,10 +24,22 @@ export const addSongToPlaylist = (data) => {
   return apiClient.post('playlist/add-song', data);
 };
 
+export const removeFromPlaylist = (data) => {
+  return apiClient.put('playlist/remove-song', data);
+};
+
 export const getPlaylist = (id) => {
   return apiClient.get(`playlist/${id}`);
 };
 
 export const deletePlaylist = (id) => {
   return apiClient.delete(`playlist/${id}`);
+};
+
+export const getLikedSongs = () => {
+  return apiClient.get('song/liked');
+};
+
+export const likeSong = (data) => {
+  return apiClient.put('song/like', data);
 };

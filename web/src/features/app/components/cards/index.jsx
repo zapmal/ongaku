@@ -40,6 +40,7 @@ export function Card({
   notLikeable = false,
   isLiked,
   children,
+  isLikedSongsPlaylist = false,
   ...extraStyles
 }) {
   const [isHovered, mouseEventsHandlers] = useHover();
@@ -50,13 +51,15 @@ export function Card({
   const [_, link] = getLink(to, to);
 
   useEffect(() => {
-    if (isHovered && !notLikeable && id) {
+    // if (isHovered && !notLikeable && id) {
+    if (isHovered && id) {
       setLoading(true);
       if (type === 'playlist') {
         isPlaylistLiked({ playlistId: id })
           .then((response) => {
             console.log('Querying isPlaylistLiked');
             setLiked(response.isLiked);
+            console.log(response);
             // setSongs(response.songs),
           })
           .catch((error) => {
@@ -109,6 +112,7 @@ export function Card({
                   to={link}
                   notLikeable={notLikeable}
                   mouseEventsHandlers={mouseEventsHandlers}
+                  isLikedSongsPlaylist={isLikedSongsPlaylist}
                   songs={songs}
                 />
               ))
@@ -191,6 +195,7 @@ function HoverButton({
   setLiked,
   notLikeable,
   isLoading,
+  isLikedSongsPlaylist,
   mouseEventsHandlers,
 }) {
   const navigate = useNavigate();
@@ -198,14 +203,21 @@ function HoverButton({
 
   const queryClient = useQueryClient();
   const mutation = useMutation(type === 'playlist' ? likePlaylist : likeAlbum, {
-    onSuccess: () => queryClient.invalidateQueries('library-albums'),
+    onSuccess: () => {
+      queryClient.invalidateQueries('library-albums');
+      queryClient.invalidateQueries('library-playlists');
+    },
   });
 
   const add = useQueueStore((s) => s.add);
 
   const handleOnLikeClick = async () => {
     if (notLikeable) {
-      navigate(`/view?id=${id}&type=${type === 'playlist' ? 'playlist' : 'album'}`);
+      if (isLikedSongsPlaylist) {
+        navigate('/view?liked=true&type=playlist');
+      } else {
+        navigate(`/view?id=${id}&type=${type === 'playlist' ? 'playlist' : 'album'}`);
+      }
     } else {
       try {
         const data = type === 'playlist' ? { playlistId: id } : { albumId: id };

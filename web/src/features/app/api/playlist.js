@@ -27,3 +27,7 @@ export const addSongToPlaylist = (data) => {
 export const getPlaylist = (id) => {
   return apiClient.get(`playlist/${id}`);
 };
+
+export const deletePlaylist = (id) => {
+  return apiClient.delete(`playlist/${id}`);
+};

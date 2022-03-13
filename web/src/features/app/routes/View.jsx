@@ -20,11 +20,11 @@ import {
 import React from 'react';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { MdShare, MdPause, MdDelete } from 'react-icons/md';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { getAlbum } from '../api/album';
-import { getPlaylist } from '../api/playlist';
+import { deleteAlbum, getAlbum } from '../api/album';
+import { deletePlaylist, getPlaylist } from '../api/playlist';
 
 import { Footer } from '@/components/Core';
 import { Banner, Link } from '@/components/Elements';
@@ -34,7 +34,6 @@ import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { copyURL } from '@/utils/copyURL';
 import { getImage } from '@/utils/getImage';
-import { getLink } from '@/utils/getLink';
 import { getName } from '@/utils/getName';
 
 const BUTTON_PROPS = {
@@ -67,16 +66,24 @@ export function View() {
     `view-${type}-${id}`,
     () => (type === 'playlist' ? getPlaylist(id) : getAlbum(id)),
     {
-      // initialData: {
-      //   user: { userMetadata: {} },
-      //   playlists: { playlists: [], likedPlaylists: [] },
-      //   followed: [],
-      // },
       onError: () => navigate('/not-found'),
     }
   );
+  const queryClient = useQueryClient();
+  const mutation = useMutation(type === 'playlist' ? deletePlaylist : deleteAlbum, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(`view-${type}-${id}`);
+      navigate('/library');
+    },
+  });
 
-  console.log(data);
+  const handleOnClick = async () => {
+    try {
+      await mutation.mutateAsync(id);
+    } catch (error) {
+      console.log('Error al intentar eliminar la playlist', error);
+    }
+  };
 
   if (isLoading) {
     return <Spinner paddingBottom="100%" />;
@@ -163,6 +170,7 @@ export function View() {
                 entity.role === 'ADMIN') && (
                 <Button
                   variant="outline"
+                  onClick={handleOnClick}
                   borderColor={theme.colors.dangerSolid.value}
                   color={theme.colors.dangerSolid.value}
                   _hover={{
@@ -191,12 +199,9 @@ export function View() {
         </Thead>
         <Tbody>
           {data.songsInPlaylist?.length === 0 && data.song?.length === 0
-            ? 'NUTing'
+            ? null
             : data.songsInPlaylist?.length
             ? data.songsInPlaylist.map(({ song }, index) => {
-                // eslint-disable-next-line no-unused-vars
-                const [_, albumLink] = getLink(song.album.name, song.album.name);
-
                 return (
                   <Tr key={index} {...TABLE_ROW_PROPS}>
                     <Td>

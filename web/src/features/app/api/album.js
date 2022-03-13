@@ -15,3 +15,7 @@ export const likeAlbum = (data) => {
 export const getAlbum = (id) => {
   return apiClient.get(`album/${id}`);
 };
+
+export const deleteAlbum = (id) => {
+  return apiClient.delete(`album/${id}`);
+};

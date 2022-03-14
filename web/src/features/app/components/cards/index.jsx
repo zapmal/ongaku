@@ -24,6 +24,7 @@ import {
   isPlaylistLiked,
   getLikedPlaylists,
   addAlbumToPlaylist,
+  getLikedSongs,
 } from '../../api/playlist';
 import { FADE_OUT_ANIMATION, MENU_ITEM_PROPS } from '../../constants';
 import { useHover } from '../../hooks/useHover';
@@ -51,7 +52,19 @@ export function Card({
   const [_, link] = getLink(to, to);
 
   useEffect(() => {
-    // if (isHovered && !notLikeable && id) {
+    if (isLikedSongsPlaylist) {
+      setLoading(true);
+      getLikedSongs()
+        .then((response) => {
+          const likedSongs = response.songsInPlaylist.map(({ song }) => ({ ...song }));
+
+          setSongs(likedSongs);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
     if (isHovered && id) {
       setLoading(true);
       if (type === 'playlist') {
@@ -59,8 +72,7 @@ export function Card({
           .then((response) => {
             console.log('Querying isPlaylistLiked');
             setLiked(response.isLiked);
-            console.log(response);
-            // setSongs(response.songs),
+            setSongs(response.songs);
           })
           .catch((error) => {
             console.log(error);
@@ -231,7 +243,9 @@ function HoverButton({
     }
   };
 
-  const handleOnPlayClick = () => add(songs);
+  const handleOnPlayClick = () => {
+    if (songs.length !== 0) add(songs);
+  };
 
   return (
     <IconButton

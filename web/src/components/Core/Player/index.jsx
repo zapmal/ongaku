@@ -62,7 +62,7 @@ export function Player() {
 
   const [controlsEnabled, setControlsEnabled] = useState(store.queue.isEmpty());
   const [isLiked, setLiked] = useState(
-    store.currentlyPlaying.interaction.length !== 0
+    store.currentlyPlaying.interaction?.length !== 0
       ? store.currentlyPlaying.interaction[0]?.value
       : false
   );
@@ -88,7 +88,7 @@ export function Player() {
       ) {
         store.setCurrentlyPlaying(store.queue.getHeadNode().getData());
       } else {
-        store.setCurrentlyPlaying({ artist: {}, album: {} });
+        store.setCurrentlyPlaying({ artist: {}, album: {}, interaction: [] });
         store.removeHeadNode();
       }
     }
@@ -223,7 +223,7 @@ export function Player() {
                 const prev = store.queue.find(store.currentlyPlaying).prev;
                 store.setCurrentlyPlaying(prev.data);
                 setLiked(
-                  prev.data.interaction.length !== 0 ? prev.data.interaction[0].value : false
+                  prev.data.interaction?.length !== 0 ? prev.data.interaction[0].value : false
                 );
               }}
               size="md"
@@ -278,8 +278,9 @@ export function Player() {
                 if (store.currentlyPlaying === store.queue.getHeadNode().getData()) {
                   store.removeHeadNode();
                   store.setCurrentlyPlaying(store.queue.getHeadNode().getData());
+
                   setLiked(
-                    store.queue.getHeadNode().getData().interaction.length !== 0
+                    store.queue.getHeadNode().getData().interaction?.length !== 0
                       ? store.queue.getHeadNode().getData().interaction[0].value
                       : false
                   );
@@ -289,7 +290,7 @@ export function Player() {
                   store.queue.removeNode(store.queue.find(store.currentlyPlaying).getData());
 
                   setLiked(
-                    currentlyPlaying.next.data.interaction.length !== 0
+                    currentlyPlaying.next.data.interaction?.length !== 0
                       ? currentlyPlaying.next.data.inteaction.value
                       : false
                   );

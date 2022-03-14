@@ -5,7 +5,7 @@ import { subscribeWithSelector } from 'zustand/middleware';
 export const useQueueStore = create(
   subscribeWithSelector((set, get) => ({
     queue: new LinkedList(),
-    currentlyPlaying: { artist: {}, album: {} },
+    currentlyPlaying: { artist: {}, album: {}, interaction: [] },
     add: (songs) => {
       const newQueue = get().queue;
 
@@ -30,7 +30,7 @@ export const useQueueStore = create(
         if (get().queue.getHeadNode()) {
           set({ currentlyPlaying: get().queue.getHeadNode().getData() });
         } else {
-          set({ currentlyPlaying: { artist: {}, album: {} } });
+          set({ currentlyPlaying: { artist: {}, album: {}, interaction: [] } });
         }
       }
 

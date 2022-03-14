@@ -219,6 +219,15 @@ export class SongService {
         song: {
           include: {
             album: true,
+            interaction: {
+              where: {
+                albumId: undefined,
+                userPlaylistId: undefined,
+                artistId: undefined,
+                userId: entityId,
+              },
+              select: { value: true },
+            },
             artist: {
               include: { band: true },
             },

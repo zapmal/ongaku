@@ -150,12 +150,37 @@ export class PlaylistService {
             value: true,
           },
         },
+        songsInPlaylist: {
+          include: {
+            song: {
+              include: {
+                album: true,
+                interaction: {
+                  where: {
+                    albumId: undefined,
+                    userPlaylistId: undefined,
+                    artistId: undefined,
+                    userId: entityId,
+                  },
+                },
+                artist: {
+                  include: {
+                    band: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
 
     if (!playlist) throw new NotFound('La playlist no existe');
 
-    return playlist.interaction.length === 0 ? false : playlist.interaction[0].value;
+    return {
+      isLiked: playlist.interaction.length === 0 ? false : playlist.interaction[0].value,
+      songs: playlist.songsInPlaylist.map(({ song }) => ({ ...song })),
+    };
   }
 
   async getById(id: number) {

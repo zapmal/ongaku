@@ -167,7 +167,12 @@ export class AlbumService {
         },
         song: {
           include: {
-            album: true,
+            album: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
             interaction: {
               where: {
                 albumId: undefined,
@@ -175,10 +180,21 @@ export class AlbumService {
                 artistId: undefined,
                 userId: entityId,
               },
+              select: {
+                id: true,
+                value: true,
+              },
             },
             artist: {
-              include: {
-                band: true,
+              select: {
+                id: true,
+                artisticName: true,
+                band: {
+                  select: {
+                    id: true,
+                    name: true,
+                  },
+                },
               },
             },
           },

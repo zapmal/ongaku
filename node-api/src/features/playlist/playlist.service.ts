@@ -154,7 +154,24 @@ export class PlaylistService {
           include: {
             song: {
               include: {
-                album: true,
+                artist: {
+                  select: {
+                    id: true,
+                    artisticName: true,
+                    band: {
+                      select: {
+                        id: true,
+                        name: true,
+                      },
+                    },
+                  },
+                },
+                album: {
+                  select: {
+                    id: true,
+                    name: true,
+                  },
+                },
                 interaction: {
                   where: {
                     albumId: undefined,
@@ -162,10 +179,8 @@ export class PlaylistService {
                     artistId: undefined,
                     userId: entityId,
                   },
-                },
-                artist: {
-                  include: {
-                    band: true,
+                  select: {
+                    value: true,
                   },
                 },
               },
@@ -225,6 +240,7 @@ export class PlaylistService {
       throw new NotFound('La playlist no existe');
     }
 
+    // change this lol
     if (playlist?.userId === 2 || role === 'ADMIN') {
       await this.prisma.userPlaylist.delete({
         where: {

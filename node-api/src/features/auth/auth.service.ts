@@ -141,7 +141,9 @@ export class AuthService {
 
     const verifiedEmail = credentials.isArtist
       ? entity.verifiedEmail
-      : entity['userMetadata'].verifiedEmail;
+      : entity['userMetadata']
+      ? entity['userMetadata'].verifiedEmail
+      : false;
 
     return {
       entity: {

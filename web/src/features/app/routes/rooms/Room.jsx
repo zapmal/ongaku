@@ -11,8 +11,9 @@ import {
   IconButton,
   Icon,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { MdExitToApp } from 'react-icons/md';
+import { useLocation } from 'react-router-dom';
 
 import { SongInQueue } from '../../components';
 import { FADE_OUT_ANIMATION, SONGS_IN_QUEUE, USERS_IN_ROOM } from '../../constants';
@@ -30,6 +31,7 @@ import { getLink } from '@/utils/getLink';
  */
 export function Room() {
   const addNotification = useNotificationStore((s) => s.addNotification);
+  const location = useLocation();
 
   return (
     <Box padding="20px 60px">

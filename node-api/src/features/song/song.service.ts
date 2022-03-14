@@ -195,6 +195,24 @@ export class SongService {
             value: true,
           },
         },
+        artist: {
+          select: {
+            id: true,
+            artisticName: true,
+            band: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+        album: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
 

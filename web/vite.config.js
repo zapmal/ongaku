@@ -19,7 +19,6 @@ export default defineConfig(({ mode }) => {
           target: process.env.VITE_NODE_API_URL,
           changeOrigin: true,
           secure: false,
-          // ws: true,
         },
       },
     },

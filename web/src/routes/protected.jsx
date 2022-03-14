@@ -1,5 +1,5 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 
 import { Layout } from '@/components/Core';
 import { useAuthStore } from '@/stores/useAuthStore';
@@ -54,14 +54,6 @@ export const protectedRoutes = [
             element: <Explore />,
           },
           {
-            path: '/rooms',
-            element: <Rooms />,
-          },
-          {
-            path: '/room/:id',
-            element: <Room />,
-          },
-          {
             path: '/search',
             element: <Search />,
           },
@@ -84,6 +76,14 @@ export const protectedRoutes = [
           {
             path: '/administration/published-work',
             element: <PublishedWork />,
+          },
+          {
+            path: '/rooms',
+            element: <Rooms />,
+          },
+          {
+            path: '/room/:id',
+            element: <Room />,
           },
         ],
       },

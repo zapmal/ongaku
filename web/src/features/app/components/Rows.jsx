@@ -26,6 +26,7 @@ import { Options, IconButton as CustomIconButton } from './Song';
 import { Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 import { useNotificationStore } from '@/stores/useNotificationStore';
+import { copyURL } from '@/utils/copyURL';
 import { getLink } from '@/utils/getLink';
 
 dayjs.extend(relativeTime);
@@ -97,13 +98,7 @@ export function RoomRow({ name, activeUsers, userLimit, host, startedAt, genres,
           <Icon
             as={MdShare}
             _hover={{ cursor: 'pointer' }}
-            onClick={() => {
-              navigator.clipboard.writeText(roomId);
-              addNotification({
-                title: '¡Copiado!',
-                message: 'ID de la sala copiada al portapapeles',
-              });
-            }}
+            onClick={() => copyURL(`room/${roomId}`)}
           />
         </Flex>
       </Box>

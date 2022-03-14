@@ -21,9 +21,9 @@ model User {
   userMetadata UserMetadata?
   userMetrics  UserMetrics?
   manager      Manager?
+  room         Room?
   interaction  Interaction[]
   userPlaylist UserPlaylist[]
-
   @@map("user")
 }
 
@@ -246,4 +246,20 @@ model SongsInPlaylist {
 
   @@id([songId, userPlaylistId])
   @@map("songs_in_playlist")
+}
+
+model Room {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  createdAt DateTime @default(now()) @map("created_at") @db.Date
+  name      String   @default("My Room")
+  limit     Int      @default(0)
+  host      Int      @unique
+  genres    String[]
+  users     Int[]
+  queue     Json
+
+  user User @relation(fields: [host], references: [id])
+
+  @@map("room")
 }

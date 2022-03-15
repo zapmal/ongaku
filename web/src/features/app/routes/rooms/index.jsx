@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { MdAdd, MdCheck, MdRefresh } from 'react-icons/md';
-import { VscError, VscEmptyWindow } from 'react-icons/vsc';
+import { VscEmptyWindow } from 'react-icons/vsc';
 import { useQuery } from 'react-query';
 
 import { getAllRooms } from '../../api/rooms';
@@ -73,11 +73,10 @@ export function Rooms() {
 
       {isLoading ? (
         <CustomSpinner paddingBottom="10%" />
-      ) : isError ? (
-        <Box paddingBottom="15%" textAlign="center" marginTop="70px">
+      ) : data?.length === 0 || isError ? (
+        <Box paddingBottom="20%" textAlign="center" marginTop="70px">
           <Icon as={VscEmptyWindow} h="60px" w="60px" color={theme.colors.accentSolid.value} />
-          <Text>{error}</Text>
-          <Text>¿Porque no creas una?</Text>
+          <Text color="whiteAlpha.700">{error}</Text>
         </Box>
       ) : (
         <SimpleGrid columns={2} paddingBottom="30%">
@@ -88,7 +87,7 @@ export function Rooms() {
               activeUsers={room.users.length}
               userLimit={room.limit}
               host={room.user.username}
-              startedAt={room.createdA}
+              startedAt={room.createdAt}
               genres={room.genres.toString()}
               roomId={room.key}
             />

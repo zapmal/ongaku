@@ -258,6 +258,7 @@ model Room {
   genres    String[]
   users     Int[]
   queue     Json
+  banList   Int[]
 
   user User @relation(fields: [host], references: [id])
 

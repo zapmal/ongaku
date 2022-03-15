@@ -31,7 +31,7 @@ import { ConfigService } from '@nestjs/config';
 import { existsSync, unlink } from 'fs';
 
 @Controller('artist')
-@UseGuards(RoleGuard([Role.ADMIN, Role.ARTIST]))
+@UseGuards(RoleGuard([Role.ADMIN, Role.USER, Role.ARTIST]))
 export class ArtistController {
   constructor(private artist: ArtistService, private config: ConfigService) {}
 

@@ -7,13 +7,26 @@ async function main() {
   // Regular user, no verified email.
   const alice = await prisma.user.upsert({
     where: { email: 'alice@prisma.io' },
-    update: {},
+    update: {
+      // userMetadata: {
+      //   create: {
+      //     verifiedEmail: true,
+      //     ipAddress: '192.168.1.1',
+      //   },
+      // },
+    },
     create: {
       email: 'alice@prisma.io',
       fullName: 'Alice Wallace',
       birthdate: new Date(),
       username: 'alicey',
       password: await hash('password', 10),
+      userMetadata: {
+        create: {
+          verifiedEmail: true,
+          ipAddress: '192.168.1.1',
+        },
+      },
     },
   });
 

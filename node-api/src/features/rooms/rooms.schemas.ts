@@ -6,3 +6,7 @@ export const createNewRoomSchema = Joi.object({
   genres: Joi.array().required(),
   queue: Joi.array().required(),
 });
+
+export const updateQueueSchema = Joi.object({
+  queue: Joi.array().required(),
+});

@@ -10,117 +10,256 @@ import {
   Flex,
   IconButton,
   Icon,
+  Tooltip,
+  Spinner as ChakraSpinner,
 } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
-import { MdExitToApp } from 'react-icons/md';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { MdCheck, MdExitToApp, MdRefresh } from 'react-icons/md';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useParams, useNavigate } from 'react-router-dom';
 
+import { addUser, banUser, deleteRoom, getRoom, removeUser } from '../../api/rooms';
 import { SongInQueue } from '../../components';
-import { FADE_OUT_ANIMATION, SONGS_IN_QUEUE, USERS_IN_ROOM } from '../../constants';
+import { FADE_OUT_ANIMATION } from '../../constants';
 import { useHover } from '../../hooks/useHover';
 
 import { Link, Button } from '@/components/Elements';
-import { Highlight } from '@/components/Utils';
+import { Highlight, Spinner } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
-import { useNotificationStore } from '@/stores/useNotificationStore';
-import { getLink } from '@/utils/getLink';
+import { useAuthStore } from '@/stores/useAuthStore';
+import { useQueueStore } from '@/stores/useQueueStore';
+import { copyURL } from '@/utils/copyURL';
+import { getImage } from '@/utils/getImage';
 
-/**
- * This should receive multiple parameters later on when it gets functional, including
- * the room ID.
- */
 export function Room() {
-  const addNotification = useNotificationStore((s) => s.addNotification);
-  const location = useLocation();
+  const navigate = useNavigate();
+  const params = useParams();
+
+  const store = useQueueStore();
+  const entity = useAuthStore((s) => s.entity);
+
+  const queryClient = useQueryClient();
+  const addUserMutation = useMutation(addUser, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(`room-${params.key}`);
+    },
+  });
+
+  const { data, isLoading, isRefetching, refetch } = useQuery(
+    `room-${params.key}`,
+    () => getRoom(params.key),
+    {
+      refetchInterval: 15000,
+      onError: () => {
+        // create a custom not found page
+        navigate('/room-error');
+      },
+      onSuccess: async (response) => {
+        if (
+          response.host !== entity.id &&
+          response.limit - response.users.length === 0 &&
+          !response.users.includes(entity.id)
+        ) {
+          navigate('/room-error');
+        }
+
+        if (response.banList.includes(entity.id)) {
+          navigate('/rooms');
+        } else if (response.host !== entity.id && !response.users.includes(entity.id)) {
+          try {
+            await addUserMutation.mutateAsync({ key: params.key, userId: entity.id });
+          } catch (error) {
+            console.log('No pudimos meterte en la sala, intentalo de nuevo mas tarde', error);
+          }
+        }
+
+        // store.queue.add(response.queue);
+      },
+    }
+  );
+
+  const leaveOrCloseRoomMutation = useMutation(
+    entity.id === data?.host || entity.role === 'ADMIN' ? deleteRoom : removeUser,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(`room-${params.key}`);
+        navigate('/rooms');
+      },
+    }
+  );
+
+  const handleLeaveOrCloseRoom = async () => {
+    try {
+      const requestData =
+        entity.id === data.host || entity.role === 'ADMIN'
+          ? params.key
+          : { key: params.key, userId: entity.id };
+
+      await leaveOrCloseRoomMutation.mutateAsync(requestData);
+    } catch (error) {
+      console.log('Ocurrió un error', error);
+    }
+  };
+
+  if (isLoading) {
+    return <Spinner paddingBottom="15%" />;
+  }
 
   return (
     <Box padding="20px 60px">
       <Flex gap="80px">
         <Box width="80%">
-          <Heading>Reguetón Bueno</Heading>
+          <Heading>
+            {data.name}
+            {isRefetching ? (
+              <Tooltip label="Estamos actualizando la lista de salas">
+                <span>
+                  <ChakraSpinner marginLeft="20px" />
+                </span>
+              </Tooltip>
+            ) : (
+              <Tooltip label="La lista está al día">
+                <span>
+                  <Icon as={MdCheck} w="30px" h="30px" marginLeft="20px" />
+                </span>
+              </Tooltip>
+            )}
+          </Heading>
 
           <Text color="whiteAlpha.800" margin="10px 0">
-            <Highlight>Cola</Highlight> · 10 canciones · 37 min 45 seg
+            <Highlight>Cola</Highlight> · {data.queue.length} canciones
           </Text>
 
           <Divider />
 
-          {SONGS_IN_QUEUE.map((song, index) => (
-            <div key={index}>
-              <SongInQueue
-                name={song.name}
-                authors={song.authors}
-                duration={song.duration}
-                itemNumber={index + 1}
-                isPlaying={index === 0}
-                isExplicit={song.isExplicit}
-              />
+          {data?.queue?.map((data, index) => {
+            const author = data.artist.artisticName
+              ? data.artist.artisticName
+              : data.artist.band.name;
 
-              {SONGS_IN_QUEUE.length !== index + 1 && <Divider />}
-            </div>
-          ))}
+            return (
+              <div key={index}>
+                <SongInQueue
+                  // id={data.id}
+                  song={data}
+                  name={data.name}
+                  isExplicit={data.isExplicit}
+                  isPlaying={data === store.currentlyPlaying}
+                  authors={`${author}${
+                    data.collaborators.filter((v) => v !== '').length !== 0
+                      ? `,${data.collaborators.join(',')}`
+                      : ''
+                  }`}
+                  itemNumber={index + 1}
+                />
+
+                {data?.queue?.length !== index + 1 && <Divider />}
+              </div>
+            );
+          })}
         </Box>
 
         <Box width="80%">
           <Flex align="center">
             <Heading>Usuarios</Heading>
             <Spacer />
-            <Button margin="0 10px" variant="danger">
-              Cerrar Sala
-            </Button>
+            {entity.id === data.host || entity.role === 'ADMIN' ? (
+              <Button variant="danger" onClick={handleLeaveOrCloseRoom}>
+                Cerrar Sala
+              </Button>
+            ) : (
+              <Button variant="danger" onClick={handleLeaveOrCloseRoom}>
+                Dejar sala
+              </Button>
+            )}
             <Button
-              onClick={() => {
-                // this should use the env var.
-                navigator.clipboard.writeText('http://localhost:3000/room/BX3A-ASS1');
-                addNotification({
-                  title: '¡Copiado!',
-                  message: 'URL copiada al portapapeles',
-                });
-              }}
+              onClick={refetch}
+              rightIcon={<Icon as={MdRefresh} w="25px" h="25px" />}
+              marginLeft="10px"
             >
+              Refrescar
+            </Button>
+            <Button marginLeft="10px" onClick={() => copyURL(`room/${params.key}`)}>
               Invitar
             </Button>
           </Flex>
 
           <Text color="whiteAlpha.800" margin="10px 0">
-            La sala está llena · <Highlight>6/6 usuarios</Highlight>
+            {data.limit - data.users.length === 0
+              ? 'La sala está full'
+              : data.limit - data.users.length === 1
+              ? 'Queda 1 espacio en la sala'
+              : `Aún quedan ${data.limit - data.users.length} espacios en la sala`}{' '}
+            -{' '}
+            <Highlight>
+              {data.users.length}/{data.limit} usuarios
+            </Highlight>
           </Text>
 
           <Divider />
 
-          <SimpleGrid columns={3} margin="10px 0">
-            {USERS_IN_ROOM.map((user, index) => (
-              <User
-                key={index}
-                name={user.name}
-                role={user.role}
-                profilePicture={user.profilePicture}
-              />
-            ))}
-          </SimpleGrid>
+          {data.users.length === 0 ? (
+            <Box textAlign="center" marginTop="20px" paddingBottom="50%">
+              <Text color="whiteAlpha.700">No hay usuarios, por ahora {';)'}</Text>
+            </Box>
+          ) : (
+            <SimpleGrid
+              columns={3}
+              margin="10px 0"
+              paddingBottom={data.users.length <= 3 ? '40%' : 0}
+            >
+              {data.usersData.map((user, index) => (
+                <User
+                  key={index}
+                  id={user.id}
+                  name={user.fullName}
+                  role={user.role}
+                  avatar={user.avatar}
+                  to={user.username}
+                  hostId={data.host}
+                  roomKey={params.key}
+                />
+              ))}
+            </SimpleGrid>
+          )}
         </Box>
       </Flex>
     </Box>
   );
 }
 
-function User({ profilePicture, role, name }) {
-  // eslint-disable-next-line no-unused-vars
-  const [_, profileLink] = getLink(name, name);
+function User({ avatar, role, name, to, id, hostId, roomKey }) {
   const [isHovered, mouseEventsHandlers] = useHover();
+  const entity = useAuthStore((s) => s.entity);
+  const canBan = hostId === entity.id || entity.role === 'ADMIN';
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation(banUser, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(`room-${roomKey}`);
+    },
+  });
+
+  const handleKick = async () => {
+    try {
+      await mutation.mutateAsync({ key: roomKey, userId: id });
+    } catch (error) {
+      console.log('Ocurrió un error mientras intentabamos remover al usuario', error);
+    }
+  };
 
   return (
     <Flex align="center" flexDir="column" margin="10px 0">
       <Avatar
         {...mouseEventsHandlers}
         size="xl"
-        src={profilePicture}
-        opacity={isHovered && 0.6}
+        src={getImage('user', avatar, 'default/default_avatar.svg')}
+        opacity={isHovered && canBan && 0.6}
         transition="opacity 150ms ease-in"
-        _hover={{ cursor: 'pointer' }}
+        _hover={{ cursor: canBan ? 'pointer' : 'auto' }}
         border={`3px solid ${theme.colors.successSolid.value}`}
       />
-      {isHovered && (
+      {isHovered && canBan && (
         <Box
           animation={FADE_OUT_ANIMATION}
           textAlign="left"
@@ -130,6 +269,7 @@ function User({ profilePicture, role, name }) {
           <IconButton
             icon={<Icon as={MdExitToApp} w="20px" h="20px" />}
             position="absolute"
+            onClick={handleKick}
             bottom="25px"
             left="-20px"
             backgroundColor={theme.colors.dangerSolid.value}
@@ -145,7 +285,7 @@ function User({ profilePicture, role, name }) {
       <Text fontSize="xs" color="whiteAlpha.700" fontWeight="bold">
         {role}
       </Text>
-      <Text fontWeight="bold" as={Link} to={`/user/${profileLink}`} underline={false}>
+      <Text fontWeight="bold" as={Link} to={`/user/${to}`} underline={false}>
         {name}
       </Text>
     </Flex>

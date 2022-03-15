@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Req,
   UseGuards,
   UsePipes,
@@ -15,8 +16,8 @@ import { RoleGuard } from '@/internal/guards';
 import { RequestWithEntity } from '@/internal/interfaces';
 import { JoiValidationPipe } from '@/internal/pipes';
 
-import { NewRoomDTO } from './rooms.dto';
-import { createNewRoomSchema } from './rooms.schemas';
+import { UpdateUserListDTO, NewRoomDTO, UpdateQueueDTO } from './rooms.dto';
+import { createNewRoomSchema, updateQueueSchema } from './rooms.schemas';
 import { RoomsService } from './rooms.service';
 
 @Controller('rooms')
@@ -27,6 +28,32 @@ export class RoomsController {
   @Get('all')
   async getAll() {
     return await this.rooms.getAll();
+  }
+
+  @Get(':key')
+  async getByKey(@Param() { key }) {
+    return await this.rooms.getByKey(key);
+  }
+
+  @Put(':key/add')
+  async addUser(@Body() { userId }: UpdateUserListDTO, @Param() { key }) {
+    return await this.rooms.addUser(key, userId);
+  }
+
+  @Put(':key/remove')
+  async removeUser(@Param() { key }, @Body() { userId }: UpdateUserListDTO) {
+    return await this.rooms.removeUser(key, userId);
+  }
+
+  @Put(':key/ban')
+  async banUser(@Param() { key }, @Body() { userId }: UpdateUserListDTO) {
+    return await this.rooms.banUser(key, userId);
+  }
+
+  @Put(':key/update-queue')
+  @UsePipes(new JoiValidationPipe(updateQueueSchema))
+  async updateQueue(@Param() { key }, @Body() { queue }: UpdateQueueDTO) {
+    return await this.rooms.updateQueue(key, queue);
   }
 
   @Delete(':key')

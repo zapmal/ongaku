@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import React from 'react';
+import { Outlet } from 'react-router-dom';
 
 import { Layout } from '@/components/Core';
 import { useAuthStore } from '@/stores/useAuthStore';
@@ -82,7 +82,7 @@ export const protectedRoutes = [
             element: <Rooms />,
           },
           {
-            path: '/room/:id',
+            path: '/room/:key',
             element: <Room />,
           },
         ],

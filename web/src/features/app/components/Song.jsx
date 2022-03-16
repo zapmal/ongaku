@@ -68,7 +68,16 @@ export function SongRow({
   );
 }
 
-export function SongInQueue({ song, isPlaying, itemNumber, name, authors, duration, isExplicit }) {
+export function SongInQueue({
+  song,
+  isPlaying,
+  itemNumber,
+  name,
+  authors,
+  duration,
+  isExplicit,
+  canEdit = true,
+}) {
   const [isHovered, mouseEventsHandlers] = useHover();
   const { playing, togglePlayPause, error, ready } = useAudioPlayer();
   const addNotification = useNotificationStore((s) => s.addNotification);
@@ -107,7 +116,13 @@ export function SongInQueue({ song, isPlaying, itemNumber, name, authors, durati
         authors={authors}
       />
 
-      <Options isHovered={isHovered} duration={duration} song={song} noHeart={true} />
+      <Options
+        isHovered={isHovered}
+        duration={duration}
+        song={song}
+        noHeart={true}
+        canEdit={canEdit}
+      />
     </Flex>
   );
 }
@@ -163,10 +178,11 @@ export function Options({
   isLarge = false,
   onlyHeart = false,
   noHeart = false,
+  canEdit,
 }) {
   return (
     <>
-      {isHovered && (
+      {isHovered && canEdit && (
         <Box animation={FADE_OUT_ANIMATION} textAlign="left">
           {!onlyHeart && (
             <>

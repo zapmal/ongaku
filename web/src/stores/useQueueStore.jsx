@@ -21,7 +21,9 @@ export const useQueueStore = create(
 
       set({ queue: newQueue, currentlyPlaying: newQueue.getHeadNode().getData() });
     },
-    setCurrentlyPlaying: (song) => set({ currentlyPlaying: song }),
+    setCurrentlyPlaying: (song) => {
+      set({ currentlyPlaying: song });
+    },
     remove: (song) => {
       const currentlyPlaying = get().currentlyPlaying;
       get().queue.removeNode(song);

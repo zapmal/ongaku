@@ -4,6 +4,8 @@ export * from './components/cards/Artist';
 export * from './components/cards/Song';
 export * from './components/Status';
 export * from './components/cards/Playlist';
+export * from './components/CurrentRoomOverlay';
 export * from './components/Rows';
 export * from './components/Song';
 export * from './api/playlist';
+export * from './api/rooms';

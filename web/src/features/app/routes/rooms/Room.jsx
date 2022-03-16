@@ -28,6 +28,7 @@ import { Highlight, Spinner } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useQueueStore } from '@/stores/useQueueStore';
+import { useRoomStore } from '@/stores/useRoomStore';
 import { copyURL } from '@/utils/copyURL';
 import { getImage } from '@/utils/getImage';
 
@@ -36,6 +37,7 @@ export function Room() {
   const params = useParams();
 
   const store = useQueueStore();
+  const setRoom = useRoomStore((s) => s.setRoom);
   const entity = useAuthStore((s) => s.entity);
 
   const queryClient = useQueryClient();
@@ -73,7 +75,8 @@ export function Room() {
           }
         }
 
-        // store.queue.add(response.queue);
+        setRoom(response);
+        store.add(response.queue);
       },
     }
   );
@@ -141,6 +144,7 @@ export function Room() {
               <div key={index}>
                 <SongInQueue
                   // id={data.id}
+                  canEdit={false}
                   song={data}
                   name={data.name}
                   isExplicit={data.isExplicit}

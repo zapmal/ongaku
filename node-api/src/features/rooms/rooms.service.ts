@@ -55,6 +55,14 @@ export class RoomsService {
       where: {
         key,
       },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+      },
     });
 
     if (!room) {

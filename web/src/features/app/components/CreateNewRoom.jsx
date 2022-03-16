@@ -73,7 +73,7 @@ export function CreateNewRoom({ isOpen, onClose }) {
         message: `${response.message}, te redigiremos pronto`,
       });
 
-      navigate(`/room/${response.key}`);
+      // navigate(`/room/${response.key}`);
     } catch (error) {
       setRequestState({
         status: 'error',

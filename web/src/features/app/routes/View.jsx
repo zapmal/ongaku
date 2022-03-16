@@ -117,7 +117,7 @@ export function View() {
   const { playing, togglePlayPause } = useAudioPlayer();
 
   if (isLoading) {
-    return <Spinner paddingBottom="100%" />;
+    return <Spinner paddingBottom="30%" />;
   }
 
   return (

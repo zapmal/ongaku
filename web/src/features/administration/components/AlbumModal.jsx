@@ -24,7 +24,7 @@ import { theme } from '@/stitches.config.js';
 import { getLink } from '@/utils/getLink';
 import { getName } from '@/utils/getName';
 
-export function AlbumModal({ isOpen, onClose, shouldValidate, album }) {
+export function AlbumModal({ isOpen, onClose, shouldValidate, album, artistId }) {
   const {
     control,
     register,
@@ -36,6 +36,7 @@ export function AlbumModal({ isOpen, onClose, shouldValidate, album }) {
       name: !shouldValidate ? getName(album.name) : '',
       year: !shouldValidate ? dayjs(album.year).add(1, 'day').format('YYYY') : '',
       releaseType: !shouldValidate ? album.releaseType : '',
+      artistId: artistId,
     },
   });
   const [request, setRequestState] = useRequest();
@@ -59,7 +60,12 @@ export function AlbumModal({ isOpen, onClose, shouldValidate, album }) {
     body.append('name', albumNameLink);
     body.append('year', data.year);
     body.append('releaseType', data.releaseType);
-    body.append('artistId', album.artistId ? album.artistId : data.artistId);
+
+    if (artistId) {
+      body.append('artistId', artistId);
+    } else {
+      body.append('artistId', album.artistId ? album.artistId : data.artistId);
+    }
     body.append('cover', data.cover[0]);
 
     try {
@@ -101,7 +107,7 @@ export function AlbumModal({ isOpen, onClose, shouldValidate, album }) {
               isDisabled={request.status !== ''}
               register={register}
             />
-            {shouldValidate && (
+            {shouldValidate && !artistId && (
               <Field
                 type="number"
                 name="artistId"

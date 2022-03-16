@@ -51,7 +51,7 @@ export function UserProfile() {
   });
 
   if (isLoading) {
-    return <Spinner paddingBottom="100%" />;
+    return <Spinner paddingBottom="30%" />;
   }
 
   return (

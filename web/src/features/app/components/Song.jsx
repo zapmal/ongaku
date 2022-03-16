@@ -28,6 +28,7 @@ import { useHover } from '../hooks/useHover';
 
 import { Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
+import { useAuthStore } from '@/stores/useAuthStore';
 import { useNotificationStore } from '@/stores/useNotificationStore';
 import { useQueueStore } from '@/stores/useQueueStore';
 import { getLink } from '@/utils/getLink';
@@ -180,13 +181,15 @@ export function Options({
   noHeart = false,
   canEdit,
 }) {
+  const entity = useAuthStore((s) => s.entity);
+
   return (
     <>
       {isHovered && canEdit && (
         <Box animation={FADE_OUT_ANIMATION} textAlign="left">
           {!onlyHeart && (
             <>
-              <OptionMenu isLarge={isLarge} song={song} />
+              {entity.role === 'USER' && <OptionMenu isLarge={isLarge} song={song} />}
               {!noHeart && <Option icon={IoMdHeartEmpty} isLarge={isLarge} />}
             </>
           )}

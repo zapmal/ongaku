@@ -30,6 +30,7 @@ import { FADE_OUT_ANIMATION, MENU_ITEM_PROPS } from '../../constants';
 import { useHover } from '../../hooks/useHover';
 
 import { theme } from '@/stitches.config.js';
+import { useAuthStore } from '@/stores/useAuthStore';
 import { useQueueStore } from '@/stores/useQueueStore';
 import { getLink } from '@/utils/getLink';
 
@@ -44,6 +45,8 @@ export function Card({
   isLikedSongsPlaylist = false,
   ...extraStyles
 }) {
+  const entity = useAuthStore((s) => s.entity);
+
   const [isHovered, mouseEventsHandlers] = useHover();
   const [liked, setLiked] = useState(isLiked);
   const [isLoading, setLoading] = useState(false);
@@ -65,7 +68,7 @@ export function Card({
         });
     }
 
-    if (isHovered && id) {
+    if (isHovered && id && entity.role !== 'ARTIST') {
       setLoading(true);
       if (type === 'playlist') {
         isPlaylistLiked({ playlistId: id })
@@ -91,7 +94,7 @@ export function Card({
           .finally(() => setLoading(false));
       }
     }
-  }, [id, isHovered, isLiked, notLikeable, type]);
+  }, [entity.role, id, isHovered, isLiked, isLikedSongsPlaylist, notLikeable, type]);
 
   return (
     <Box
@@ -114,7 +117,7 @@ export function Card({
       />
       {isHovered && (
         <Box animation={FADE_OUT_ANIMATION}>
-          {notLikeable
+          {notLikeable || entity.role === 'ARTIST'
             ? notLikeablePlaylistButtons.map((button, index) => (
                 <HoverButton
                   id={id}
@@ -141,14 +144,15 @@ export function Card({
                   mouseEventsHandlers={mouseEventsHandlers}
                 />
               ))}
-          {!notLikeable && (
-            <OptionsButton
-              mouseEventsHandlers={mouseEventsHandlers}
-              type={type}
-              to={link}
-              id={id}
-            />
-          )}
+          {!notLikeable ||
+            (entity.role === 'USER' && (
+              <OptionsButton
+                mouseEventsHandlers={mouseEventsHandlers}
+                type={type}
+                to={link}
+                id={id}
+              />
+            ))}
         </Box>
       )}
       {children}

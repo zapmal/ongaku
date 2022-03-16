@@ -95,7 +95,7 @@ export function ArtistProfile() {
   };
 
   if (isLoadingProfile && isLoadingFollowedArtists) {
-    return <Spinner paddingBottom="100%" />;
+    return <Spinner paddingBottom="30%" />;
   }
 
   return (
@@ -149,26 +149,27 @@ export function ArtistProfile() {
                       Editar Perfil
                     </ChakraButton>
                   ))}
-                {artist.id !== entity.id &&
-                followedArtists?.filter((followed) => followed.id === artist.id).length === 1 ? (
-                  <ChakraButton
-                    {...BUTTON_PROPS}
-                    rightIcon={<Icon as={MdCheck} w="25px" h="25px" />}
-                    onClick={handleOnClick}
-                    isDisabled={mutation.isLoading}
-                  >
-                    Siguiendo
-                  </ChakraButton>
-                ) : (
-                  <ChakraButton
-                    {...BUTTON_PROPS}
-                    rightIcon={<Icon as={MdAdd} w="25px" h="25px" />}
-                    onClick={handleOnClick}
-                    isDisabled={mutation.isLoading}
-                  >
-                    Seguir
-                  </ChakraButton>
-                )}
+                {entity.role === 'USER' &&
+                  (artist.id !== entity.id &&
+                  followedArtists?.filter((followed) => followed.id === artist.id).length === 1 ? (
+                    <ChakraButton
+                      {...BUTTON_PROPS}
+                      rightIcon={<Icon as={MdCheck} w="25px" h="25px" />}
+                      onClick={handleOnClick}
+                      isDisabled={mutation.isLoading}
+                    >
+                      Siguiendo
+                    </ChakraButton>
+                  ) : (
+                    <ChakraButton
+                      {...BUTTON_PROPS}
+                      rightIcon={<Icon as={MdAdd} w="25px" h="25px" />}
+                      onClick={handleOnClick}
+                      isDisabled={mutation.isLoading}
+                    >
+                      Seguir
+                    </ChakraButton>
+                  ))}
                 <ChakraButton
                   onClick={() =>
                     copyURL(

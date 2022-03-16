@@ -14,7 +14,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
-import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { createNewRoom } from '../api/rooms';
@@ -26,6 +25,7 @@ import { useRequest } from '@/hooks';
 import { theme } from '@/stitches.config.js';
 import { useNotificationStore } from '@/stores/useNotificationStore';
 import { useQueueStore } from '@/stores/useQueueStore';
+import { useRoomStore } from '@/stores/useRoomStore';
 
 export function CreateNewRoom({ isOpen, onClose }) {
   const {
@@ -49,9 +49,10 @@ export function CreateNewRoom({ isOpen, onClose }) {
   });
 
   const [request, setRequestState] = useRequest();
-  const navigate = useNavigate();
+
   const addNotification = useNotificationStore((s) => s.addNotification);
   const queue = useQueueStore((s) => s.queue);
+  const room = useRoomStore((s) => s.room);
 
   const onSubmit = async (data) => {
     if (queue.size === 0) {
@@ -59,6 +60,13 @@ export function CreateNewRoom({ isOpen, onClose }) {
         title: 'Error',
         message:
           'Tu cola está vacia, debes tener al menos tres (3) canciones para empezar una sala',
+        status: 'error',
+      });
+      return;
+    } else if (room.length !== 0) {
+      addNotification({
+        title: 'Error',
+        message: 'No puedes crear una sala mientras estas en una, salte de la sala y vuelve',
         status: 'error',
       });
       return;
@@ -73,7 +81,7 @@ export function CreateNewRoom({ isOpen, onClose }) {
         message: `${response.message}, te redigiremos pronto`,
       });
 
-      // navigate(`/room/${response.key}`);
+      onClose();
     } catch (error) {
       setRequestState({
         status: 'error',

@@ -81,18 +81,24 @@ export function ArtistCard({
       />
       {isHovered && size !== 'lg' && (
         <Box animation={FADE_OUT_ANIMATION}>
-          {hoverButtons.map((button, index) => (
-            <HoverButton
-              key={index}
-              button={button}
-              to={artistLink}
-              mouseEventsHandlers={mouseEventsHandlers}
-              size={size}
-              isFollowed={followed}
-              artistId={artistId}
-              entityId={entity.id}
-            />
-          ))}
+          {hoverButtons.map((button, index) => {
+            if (button.text === 'Seguir' && entity.role === 'ARTIST') {
+              return null;
+            }
+
+            return (
+              <HoverButton
+                key={index}
+                button={button}
+                to={artistLink}
+                mouseEventsHandlers={mouseEventsHandlers}
+                size={size}
+                isFollowed={followed}
+                artistId={artistId}
+                entityId={entity.id}
+              />
+            );
+          })}
         </Box>
       )}
       {size === 'lg' ? (

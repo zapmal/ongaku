@@ -21,7 +21,7 @@ import { Field, Checkbox } from '@/components/Form';
 import { useRequest } from '@/hooks';
 import { getName } from '@/utils/getName';
 
-export function SongModal({ isOpen, onClose, shouldValidate, song }) {
+export function SongModal({ isOpen, onClose, shouldValidate, song, artistId }) {
   const {
     control,
     register,
@@ -33,6 +33,7 @@ export function SongModal({ isOpen, onClose, shouldValidate, song }) {
       name: !shouldValidate ? song.name : '',
       collaborators: !shouldValidate ? song.collaborators.map((c) => getName(c)).toString() : '',
       isExplicit: !shouldValidate ? song.isExplicit : false,
+      artistId: artistId,
     },
   });
   const [request, setRequestState] = useRequest();
@@ -57,7 +58,12 @@ export function SongModal({ isOpen, onClose, shouldValidate, song }) {
       body.append('collaborators', data.collaborators);
       body.append('isExplicit', data.isExplicit);
       body.append('albumId', song.albumId ? song.albumId : data.albumId);
-      body.append('artistId', song.artistId ? song.artistId : data.artistId);
+
+      if (artistId) {
+        body.append('artistId', artistId);
+      } else {
+        body.append('artistId', song.artistId ? song.artistId : data.artistId);
+      }
     }
 
     try {
@@ -119,7 +125,7 @@ export function SongModal({ isOpen, onClose, shouldValidate, song }) {
               error={errors.collaborators}
               register={register}
             />
-            {shouldValidate && (
+            {shouldValidate && !artistId && (
               <>
                 <Field
                   type="number"

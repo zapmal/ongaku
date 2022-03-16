@@ -40,6 +40,16 @@ export class ArtistController {
     return await this.artist.getAll();
   }
 
+  @Get('/songs/:id')
+  async getSongsById(@Param() { id }) {
+    return await this.artist.getSongs(Number(id));
+  }
+
+  @Get('/albums/:id')
+  async getAlbumsById(@Param() { id }) {
+    return await this.artist.getAlbums(Number(id));
+  }
+
   @Get('followed')
   async getFollowed(@Req() request: RequestWithEntity) {
     const followedArtists = await this.artist.getFollowed(Number(request.entity.id));

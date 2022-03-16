@@ -60,7 +60,7 @@ export function Library() {
 
   return (
     <>
-      <Box minHeight="455px" maxHeight="100%" margin="0 20px 0 40px">
+      <Box minHeight="420px" maxHeight="100%" margin="0 20px 0 40px">
         <Flex gap={20} justify="center">
           <LibraryOption onClick={() => setSelected('artist')} selected={selected === 'artist'}>
             Artistas
@@ -209,15 +209,18 @@ function LibraryOption({ selected, onClick, children }) {
 
 function EmptySection({ message }) {
   return (
-    <Box textAlign="center" position="absolute" top="200px">
-      <Heading fontSize="2xl">{message}</Heading>
-      <Text color="whiteAlpha.700" marginTop="10px" fontSize="lg">
-        ¿Porqué no lo intentas?
-      </Text>
-      <Text color="whiteAlpha.700" marginTop="10px">
-        Presiona el botón que está arriba o visita la{' '}
-        <Link to="/explore">página de exploración</Link> para empezar.
-      </Text>
-    </Box>
+    <>
+      <Box textAlign="center" position="absolute" top="250px">
+        <Heading fontSize="2xl">{message}</Heading>
+        <Text color="whiteAlpha.700" marginTop="10px" fontSize="lg">
+          ¿Porqué no lo intentas?
+        </Text>
+        <Text color="whiteAlpha.700" marginTop="10px">
+          Presiona el botón que está arriba o visita la{' '}
+          <Link to="/explore">página de exploración</Link> para empezar.
+        </Text>
+      </Box>
+      <span style={{ height: '70vh' }}></span>
+    </>
   );
 }

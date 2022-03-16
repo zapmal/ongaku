@@ -19,17 +19,21 @@ import { Link } from 'react-router-dom';
 import { MENU_ITEM_PROPS } from '@/features/app';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
-// import { getImage } from '@/utils/getImage';
+import { getImage } from '@/utils/getImage';
 
 export function ProfileIcon() {
-  // const { role = {} } = useAuthStore((s) => s.entity);
-  const role = 'ADMIN';
+  const entity = useAuthStore((s) => s.entity);
 
   return (
     <Menu isLazy>
       <MenuButton margin="10px" _hover={{ opacity: '.8' }}>
-        <Avatar src="/assets/images/static-admin-avatar.jpeg">
-          {/* <Avatar src={getImage('user', null, 'default/default_avatar.svg')}> */}
+        <Avatar
+          src={getImage(
+            entity.role.toLowerCase(),
+            null,
+            entity.role === 'USER' ? 'default/default_avatar.svg' : 'default/default_avatar.png'
+          )}
+        >
           <AvatarBadge
             as={Badge}
             bg={theme.colors.accentSolid.value}
@@ -37,27 +41,27 @@ export function ProfileIcon() {
             height="20px"
             borderColor="transparent"
             width="50px"
-            fontSize={role === 'MANAGER' && 'xx-small'}
+            fontSize={entity.role === 'MANAGER' && 'xx-small'}
           >
-            {role === 'MODERATOR' ? 'MOD' : role}
+            {entity.role === 'MODERATOR' ? 'MOD' : entity.role}
           </AvatarBadge>
         </Avatar>
       </MenuButton>
       <MenuList bg={theme.colors.primaryBase.value} marginTop="10px">
-        {role !== 'USER' && (
+        {entity.role !== 'USER' && (
           <>
-            <MenuItems group="management" role={role} />
+            <MenuItems group="management" entity={entity} />
             <MenuDivider />
           </>
         )}
 
-        <MenuItems group="account" role={role} />
+        <MenuItems group="account" entity={entity} />
       </MenuList>
     </Menu>
   );
 }
 
-function MenuItems({ group, role }) {
+function MenuItems({ group, entity }) {
   const logout = useAuthStore((s) => s.logout);
 
   const handleLogout = async () => {
@@ -66,7 +70,7 @@ function MenuItems({ group, role }) {
   };
 
   return optionsPerRole.map((currentOption, index) => {
-    const option = currentOption[role];
+    const option = currentOption[entity.role];
     return (
       option && (
         <MenuOptionGroup key={index} title={group === 'management' ? 'Administrar' : 'Cuenta'}>
@@ -74,7 +78,13 @@ function MenuItems({ group, role }) {
             <MenuItem
               key={index}
               as={m.to && Link}
-              to={m.to}
+              to={
+                m.text === 'Ver Perfil' && entity.role === 'USER'
+                  ? `${m.to}user/${entity.username}`
+                  : m.text === 'Ver Perfil' && entity.role === 'ARTIST'
+                  ? `${m.to}artist/${entity.artisticName}`
+                  : m.to
+              }
               icon={<Icon as={m.icon} w="20px" h="20px" marginTop="5px" />}
               onClick={!m.to && handleLogout}
               {...MENU_ITEM_PROPS}
@@ -92,7 +102,7 @@ const options = {
   account: [
     {
       text: 'Ver Perfil',
-      to: '/user/zapmal',
+      to: '/',
       icon: CgProfile,
     },
     {
@@ -124,7 +134,7 @@ const optionsPerRole = [
       management: [
         {
           text: 'Trabajo del Artista',
-          to: '/m/published-work',
+          to: '/administration/published-work',
           icon: MdOutlineWork,
         },
       ],
@@ -133,7 +143,9 @@ const optionsPerRole = [
   {
     ARTIST: {
       account: options.account,
-      management: [{ text: 'Trabajos Publicados', to: '/m/published-work', icon: MdOutlineWork }],
+      management: [
+        { text: 'Trabajos Publicados', to: '/administration/published-work', icon: MdOutlineWork },
+      ],
     },
   },
   {

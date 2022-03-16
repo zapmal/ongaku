@@ -72,7 +72,7 @@ export function Rooms() {
       </Flex>
 
       {isLoading ? (
-        <CustomSpinner paddingBottom="10%" />
+        <CustomSpinner paddingBottom="20%" />
       ) : data?.length === 0 || isError ? (
         <Box paddingBottom="20%" textAlign="center" marginTop="70px">
           <Icon as={VscEmptyWindow} h="60px" w="60px" color={theme.colors.accentSolid.value} />

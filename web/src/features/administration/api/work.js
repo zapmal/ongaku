@@ -31,3 +31,11 @@ export const createSong = (data) => {
 export const deleteSong = (id) => {
   return apiClient.delete(`song/${id}`);
 };
+
+export const getArtistSongs = (id) => {
+  return apiClient.get(`artist/songs/${id}`);
+};
+
+export const getArtistAlbums = (id) => {
+  return apiClient.get(`artist/albums/${id}`);
+};

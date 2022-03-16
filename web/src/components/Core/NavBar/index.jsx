@@ -15,12 +15,14 @@ import { SearchBar } from './SearchBar';
 
 import { GRADIENTS } from '@/features/app';
 import { theme } from '@/stitches.config.js';
+import { useAuthStore } from '@/stores/useAuthStore';
 
 export function NavigationBar() {
   const { pathname } = useLocation();
   const [y, setY] = useState(window.scrollY);
   const [clickedSearch, setClickedSearch] = useState(false);
   const [isBackgroundVisible, setVisibleBackground] = useState(false);
+  const entity = useAuthStore((s) => s.entity);
 
   const isNotProfilePage = !pathname.includes('/user') && !pathname.includes('/artist');
   const isNotView = !pathname.includes('/view');
@@ -70,21 +72,27 @@ export function NavigationBar() {
         {clickedSearch ? (
           <SearchBar setClickedSearch={setClickedSearch} />
         ) : (
-          items.map((item, index) => (
-            <Item
-              key={index}
-              text={item.text}
-              icon={item.icon}
-              to={item.to}
-              onClick={
-                item.text === 'Búsqueda' &&
-                (() => {
-                  setClickedSearch(true);
-                })
-              }
-              isHighlighted={pathname === item.to}
-            />
-          ))
+          items.map((item, index) => {
+            if (entity.role === 'ARTIST' && (item.to === '/library' || item.to === '/rooms')) {
+              return null;
+            }
+
+            return (
+              <Item
+                key={index}
+                text={item.text}
+                icon={item.icon}
+                to={item.to}
+                onClick={
+                  item.text === 'Búsqueda' &&
+                  (() => {
+                    setClickedSearch(true);
+                  })
+                }
+                isHighlighted={pathname === item.to}
+              />
+            );
+          })
         )}
 
         <Spacer />

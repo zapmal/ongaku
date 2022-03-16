@@ -17,7 +17,7 @@ import React, { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { useQuery } from 'react-query';
 
-import { getAllAlbums, getAllSongs } from '../api/work';
+import { getAllAlbums, getAllSongs, getArtistSongs, getArtistAlbums } from '../api/work';
 import { Option, SongModal, AlbumModal } from '../components';
 import { SUB_HEADER_MARGIN, TABLE_PROPS, TABLE_ROW_PROPS } from '../constants';
 
@@ -25,22 +25,29 @@ import { Footer } from '@/components/Core';
 import { Button } from '@/components/Elements';
 import { Spinner } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
+import { useAuthStore } from '@/stores/useAuthStore';
 import { getImage } from '@/utils/getImage';
 import { getName } from '@/utils/getName';
 
 export function PublishedWork() {
-  // const entity = useAuthStore((s) => s.entity); -- para filtrar por las canciones
-  // del ARTISTA cuando este inicie sesión
+  const entity = useAuthStore((s) => s.entity);
+
   const {
     data: songs,
     isLoading: isLoadingSongs,
     isSongsError,
-  } = useQuery('admin-songs', getAllSongs);
+  } = useQuery(
+    'admin-songs',
+    entity.role === 'ARTIST' ? () => getArtistSongs(entity.id) : getAllSongs
+  );
   const {
     data: albums,
     isLoading: isLoadingAlbums,
     isAlbumsError,
-  } = useQuery('admin-albums', getAllAlbums);
+  } = useQuery(
+    'admin-albums',
+    entity.role === 'ARTIST' ? () => getArtistAlbums(entity.id) : getAllAlbums
+  );
   const [toEdit, setToEdit] = useState({});
 
   const {
@@ -191,6 +198,7 @@ export function PublishedWork() {
           onClose={onSongModalClose}
           shouldValidate={shouldValidateSong}
           song={toEdit}
+          artistId={entity.role === 'ARTIST' ? entity.id : null}
         />
       )}
       {isAlbumModalOpen && (
@@ -199,6 +207,7 @@ export function PublishedWork() {
           onClose={onAlbumModalClose}
           shouldValidate={shouldValidateAlbum}
           album={toEdit}
+          artistId={entity.role === 'ARTIST' ? entity.id : null}
         />
       )}
     </>

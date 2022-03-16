@@ -81,7 +81,7 @@ export function Entities() {
   }, [selectedRole, users]);
 
   if (isLoadingUsers || isLoadingArtists) {
-    return <Spinner paddingBottom="100%" />;
+    return <Spinner paddingBottom="20%" />;
   }
 
   if (isUsersError || isArtistsError) throw new Error();

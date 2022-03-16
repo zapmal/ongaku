@@ -152,6 +152,9 @@ export class AuthService {
         role: entity.role,
         username: entity['username'],
         verifiedEmail,
+        artisticName: entity['artisticName']
+          ? entity['artisticName']
+          : entity['band'].name,
       },
     };
   }

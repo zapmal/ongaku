@@ -8,6 +8,7 @@ import { ArtistRow, SongRow, AlbumRow, PlaylistRow, Status } from '../components
 import { ALBUMS_SEARCH_RESULTS, SONGS_SEARCH_RESULT } from '../constants';
 
 import { Highlight } from '@/components/Utils';
+import { useAuthStore } from '@/stores/useAuthStore';
 import { getImage } from '@/utils/getImage';
 
 const DIVIDER_WIDTH = '75%';
@@ -17,6 +18,8 @@ const HEADING_PROPS = {
 };
 
 export function Search() {
+  const entity = useAuthStore((s) => s.entity);
+
   const [searchParams] = useSearchParams();
   const query = searchParams.get('query');
   const { data, isLoading, isError } = useQuery('search', () => searchByQuery(query));
@@ -82,22 +85,26 @@ export function Search() {
               />
             ))
           )}
-          <Heading {...HEADING_PROPS}>Playlists</Heading>
-          <Divider width={DIVIDER_WIDTH} />
-          {data.playlists.length === 0 ? (
-            <NothingFound section="playlists" />
-          ) : (
-            data.playlists.map((playlist, index) => (
-              <PlaylistRow
-                key={index}
-                name={playlist.name}
-                cover={getImage('playlist', playlist.cover, 'default/default_cover.jpg')}
-                author="example"
-                amountOfSongs="32"
-                // author={playlist.author}
-                // amountOfSongs={playlist.amountOfSongs}
-              />
-            ))
+          {entity.role === 'USER' && (
+            <>
+              <Heading {...HEADING_PROPS}>Playlists</Heading>
+              <Divider width={DIVIDER_WIDTH} />
+              {data.playlists.length === 0 ? (
+                <NothingFound section="playlists" />
+              ) : (
+                data.playlists.map((playlist, index) => (
+                  <PlaylistRow
+                    key={index}
+                    name={playlist.name}
+                    cover={getImage('playlist', playlist.cover, 'default/default_cover.jpg')}
+                    author="example"
+                    amountOfSongs="32"
+                    // author={playlist.author}
+                    // amountOfSongs={playlist.amountOfSongs}
+                  />
+                ))
+              )}
+            </>
           )}
         </>
       )}

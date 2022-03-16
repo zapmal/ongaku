@@ -13,7 +13,7 @@ import {
   Tooltip,
   Spinner as ChakraSpinner,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { MdCheck, MdExitToApp, MdRefresh } from 'react-icons/md';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -27,6 +27,7 @@ import { Link, Button } from '@/components/Elements';
 import { Highlight, Spinner } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { useNotificationStore } from '@/stores/useNotificationStore';
 import { useQueueStore } from '@/stores/useQueueStore';
 import { useRoomStore } from '@/stores/useRoomStore';
 import { copyURL } from '@/utils/copyURL';
@@ -37,7 +38,8 @@ export function Room() {
   const params = useParams();
 
   const store = useQueueStore();
-  const setRoom = useRoomStore((s) => s.setRoom);
+  const addNotification = useNotificationStore((s) => s.addNotification);
+  const [room, setRoom] = useRoomStore((s) => [s.room, s.setRoom]);
   const entity = useAuthStore((s) => s.entity);
 
   const queryClient = useQueryClient();
@@ -51,7 +53,7 @@ export function Room() {
     `room-${params.key}`,
     () => getRoom(params.key),
     {
-      refetchInterval: 15000,
+      refetchInterval: 10000,
       onError: () => {
         // create a custom not found page
         navigate('/room-error');
@@ -60,7 +62,8 @@ export function Room() {
         if (
           response.host !== entity.id &&
           response.limit - response.users.length === 0 &&
-          !response.users.includes(entity.id)
+          !response.users.includes(entity.id) &&
+          room.length !== 0
         ) {
           navigate('/room-error');
         }
@@ -100,7 +103,14 @@ export function Room() {
 
       await leaveOrCloseRoomMutation.mutateAsync(requestData);
     } catch (error) {
-      console.log('Ocurrió un error', error);
+      addNotification({
+        title: 'Error',
+        status: 'error',
+        message: error,
+      });
+    } finally {
+      setRoom([]);
+      store.clearQueue();
     }
   };
 
@@ -144,7 +154,7 @@ export function Room() {
               <div key={index}>
                 <SongInQueue
                   // id={data.id}
-                  canEdit={false}
+                  canEdit={data?.host !== entity.id}
                   song={data}
                   name={data.name}
                   isExplicit={data.isExplicit}

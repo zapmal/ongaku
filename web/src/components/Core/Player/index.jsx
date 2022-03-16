@@ -38,6 +38,7 @@ import { Link } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
 import { likeSong } from '@/features/app';
 import { theme } from '@/stitches.config.js';
+import { useAuthStore } from '@/stores/useAuthStore';
 import { useNotificationStore } from '@/stores/useNotificationStore';
 import { useQueueStore } from '@/stores/useQueueStore';
 import { useRoomStore } from '@/stores/useRoomStore';
@@ -59,6 +60,7 @@ const PATH = import.meta.env.VITE_NODE_API_URL;
 
 export function Player() {
   const addNotification = useNotificationStore((s) => s.addNotification);
+  const entity = useAuthStore((s) => s.entity);
   const store = useQueueStore();
   const room = useRoomStore((s) => s.room);
 
@@ -327,32 +329,34 @@ export function Player() {
             onClick={handleDownload}
             size="md"
             marginLeft="15px"
+            marginRight={entity.role === 'USER' ? 0 : '20px'}
           />
-          {room.length === 0 ? (
-            <IconButton
-              icon={isLiked ? AiFillHeart : AiOutlineHeart}
-              isLiked={isLiked}
-              onClick={() => {
-                handleLike(store.currentlyPlaying.id);
-              }}
-              isDisabled={controlsEnabled || likeMutation.isLoading}
-              size="md"
-              marginRight="20px"
-            />
-          ) : (
-            <Tooltip label="Esta función está deshabilitada al estar en una sala">
-              <span>
-                <Icon
-                  as={AiOutlineHeart}
-                  w="25px"
-                  h="25px"
-                  marginRight="15px"
-                  marginTop="5px"
-                  color="whiteAlpha.300"
-                />
-              </span>
-            </Tooltip>
-          )}
+          {entity.role === 'USER' &&
+            (room.length === 0 ? (
+              <IconButton
+                icon={isLiked ? AiFillHeart : AiOutlineHeart}
+                isLiked={isLiked}
+                onClick={() => {
+                  handleLike(store.currentlyPlaying.id);
+                }}
+                isDisabled={controlsEnabled || likeMutation.isLoading}
+                size="md"
+                marginRight="20px"
+              />
+            ) : (
+              <Tooltip label="Esta función está deshabilitada al estar en una sala">
+                <span>
+                  <Icon
+                    as={AiOutlineHeart}
+                    w="25px"
+                    h="25px"
+                    marginRight="15px"
+                    marginTop="5px"
+                    color="whiteAlpha.300"
+                  />
+                </span>
+              </Tooltip>
+            ))}
           <Slider
             colorScheme="pink"
             isDisabled={controlsEnabled}

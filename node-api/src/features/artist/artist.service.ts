@@ -238,6 +238,21 @@ export class ArtistService {
     });
   }
 
+  async getSongs(id: number) {
+    return await this.prisma.song.findMany({
+      where: {
+        artistId: id,
+      },
+      include: {
+        artist: {
+          include: {
+            band: true,
+          },
+        },
+      },
+    });
+  }
+
   async getAlbums(id: number) {
     return await this.prisma.album.findMany({
       where: {

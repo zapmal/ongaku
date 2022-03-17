@@ -26,12 +26,15 @@ import {
   addAlbumToPlaylist,
   getLikedSongs,
 } from '../../api/playlist';
+import { updateQueue } from '../../api/rooms';
 import { FADE_OUT_ANIMATION, MENU_ITEM_PROPS } from '../../constants';
 import { useHover } from '../../hooks/useHover';
 
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { useNotificationStore } from '@/stores/useNotificationStore';
 import { useQueueStore } from '@/stores/useQueueStore';
+import { useRoomStore } from '@/stores/useRoomStore';
 import { getLink } from '@/utils/getLink';
 
 export function Card({
@@ -144,15 +147,14 @@ export function Card({
                   mouseEventsHandlers={mouseEventsHandlers}
                 />
               ))}
-          {!notLikeable ||
-            (entity.role === 'USER' && (
-              <OptionsButton
-                mouseEventsHandlers={mouseEventsHandlers}
-                type={type}
-                to={link}
-                id={id}
-              />
-            ))}
+          {(!notLikeable || entity.role !== 'ARTIST') && (
+            <OptionsButton
+              mouseEventsHandlers={mouseEventsHandlers}
+              type={type}
+              to={link}
+              id={id}
+            />
+          )}
         </Box>
       )}
       {children}
@@ -217,6 +219,11 @@ function HoverButton({
   const navigate = useNavigate();
   const icon = button.altIcon && liked ? button.altIcon : button.icon;
 
+  const addNotification = useNotificationStore((s) => s.addNotification);
+  const entity = useAuthStore((s) => s.entity);
+  const store = useQueueStore();
+  const room = useRoomStore((s) => s.room);
+
   const queryClient = useQueryClient();
   const mutation = useMutation(type === 'playlist' ? likePlaylist : likeAlbum, {
     onSuccess: () => {
@@ -224,8 +231,14 @@ function HoverButton({
       queryClient.invalidateQueries('library-playlists');
     },
   });
-
-  const add = useQueueStore((s) => s.add);
+  const updateQueueMutation = useMutation(updateQueue, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('all-rooms');
+      if (room.key) {
+        queryClient.invalidateQueries(`room-${room.key}`);
+      }
+    },
+  });
 
   const handleOnLikeClick = async () => {
     if (notLikeable) {
@@ -247,8 +260,24 @@ function HoverButton({
     }
   };
 
-  const handleOnPlayClick = () => {
-    if (songs.length !== 0) add(songs);
+  const handleOnPlayClick = async () => {
+    try {
+      if (songs.length !== 0) {
+        if (room.length === 0) {
+          store.add(songs);
+        } else if (room.host === entity.id) {
+          store.add(songs);
+
+          await updateQueueMutation.mutateAsync({ key: room.key, queue: store.queue.toArray() });
+        }
+      }
+    } catch (error) {
+      addNotification({
+        title: 'Error',
+        message: error,
+        status: 'error',
+      });
+    }
   };
 
   return (
@@ -318,37 +347,41 @@ function OptionsButton({ id, type, to, mouseEventsHandlers }) {
           Abrir
         </MenuItem>
 
+        {/* {type !== 'playlist' && (
+          <> */}
         <MenuDivider />
-        {type !== 'playlist' && (
-          <>
-            <MenuOptionGroup title="Agregar a Playlist">
-              {isLoading ? (
-                <Box marginTop="10px" textAlign="center">
-                  <Spinner />
-                </Box>
-              ) : isError ? (
-                <MenuItem {...MENU_ITEM_PROPS} fontSize="sm" isDisabled={true}>
-                  Ha ocurrido un error
+        <MenuOptionGroup title="Agregar a Playlist">
+          {isLoading ? (
+            <Box marginTop="10px" textAlign="center">
+              <Spinner />
+            </Box>
+          ) : isError ? (
+            <MenuItem {...MENU_ITEM_PROPS} fontSize="sm" isDisabled={true}>
+              Ha ocurrido un error
+            </MenuItem>
+          ) : data.playlists.length === 0 ? (
+            <MenuItem {...MENU_ITEM_PROPS} fontSize="sm" isDisabled={true}>
+              No tienes playlists
+            </MenuItem>
+          ) : (
+            data.playlists.map((playlist, index) => {
+              if (playlist.id === id) return null;
+
+              return (
+                <MenuItem
+                  key={index}
+                  {...MENU_ITEM_PROPS}
+                  fontSize="sm"
+                  onClick={() => handleClick(playlist.id)}
+                >
+                  {playlist.name}
                 </MenuItem>
-              ) : data.playlists.length === 0 ? (
-                <MenuItem {...MENU_ITEM_PROPS} fontSize="sm" isDisabled={true}>
-                  No tienes playlists
-                </MenuItem>
-              ) : (
-                data.playlists.map((playlist, index) => (
-                  <MenuItem
-                    key={index}
-                    {...MENU_ITEM_PROPS}
-                    fontSize="sm"
-                    onClick={() => handleClick(playlist.id)}
-                  >
-                    {playlist.name}
-                  </MenuItem>
-                ))
-              )}
-            </MenuOptionGroup>
-          </>
-        )}
+              );
+            })
+          )}
+        </MenuOptionGroup>
+        {/* </>
+        )} */}
       </MenuList>
     </Menu>
   );

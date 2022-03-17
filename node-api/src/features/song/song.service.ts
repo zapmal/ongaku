@@ -211,6 +211,7 @@ export class SongService {
           select: {
             id: true,
             name: true,
+            cover: true,
           },
         },
       },

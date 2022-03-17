@@ -149,7 +149,7 @@ export function ArtistProfile() {
                       Editar Perfil
                     </ChakraButton>
                   ))}
-                {entity.role === 'USER' &&
+                {entity.role !== 'ARTIST' &&
                   (artist.id !== entity.id &&
                   followedArtists?.filter((followed) => followed.id === artist.id).length === 1 ? (
                     <ChakraButton

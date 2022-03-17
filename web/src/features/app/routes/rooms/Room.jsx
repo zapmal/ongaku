@@ -145,29 +145,29 @@ export function Room() {
 
           <Divider />
 
-          {data?.queue?.map((data, index) => {
-            const author = data.artist.artisticName
-              ? data.artist.artisticName
-              : data.artist.band.name;
+          {data?.queue?.map((current, index) => {
+            const author = current.artist.artisticName
+              ? current.artist.artisticName
+              : current.artist.band.name;
 
             return (
               <div key={index}>
                 <SongInQueue
                   // id={data.id}
-                  canEdit={data?.host !== entity.id}
-                  song={data}
-                  name={data.name}
-                  isExplicit={data.isExplicit}
-                  isPlaying={data === store.currentlyPlaying}
+                  canEdit={data.host === entity.id}
+                  song={current}
+                  name={current.name}
+                  isExplicit={current.isExplicit}
+                  isPlaying={current === store.currentlyPlaying}
                   authors={`${author}${
-                    data.collaborators.filter((v) => v !== '').length !== 0
-                      ? `,${data.collaborators.join(',')}`
+                    current.collaborators.filter((v) => v !== '').length !== 0
+                      ? `,${current.collaborators.join(',')}`
                       : ''
                   }`}
                   itemNumber={index + 1}
                 />
 
-                {data?.queue?.length !== index + 1 && <Divider />}
+                {current?.queue?.length !== index + 1 && <Divider />}
               </div>
             );
           })}

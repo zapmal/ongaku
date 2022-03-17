@@ -170,6 +170,7 @@ export class PlaylistService {
                   select: {
                     id: true,
                     name: true,
+                    cover: true,
                   },
                 },
                 interaction: {

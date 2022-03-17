@@ -204,6 +204,8 @@ export class RoomsService {
   }
 
   async updateQueue(key: string, queue: Array<any>) {
+    if (queue.length === 0 || !queue) throw new BadRequest('Debes proveer una cola');
+
     const room = await this.prisma.room.findUnique({ where: { key } });
 
     if (!room) {

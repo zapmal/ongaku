@@ -112,7 +112,7 @@ export function CreateNewRoom({ isOpen, onClose }) {
                 type="text"
                 name="name"
                 label="Nombre de la Sala"
-                placeholder="Joe's Room"
+                placeholder="Sala de Joe"
                 error={errors.name}
                 register={register}
                 isDisabled={request.status !== ''}

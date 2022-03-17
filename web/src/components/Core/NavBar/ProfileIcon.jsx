@@ -29,9 +29,9 @@ export function ProfileIcon() {
       <MenuButton margin="10px" _hover={{ opacity: '.8' }}>
         <Avatar
           src={getImage(
-            entity.role.toLowerCase(),
+            entity.role !== 'ARTIST' ? 'user' : 'artist',
             null,
-            entity.role === 'USER' ? 'default/default_avatar.svg' : 'default/default_avatar.png'
+            entity.role !== 'ARTIST' ? 'default/default_avatar.svg' : 'default/default_avatar.png'
           )}
         >
           <AvatarBadge
@@ -79,7 +79,7 @@ function MenuItems({ group, entity }) {
               key={index}
               as={m.to && Link}
               to={
-                m.text === 'Ver Perfil' && entity.role === 'USER'
+                m.text === 'Ver Perfil' && entity.role !== 'ARTIST'
                   ? `${m.to}user/${entity.username}`
                   : m.text === 'Ver Perfil' && entity.role === 'ARTIST'
                   ? `${m.to}artist/${entity.artisticName}`

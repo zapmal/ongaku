@@ -85,7 +85,7 @@ export function Search() {
               />
             ))
           )}
-          {entity.role === 'USER' && (
+          {entity.role !== 'ARTIST' && (
             <>
               <Heading {...HEADING_PROPS}>Playlists</Heading>
               <Divider width={DIVIDER_WIDTH} />

@@ -171,6 +171,7 @@ export class AlbumService {
               select: {
                 id: true,
                 name: true,
+                cover: true,
               },
             },
             interaction: {

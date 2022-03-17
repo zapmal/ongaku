@@ -17,7 +17,7 @@ import { RequestWithEntity } from '@/internal/interfaces';
 import { JoiValidationPipe } from '@/internal/pipes';
 
 import { UpdateUserListDTO, NewRoomDTO, UpdateQueueDTO } from './rooms.dto';
-import { createNewRoomSchema, updateQueueSchema } from './rooms.schemas';
+import { createNewRoomSchema } from './rooms.schemas';
 import { RoomsService } from './rooms.service';
 
 @Controller('rooms')
@@ -51,7 +51,6 @@ export class RoomsController {
   }
 
   @Put(':key/update-queue')
-  @UsePipes(new JoiValidationPipe(updateQueueSchema))
   async updateQueue(@Param() { key }, @Body() { queue }: UpdateQueueDTO) {
     return await this.rooms.updateQueue(key, queue);
   }

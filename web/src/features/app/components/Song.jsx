@@ -19,10 +19,11 @@ import {
 import React from 'react';
 import { IoMdHeartEmpty, IoMdRemoveCircleOutline } from 'react-icons/io';
 import { MdMoreVert, MdPlayArrow, MdPause } from 'react-icons/md';
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { useAudioPlayer } from 'react-use-audio-player';
 
 import { addSongToPlaylist, getLikedPlaylists } from '../api/playlist';
+import { updateQueue } from '../api/rooms';
 import { MENU_ITEM_PROPS, FADE_OUT_ANIMATION } from '../constants';
 import { useHover } from '../hooks/useHover';
 
@@ -31,6 +32,7 @@ import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useNotificationStore } from '@/stores/useNotificationStore';
 import { useQueueStore } from '@/stores/useQueueStore';
+import { useRoomStore } from '@/stores/useRoomStore';
 import { getLink } from '@/utils/getLink';
 import { getName } from '@/utils/getName';
 
@@ -189,7 +191,7 @@ export function Options({
         <Box animation={FADE_OUT_ANIMATION} textAlign="left">
           {!onlyHeart && (
             <>
-              {entity.role === 'USER' && <OptionMenu isLarge={isLarge} song={song} />}
+              {entity.role !== 'ARTIST' && <OptionMenu isLarge={isLarge} song={song} />}
               {!noHeart && <Option icon={IoMdHeartEmpty} isLarge={isLarge} />}
             </>
           )}
@@ -249,16 +251,43 @@ export function Option({ icon, label, isLarge = false, ...styles }) {
 
 export function OptionMenu({ song, isLarge = false, ...styles }) {
   const { data, isLoading, isError } = useQuery('library-playlists', getLikedPlaylists);
-  const remove = useQueueStore((s) => s.remove);
+
+  const entity = useAuthStore((s) => s.entity);
+  const room = useRoomStore((s) => s.room);
+  const addNotification = useNotificationStore((s) => s.addNotification);
+  const store = useQueueStore();
+
   const dimensions = isLarge && { ...DIMENSIONS };
 
+  const queryClient = useQueryClient();
   const mutation = useMutation(addSongToPlaylist);
+  const updateQueueMutation = useMutation(updateQueue, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('all-rooms');
+      if (room.length !== 0) {
+        queryClient.invalidateQueries(`room-${room.key}`);
+      }
+    },
+  });
 
   const handleClick = async (playlistId) => {
     try {
       await mutation.mutateAsync({ playlistId, songId: song.id });
     } catch (error) {
       console.log('Error al intentar agregar las canciones', error);
+    }
+  };
+
+  const handleUpdateQueue = async () => {
+    try {
+      await updateQueueMutation.mutateAsync({ key: room.key, queue: store.queue.toArray() });
+    } catch (error) {
+      console.log(error);
+      addNotification({
+        title: 'Error',
+        status: 'error',
+        message: error,
+      });
     }
   };
 
@@ -281,7 +310,21 @@ export function OptionMenu({ song, isLarge = false, ...styles }) {
             <MenuItem
               {...MENU_ITEM_PROPS}
               icon={<Icon as={IoMdRemoveCircleOutline} w="15px" h="15px" marginTop="5px" />}
-              onClick={() => remove(song)}
+              onClick={() => {
+                store.remove(song);
+                if (room.length !== 0 && room.host === entity.id) {
+                  if (room.queue.length === 1) {
+                    addNotification({
+                      title: 'Aviso',
+                      status: 'info',
+                      message:
+                        'No puedes eliminar la última canción en la sala, agrega más canciones o cierra la sala',
+                    });
+                  } else {
+                    handleUpdateQueue();
+                  }
+                }
+              }}
               fontSize="sm"
             >
               Remover de la cola

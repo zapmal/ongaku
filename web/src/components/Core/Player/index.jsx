@@ -136,11 +136,15 @@ export function Player() {
         borderTop={`.5px solid ${theme.colors.primaryLine.value}`}
       >
         <Flex width="300px">
-          {pathname !== '/queue' && (
+          {room.length === 0 && pathname !== '/queue' && (
             <Tooltip label="Haz click para ir a la cola">
               <Box as={RouterLink} to="/queue">
                 <Image
-                  src={getImage('album', store.currentlyPlaying.cover, 'default/default_album.png')}
+                  src={getImage(
+                    'album',
+                    store.currentlyPlaying?.album?.cover,
+                    'default/default_album.png'
+                  )}
                   width="100px"
                   height="100px"
                   _hover={{
@@ -216,12 +220,27 @@ export function Player() {
 
         <SimpleGrid width="700px">
           <Flex justify="center" marginBottom="5px">
-            <IconButton
-              icon={MdShuffle}
-              isDisabled={controlsEnabled}
-              onClick={store.shuffle}
-              size="sm"
-            />
+            {room.length === 0 ? (
+              <IconButton
+                icon={MdShuffle}
+                isDisabled={controlsEnabled}
+                onClick={store.shuffle}
+                size="sm"
+              />
+            ) : (
+              <Tooltip label="Esta función está deshabilitada al estar en una sala">
+                <span>
+                  <Icon
+                    as={MdShuffle}
+                    w="23px"
+                    h="23px"
+                    marginTop="8px"
+                    marginRight="5px"
+                    color="whiteAlpha.300"
+                  />
+                </span>
+              </Tooltip>
+            )}
             <IconButton
               icon={MdSkipPrevious}
               isDisabled={
@@ -329,9 +348,9 @@ export function Player() {
             onClick={handleDownload}
             size="md"
             marginLeft="15px"
-            marginRight={entity.role === 'USER' ? 0 : '20px'}
+            marginRight={entity.role !== 'USER' ? 0 : '20px'}
           />
-          {entity.role === 'USER' &&
+          {entity.role !== 'ARTIST' &&
             (room.length === 0 ? (
               <IconButton
                 icon={isLiked ? AiFillHeart : AiOutlineHeart}

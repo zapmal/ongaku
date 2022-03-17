@@ -60,7 +60,7 @@ export function Library() {
 
   return (
     <>
-      <Box minHeight="420px" maxHeight="100%" margin="0 20px 0 40px">
+      <Box minHeight="450px" maxHeight="100%" margin="0 20px 0 40px">
         <Flex gap={20} justify="center">
           <LibraryOption onClick={() => setSelected('artist')} selected={selected === 'artist'}>
             Artistas

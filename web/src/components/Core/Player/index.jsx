@@ -111,7 +111,11 @@ export function Player() {
       await likeMutation.mutateAsync({ songId });
       setLiked(!isLiked);
     } catch (error) {
-      console.log('Error al intentar remover', error);
+      addNotification({
+        title: 'Error',
+        message: error,
+        status: 'error',
+      });
     }
   };
 

@@ -74,7 +74,11 @@ export function Room() {
           try {
             await addUserMutation.mutateAsync({ key: params.key, userId: entity.id });
           } catch (error) {
-            console.log('No pudimos meterte en la sala, intentalo de nuevo mas tarde', error);
+            addNotification({
+              title: 'Error',
+              status: 'error',
+              message: error,
+            });
           }
         }
 
@@ -244,6 +248,7 @@ export function Room() {
 
 function User({ avatar, role, name, to, id, hostId, roomKey }) {
   const [isHovered, mouseEventsHandlers] = useHover();
+  const addNotification = useNotificationStore((s) => s.addNotification);
   const entity = useAuthStore((s) => s.entity);
   const canBan = hostId === entity.id || entity.role === 'ADMIN';
 
@@ -258,7 +263,11 @@ function User({ avatar, role, name, to, id, hostId, roomKey }) {
     try {
       await mutation.mutateAsync({ key: roomKey, userId: id });
     } catch (error) {
-      console.log('Ocurrió un error mientras intentabamos remover al usuario', error);
+      addNotification({
+        title: 'Error',
+        status: 'error',
+        message: error,
+      });
     }
   };
 

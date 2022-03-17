@@ -16,7 +16,8 @@ import dayjs from 'dayjs';
 import { es } from 'dayjs/locale/es';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React from 'react';
-import { MdShare, MdAdd, MdPlayArrow } from 'react-icons/md';
+import { MdShare, MdAdd, MdPlayArrow, MdPause } from 'react-icons/md';
+import { useAudioPlayer } from 'react-use-audio-player';
 
 import { FADE_OUT_ANIMATION } from '../constants';
 import { useHover } from '../hooks/useHover';
@@ -26,6 +27,8 @@ import { Options, IconButton as CustomIconButton } from './Song';
 import { Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 import { useNotificationStore } from '@/stores/useNotificationStore';
+import { useQueueStore } from '@/stores/useQueueStore';
+import { useRoomStore } from '@/stores/useRoomStore';
 import { copyURL } from '@/utils/copyURL';
 import { getLink } from '@/utils/getLink';
 
@@ -151,16 +154,18 @@ export function ArtistRow({ name, avatar, amountOfFollowers }) {
   );
 }
 
-export function AlbumRow({ name, cover, isExplicit, authors, type, year }) {
+export function AlbumRow({ id, name, cover, isExplicit, authors, songs, type, year }) {
   const [isHovered, mouseEventsHandlers] = useHover();
-  // eslint-disable-next-line no-unused-vars
-  const [_, linkToAlbum] = getLink(name, name);
-
   return (
-    <RowContainer isHovered={isHovered} cover={cover} mouseEventsHandlers={mouseEventsHandlers}>
+    <RowContainer
+      isHovered={isHovered}
+      cover={cover}
+      mouseEventsHandlers={mouseEventsHandlers}
+      songs={songs}
+    >
       <Box marginLeft="10px" textAlign="left">
         <Text color={theme.colors.accentText.value}>
-          <Link to={`/view/${linkToAlbum}`} underline={false} color="inherit">
+          <Link to={`/view?id=${id}&type=album`} underline={false} color="inherit">
             {name}
           </Link>{' '}
           {isExplicit && (
@@ -231,12 +236,51 @@ export function PlaylistRow({ name, author, cover, amountOfSongs }) {
   );
 }
 
-function RowContainer({ isHovered, cover, mouseEventsHandlers, children }) {
+function RowContainer({ isHovered, cover, mouseEventsHandlers, songs, children }) {
+  const store = useQueueStore();
+
+  const { playing, togglePlayPause, error, ready } = useAudioPlayer();
+
+  const room = useRoomStore((s) => s.room);
+  const addNotification = useNotificationStore((s) => s.addNotification);
+
+  const handleIsPlaying = () => {
+    if (ready) {
+      togglePlayPause();
+    } else {
+      if (error) {
+        addNotification({
+          title: 'Error',
+          status: 'error',
+          message: 'No pudimos reproducir la canción, intentalo de nuevo luego',
+        });
+      }
+    }
+  };
+
+  const handlePlay = () => {
+    if (songs.length !== 0 && room.length === 0) store.add(songs);
+  };
+
+  console.log('hello', songs);
+  console.log(store.currentlyPlaying.id === store.queue.getHeadNode()?.getData().id);
+  console.log(store.currentlyPlaying);
+
   return (
     <Flex align="center" margin="15px 0" width="75%" {...mouseEventsHandlers}>
       {isHovered ? (
-        <Box animation={FADE_OUT_ANIMATION}>
-          <CustomIconButton icon={MdPlayArrow} size="lg" w="40px" h="40px" />
+        <Box animation={FADE_OUT_ANIMATION} onClick={handlePlay}>
+          <CustomIconButton
+            icon={playing ? MdPause : MdPlayArrow}
+            size="lg"
+            w="40px"
+            h="40px"
+            onClick={
+              store.currentlyPlaying.id === store.queue.getHeadNode()?.getData().id
+                ? handleIsPlaying
+                : handlePlay
+            }
+          />
         </Box>
       ) : (
         <Image src={cover} w="60px" h="60px" borderRadius="5px" />

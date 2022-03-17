@@ -177,7 +177,11 @@ function HoverButton({ button, size, to, isFollowed, artistId, entityId, mouseEv
         await mutation.mutateAsync({ artistId });
       }
     } catch (error) {
-      console.log('Error al cambiar el seguimiento del artista', error);
+      addNotification({
+        title: 'Error',
+        status: 'error',
+        message: error,
+      });
     }
   };
 

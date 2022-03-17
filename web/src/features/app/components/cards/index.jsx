@@ -49,6 +49,7 @@ export function Card({
   ...extraStyles
 }) {
   const entity = useAuthStore((s) => s.entity);
+  const addNotification = useNotificationStore((s) => s.addNotification);
 
   const [isHovered, mouseEventsHandlers] = useHover();
   const [liked, setLiked] = useState(isLiked);
@@ -67,7 +68,11 @@ export function Card({
           setSongs(likedSongs);
         })
         .catch((error) => {
-          console.log(error);
+          addNotification({
+            title: 'Error',
+            message: error,
+            status: 'error',
+          });
         });
     }
 
@@ -81,7 +86,11 @@ export function Card({
             setSongs(response.songs);
           })
           .catch((error) => {
-            console.log(error);
+            addNotification({
+              title: 'Error',
+              message: error,
+              status: 'error',
+            });
           })
           .finally(() => setLoading(false));
       } else {
@@ -92,7 +101,11 @@ export function Card({
             setSongs(response.songs);
           })
           .catch((error) => {
-            console.log(error);
+            addNotification({
+              title: 'Error',
+              message: error,
+              status: 'error',
+            });
           })
           .finally(() => setLoading(false));
       }
@@ -255,7 +268,11 @@ function HoverButton({
 
         setLiked(!liked);
       } catch (error) {
-        console.log('Error al registrar el like/dislike', error);
+        addNotification({
+          title: 'Error',
+          message: error,
+          status: 'error',
+        });
       }
     }
   };
@@ -301,6 +318,8 @@ function HoverButton({
 }
 
 function OptionsButton({ id, type, to, mouseEventsHandlers }) {
+  const addNotification = useNotificationStore((s) => s.addNotification);
+
   const { data, isLoading, isError } = useQuery('library-playlists', getLikedPlaylists);
   const mutation = useMutation(addAlbumToPlaylist);
 
@@ -308,7 +327,11 @@ function OptionsButton({ id, type, to, mouseEventsHandlers }) {
     try {
       await mutation.mutateAsync({ playlistId, albumId: id });
     } catch (error) {
-      console.log('Error al intentar agregar las canciones', error);
+      addNotification({
+        title: 'Error',
+        message: error,
+        status: 'error',
+      });
     }
   };
 

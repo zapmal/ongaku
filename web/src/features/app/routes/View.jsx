@@ -37,6 +37,7 @@ import { Banner, Link } from '@/components/Elements';
 import { Spinner } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { useNotificationStore } from '@/stores/useNotificationStore';
 import { useQueueStore } from '@/stores/useQueueStore';
 import { copyURL } from '@/utils/copyURL';
 import { getImage } from '@/utils/getImage';
@@ -60,6 +61,7 @@ const TABLE_ROW_PROPS = {
 };
 
 export function View() {
+  const addNotification = useNotificationStore((s) => s.addNotification);
   const entity = useAuthStore((s) => s.entity);
   const currentlyPlaying = useQueueStore((s) => s.currentlyPlaying);
 
@@ -94,7 +96,11 @@ export function View() {
     try {
       await mutation.mutateAsync(id);
     } catch (error) {
-      console.log('Error al intentar eliminar la playlist', error);
+      addNotification({
+        title: 'Error',
+        message: error,
+        status: 'error',
+      });
     }
   };
 
@@ -110,7 +116,11 @@ export function View() {
 
       await removalMutation.mutateAsync(data);
     } catch (error) {
-      console.log('Error al intentar remover', error);
+      addNotification({
+        title: 'Error',
+        message: error,
+        status: 'error',
+      });
     }
   };
 

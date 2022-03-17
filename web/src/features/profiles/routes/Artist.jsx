@@ -29,6 +29,7 @@ import { Spinner, Highlight } from '@/components/Utils';
 import { SongRow, SongCard, ArtistRow, NEW_ARTISTS, NEW_SONGS } from '@/features/app';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { useNotificationStore } from '@/stores/useNotificationStore';
 import { copyURL } from '@/utils/copyURL';
 import { getImage } from '@/utils/getImage';
 import { getName } from '@/utils/getName';
@@ -71,6 +72,7 @@ export function ArtistProfile() {
       navigate('/not-found');
     },
   });
+  const addNotification = useNotificationStore((s) => s.addNotification);
 
   const { data: followedArtists, isLoading: isLoadingFollowedArtists } = useQuery(
     'library-artists',
@@ -90,7 +92,11 @@ export function ArtistProfile() {
     try {
       await mutation.mutateAsync({ artistId: artist.id });
     } catch (error) {
-      console.log('Error al cambiar el seguimiento del artista', error);
+      addNotification({
+        title: 'Error',
+        status: 'error',
+        message: error,
+      });
     }
   };
 

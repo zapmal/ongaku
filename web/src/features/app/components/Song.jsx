@@ -44,15 +44,44 @@ export function SongRow({
   albumName,
   year,
   duration,
+  song,
+  albumId,
   width = '75%',
 }) {
   const [isHovered, mouseEventsHandlers] = useHover();
+  const [_, artistLink] = getLink(authors, authors);
+  const { playing, togglePlayPause, error, ready } = useAudioPlayer();
+  const room = useRoomStore((s) => s.room);
+  const store = useQueueStore();
+
+  const addNotification = useNotificationStore((s) => s.addNotification);
+
+  const handleIsPlaying = () => {
+    if (ready) {
+      togglePlayPause();
+    } else {
+      if (error) {
+        addNotification({
+          title: 'Error',
+          status: 'error',
+          message: 'No pudimos reproducir la canción, intentalo de nuevo luego',
+        });
+      }
+    }
+  };
+
+  const handlePlay = () => {
+    if (song && room.length === 0) store.add([song]);
+  };
 
   return (
     <Flex align="center" margin="15px 0" width={width} {...mouseEventsHandlers}>
       {isHovered ? (
-        <Box animation={FADE_OUT_ANIMATION}>
-          <IconButton icon={MdPlayArrow} size="lg" w="40px" h="40px" />
+        <Box
+          animation={FADE_OUT_ANIMATION}
+          onClick={store.currentlyPlaying.id === song.id ? handleIsPlaying : handlePlay}
+        >
+          <IconButton icon={playing ? MdPause : MdPlayArrow} size="lg" w="40px" h="40px" />
         </Box>
       ) : (
         <Image src={cover} w="60px" h="60px" borderRadius="5px" />
@@ -61,8 +90,9 @@ export function SongRow({
       <SongInformation
         name={name}
         isExplicit={isExplicit}
-        authors={authors}
+        authors={artistLink}
         albumName={albumName}
+        albumId={albumId}
         year={year}
       />
 
@@ -130,7 +160,7 @@ export function SongInQueue({
   );
 }
 
-function SongInformation({ name, isPlaying, isExplicit, authors, albumName, year }) {
+function SongInformation({ name, isPlaying, isExplicit, authors, albumName, albumId, year }) {
   return (
     <>
       <Box marginLeft="10px" textAlign="left">
@@ -154,12 +184,11 @@ function SongInformation({ name, isPlaying, isExplicit, authors, albumName, year
           })}
           {albumName &&
             albumName.split(',').map((a, index) => {
-              const [linkText, authorPath] = getLink(a, albumName);
               return (
                 <React.Fragment key={index}>
                   {' - '}
-                  <Link to={`/view/${authorPath}`} underline={false} variant="gray">
-                    {linkText}
+                  <Link to={`/view?id=${albumId}&type=album`} underline={false} variant="gray">
+                    {albumName}
                   </Link>
                   {' - '}
                 </React.Fragment>
@@ -274,7 +303,11 @@ export function OptionMenu({ song, isLarge = false, ...styles }) {
     try {
       await mutation.mutateAsync({ playlistId, songId: song.id });
     } catch (error) {
-      console.log('Error al intentar agregar las canciones', error);
+      addNotification({
+        title: 'Error',
+        message: error,
+        status: 'error',
+      });
     }
   };
 
@@ -282,7 +315,6 @@ export function OptionMenu({ song, isLarge = false, ...styles }) {
     try {
       await updateQueueMutation.mutateAsync({ key: room.key, queue: store.queue.toArray() });
     } catch (error) {
-      console.log(error);
       addNotification({
         title: 'Error',
         status: 'error',

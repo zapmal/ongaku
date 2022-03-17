@@ -83,7 +83,11 @@ function DeleteConfirmation({ isOpen, onClose, id, type }) {
         await mutation.mutateAsync(id);
       }
     } catch (error) {
-      console.log('Error al intentar eliminar', error);
+      addNotification({
+        title: 'Error',
+        message: error,
+        status: 'error',
+      });
     } finally {
       onClose();
     }

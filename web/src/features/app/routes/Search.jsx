@@ -1,15 +1,16 @@
 import { Box, Divider, Heading, Text } from '@chakra-ui/react';
-import React from 'react';
+import * as dayjs from 'dayjs';
+import React, { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { useSearchParams } from 'react-router-dom';
 
 import { searchByQuery } from '../api/search';
 import { ArtistRow, SongRow, AlbumRow, PlaylistRow, Status } from '../components';
-import { ALBUMS_SEARCH_RESULTS, SONGS_SEARCH_RESULT } from '../constants';
 
 import { Highlight } from '@/components/Utils';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { getImage } from '@/utils/getImage';
+import { getName } from '@/utils/getName';
 
 const DIVIDER_WIDTH = '75%';
 const HEADING_PROPS = {
@@ -22,9 +23,13 @@ export function Search() {
 
   const [searchParams] = useSearchParams();
   const query = searchParams.get('query');
-  const { data, isLoading, isError } = useQuery('search', () => searchByQuery(query));
+  const { data, isLoading, isError, refetch } = useQuery('search', () => searchByQuery(query));
 
   if (isError) throw new Error();
+
+  useEffect(() => {
+    refetch();
+  }, [query, refetch]);
 
   return (
     <Box width="80%" align="center" margin="0 auto">
@@ -42,18 +47,27 @@ export function Search() {
         <>
           <Heading {...HEADING_PROPS}>Canciones</Heading>
           <Divider width={DIVIDER_WIDTH} />
-          {SONGS_SEARCH_RESULT.map((song, index) => (
-            <SongRow
-              key={index}
-              name={song.name}
-              cover={song.cover}
-              isExplicit={song.isExplicit}
-              authors={song.authors}
-              albumName={song.albumName}
-              year={song.year}
-              duration={song.duration}
-            />
-          ))}
+          {data.songs.length === 0 ? (
+            <NothingFound section="canciones" />
+          ) : (
+            data.songs.map((song, index) => (
+              <SongRow
+                key={index}
+                albumId={song.album.id}
+                song={song}
+                name={song.name}
+                cover={getImage('album', song.album.cover, 'default/default_album.png')}
+                isExplicit={song.isExplicit}
+                authors={
+                  song.artist.artisticName
+                    ? getName(song.artist.artisticName)
+                    : getName(song.artist.band.name)
+                }
+                albumName={song.album.name}
+                year={dayjs(song.album.year).format('YYYY')}
+              />
+            ))
+          )}
           <Heading {...HEADING_PROPS}>Artistas</Heading>
           <Divider width={DIVIDER_WIDTH} />
           {data.artists.length === 0 ? (
@@ -63,7 +77,7 @@ export function Search() {
               <ArtistRow
                 key={index}
                 name={artist.band.name ? artist.band.name : artist.artisticName}
-                avatar={artist.avatar}
+                avatar={getImage('artist', artist.avatar, 'default/default_avatar.png')}
                 amountOfFollowers={artist.artistMetrics.followers}
                 badge={false}
               />
@@ -71,17 +85,23 @@ export function Search() {
           )}
           <Heading {...HEADING_PROPS}>Albumes, Singles y EPs</Heading>
           <Divider width={DIVIDER_WIDTH} />
-          {[].length === 0 ? (
+          {data.albums.length === 0 ? (
             <NothingFound section="playlists" />
           ) : (
-            ALBUMS_SEARCH_RESULTS.map((album, index) => (
+            data.albums.map((album, index) => (
               <AlbumRow
+                id={album.id}
                 key={index}
                 name={album.name}
-                cover={album.cover}
-                authors={album.authors}
-                type={album.type}
-                year={album.year}
+                cover={getImage('album', album.cover, 'default/default_album.png')}
+                authors={
+                  album.artist?.artisticName
+                    ? getName(album.artist.artisticName)
+                    : getName(album.artist.band?.name)
+                }
+                type={album.releaseType}
+                songs={album.song}
+                year={dayjs(album.year).format('YYYY')}
               />
             ))
           )}
@@ -92,17 +112,17 @@ export function Search() {
               {data.playlists.length === 0 ? (
                 <NothingFound section="playlists" />
               ) : (
-                data.playlists.map((playlist, index) => (
-                  <PlaylistRow
-                    key={index}
-                    name={playlist.name}
-                    cover={getImage('playlist', playlist.cover, 'default/default_cover.jpg')}
-                    author="example"
-                    amountOfSongs="32"
-                    // author={playlist.author}
-                    // amountOfSongs={playlist.amountOfSongs}
-                  />
-                ))
+                data.playlists.map((playlist, index) => {
+                  return (
+                    <PlaylistRow
+                      key={index}
+                      name={playlist.name}
+                      cover={getImage('playlist', playlist.cover, 'default/default_cover.jpg')}
+                      author={playlist.user.username}
+                      amountOfSongs={playlist.songsInPlaylist.length}
+                    />
+                  );
+                })
               )}
             </>
           )}

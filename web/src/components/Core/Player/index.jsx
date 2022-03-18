@@ -84,19 +84,22 @@ export function Player() {
     if (ended) {
       const currentlyPlayingNode = store.queue.find(store.currentlyPlaying);
 
-      if (currentlyPlayingNode.next) {
-        store.setCurrentlyPlaying(currentlyPlayingNode.next.data);
-      } else if (
-        store.queue.getHeadNode() &&
-        store.queue.getHeadNode().getData() !== currentlyPlayingNode.getData()
-      ) {
-        store.setCurrentlyPlaying(store.queue.getHeadNode().getData());
-      } else {
-        store.setCurrentlyPlaying({ artist: {}, album: {}, interaction: [] });
-        store.removeHeadNode();
-        setLiked(false);
+      if (!shouldRepeat) {
+        if (currentlyPlayingNode.next) {
+          store.setCurrentlyPlaying(currentlyPlayingNode.next.data);
+        } else if (
+          store.queue.getHeadNode() &&
+          store.queue.getHeadNode().getData() !== currentlyPlayingNode.getData()
+        ) {
+          store.setCurrentlyPlaying(store.queue.getHeadNode().getData());
+        } else {
+          store.setCurrentlyPlaying({ artist: {}, album: {}, interaction: [] });
+          store.removeHeadNode();
+          setLiked(false);
+        }
       }
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ended]);
 

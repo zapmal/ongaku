@@ -73,15 +73,19 @@ export function Search() {
           {data.artists.length === 0 ? (
             <NothingFound section="artistas" />
           ) : (
-            data.artists.map((artist, index) => (
-              <ArtistRow
-                key={index}
-                name={artist.band.name ? artist.band.name : artist.artisticName}
-                avatar={getImage('artist', artist.avatar, 'default/default_avatar.png')}
-                amountOfFollowers={artist.artistMetrics.followers}
-                badge={false}
-              />
-            ))
+            data.artists.map((artist, index) => {
+              return (
+                <ArtistRow
+                  key={index}
+                  id={artist.id}
+                  name={artist.band.name ? artist.band.name : artist.artisticName}
+                  avatar={getImage('artist', artist.avatar, 'default/default_avatar.png')}
+                  amountOfFollowers={artist.artistMetrics.followers}
+                  isFollowed={artist.interaction.length !== 0 ? artist.interaction[0].value : false}
+                  badge={false}
+                />
+              );
+            })
           )}
           <Heading {...HEADING_PROPS}>Albumes, Singles y EPs</Heading>
           <Divider width={DIVIDER_WIDTH} />
@@ -113,13 +117,23 @@ export function Search() {
                 <NothingFound section="playlists" />
               ) : (
                 data.playlists.map((playlist, index) => {
+                  const songs = playlist.songsInPlaylist.map(({ song }) => ({
+                    ...song,
+                  }));
+
                   return (
                     <PlaylistRow
                       key={index}
+                      id={playlist.id}
                       name={playlist.name}
                       cover={getImage('playlist', playlist.cover, 'default/default_cover.jpg')}
                       author={playlist.user.username}
-                      amountOfSongs={playlist.songsInPlaylist.length}
+                      amountOfSongs={songs.length}
+                      noHeart={playlist.userId === entity.id}
+                      isLiked={
+                        playlist.interaction.length !== 0 ? playlist.interaction[0].value : false
+                      }
+                      songs={songs}
                     />
                   );
                 })

@@ -41,6 +41,17 @@ export class SearchService {
             name: true,
           },
         },
+        interaction: {
+          where: {
+            albumId: undefined,
+            songId: undefined,
+            userPlaylistId: undefined,
+            userId: entityId,
+          },
+          select: {
+            value: true,
+          },
+        },
       },
       take: SEARCH_LIMIT,
     });
@@ -56,7 +67,7 @@ export class SearchService {
         interaction: {
           where: {
             albumId: undefined,
-            userPlaylistId: undefined,
+            songId: undefined,
             artistId: undefined,
             userId: entityId,
           },
@@ -73,6 +84,17 @@ export class SearchService {
           include: {
             song: {
               include: {
+                interaction: {
+                  where: {
+                    albumId: undefined,
+                    userPlaylistId: undefined,
+                    artistId: undefined,
+                    userId: entityId,
+                  },
+                  select: {
+                    value: true,
+                  },
+                },
                 artist: {
                   select: {
                     artisticName: true,

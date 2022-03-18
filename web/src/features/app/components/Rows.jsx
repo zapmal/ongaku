@@ -15,10 +15,12 @@ import dayjs from 'dayjs';
 // eslint-disable-next-line no-unused-vars
 import { es } from 'dayjs/locale/es';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import React from 'react';
-import { MdShare, MdAdd, MdPlayArrow, MdPause } from 'react-icons/md';
+import React, { useState } from 'react';
+import { MdShare, MdAdd, MdPlayArrow, MdPause, MdCheck } from 'react-icons/md';
+import { useMutation, useQueryClient } from 'react-query';
 import { useAudioPlayer } from 'react-use-audio-player';
 
+import { followArtist } from '../api/artist';
 import { FADE_OUT_ANIMATION } from '../constants';
 import { useHover } from '../hooks/useHover';
 
@@ -31,15 +33,12 @@ import { useQueueStore } from '@/stores/useQueueStore';
 import { useRoomStore } from '@/stores/useRoomStore';
 import { copyURL } from '@/utils/copyURL';
 import { getLink } from '@/utils/getLink';
+import { getName } from '@/utils/getName';
 
 dayjs.extend(relativeTime);
 dayjs.locale('es');
 
 export function RoomRow({ name, activeUsers, userLimit, host, startedAt, genres, roomId }) {
-  const addNotification = useNotificationStore((s) => s.addNotification);
-  // eslint-disable-next-line no-unused-vars
-  const [_, userProfileLink] = getLink(host, host);
-
   return (
     <Box
       width="620px"
@@ -77,8 +76,8 @@ export function RoomRow({ name, activeUsers, userLimit, host, startedAt, genres,
 
       <Box margin="5px 15px">
         <Text color="whiteAlpha.800" fontSize="xs">
-          <Link to={`/user/${userProfileLink}`} underline={false}>
-            {host}
+          <Link to={`/user/${host}`} underline={false}>
+            {getName(host)}
           </Link>{' '}
           - Empezó hace {dayjs().from(startedAt, true)}.
         </Text>
@@ -109,10 +108,30 @@ export function RoomRow({ name, activeUsers, userLimit, host, startedAt, genres,
   );
 }
 
-export function ArtistRow({ name, avatar, amountOfFollowers }) {
-  // eslint-disable-next-line no-unused-vars
-  const [_, artistLink] = getLink(name, name);
+export function ArtistRow({ id, name, avatar, amountOfFollowers, isFollowed }) {
   const [isHovered, mouseEventsHandlers] = useHover();
+  const addNotification = useNotificationStore((s) => s.addNotification);
+  const [followed, setFollowed] = useState(isFollowed);
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation(followArtist, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('search');
+    },
+  });
+
+  const handleOnClick = async () => {
+    try {
+      await mutation.mutateAsync({ artistId: id });
+      setFollowed(!followed);
+    } catch (error) {
+      addNotification({
+        title: 'Error',
+        status: 'error',
+        message: error,
+      });
+    }
+  };
 
   return (
     <Flex align="center" margin="13px 0" width="75%" {...mouseEventsHandlers}>
@@ -123,22 +142,25 @@ export function ArtistRow({ name, avatar, amountOfFollowers }) {
           fontSize="lg"
           underline={false}
           as={Link}
-          to={`/artist/${artistLink}`}
+          to={`/artist/${name}`}
         >
-          {name}
+          {getName(name)}
         </Text>
         <Text color="whiteAlpha.700" fontSize="sm" textAlign="left">
-          {amountOfFollowers} seguidores
+          {amountOfFollowers === 1 ? '1 seguidor' : `${amountOfFollowers} seguidores`}
         </Text>
       </Box>
 
       <Spacer />
       {isHovered && (
-        <Box animation={FADE_OUT_ANIMATION}>
-          <Tooltip label={`Sigue a ${name}`}>
+        <Box animation={FADE_OUT_ANIMATION} onClick={handleOnClick}>
+          <Tooltip
+            label={followed ? `¿Dejar de seguir a ${getName(name)}?` : `Sigue a ${getName(name)}`}
+          >
             <IconButton
-              icon={<Icon as={MdAdd} />}
+              icon={<Icon as={followed ? MdCheck : MdAdd} />}
               variant="outline"
+              isDisabled={mutation.isLoading}
               _hover={{
                 color: 'whiteAlpha.800',
               }}
@@ -202,25 +224,27 @@ export function AlbumRow({ id, name, cover, isExplicit, authors, songs, type, ye
   );
 }
 
-export function PlaylistRow({ name, author, cover, amountOfSongs }) {
+export function PlaylistRow({ id, name, author, cover, songs, isLiked, amountOfSongs, noHeart }) {
   const [isHovered, mouseEventsHandlers] = useHover();
-  const [linkText, linkToUserProfile] = getLink(author, author);
-  // eslint-disable-next-line no-unused-vars
-  const [__, linkToPlaylist] = getLink(name, name);
 
   return (
-    <RowContainer isHovered={isHovered} cover={cover} mouseEventsHandlers={mouseEventsHandlers}>
+    <RowContainer
+      isHovered={isHovered}
+      cover={cover}
+      mouseEventsHandlers={mouseEventsHandlers}
+      songs={songs}
+    >
       <Box marginLeft="10px" textAlign="left">
         <Text color={theme.colors.accentText.value}>
-          <Link to={`/view/${linkToPlaylist}`} underline={false} color="inherit">
+          <Link to={`/view?id=${id}&type=playlist`} underline={false} color="inherit">
             {name}
           </Link>
         </Text>
 
         <Flex gap="5px">
           <Text fontSize="xs" color={theme.colors.primaryText.value}>
-            <Link to={`/user/${linkToUserProfile}`} underline={false} variant="gray">
-              {linkText}{' '}
+            <Link to={`/user/${author}`} underline={false} variant="gray">
+              {getName(author)}{' '}
             </Link>
           </Text>
           <Text fontSize="xs" color={theme.colors.primaryText.value}>
@@ -231,7 +255,13 @@ export function PlaylistRow({ name, author, cover, amountOfSongs }) {
 
       <Spacer />
 
-      <Options isHovered={isHovered} isLarge={true} onlyHeart={true} />
+      <Options
+        isHovered={isHovered}
+        isLarge={true}
+        onlyHeart={true}
+        noHeart={noHeart}
+        isLiked={isLiked}
+      />
     </RowContainer>
   );
 }
@@ -261,10 +291,6 @@ function RowContainer({ isHovered, cover, mouseEventsHandlers, songs, children }
   const handlePlay = () => {
     if (songs.length !== 0 && room.length === 0) store.add(songs);
   };
-
-  console.log('hello', songs);
-  console.log(store.currentlyPlaying.id === store.queue.getHeadNode()?.getData().id);
-  console.log(store.currentlyPlaying);
 
   return (
     <Flex align="center" margin="15px 0" width="75%" {...mouseEventsHandlers}>

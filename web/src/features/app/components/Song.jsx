@@ -35,6 +35,7 @@ import { useQueueStore } from '@/stores/useQueueStore';
 import { useRoomStore } from '@/stores/useRoomStore';
 import { getLink } from '@/utils/getLink';
 import { getName } from '@/utils/getName';
+import { AiFillHeart } from 'react-icons/ai';
 
 export function SongRow({
   name,
@@ -210,6 +211,7 @@ export function Options({
   isLarge = false,
   onlyHeart = false,
   noHeart = false,
+  isLiked = false,
   canEdit,
 }) {
   const entity = useAuthStore((s) => s.entity);
@@ -221,13 +223,17 @@ export function Options({
           {!onlyHeart && (
             <>
               {entity.role !== 'ARTIST' && <OptionMenu isLarge={isLarge} song={song} />}
-              {!noHeart && <Option icon={IoMdHeartEmpty} isLarge={isLarge} />}
+              {!noHeart && (
+                <Option icon={isLiked ? AiFillHeart : IoMdHeartEmpty} isLarge={isLarge} />
+              )}
             </>
           )}
         </Box>
       )}
 
-      {onlyHeart && !noHeart && <Option icon={IoMdHeartEmpty} isLarge={isLarge} />}
+      {onlyHeart && !noHeart && (
+        <Option icon={isLiked ? AiFillHeart : IoMdHeartEmpty} isLarge={isLarge} />
+      )}
 
       <Text
         color={theme.colors.primaryText.value}

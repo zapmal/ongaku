@@ -27,6 +27,7 @@ import {
 
 import { Button, Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
+import { useAuthStore } from '@/stores/useAuthStore';
 import { getImage } from '@/utils/getImage';
 import { getName } from '@/utils/getName';
 
@@ -160,6 +161,8 @@ function Albums() {
 function Playlists() {
   const { data, isLoading, isError, error } = useQuery('library-playlists', getLikedPlaylists);
 
+  const entity = useAuthStore((s) => s.entity);
+
   if (isLoading) {
     return <Status status="loading" message="Buscando tus playlists..." />;
   }
@@ -167,25 +170,43 @@ function Playlists() {
   if (isError) {
     return <Status status="error" message={error} />;
   }
+  console.log(data);
 
   return data.playlists.length === 0 ? (
     <EmptySection message="No has creado o marcado como favorita ni una playlist" />
   ) : (
-    data.playlists.map((playlist, index) => (
-      <Box margin="10px 0" key={index}>
-        <PlaylistCard
-          id={playlist.id}
-          key={index}
-          name={playlist.name}
-          likes={playlist.likes}
-          author={playlist.username}
-          cover={getImage('playlist', playlist.cover, 'default/default_cover.jpg')}
-          amountOfSongs={0}
-          badge={false}
-          notLikeable={true}
-        />
-      </Box>
-    ))
+    <>
+      {data.playlists.map((playlist, index) => (
+        <Box margin="10px 0" key={index}>
+          <PlaylistCard
+            id={playlist.id}
+            key={index}
+            name={playlist.name}
+            likes={playlist.likes}
+            author={playlist.username}
+            cover={getImage('playlist', playlist.cover, 'default/default_cover.jpg')}
+            amountOfSongs={0}
+            badge={false}
+            notLikeable={true}
+          />
+        </Box>
+      ))}
+      {data.liked.map((playlist, index) => (
+        <Box margin="10px 0" key={index}>
+          <PlaylistCard
+            id={playlist.id}
+            key={index}
+            name={playlist.name}
+            likes={playlist.likes}
+            author={playlist.username}
+            cover={getImage('playlist', playlist.cover, 'default/default_cover.jpg')}
+            amountOfSongs={0}
+            badge={false}
+            notLikeable={playlist.username === entity.username}
+          />
+        </Box>
+      ))}
+    </>
   );
 }
 

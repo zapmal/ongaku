@@ -261,6 +261,7 @@ export function PlaylistRow({ id, name, author, cover, songs, isLiked, amountOfS
         onlyHeart={true}
         noHeart={noHeart}
         isLiked={isLiked}
+        playlistId={id}
       />
     </RowContainer>
   );

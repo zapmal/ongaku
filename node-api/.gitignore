@@ -5,5 +5,9 @@ yarn-error.log
 .env.development
 .env.production
 
-src/config/seeders/user.ts
-assets/*/**
+assets/album
+assets/artist
+assets/playlist
+assets/song
+assets/user
+assets/view

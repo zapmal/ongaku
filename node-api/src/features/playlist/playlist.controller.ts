@@ -106,8 +106,8 @@ export class PlaylistController {
         username,
       }),
     );
-    const liked = likedPlaylists.map(({ user: { username }, userPlaylist }) => {
-      return { ...userPlaylist, username };
+    const liked = likedPlaylists.map(({ userPlaylist }) => {
+      return { ...userPlaylist, username: userPlaylist.user.username };
     });
 
     return {

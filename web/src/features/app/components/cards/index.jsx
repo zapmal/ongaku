@@ -240,6 +240,7 @@ function HoverButton({
   const queryClient = useQueryClient();
   const mutation = useMutation(type === 'playlist' ? likePlaylist : likeAlbum, {
     onSuccess: () => {
+      queryClient.invalidateQueries('search');
       queryClient.invalidateQueries('library-albums');
       queryClient.invalidateQueries('library-playlists');
     },

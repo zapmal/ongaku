@@ -16,13 +16,14 @@ import {
   Box,
   Spinner,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
+import { AiFillHeart } from 'react-icons/ai';
 import { IoMdHeartEmpty, IoMdRemoveCircleOutline } from 'react-icons/io';
 import { MdMoreVert, MdPlayArrow, MdPause } from 'react-icons/md';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { useAudioPlayer } from 'react-use-audio-player';
 
-import { addSongToPlaylist, getLikedPlaylists } from '../api/playlist';
+import { addSongToPlaylist, getLikedPlaylists, likePlaylist } from '../api/playlist';
 import { updateQueue } from '../api/rooms';
 import { MENU_ITEM_PROPS, FADE_OUT_ANIMATION } from '../constants';
 import { useHover } from '../hooks/useHover';
@@ -35,7 +36,6 @@ import { useQueueStore } from '@/stores/useQueueStore';
 import { useRoomStore } from '@/stores/useRoomStore';
 import { getLink } from '@/utils/getLink';
 import { getName } from '@/utils/getName';
-import { AiFillHeart } from 'react-icons/ai';
 
 export function SongRow({
   name,
@@ -72,7 +72,9 @@ export function SongRow({
   };
 
   const handlePlay = () => {
-    if (song && room.length === 0) store.add([song]);
+    if (song && room.length === 0) {
+      store.add([song]);
+    }
   };
 
   return (
@@ -212,19 +214,51 @@ export function Options({
   onlyHeart = false,
   noHeart = false,
   isLiked = false,
+  playlistId,
   canEdit,
 }) {
+  const addNotification = useNotificationStore((s) => s.addNotification);
   const entity = useAuthStore((s) => s.entity);
+
+  const [liked, setLiked] = useState(isLiked);
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation(likePlaylist, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('search');
+    },
+  });
+
+  const handleLike = async () => {
+    try {
+      await mutation.mutateAsync({ playlistId });
+      setLiked(!liked);
+    } catch (error) {
+      addNotification({
+        title: 'Error',
+        message: error,
+        status: 'error',
+      });
+    }
+  };
 
   return (
     <>
       {isHovered && canEdit && (
-        <Box animation={FADE_OUT_ANIMATION} textAlign="left">
+        <Box
+          animation={FADE_OUT_ANIMATION}
+          textAlign="left"
+          onClick={playlistId ? handleLike : () => console.log('Alt?')}
+        >
           {!onlyHeart && (
             <>
               {entity.role !== 'ARTIST' && <OptionMenu isLarge={isLarge} song={song} />}
               {!noHeart && (
-                <Option icon={isLiked ? AiFillHeart : IoMdHeartEmpty} isLarge={isLarge} />
+                <Option
+                  icon={liked ? AiFillHeart : IoMdHeartEmpty}
+                  isLarge={isLarge}
+                  isLiked={liked}
+                />
               )}
             </>
           )}
@@ -232,7 +266,9 @@ export function Options({
       )}
 
       {onlyHeart && !noHeart && (
-        <Option icon={isLiked ? AiFillHeart : IoMdHeartEmpty} isLarge={isLarge} />
+        <Box onClick={playlistId ? handleLike : () => console.log('Alt')}>
+          <Option icon={liked ? AiFillHeart : IoMdHeartEmpty} isLarge={isLarge} isLiked={liked} />
+        </Box>
       )}
 
       <Text
@@ -265,13 +301,15 @@ export function IconButton({ icon, size = 'sm', w = DIMENSIONS.w, h = DIMENSIONS
   );
 }
 
-export function Option({ icon, label, isLarge = false, ...styles }) {
+export function Option({ icon, label, isLarge = false, isLiked, ...styles }) {
   const dimensions = isLarge && { ...DIMENSIONS };
+
   const iconButton = (
     <ChakraIconButton
       {...styles}
       variant="ghost"
       icon={<Icon as={icon} {...dimensions} />}
+      color={isLiked ? theme.colors.accentSolid.value : 'white'}
       _hover={{
         color: theme.colors.accentSolidHover.value,
       }}

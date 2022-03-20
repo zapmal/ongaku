@@ -76,18 +76,22 @@ export class PlaylistService {
         where: { id: foundPlaylist.interaction[0]?.id || 0 },
         update: {
           value: !isLiked,
-          userPlaylist: {
-            update: {
-              likes: {
-                ...update,
-              },
-            },
-          },
         },
         create: {
           value: !isLiked,
           userId: entityId,
           userPlaylistId: playlistId,
+        },
+      });
+
+      await this.prisma.userPlaylist.update({
+        where: {
+          id: playlistId,
+        },
+        data: {
+          likes: {
+            ...update,
+          },
         },
       });
 
@@ -126,10 +130,13 @@ export class PlaylistService {
         songId: null,
       },
       include: {
-        userPlaylist: true,
-        user: {
-          select: {
-            username: true,
+        userPlaylist: {
+          include: {
+            user: {
+              select: {
+                username: true,
+              },
+            },
           },
         },
       },

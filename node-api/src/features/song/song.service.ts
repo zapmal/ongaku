@@ -262,23 +262,3 @@ export class SongService {
     return [user, likedSongs];
   }
 }
-
-/// for authors query maybe(?)
-// const condition = [];
-// for (const collaborator of collaborators) {
-//   condition.push(
-//     { artisticName: collaborator.trim() },
-//     { band: { name: collaborator.trim() } },
-//   );
-// }
-
-// const artistsIds = await this.prisma.artist.findMany({
-//   where: {
-//     OR: condition,
-//   },
-//   select: {
-//     id: true,
-//   },
-// });
-
-// console.log('artists', artistsIds);

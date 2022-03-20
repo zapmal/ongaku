@@ -61,7 +61,7 @@ export function Search() {
                 authors={
                   song.artist.artisticName
                     ? getName(song.artist.artisticName)
-                    : getName(song.artist.band.name)
+                    : getName(song.artist?.band?.name)
                 }
                 albumName={song.album.name}
                 year={dayjs(song.album.year).format('YYYY')}
@@ -78,9 +78,9 @@ export function Search() {
                 <ArtistRow
                   key={index}
                   id={artist.id}
-                  name={artist.band.name ? artist.band.name : artist.artisticName}
+                  name={artist.band?.name ? artist.band.name : artist.artisticName}
                   avatar={getImage('artist', artist.avatar, 'default/default_avatar.png')}
-                  amountOfFollowers={artist.artistMetrics.followers}
+                  amountOfFollowers={artist.artistMetrics?.followers}
                   isFollowed={artist.interaction.length !== 0 ? artist.interaction[0].value : false}
                   badge={false}
                 />
@@ -101,7 +101,7 @@ export function Search() {
                 authors={
                   album.artist?.artisticName
                     ? getName(album.artist.artisticName)
-                    : getName(album.artist.band?.name)
+                    : getName(album.artist?.band?.name)
                 }
                 type={album.releaseType}
                 songs={album.song}

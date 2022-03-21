@@ -18,6 +18,7 @@ import { SUB_SECTION_MARGIN } from '../../constants';
 import { Button } from '@/components/Elements';
 import { Highlight } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
+import { copyURL } from '@/utils/copyURL';
 
 const TEXT_PROPS = { marginTop: '20px', fontSize: 'xl', color: 'whiteAlpha.800' };
 const BUTTON_PROPS = { margin: '20px 0 0 10px', width: '250px' };
@@ -28,6 +29,8 @@ export function PerfectForYou({
   description,
   genres,
   followers,
+  country,
+  labels,
   pageURL,
   youtubeChannelURL,
 }) {
@@ -41,7 +44,7 @@ export function PerfectForYou({
     >
       <Box margin={SUB_SECTION_MARGIN}>
         <Heading fontSize="xxx-large" color={theme.colors.accentText.value}>
-          {name}{' '}
+          {name.toUpperCase()} {getFlagEmoji(country)}{' '}
           <IconButton
             variant="ghost"
             href={youtubeChannelURL}
@@ -57,12 +60,18 @@ export function PerfectForYou({
         <Text {...TEXT_PROPS}>{description}</Text>
 
         <Text {...TEXT_PROPS}>
-          <Highlight>Géneros:</Highlight> {genres}
+          <Highlight>Géneros:</Highlight>{' '}
+          {genres.map((genre, index) => {
+            return genres.length !== index + 1 ? `${genre}, ` : genre;
+          })}
         </Text>
 
-        {/* <Text {...TEXT_PROPS}>
-          <Highlight>Audiencia Mensual:</Highlight> {monthlyListeners}
-        </Text> */}
+        <Text {...TEXT_PROPS}>
+          <Highlight>Discográfica(s):</Highlight>{' '}
+          {labels.map((label, index) => {
+            return labels.length !== index + 1 ? `${label}, ` : label;
+          })}
+        </Text>
 
         <Text {...TEXT_PROPS}>
           <Highlight>Seguidores:</Highlight> {followers}
@@ -73,8 +82,8 @@ export function PerfectForYou({
             <Button {...BUTTON_PROPS} as={RouterLink} to={pageURL}>
               Ir a Página
             </Button>
-            <Button {...BUTTON_PROPS} variant="accent">
-              Empezar a Escuchar
+            <Button {...BUTTON_PROPS} variant="accent" onClick={() => copyURL(`artist/${name}`)}>
+              Compartir
             </Button>
           </Flex>
         </Box>
@@ -82,19 +91,29 @@ export function PerfectForYou({
       <Image
         src={image}
         height="500px"
+        objectFit="cover"
         borderTopRightRadius="inherit"
         borderBottomRightRadius="inherit"
         onClick={(event) => {
-          if (name === 'DEMONDICE') {
+          if (name === 'demondice') {
             const moriImage = `${window.origin}/assets/images/static-artist-mori.jpg`;
-            const demondiceImage = `${window.origin}/assets/images/static-artist-og-mori.jpeg`;
+            const demondiceImage = image;
 
             event.target.src = moriImage;
 
-            setTimeout(() => (event.target.src = demondiceImage), 3000);
+            setTimeout(() => (event.target.src = demondiceImage), 100);
           }
         }}
       />
     </SimpleGrid>
   );
 }
+
+const getFlagEmoji = (countryCode = 'VE') => {
+  const codePoints = countryCode
+    .toUpperCase()
+    .split('')
+    .map((char) => 127397 + char.charCodeAt());
+
+  return String.fromCodePoint(...codePoints);
+};

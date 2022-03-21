@@ -172,6 +172,129 @@ export class AuthService {
     };
   }
 
+  async getHomeData(entityId: number) {
+    const ARTIST_OF_THE_MONTH = 'gidle';
+    const PERFECT_FOR_YOU = 'demondice';
+
+    const artistOfTheMonth = await this.prisma.artist.findFirst({
+      where: {
+        band: {
+          name: ARTIST_OF_THE_MONTH,
+        },
+      },
+      include: {
+        band: true,
+        artistMetrics: true,
+        artistInformation: true,
+        album: {
+          include: {
+            interaction: {
+              where: {
+                userId: entityId,
+                songId: undefined,
+                userPlaylistId: undefined,
+                artistId: undefined,
+              },
+              select: {
+                value: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!artistOfTheMonth) {
+      throw new NotFound('No encontramos al artista del mes');
+    }
+
+    const suggestedArtists = await this.prisma.artist.findMany({
+      orderBy: {
+        artisticName: 'desc',
+      },
+      include: {
+        artistMetrics: true,
+        band: true,
+      },
+      take: 4,
+    });
+
+    if (!suggestedArtists) {
+      throw new NotFound('No encontramos artistas sugeridos para ti');
+    }
+
+    const perfectForYou = await this.prisma.artist.findFirst({
+      where: {
+        artisticName: PERFECT_FOR_YOU,
+      },
+      include: {
+        artistMetrics: true,
+        artistInformation: true,
+      },
+    });
+
+    if (!perfectForYou) {
+      throw new NotFound('No encontramos al artista perfecto para ti');
+    }
+
+    const trendingArtist = await this.prisma.artist.findMany({
+      orderBy: {
+        artisticName: 'asc',
+      },
+      include: {
+        band: true,
+        artistMetrics: true,
+        interaction: {
+          where: {
+            userId: entityId,
+            songId: undefined,
+            userPlaylistId: undefined,
+            albumId: undefined,
+          },
+          select: {
+            value: true,
+          },
+        },
+      },
+      take: 2,
+    });
+
+    const trendingAlbums = await this.prisma.album.findMany({
+      include: {
+        artist: {
+          include: {
+            band: true,
+          },
+        },
+        interaction: {
+          where: {
+            userId: entityId,
+            songId: undefined,
+            userPlaylistId: undefined,
+            artistId: undefined,
+          },
+          select: {
+            value: true,
+          },
+        },
+      },
+      orderBy: {
+        name: 'asc',
+      },
+      take: 3,
+    });
+
+    return {
+      artistOfTheMonth,
+      suggestedArtists,
+      perfectForYou,
+      trending: {
+        artists: [...trendingArtist],
+        albums: [...trendingAlbums],
+      },
+    };
+  }
+
   async verifyEmail(data: VerifyEmailDTO) {
     let entity: Artist | UserMetadata;
 

@@ -493,7 +493,11 @@ function ProgressBar({ controlsEnabled }) {
       </Slider>
 
       <Text marginLeft="10px" fontSize="sm">
-        {duration !== 0 ? `${Math.floor(duration / 60)}:${Math.ceil(duration % 60)}` : '0:00'}
+        {duration !== 0
+          ? Math.ceil(duration % 60) < 10
+            ? `${Math.floor(duration / 60)}:0${Math.ceil(duration % 60)}`
+            : `${Math.floor(duration / 60)}:${Math.ceil(duration % 60)}`
+          : '0:00'}
       </Text>
 
       <Spacer />

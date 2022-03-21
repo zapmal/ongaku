@@ -26,7 +26,9 @@ import { Link as CustomLink } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useNotificationStore } from '@/stores/useNotificationStore';
+import { capitalizeEach } from '@/utils/capitalizeEach';
 import { getLink } from '@/utils/getLink';
+import { getName } from '@/utils/getName';
 
 const sizes = {
   sm: {
@@ -59,7 +61,6 @@ export function ArtistCard({
 
   const [isHovered, mouseEventsHandlers] = useHover();
   const [followed, setFollowed] = useState(isFollowed);
-  const [_, artistLink] = getLink(name, name);
 
   return (
     <Box
@@ -90,10 +91,11 @@ export function ArtistCard({
               <HoverButton
                 key={index}
                 button={button}
-                to={artistLink}
+                to={name}
                 mouseEventsHandlers={mouseEventsHandlers}
                 size={size}
                 isFollowed={followed}
+                setFollowed={setFollowed}
                 artistId={artistId}
                 entityId={entity.id}
               />
@@ -106,18 +108,20 @@ export function ArtistCard({
           <Heading
             color={isHighlighted && theme.colors.accentText.value}
             as={CustomLink}
-            to={`/artist/${artistLink}`}
+            to={`/artist/${name}`}
             underline={false}
             fontSize="3xl"
           >
-            {name}
+            {capitalizeEach(getName(name))}
           </Heading>
-          <Text color="whiteAlpha.800">{amountOfFollowers} seguidores</Text>
+          <Text color="whiteAlpha.800">
+            {amountOfFollowers === 1 ? '1 seguidor' : `${amountOfFollowers} seguidores`}
+          </Text>
         </>
       ) : (
         <>
           <Flex align="center">
-            <Text fontWeight="bold">{name}</Text>
+            <Text fontWeight="bold">{capitalizeEach(getName(name))}</Text>
             <Spacer />
             {badge && (
               <Badge bg={theme.colors.accentSolid.value} color="whiteAlpha.900" height="100%">
@@ -153,7 +157,16 @@ const hoverButtons = [
   },
 ];
 
-function HoverButton({ button, size, to, isFollowed, artistId, entityId, mouseEventsHandlers }) {
+function HoverButton({
+  button,
+  size,
+  to,
+  isFollowed,
+  setFollowed,
+  artistId,
+  entityId,
+  mouseEventsHandlers,
+}) {
   const goToPageProps = to && button.text.includes('Página') && { as: Link, to: `/artist/${to}` };
   const icon = button.altIcon && isFollowed ? button.altIcon : button.icon;
   const text = button.altText && isFollowed ? button.altText : button.text;
@@ -162,7 +175,10 @@ function HoverButton({ button, size, to, isFollowed, artistId, entityId, mouseEv
 
   const queryClient = useQueryClient();
   const mutation = useMutation(followArtist, {
-    onSuccess: () => queryClient.invalidateQueries('library-artists'),
+    onSuccess: () => {
+      queryClient.invalidateQueries('library-artists');
+      queryClient.invalidateQueries('home');
+    },
   });
 
   const handleOnClick = async () => {
@@ -175,6 +191,7 @@ function HoverButton({ button, size, to, isFollowed, artistId, entityId, mouseEv
         });
       } else {
         await mutation.mutateAsync({ artistId });
+        setFollowed(!isFollowed);
       }
     } catch (error) {
       addNotification({

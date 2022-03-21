@@ -153,8 +153,6 @@ export const PERFECT_FOR_YOU = [
     name: 'DEMONDICE',
     youtubeChannelURL: 'https://youtube.com/DEMONDICEKAREN',
     pageURL: '/artist/DEMONDICE',
-    description: `Karen, meojr conocida online como DEMONDICE es una YouTuber Américana viviendo en japón 
-    que es mayormente conocida por su rap, producción de videos músicales y animación.`,
     genres: 'Hip-Hop, Rap, Jazz Rap, Pop Rap',
     monthlyListeners: '403,871',
     followers: '103,948',

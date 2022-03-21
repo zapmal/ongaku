@@ -1,26 +1,36 @@
 import { Box, Heading, SimpleGrid, Flex, Text } from '@chakra-ui/react';
+import dayjs from 'dayjs';
 import React from 'react';
+import { useQuery } from 'react-query';
 
+import { getHomeData } from '../api/home';
 import { SongCard, ArtistCard, FeaturedArtistInformation, PerfectForYou } from '../components';
-import {
-  FEATURED_ARTIST,
-  GRADIENTS,
-  SECTION_MARGIN,
-  SUB_SECTION_MARGIN,
-  GRID_COLUMN_HEIGHT,
-  SUGGESTED_ARTISTS,
-  PERFECT_FOR_YOU,
-  TRENDING,
-} from '../constants';
+import { GRADIENTS, SECTION_MARGIN, SUB_SECTION_MARGIN, GRID_COLUMN_HEIGHT } from '../constants';
 
 import { Footer } from '@/components/Core';
 import { Banner } from '@/components/Elements';
-import { Highlight } from '@/components/Utils';
+import { Highlight, Spinner } from '@/components/Utils';
+import { capitalizeEach } from '@/utils/capitalizeEach';
+import { getImage } from '@/utils/getImage';
+import { getName } from '@/utils/getName';
 
 export function Home() {
+  const { data, isLoading } = useQuery('home', getHomeData, { useErrorBoundary: true });
+
+  if (isLoading) {
+    return <Spinner paddingBottom="30%" />;
+  }
+
+  console.log(data);
   return (
     <>
-      <Banner image="/assets/images/static-featured-artist-gidle.webp">
+      <Banner
+        image={getImage(
+          'artist',
+          data.artistOfTheMonth.artistInformation.coverImage,
+          'default/default_cover.svg'
+        )}
+      >
         <SimpleGrid
           gridAutoFlow="column"
           alignItems="end"
@@ -31,22 +41,27 @@ export function Home() {
           bg={GRADIENTS.bottom}
         >
           <FeaturedArtistInformation
-            name={FEATURED_ARTIST.name}
-            amountOfFollowers={FEATURED_ARTIST.amountOfFollowers}
-            description={FEATURED_ARTIST.description}
+            name={data.artistOfTheMonth.band.name}
+            amountOfFollowers={data.artistOfTheMonth.artistMetrics.followers}
+            description={`
+              (G)I-dle (en hangul, (여자)아이들; romanización revisada del coreano, Yeoja Aideul; abreviatura de GIRL-I-DLE; 
+              estilizado como (G)I-DLE), es un grupo musical femenino formado por Cube Entertainment en 2018. El grupo consta de cinco integrantes: 
+              Miyeon, Minnie, Soyeon, Yuqi y Shuhua.`}
           />
 
           <Box height={GRID_COLUMN_HEIGHT}>
             <Flex>
-              {FEATURED_ARTIST.songs.map((song, index) => (
+              {data.artistOfTheMonth.album.map((album, index) => (
                 <SongCard
                   key={index}
-                  cover={song.cover}
-                  name={song.name}
-                  isExplicit={song.isExplicit}
-                  type={song.type}
-                  authors={song.authors}
-                  year={song.year}
+                  cover={getImage('album', album.cover, 'default/default_album.png')}
+                  name={album.name}
+                  isExplicit={album.isExplicit}
+                  type={album.releaseType}
+                  authors={data.artistOfTheMonth.band.name}
+                  isLiked={album.interaction.length !== 0 ? album.interaction[0].value : false}
+                  id={album.id}
+                  year={dayjs(album.year).format('YYYY')}
                 />
               ))}
             </Flex>
@@ -64,14 +79,13 @@ export function Home() {
       </Box>
 
       <SimpleGrid column={4} gridAutoFlow="column" justifyItems="center">
-        {SUGGESTED_ARTISTS.map((artist, index) => (
+        {data.suggestedArtists.map((artist, index) => (
           <ArtistCard
             key={index}
-            name={artist.name}
-            avatar={artist.image}
-            amountOfFollowers={artist.amountOfFollowers}
+            name={artist.artisticName ? artist.artisticName : artist.band?.name}
+            avatar={getImage('artist', artist.avatar, 'default/default_avatar.png')}
+            amountOfFollowers={artist.artistMetrics.followers}
             isHighlighted={index % 2 === 0}
-            to={artist.to}
           />
         ))}
       </SimpleGrid>
@@ -85,19 +99,22 @@ export function Home() {
           a tu estilo también {';)'}
         </Text>
 
-        {PERFECT_FOR_YOU.map((artist, index) => (
-          <PerfectForYou
-            key={index}
-            name={artist.name}
-            description={artist.description}
-            genres={artist.genres}
-            monthlyListeners={artist.monthlyListeners}
-            followers={artist.followers}
-            image={artist.image}
-            pageURL={artist.pageURL}
-            youtubeChannelURL={artist.youtubeChannelURL}
-          />
-        ))}
+        <PerfectForYou
+          name={data.perfectForYou.artisticName}
+          country={data.perfectForYou.country}
+          labels={data.perfectForYou.labels}
+          description={`Karen, mejor conocida online como DEMONDICE es una YouTuber Américana viviendo en japón 
+            que es mayormente conocida por su rap, producción de videos músicales y animación.`}
+          genres={data.perfectForYou.genres}
+          followers={data.perfectForYou.artistMetrics.followers}
+          image={getImage(
+            'artist',
+            data.perfectForYou.artistInformation.coverImage,
+            'default/default_avatar.png'
+          )}
+          pageURL={`/artist/${data.perfectForYou.artisticName}`}
+          youtubeChannelURL="https://youtube.com/c/DEMONDICE"
+        />
       </Box>
 
       <Box margin={SECTION_MARGIN}>
@@ -111,28 +128,32 @@ export function Home() {
 
       <SimpleGrid column={5}>
         <Flex margin={SUB_SECTION_MARGIN} justify="space-evenly" align="center">
-          {TRENDING.map((item, index) =>
-            item.cardType === 'song' ? (
-              <SongCard
-                key={index}
-                cover={item.cover}
-                name={item.name}
-                isExplicit={item.isExplicit}
-                type={item.type}
-                authors={item.authors}
-                year={item.year}
-              />
-            ) : (
-              <ArtistCard
-                key={index}
-                name={item.name}
-                avatar={item.image}
-                amountOfFollowers={item.amountOfFollowers}
-                to={item.to}
-                size="sm"
-              />
-            )
-          )}
+          {data.trending.albums.map((album, index) => (
+            <SongCard
+              key={index}
+              id={album.id}
+              isLiked={album.interaction.length !== 0 ? album.interaction[0].value : false}
+              cover={getImage('album', album.cover, 'default/default_album.png')}
+              name={album.name}
+              isExplicit={album.isExplicit}
+              type={album.releaseType}
+              authors={
+                album.artist.artisticName ? album.artist.artisticName : album.artist?.band?.name
+              }
+              year={dayjs(album.year).format('YYYY')}
+            />
+          ))}
+          {data.trending.artists.map((artist, index) => (
+            <ArtistCard
+              key={index}
+              artistId={artist.id}
+              name={artist.artisticName ? artist.artisticName : artist.band?.name}
+              isFollowed={artist.interaction.length !== 0 ? artist.interaction[0].value : false}
+              avatar={getImage('artist', artist.avatar, 'default/default_avatar.png')}
+              amountOfFollowers={artist.artistMetrics.followers}
+              size="sm"
+            />
+          ))}
         </Flex>
       </SimpleGrid>
 

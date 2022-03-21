@@ -28,7 +28,6 @@ import {
 import { Button, Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
-import { capitalizeEach } from '@/utils/capitalizeEach';
 import { getImage } from '@/utils/getImage';
 import { getName } from '@/utils/getName';
 
@@ -113,7 +112,7 @@ function Artists() {
         <ArtistCard
           artistId={artist.id}
           amountOfFollowers={artist.followers}
-          name={capitalizeEach(getName(artist.bandName ? artist.bandName : artist.artisticName))}
+          name={artist.bandName ? artist.bandName : artist.artisticName}
           avatar={getImage('artist', artist.avatar, 'default/default_avatar.png')}
           isFollowed={true}
           badge={false}

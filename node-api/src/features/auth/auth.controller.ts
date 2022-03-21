@@ -157,6 +157,12 @@ export class AuthController {
     return { entity: request.entity };
   }
 
+  @Get('home')
+  @UseGuards(AuthGuard)
+  async getHomeData(@Req() request: RequestWithEntity) {
+    return await this.auth.getHomeData(Number(request.entity.id));
+  }
+
   @Get('csrf')
   getCsrfToken(@Req() request: Request) {
     return { csrf: request.csrfToken() };

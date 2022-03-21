@@ -69,7 +69,7 @@ export class AlbumController {
         ...album,
         artist: {
           artisticName: album.artist.artisticName,
-          bandName: album.artist.band.name,
+          bandName: album.artist?.band?.name ? album.artist.band.name : '',
         },
       };
     });

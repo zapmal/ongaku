@@ -118,6 +118,11 @@ export class PlaylistService {
             username: true,
           },
         },
+        songsInPlaylist: {
+          include: {
+            song: true,
+          },
+        },
       },
     });
 
@@ -136,6 +141,9 @@ export class PlaylistService {
               select: {
                 username: true,
               },
+            },
+            songsInPlaylist: {
+              include: { song: true },
             },
           },
         },

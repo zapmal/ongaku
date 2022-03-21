@@ -77,6 +77,11 @@ export class SongController {
     return await this.song.getAll(artistId);
   }
 
+  @Get('latest')
+  async getLatest(@Req() request: RequestWithEntity) {
+    return await this.song.getLatest(Number(request.entity.id));
+  }
+
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id', ParseIntPipe) id: number) {

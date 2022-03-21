@@ -30,6 +30,7 @@ import { SongRow, SongCard, ArtistRow, NEW_ARTISTS, NEW_SONGS } from '@/features
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useNotificationStore } from '@/stores/useNotificationStore';
+import { capitalizeEach } from '@/utils/capitalizeEach';
 import { copyURL } from '@/utils/copyURL';
 import { getImage } from '@/utils/getImage';
 import { getName } from '@/utils/getName';
@@ -113,7 +114,7 @@ export function ArtistProfile() {
             artist.artistInformation?.coverImage,
             'default/default_cover.svg'
           )}
-          bgRepeat="no-repeat"
+          bgRepeat={artist.artistInformation?.coverImage ? 'round' : 'no-repeat'}
           bgPosition="top"
           height="700px"
         >
@@ -124,12 +125,14 @@ export function ArtistProfile() {
             bg={
               artist.artistInformation?.coverImage
                 ? `linear-gradient(0, ${theme.colors.primaryBase.value} 5%, rgba(255,255,255,0) 40%)`
-                : `linear-gradient(0, ${theme.colors.primaryBase.value} 5%, rgba(255, 255, 255, 0.1) 40%)`
+                : `linear-gradient(0, ${theme.colors.primaryBase.value} 5%, rgba(255, 255, 255, 0) 40%)`
             }
           >
             <VStack marginTop="150px">
-              <Heading fontSize="xxx-large" letterSpacing="4px">
-                {getName(artist.artisticName ? artist.artisticName : artist.band?.name)}{' '}
+              <Heading fontSize="xxx-large" textAlign="center">
+                {artist.artisticName && capitalizeEach(getName(artist.artisticName))}
+                {artist.band?.name && capitalizeEach(getName(artist.band?.name))}
+                <br />
                 {getFlagEmoji(artist.country)}
               </Heading>
               <Text fontWeight="bold" fontSize="lg">
@@ -138,14 +141,14 @@ export function ArtistProfile() {
               </Text>
               {artist.artistInformation?.officialWebsite && (
                 <HStack fontWeight="bold" fontSize="lg">
-                  <Link isExternal href="https://arknights.official.com">
+                  <Link isExternal href={artist.artistInformation.officialWebsite}>
                     SITIO WEB OFICIAL
                   </Link>
                   <Icon as={FiExternalLink} w="20px" h="20px" />
                 </HStack>
               )}
               <HStack>
-                {artist.id === entity.id ||
+                {(artist.id === entity.id && entity.role === 'ARTIST') ||
                   (entity.role === 'ADMIN' && (
                     <ChakraButton
                       {...BUTTON_PROPS}
@@ -156,26 +159,25 @@ export function ArtistProfile() {
                     </ChakraButton>
                   ))}
                 {entity.role !== 'ARTIST' &&
-                  (artist.id !== entity.id &&
-                  followedArtists?.filter((followed) => followed.id === artist.id).length === 1 ? (
-                    <ChakraButton
-                      {...BUTTON_PROPS}
-                      rightIcon={<Icon as={MdCheck} w="25px" h="25px" />}
-                      onClick={handleOnClick}
-                      isDisabled={mutation.isLoading}
-                    >
-                      Siguiendo
-                    </ChakraButton>
-                  ) : (
-                    <ChakraButton
-                      {...BUTTON_PROPS}
-                      rightIcon={<Icon as={MdAdd} w="25px" h="25px" />}
-                      onClick={handleOnClick}
-                      isDisabled={mutation.isLoading}
-                    >
-                      Seguir
-                    </ChakraButton>
-                  ))}
+                followedArtists?.filter((followed) => followed.id === artist.id).length === 1 ? (
+                  <ChakraButton
+                    {...BUTTON_PROPS}
+                    rightIcon={<Icon as={MdCheck} w="25px" h="25px" />}
+                    onClick={handleOnClick}
+                    isDisabled={mutation.isLoading}
+                  >
+                    Siguiendo
+                  </ChakraButton>
+                ) : (
+                  <ChakraButton
+                    {...BUTTON_PROPS}
+                    rightIcon={<Icon as={MdAdd} w="25px" h="25px" />}
+                    onClick={handleOnClick}
+                    isDisabled={mutation.isLoading}
+                  >
+                    Seguir
+                  </ChakraButton>
+                )}
                 <ChakraButton
                   onClick={() =>
                     copyURL(

@@ -28,6 +28,7 @@ import {
 import { Button, Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { capitalizeEach } from '@/utils/capitalizeEach';
 import { getImage } from '@/utils/getImage';
 import { getName } from '@/utils/getName';
 
@@ -61,7 +62,7 @@ export function Library() {
 
   return (
     <>
-      <Box minHeight="450px" maxHeight="100%" margin="0 20px 0 40px">
+      <Box minHeight="460px" maxHeight="100%" margin="0 20px 0 40px">
         <Flex gap={20} justify="center">
           <LibraryOption onClick={() => setSelected('artist')} selected={selected === 'artist'}>
             Artistas
@@ -112,7 +113,7 @@ function Artists() {
         <ArtistCard
           artistId={artist.id}
           amountOfFollowers={artist.followers}
-          name={getName(artist.bandName ? artist.bandName : artist.artisticName)}
+          name={capitalizeEach(getName(artist.bandName ? artist.bandName : artist.artisticName))}
           avatar={getImage('artist', artist.avatar, 'default/default_avatar.png')}
           isFollowed={true}
           badge={false}
@@ -142,12 +143,9 @@ function Albums() {
         <SongCard
           key={index}
           id={album.id}
-          name={album.name}
+          name={getName(album.name)}
           type={album.releaseType}
-          // authors="official bts, IVerson, yoa"
-          authors={getName(
-            album.artist.artisticName ? album.artist.artisticName : album.artist.bandName
-          )}
+          authors={album.artist.artisticName ? album.artist.artisticName : album.artist.bandName}
           cover={getImage('album', album.cover, 'default/default_album.png')}
           year={dayjs(album.year).format('YYYY')}
           isExplicit={false}
@@ -170,7 +168,6 @@ function Playlists() {
   if (isError) {
     return <Status status="error" message={error} />;
   }
-  console.log(data);
 
   return data.playlists.length === 0 ? (
     <EmptySection message="No has creado o marcado como favorita ni una playlist" />
@@ -185,7 +182,7 @@ function Playlists() {
             likes={playlist.likes}
             author={playlist.username}
             cover={getImage('playlist', playlist.cover, 'default/default_cover.jpg')}
-            amountOfSongs={0}
+            amountOfSongs={playlist.songsInPlaylist.length}
             badge={false}
             notLikeable={true}
           />

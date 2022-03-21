@@ -81,6 +81,11 @@ export class AuthService {
                 members,
               },
             },
+            artistMetrics: {
+              create: {
+                followers: 0,
+              },
+            },
           },
         });
       } else {
@@ -90,6 +95,11 @@ export class AuthService {
             password: hashedPassword,
             verifiedEmail: false,
             artisticName,
+            artistMetrics: {
+              create: {
+                followers: 0,
+              },
+            },
           },
         });
       }
@@ -152,6 +162,7 @@ export class AuthService {
         role: entity.role,
         username: entity['username'],
         verifiedEmail,
+        avatar: entity.avatar,
         artisticName: credentials.isArtist
           ? entity['artisticName']
             ? entity['artisticName']

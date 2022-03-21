@@ -9,6 +9,7 @@ import { ArtistRow, SongRow, AlbumRow, PlaylistRow, Status } from '../components
 
 import { Highlight } from '@/components/Utils';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { capitalizeEach } from '@/utils/capitalizeEach';
 import { getImage } from '@/utils/getImage';
 import { getName } from '@/utils/getName';
 
@@ -63,7 +64,7 @@ export function Search() {
                     ? getName(song.artist.artisticName)
                     : getName(song.artist?.band?.name)
                 }
-                albumName={song.album.name}
+                albumName={capitalizeEach(getName(song.album.name))}
                 year={dayjs(song.album.year).format('YYYY')}
               />
             ))
@@ -96,7 +97,7 @@ export function Search() {
               <AlbumRow
                 id={album.id}
                 key={index}
-                name={album.name}
+                name={getName(album.name)}
                 cover={getImage('album', album.cover, 'default/default_album.png')}
                 authors={
                   album.artist?.artisticName

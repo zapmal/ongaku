@@ -5,7 +5,8 @@ import { Card } from './index';
 
 import { Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
-import { getLink } from '@/utils/getLink';
+import { capitalizeEach } from '@/utils/capitalizeEach';
+import { getName } from '@/utils/getName';
 
 export function SongCard({
   id,
@@ -22,7 +23,7 @@ export function SongCard({
     <Card cover={cover} type="song" id={id} isLiked={isLiked} to={name} notLikeable={notLikeable}>
       <Flex justify="end">
         <Text fontWeight="bold" wordBreak="break-word">
-          {name}
+          {capitalizeEach(getName(name))}
         </Text>
         <Spacer />
         <Badge marginTop="5px" marginRight="5px" height="100%">
@@ -51,15 +52,15 @@ export function SongCard({
         </Badge>
       </Flex>
       <Text color="whiteAlpha.700" fontSize="sm">
-        {authors.split(',').map((author, index) => {
+        {/* {authors.split(',').map((author, index) => {
           const [linkText, authorLink] = getLink(author, authors);
 
-          return (
-            <Link to={`/artist/${authorLink}`} key={index} underline={false} variant="gray">
-              {linkText}
-            </Link>
-          );
-        })}
+          return ( */}
+        <Link to={`/artist/${authors}`} underline={false} variant="gray">
+          {capitalizeEach(getName(authors))}
+        </Link>
+        {/* );
+        })} */}
       </Text>
     </Card>
   );

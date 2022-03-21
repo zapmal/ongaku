@@ -15,6 +15,49 @@ import { ConfigService } from '@nestjs/config';
 export class SongService {
   constructor(private prisma: PrismaService, private config: ConfigService) {}
 
+  async getLatest(entityId: number) {
+    const songs = await this.prisma.song.findMany({
+      include: {
+        album: {
+          select: { id: true, name: true, cover: true, year: true },
+        },
+        interaction: {
+          where: {
+            userId: entityId,
+            albumId: undefined,
+            userPlaylistId: undefined,
+            artistId: undefined,
+          },
+          select: {
+            value: true,
+          },
+        },
+        artist: {
+          select: {
+            id: true,
+            artisticName: true,
+            band: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        id: 'desc',
+      },
+      take: 4,
+    });
+
+    if (songs.length === 0) {
+      throw new NotFound('No se encontraron canciones');
+    }
+
+    return songs;
+  }
+
   async update(
     id: number,
     newData: Prisma.SongUpdateInput,

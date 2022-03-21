@@ -80,6 +80,11 @@ export class ArtistController {
     };
   }
 
+  @Get('latest')
+  async newArtists(@Req() request: RequestWithEntity) {
+    return await this.artist.getLatest(Number(request.entity.id));
+  }
+
   @Put('follow')
   @UsePipes(new JoiValidationPipe(followArtistSchema))
   async follow(@Req() request: RequestWithEntity, @Body() { artistId }: FollowArtistDTO) {

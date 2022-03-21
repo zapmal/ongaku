@@ -5,6 +5,8 @@ import { Card } from './index';
 
 import { Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
+import { useAuthStore } from '@/stores/useAuthStore';
+import { getImage } from '@/utils/getImage';
 
 export function PlaylistCard({
   id,
@@ -53,7 +55,7 @@ export function PlaylistCard({
         </Text>
         <Spacer />
         <Text fontWeight="bold" fontSize="sm">
-          {amountOfSongs} canciones
+          {amountOfSongs === 1 ? '1 canción' : `${amountOfSongs} canciones`}
         </Text>
       </Flex>
     </Card>
@@ -61,17 +63,19 @@ export function PlaylistCard({
 }
 
 export function LikedSongsPlaylist() {
+  const entity = useAuthStore((s) => s.entity);
+
   return (
     <Card
-      cover="/assets/images/static-admin-avatar.jpeg"
+      cover={getImage('user', entity.avatar, 'default/default_avatar.svg')}
       type="playlist"
       notLikeable={true}
       isLikedSongsPlaylist={true}
     >
       <Box align="center">
         <Text fontWeight="bold">Canciones Favoritas</Text>
-        <Text color="whiteAlpha.700" fontSize="sm">
-          200 canciones
+        <Text color="whiteAlpha.700" fontSize="xs">
+          Playlist creada automáticamente.
         </Text>
       </Box>
     </Card>

@@ -32,6 +32,37 @@ export class ArtistService {
     return artists;
   }
 
+  async getLatest(entityId: number) {
+    const artists = await this.prisma.artist.findMany({
+      include: {
+        band: true,
+        artistInformation: true,
+        artistMetrics: true,
+        interaction: {
+          where: {
+            songId: undefined,
+            albumId: undefined,
+            userPlaylistId: undefined,
+            userId: entityId,
+          },
+          select: {
+            value: true,
+          },
+        },
+      },
+      orderBy: {
+        id: 'desc',
+      },
+      take: 4,
+    });
+
+    if (artists.length === 0) {
+      throw new NotFound('No se encontraron artistas registrados');
+    }
+
+    return artists;
+  }
+
   async follow(artistId: number, entityId: number) {
     try {
       const foundArtist = await this.prisma.artist.findUnique({

@@ -30,7 +30,7 @@ export function ProfileIcon() {
         <Avatar
           src={getImage(
             entity.role !== 'ARTIST' ? 'user' : 'artist',
-            null,
+            entity.avatar,
             entity.role !== 'ARTIST' ? 'default/default_avatar.svg' : 'default/default_avatar.png'
           )}
         >

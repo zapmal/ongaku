@@ -42,6 +42,7 @@ import { useAuthStore } from '@/stores/useAuthStore';
 import { useNotificationStore } from '@/stores/useNotificationStore';
 import { useQueueStore } from '@/stores/useQueueStore';
 import { useRoomStore } from '@/stores/useRoomStore';
+import { capitalizeEach } from '@/utils/capitalizeEach';
 import { getImage } from '@/utils/getImage';
 import { getName } from '@/utils/getName';
 
@@ -195,10 +196,12 @@ export function Player() {
                     }`}
                     underline={false}
                   >
-                    {getName(
-                      store.currentlyPlaying?.artist.artisticName
-                        ? store.currentlyPlaying.artist.artisticName
-                        : store.currentlyPlaying.artist?.band?.name
+                    {capitalizeEach(
+                      getName(
+                        store.currentlyPlaying?.artist.artisticName
+                          ? store.currentlyPlaying.artist.artisticName
+                          : store.currentlyPlaying.artist?.band?.name
+                      )
                     )}
                   </Link>
                 </Text>
@@ -206,7 +209,9 @@ export function Player() {
                 <Text {...SONG_DATA_PROPS}>
                   Album:{' '}
                   {store.currentlyPlaying?.album?.name && (
-                    <Highlight>{store.currentlyPlaying.album.name}</Highlight>
+                    <Highlight>
+                      {capitalizeEach(getName(store.currentlyPlaying.album.name))}
+                    </Highlight>
                   )}
                 </Text>
               </Box>

@@ -34,7 +34,7 @@ import { useAuthStore } from '@/stores/useAuthStore';
 import { useNotificationStore } from '@/stores/useNotificationStore';
 import { useQueueStore } from '@/stores/useQueueStore';
 import { useRoomStore } from '@/stores/useRoomStore';
-import { getLink } from '@/utils/getLink';
+import { capitalizeEach } from '@/utils/capitalizeEach';
 import { getName } from '@/utils/getName';
 
 export function SongRow({
@@ -44,13 +44,12 @@ export function SongRow({
   authors,
   albumName,
   year,
-  duration,
   song,
   albumId,
+  isLiked,
   width = '75%',
 }) {
   const [isHovered, mouseEventsHandlers] = useHover();
-  const [_, artistLink] = getLink(authors, authors);
   const { playing, togglePlayPause, error, ready } = useAudioPlayer();
   const room = useRoomStore((s) => s.room);
   const store = useQueueStore();
@@ -84,7 +83,12 @@ export function SongRow({
           animation={FADE_OUT_ANIMATION}
           onClick={store.currentlyPlaying.id === song.id ? handleIsPlaying : handlePlay}
         >
-          <IconButton icon={playing ? MdPause : MdPlayArrow} size="lg" w="40px" h="40px" />
+          <IconButton
+            icon={playing && store.currentlyPlaying.id === song.id ? MdPause : MdPlayArrow}
+            size="lg"
+            w="40px"
+            h="40px"
+          />
         </Box>
       ) : (
         <Image src={cover} w="60px" h="60px" borderRadius="5px" />
@@ -93,13 +97,20 @@ export function SongRow({
       <SongInformation
         name={name}
         isExplicit={isExplicit}
-        authors={artistLink}
+        authors={authors}
         albumName={albumName}
         albumId={albumId}
         year={year}
       />
 
-      <Options isHovered={isHovered} duration={duration} isLarge={true} />
+      <Options
+        isHovered={isHovered}
+        isLarge={true}
+        canEdit={true}
+        noHeart={true}
+        isLiked={isLiked}
+        song={song}
+      />
     </Flex>
   );
 }
@@ -176,27 +187,18 @@ function SongInformation({ name, isPlaying, isExplicit, authors, albumName, albu
           )}
         </Text>
         <Text fontSize="xs" color={theme.colors.primaryText.value}>
-          {authors.split(',').map((author, index) => {
-            return (
-              <Link to={`/artist/${author}`} key={index} underline={false} variant="gray">
-                {authors.split(',').length !== index + 1
-                  ? `${getName(author.trim())}, `
-                  : getName(author.trim())}
+          <Link to={`/artist/${authors}`} underline={false} variant="gray">
+            {capitalizeEach(getName(authors))}
+          </Link>
+          {albumName && (
+            <>
+              {' - '}
+              <Link to={`/view?id=${albumId}&type=album`} underline={false} variant="gray">
+                {capitalizeEach(getName(albumName))}
               </Link>
-            );
-          })}
-          {albumName &&
-            albumName.split(',').map((a, index) => {
-              return (
-                <React.Fragment key={index}>
-                  {' - '}
-                  <Link to={`/view?id=${albumId}&type=album`} underline={false} variant="gray">
-                    {albumName}
-                  </Link>
-                  {' - '}
-                </React.Fragment>
-              );
-            })}
+              {' - '}
+            </>
+          )}
           {year}
         </Text>
       </Box>
@@ -215,7 +217,7 @@ export function Options({
   noHeart = false,
   isLiked = false,
   playlistId,
-  canEdit,
+  canEdit = false,
 }) {
   const addNotification = useNotificationStore((s) => s.addNotification);
   const entity = useAuthStore((s) => s.entity);
@@ -248,7 +250,7 @@ export function Options({
         <Box
           animation={FADE_OUT_ANIMATION}
           textAlign="left"
-          onClick={playlistId ? handleLike : () => console.log('Alt?')}
+          onClick={playlistId ? handleLike : () => console.log('Ignored')}
         >
           {!onlyHeart && (
             <>

@@ -1,15 +1,38 @@
 import { SimpleGrid, Heading, Box, Divider, Text } from '@chakra-ui/react';
+import dayjs from 'dayjs';
 import React from 'react';
+import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 
+import { getLatestArtists } from '../api/artist';
+import { getLatestSongs } from '../api/song';
 import { SongRow, ArtistRow } from '../components';
-import { NEW_ARTISTS, NEW_SONGS, POPULAR_TOPICS } from '../constants';
+import { NEW_ARTISTS, POPULAR_TOPICS } from '../constants';
 
 import { Footer } from '@/components/Core';
-import { Highlight } from '@/components/Utils';
+import { Highlight, Spinner } from '@/components/Utils';
+import { getImage } from '@/utils/getImage';
 import { getLink } from '@/utils/getLink';
 
 export function Explore() {
+  const {
+    data: latestArtists,
+    isLoading: isLoadingArtists,
+    isError: isArtistsError,
+  } = useQuery('latest-artists', getLatestArtists);
+
+  const {
+    data: latestSongs,
+    isLoading: isLoadingSongs,
+    isError: isSongsError,
+  } = useQuery('latest-songs', getLatestSongs);
+
+  if (isLoadingSongs || isLoadingArtists) {
+    return <Spinner paddingBottom="20%" />;
+  }
+
+  if (isSongsError || isArtistsError) throw new Error();
+
   return (
     <Box>
       <SimpleGrid columns={2} align="center">
@@ -18,20 +41,31 @@ export function Explore() {
             <Highlight>Nuevas</Highlight> Canciones
           </Heading>
 
-          {NEW_SONGS.map((song, index) => (
-            <Box key={index}>
-              <SongRow
-                name={song.name}
-                cover={song.cover}
-                isExplicit={song.isExplicit}
-                authors={song.authors}
-                albumName={song.albumName}
-                year={song.year}
-                duration={song.duration}
-              />
-              <Divider width="75%" />
+          {latestSongs.length === 0 ? (
+            <Box>
+              <Text color="whiteAlpha.700" marginTop="20px">
+                No hay canciones
+              </Text>
             </Box>
-          ))}
+          ) : (
+            latestSongs.map((song, index) => (
+              <Box key={index}>
+                <SongRow
+                  name={song.name}
+                  cover={getImage('album', song.album.cover, 'default/default_album.png')}
+                  isExplicit={song.isExplicit}
+                  authors={
+                    song.artist.artisticName ? song.artist.artisticName : song.artist.band.name
+                  }
+                  albumName={song.album.name}
+                  albumId={song.album.id}
+                  year={dayjs(song.album.year).format('YYYY')}
+                  song={song}
+                />
+                <Divider width="75%" />
+              </Box>
+            ))
+          )}
         </Box>
 
         <Box>
@@ -39,18 +73,31 @@ export function Explore() {
             <Highlight>Nuevos</Highlight> Artistas
           </Heading>
 
-          {NEW_ARTISTS.map((artist, index) => (
-            <Box key={index}>
-              <ArtistRow
-                name={artist.name}
-                avatar={artist.image}
-                amountOfFollowers={artist.amountOfFollowers}
-                badge={false}
-                size="sm"
-              />
-              <Divider width="75%" />
+          {console.log(latestArtists)}
+          {latestArtists.length === 0 ? (
+            <Box>
+              <Text color="whiteAlpha.700" marginTop="20px">
+                No hay artistas
+              </Text>
             </Box>
-          ))}
+          ) : (
+            latestArtists.map((artist, index) => (
+              <Box key={index}>
+                <ArtistRow
+                  id={artist.id}
+                  name={artist.artisticName ? artist.artisticName : artist.band.name}
+                  avatar={getImage('artist', artist.avatar, 'default/default_avatar.png')}
+                  amountOfFollowers={
+                    artist.artistMetrics?.followers ? artist.artistMetrics.followers : 0
+                  }
+                  badge={false}
+                  isFollowed={artist.interaction.length !== 0 ? artist.interaction[0].value : false}
+                  size="sm"
+                />
+                <Divider width="75%" />
+              </Box>
+            ))
+          )}
         </Box>
       </SimpleGrid>
 

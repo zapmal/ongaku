@@ -160,7 +160,7 @@ export function Card({
                   mouseEventsHandlers={mouseEventsHandlers}
                 />
               ))}
-          {(!notLikeable || entity.role !== 'ARTIST') && (
+          {(!notLikeable || entity.role !== 'ARTIST') && !isLikedSongsPlaylist && (
             <OptionsButton
               mouseEventsHandlers={mouseEventsHandlers}
               type={type}

@@ -168,9 +168,7 @@ const seed = async () => {
   // Artist, verified email.
   const iverson = await prisma.artist.upsert({
     where: { email: 'yungiverson@gmail.com' },
-    update: {
-      country: 'VE',
-    },
+    update: {},
     create: {
       email: 'yungiverson@gmail.com',
       country: 'VE',
@@ -181,6 +179,11 @@ const seed = async () => {
       verifiedEmail: true,
       password: await hash('password', 10),
       avatar: iversonAvatar,
+      artistMetrics: {
+        create: {
+          followers: 0,
+        },
+      },
     },
   });
 
@@ -213,6 +216,11 @@ const seed = async () => {
           coverImage: gentlemenCover,
         },
       },
+      artistMetrics: {
+        create: {
+          followers: 0,
+        },
+      },
       verifiedEmail: true,
     },
   });
@@ -232,9 +240,7 @@ const seed = async () => {
   // Artist (group), verified email.
   const bts = await prisma.artist.upsert({
     where: { email: 'contact@btsbighit.com' },
-    update: {
-      country: 'KR',
-    },
+    update: {},
     create: {
       email: 'contact@btsbighit.com',
       password: await hash('password', 10),
@@ -244,6 +250,11 @@ const seed = async () => {
       yearsActive: 2,
       verifiedEmail: true,
       avatar: btsAvatar,
+      artistMetrics: {
+        create: {
+          followers: 0,
+        },
+      },
       artistInformation: {
         create: {
           coverImage: btsCover,
@@ -283,6 +294,11 @@ const seed = async () => {
       yearsActive: 2,
       avatar: monsterSirenAvatar,
       verifiedEmail: true,
+      artistMetrics: {
+        create: {
+          followers: 0,
+        },
+      },
       artistInformation: {
         create: {
           coverImage: monsterSirenCover,
@@ -316,6 +332,11 @@ const seed = async () => {
       artisticName: 'demondice',
       avatar: demondiceAvatar,
       verifiedEmail: true,
+      artistMetrics: {
+        create: {
+          followers: 0,
+        },
+      },
       artistInformation: {
         create: {
           coverImage: demondiceCover,
@@ -349,6 +370,11 @@ const seed = async () => {
       yearsActive: 3,
       avatar: jojiAvatar,
       verifiedEmail: true,
+      artistMetrics: {
+        create: {
+          followers: 0,
+        },
+      },
       artistInformation: {
         create: {
           coverImage: jojiCover,
@@ -381,6 +407,11 @@ const seed = async () => {
       yearsActive: 7,
       avatar: gidleAvatar,
       verifiedEmail: true,
+      artistMetrics: {
+        create: {
+          followers: 0,
+        },
+      },
       band: {
         create: {
           name: 'gidle',
@@ -420,6 +451,11 @@ const seed = async () => {
       yearsActive: 3,
       avatar: moriAvatar,
       verifiedEmail: true,
+      artistMetrics: {
+        create: {
+          followers: 0,
+        },
+      },
       artistInformation: {
         create: {
           coverImage: moriCover,
@@ -447,6 +483,11 @@ const seed = async () => {
       yearsActive: 8,
       avatar: pvrisAvatar,
       verifiedEmail: true,
+      artistMetrics: {
+        create: {
+          followers: 0,
+        },
+      },
     },
   });
 
@@ -474,6 +515,11 @@ const seed = async () => {
       yearsActive: 5,
       avatar: twiceAvatar,
       verifiedEmail: true,
+      artistMetrics: {
+        create: {
+          followers: 0,
+        },
+      },
       band: {
         create: {
           name: 'twice',
@@ -512,6 +558,11 @@ const seed = async () => {
       yearsActive: 2,
       avatar: kdaAvatar,
       verifiedEmail: true,
+      artistMetrics: {
+        create: {
+          followers: 0,
+        },
+      },
       band: {
         create: {
           name: 'kda',

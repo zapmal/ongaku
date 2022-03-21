@@ -31,6 +31,7 @@ import { theme } from '@/stitches.config.js';
 import { useNotificationStore } from '@/stores/useNotificationStore';
 import { useQueueStore } from '@/stores/useQueueStore';
 import { useRoomStore } from '@/stores/useRoomStore';
+import { capitalizeEach } from '@/utils/capitalizeEach';
 import { copyURL } from '@/utils/copyURL';
 import { getLink } from '@/utils/getLink';
 import { getName } from '@/utils/getName';
@@ -117,6 +118,7 @@ export function ArtistRow({ id, name, avatar, amountOfFollowers, isFollowed }) {
   const mutation = useMutation(followArtist, {
     onSuccess: () => {
       queryClient.invalidateQueries('search');
+      queryClient.invalidateQueries('latest-artists');
     },
   });
 
@@ -144,7 +146,7 @@ export function ArtistRow({ id, name, avatar, amountOfFollowers, isFollowed }) {
           as={Link}
           to={`/artist/${name}`}
         >
-          {getName(name)}
+          {capitalizeEach(getName(name))}
         </Text>
         <Text color="whiteAlpha.700" fontSize="sm" textAlign="left">
           {amountOfFollowers === 1 ? '1 seguidor' : `${amountOfFollowers} seguidores`}
@@ -155,7 +157,11 @@ export function ArtistRow({ id, name, avatar, amountOfFollowers, isFollowed }) {
       {isHovered && (
         <Box animation={FADE_OUT_ANIMATION} onClick={handleOnClick}>
           <Tooltip
-            label={followed ? `¿Dejar de seguir a ${getName(name)}?` : `Sigue a ${getName(name)}`}
+            label={
+              followed
+                ? `¿Dejar de seguir a ${capitalizeEach(getName(name))}?`
+                : `Sigue a ${capitalizeEach(getName(name))}`
+            }
           >
             <IconButton
               icon={<Icon as={followed ? MdCheck : MdAdd} />}
@@ -219,7 +225,7 @@ export function AlbumRow({ id, name, cover, isExplicit, authors, songs, type, ye
 
       <Spacer />
 
-      <Options isHovered={isHovered} duration="3:35" isLarge={true} />
+      <Options isHovered={isHovered} isLarge={true} />
     </RowContainer>
   );
 }

@@ -179,15 +179,13 @@ export function View() {
                     : getName(data?.artist?.band?.name)}
                 </Link>
               </HStack>
-              {data.name}
+              {getName(data.name)}
             </Heading>
 
             <HStack color="whiteAlpha.800" marginTop="5px">
               <Text fontWeight="bold">
-                {id && type.toUpperCase()}{' '}
                 {type === 'album' && (
                   <>
-                    {' - '}
                     {data.releaseType.toUpperCase()}
                     {' - '}
                   </>
@@ -289,7 +287,7 @@ export function View() {
                         underline={false}
                         variant="gray"
                       >
-                        {song.album.name}
+                        {getName(song.album.name)}
                       </Link>
                     </Td>
                     <Td>{song.isExplicit ? 'Sí' : 'No'}</Td>

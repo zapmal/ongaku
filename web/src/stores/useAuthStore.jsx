@@ -22,9 +22,9 @@ export const useAuthStore = create((set, get) => ({
       await apiClient.get('logout');
 
       localStorage.removeItem('isLoggedIn');
-      set({ user: {}, csrfToken: null });
+      set({ entity: {}, csrfToken: null });
     } catch (error) {
-      set({ user: {} });
+      set({ entity: {} });
     }
   },
 }));

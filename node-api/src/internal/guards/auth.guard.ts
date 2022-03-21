@@ -43,6 +43,8 @@ export class AuthGuard implements CanActivate {
       email: entity.email,
       username: entity.username,
       verifiedEmail: entity.verifiedEmail,
+      avatar: entity.avatar,
+      artisticName: entity.artisticName,
       role: entity.role,
     };
 

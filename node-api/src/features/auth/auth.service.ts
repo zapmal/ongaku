@@ -196,6 +196,7 @@ export class AuthService {
                 artistId: undefined,
               },
               select: {
+                id: true,
                 value: true,
               },
             },
@@ -252,6 +253,7 @@ export class AuthService {
             albumId: undefined,
           },
           select: {
+            id: true,
             value: true,
           },
         },
@@ -274,6 +276,7 @@ export class AuthService {
             artistId: undefined,
           },
           select: {
+            id: true,
             value: true,
           },
         },

@@ -13,6 +13,8 @@ export const useQueueStore = create(
         songs.map((song) => newQueue.insert(song));
       } else {
         songs.map((song) => {
+          console.log(song);
+          console.log(newQueue);
           if (newQueue.find(song) === -1) {
             newQueue.insert(song);
           }

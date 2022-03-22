@@ -39,6 +39,7 @@ import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useNotificationStore } from '@/stores/useNotificationStore';
 import { useQueueStore } from '@/stores/useQueueStore';
+import { capitalizeEach } from '@/utils/capitalizeEach';
 import { copyURL } from '@/utils/copyURL';
 import { getImage } from '@/utils/getImage';
 import { getName } from '@/utils/getName';
@@ -63,7 +64,7 @@ const TABLE_ROW_PROPS = {
 export function View() {
   const addNotification = useNotificationStore((s) => s.addNotification);
   const entity = useAuthStore((s) => s.entity);
-  const currentlyPlaying = useQueueStore((s) => s.currentlyPlaying);
+  const store = useQueueStore();
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -130,6 +131,8 @@ export function View() {
     return <Spinner paddingBottom="30%" />;
   }
 
+  console.log(data);
+
   return (
     <Box>
       <Banner
@@ -173,13 +176,13 @@ export function View() {
                   fontWeight="bold"
                 >
                   {type === 'playlist'
-                    ? getName(data?.user.username)
+                    ? capitalizeEach(getName(data?.user.username))
                     : data?.artist?.artisticName
-                    ? getName(data?.artist?.artisticName)
-                    : getName(data?.artist?.band?.name)}
+                    ? capitalizeEach(getName(data?.artist?.artisticName))
+                    : capitalizeEach(getName(data?.artist?.band?.name))}
                 </Link>
               </HStack>
-              {getName(data.name)}
+              {capitalizeEach(getName(data.name))}
             </Heading>
 
             <HStack color="whiteAlpha.800" marginTop="5px">
@@ -187,12 +190,18 @@ export function View() {
                 {type === 'album' && (
                   <>
                     {data.releaseType.toUpperCase()}
-                    {' - '}
+                    {' -'}
                   </>
                 )}
               </Text>
               <Text>
-                {type === 'playlist' ? data.songsInPlaylist?.length : data.song?.length} canciones{' '}
+                {type === 'playlist'
+                  ? data.songsInPlaylist?.length === 1
+                    ? '1 canción'
+                    : `${data.songsInPlaylist?.length} canciones`
+                  : data.song?.length === 1
+                  ? '1 canción'
+                  : `${data.song?.length} canciones`}{' '}
               </Text>
             </HStack>
 
@@ -248,7 +257,7 @@ export function View() {
                 return (
                   <Tr key={index} {...TABLE_ROW_PROPS}>
                     <Td>
-                      {currentlyPlaying.id === song.id ? (
+                      {store.currentlyPlaying.id === song.id ? (
                         <Icon
                           as={playing ? MdPause : MdPlayArrow}
                           onClick={togglePlayPause}
@@ -309,10 +318,10 @@ export function View() {
                 return (
                   <Tr key={index} {...TABLE_ROW_PROPS}>
                     <Td>
-                      {/* This should be "isPlaying?" */}
-                      {index === 0 ? (
+                      {store.currentlyPlaying.id === song.id ? (
                         <Icon
-                          as={MdPause}
+                          as={playing ? MdPause : MdPlayArrow}
+                          onClick={togglePlayPause}
                           w="25px"
                           h="25px"
                           color="whiteAlpha.900"
@@ -324,7 +333,7 @@ export function View() {
                     </Td>
                     <Td>{song.name}</Td>
                     <Td>
-                      {song?.collaborators[0] !== ''
+                      {song?.collaborators[0] !== '' && song.collaborators.length !== 0
                         ? song?.collaborators.map((collaborator, index) => {
                             return song?.collaborators.length !== index + 1
                               ? `${getName(collaborator)}, `

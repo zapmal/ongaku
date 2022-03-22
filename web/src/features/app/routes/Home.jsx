@@ -10,9 +10,7 @@ import { GRADIENTS, SECTION_MARGIN, SUB_SECTION_MARGIN, GRID_COLUMN_HEIGHT } fro
 import { Footer } from '@/components/Core';
 import { Banner } from '@/components/Elements';
 import { Highlight, Spinner } from '@/components/Utils';
-import { capitalizeEach } from '@/utils/capitalizeEach';
 import { getImage } from '@/utils/getImage';
-import { getName } from '@/utils/getName';
 
 export function Home() {
   const { data, isLoading } = useQuery('home', getHomeData, { useErrorBoundary: true });
@@ -21,7 +19,6 @@ export function Home() {
     return <Spinner paddingBottom="30%" />;
   }
 
-  console.log(data);
   return (
     <>
       <Banner

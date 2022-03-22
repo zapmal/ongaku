@@ -46,6 +46,7 @@ export class ArtistService {
             userId: entityId,
           },
           select: {
+            id: true,
             value: true,
           },
         },
@@ -275,6 +276,7 @@ export class ArtistService {
         artistId: id,
       },
       include: {
+        album: true,
         artist: {
           include: {
             band: true,

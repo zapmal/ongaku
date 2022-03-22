@@ -38,6 +38,7 @@ export class SearchService {
         },
         band: {
           select: {
+            id: true,
             name: true,
           },
         },
@@ -49,6 +50,7 @@ export class SearchService {
             userId: entityId,
           },
           select: {
+            id: true,
             value: true,
           },
         },
@@ -72,6 +74,7 @@ export class SearchService {
             userId: entityId,
           },
           select: {
+            id: true,
             value: true,
           },
         },
@@ -92,16 +95,18 @@ export class SearchService {
                     userId: entityId,
                   },
                   select: {
+                    id: true,
                     value: true,
                   },
                 },
                 artist: {
                   select: {
+                    id: true,
                     artisticName: true,
-                    band: { select: { name: true } },
+                    band: { select: { id: true, name: true } },
                   },
                 },
-                album: { select: { cover: true, name: true } },
+                album: true,
               },
             },
           },
@@ -120,9 +125,11 @@ export class SearchService {
       include: {
         song: {
           include: {
+            album: true,
             interaction: {
               where: { userId: entityId, value: true },
               select: {
+                id: true,
                 value: true,
               },
             },
@@ -142,9 +149,11 @@ export class SearchService {
         },
         artist: {
           select: {
+            id: true,
             artisticName: true,
             band: {
               select: {
+                id: true,
                 name: true,
               },
             },
@@ -165,27 +174,23 @@ export class SearchService {
         interaction: {
           where: { userId: entityId, value: true },
           select: {
+            id: true,
             value: true,
           },
         },
         artist: {
           select: {
+            id: true,
             artisticName: true,
             band: {
               select: {
+                id: true,
                 name: true,
               },
             },
           },
         },
-        album: {
-          select: {
-            id: true,
-            name: true,
-            cover: true,
-            year: true,
-          },
-        },
+        album: true,
       },
       take: SEARCH_LIMIT,
     });

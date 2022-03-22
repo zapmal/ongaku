@@ -18,9 +18,7 @@ export class SongService {
   async getLatest(entityId: number) {
     const songs = await this.prisma.song.findMany({
       include: {
-        album: {
-          select: { id: true, name: true, cover: true, year: true },
-        },
+        album: true,
         interaction: {
           where: {
             userId: entityId,
@@ -29,6 +27,7 @@ export class SongService {
             artistId: undefined,
           },
           select: {
+            id: true,
             value: true,
           },
         },
@@ -235,6 +234,7 @@ export class SongService {
         interaction: {
           where: { userId: entityId, value: true },
           select: {
+            id: true,
             value: true,
           },
         },
@@ -250,13 +250,7 @@ export class SongService {
             },
           },
         },
-        album: {
-          select: {
-            id: true,
-            name: true,
-            cover: true,
-          },
-        },
+        album: true,
       },
     });
 
@@ -288,7 +282,7 @@ export class SongService {
                 artistId: undefined,
                 userId: entityId,
               },
-              select: { value: true },
+              select: { id: true, value: true },
             },
             artist: {
               include: { band: true },

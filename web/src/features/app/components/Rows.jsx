@@ -33,7 +33,6 @@ import { useQueueStore } from '@/stores/useQueueStore';
 import { useRoomStore } from '@/stores/useRoomStore';
 import { capitalizeEach } from '@/utils/capitalizeEach';
 import { copyURL } from '@/utils/copyURL';
-import { getLink } from '@/utils/getLink';
 import { getName } from '@/utils/getName';
 
 dayjs.extend(relativeTime);
@@ -194,7 +193,7 @@ export function AlbumRow({ id, name, cover, isExplicit, authors, songs, type, ye
       <Box marginLeft="10px" textAlign="left">
         <Text color={theme.colors.accentText.value}>
           <Link to={`/view?id=${id}&type=album`} underline={false} color="inherit">
-            {name}
+            {capitalizeEach(name)}
           </Link>{' '}
           {isExplicit && (
             <Badge bg={theme.colors.dangerSolid.value} color="whiteAlpha.900">
@@ -205,14 +204,9 @@ export function AlbumRow({ id, name, cover, isExplicit, authors, songs, type, ye
 
         <Flex gap="5px">
           <Text fontSize="xs" color={theme.colors.primaryText.value}>
-            {authors.split(',').map((a, index) => {
-              const [linkText, authorPath] = getLink(a, authors);
-              return (
-                <Link to={`/artist/${authorPath}`} key={index} underline={false} variant="gray">
-                  {linkText}{' '}
-                </Link>
-              );
-            })}
+            <Link to={`/artist/${authors}`} underline={false} variant="gray">
+              {capitalizeEach(getName(authors))}
+            </Link>
           </Text>
           <Text fontSize="xs" color={theme.colors.primaryText.value}>
             - {type} -
@@ -296,23 +290,31 @@ function RowContainer({ isHovered, cover, mouseEventsHandlers, songs, children }
   };
 
   const handlePlay = () => {
-    if (songs.length !== 0 && room.length === 0) store.add(songs);
+    if (songs.length !== 0 && room.length === 0) {
+      store.add(songs);
+    }
   };
 
   return (
     <Flex align="center" margin="15px 0" width="75%" {...mouseEventsHandlers}>
       {isHovered ? (
-        <Box animation={FADE_OUT_ANIMATION} onClick={handlePlay}>
+        <Box
+          animation={FADE_OUT_ANIMATION}
+          onClick={handlePlay}
+          // songs.find((song) => song.id === store.currentlyPlaying.id) !== undefined
+          //   ? handleIsPlaying
+          //   : handlePlay
+          // }
+        >
           <CustomIconButton
-            icon={playing ? MdPause : MdPlayArrow}
+            icon={MdPlayArrow}
+            // playing && songs.find((song) => song.id === store.currentlyPlaying.id) !== undefined
+            //   ? MdPause
+            // : MdPlayArrow
+            // }
             size="lg"
             w="40px"
             h="40px"
-            onClick={
-              store.currentlyPlaying.id === store.queue.getHeadNode()?.getData().id
-                ? handleIsPlaying
-                : handlePlay
-            }
           />
         </Box>
       ) : (

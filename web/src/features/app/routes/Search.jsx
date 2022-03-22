@@ -100,9 +100,7 @@ export function Search() {
                 name={getName(album.name)}
                 cover={getImage('album', album.cover, 'default/default_album.png')}
                 authors={
-                  album.artist?.artisticName
-                    ? getName(album.artist.artisticName)
-                    : getName(album.artist?.band?.name)
+                  album.artist?.artisticName ? album.artist.artisticName : album.artist?.band?.name
                 }
                 type={album.releaseType}
                 songs={album.song}

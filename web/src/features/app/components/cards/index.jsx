@@ -366,13 +366,11 @@ function OptionsButton({ id, type, to, mouseEventsHandlers }) {
           {...MENU_ITEM_PROPS}
           icon={<Icon as={MdOpenInNew} w="15px" h="15px" marginTop="5px" />}
           as={Link}
-          to={`/view?id=${id}&type=${type === 'playlist' ? 'playlits' : 'album'}`}
+          to={`/view?id=${id}&type=${type === 'playlist' ? 'playlist' : 'album'}`}
         >
           Abrir
         </MenuItem>
 
-        {/* {type !== 'playlist' && (
-          <> */}
         <MenuDivider />
         <MenuOptionGroup title="Agregar a Playlist">
           {isLoading ? (
@@ -404,8 +402,6 @@ function OptionsButton({ id, type, to, mouseEventsHandlers }) {
             })
           )}
         </MenuOptionGroup>
-        {/* </>
-        )} */}
       </MenuList>
     </Menu>
   );

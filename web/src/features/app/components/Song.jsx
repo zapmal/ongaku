@@ -187,9 +187,16 @@ function SongInformation({ name, isPlaying, isExplicit, authors, albumName, albu
           )}
         </Text>
         <Text fontSize="xs" color={theme.colors.primaryText.value}>
-          <Link to={`/artist/${authors}`} underline={false} variant="gray">
-            {capitalizeEach(getName(authors))}
-          </Link>
+          {authors.split(',').map((author, index) => {
+            return (
+              <React.Fragment key={index}>
+                <Link to={`/artist/${author}`} underline={false} variant="gray">
+                  {capitalizeEach(getName(author))}
+                </Link>
+                {authors.split(',').length !== index + 1 && ', '}
+              </React.Fragment>
+            );
+          })}
           {albumName && (
             <>
               {' - '}

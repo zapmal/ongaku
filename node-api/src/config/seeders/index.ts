@@ -588,7 +588,7 @@ const seed = async () => {
     update: {},
     create: {
       cover: iNeverDieCover,
-      name: 'i-never-die',
+      name: 'i-will-never-die',
       releaseType: 'ALBUM',
       artistId: gidle.id,
       year: dayjs('2022').toDate(),

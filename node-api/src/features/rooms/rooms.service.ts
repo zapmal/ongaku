@@ -243,6 +243,7 @@ export class RoomsService {
       data: {
         key,
         host: userId,
+        createdAt: new Date(),
         ...data,
       },
     });

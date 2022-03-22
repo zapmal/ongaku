@@ -60,12 +60,12 @@ export function ArtistProfile() {
 
   const queryClient = useQueryClient();
   const {
-    data: { artist, popularSongs, recommendation, albums },
+    data: { artist, latestSongs, recommendation, albums },
     isLoading: isLoadingProfile,
   } = useQuery(`artist-${params?.name}`, () => getProfileData(params?.name), {
     initialData: {
       artist: {},
-      popularSongs: [],
+      latestSongs: [],
       recommendation: [],
       albums: [],
     },
@@ -104,6 +104,8 @@ export function ArtistProfile() {
   if (isLoadingProfile && isLoadingFollowedArtists) {
     return <Spinner paddingBottom="30%" />;
   }
+
+  console.log(latestSongs);
 
   return (
     <>
@@ -196,22 +198,25 @@ export function ArtistProfile() {
 
         <SimpleGrid columns={recommendation.length === 0 ? 1 : 2} align="center">
           <Box>
-            <Heading fontSize="xx-large">Canciones Populares</Heading>
-            {popularSongs.length === 0 ? (
+            <Heading fontSize="xx-large">Canciones Nuevas</Heading>
+            {latestSongs.length === 0 ? (
               <Text fontSize="large" color="whiteAlpha.700" marginTop="10px">
                 Este artista no tiene canciones populares, por ahora.
               </Text>
             ) : (
-              NEW_SONGS.map((song, index) => (
+              latestSongs.map((song, index) => (
                 <Box key={index}>
                   <SongRow
                     name={song.name}
-                    cover={song.cover}
+                    cover={getImage('album', song.album.cover, 'default/default_album.png')}
                     isExplicit={song.isExplicit}
-                    authors={song.authors} // wrong
-                    albumName={song.albumName}
-                    year={song.year}
-                    duration={song.duration}
+                    authors={
+                      song.artist.artisticName ? song.artist.artisticName : song.artist.band.name
+                    }
+                    albumName={song.album.name}
+                    albumId={song.album.id}
+                    year={dayjs(song.album.year).format('YYYY')}
+                    song={song}
                     width="90%"
                   />
                   <Divider width="90%" />
@@ -222,14 +227,19 @@ export function ArtistProfile() {
           {recommendation.length !== 0 && (
             <Box>
               <Heading fontSize="xx-large">A los fans también les gusta</Heading>
-              {NEW_ARTISTS.map((artist, index) => (
+              {recommendation.map((artist, index) => (
                 <Box key={index}>
                   <ArtistRow
-                    name={artist.name}
-                    avatar={artist.image}
-                    amountOfFollowers={artist.amountOfFollowers}
-                    to={artist.to}
+                    id={artist.id}
+                    name={artist.artisticName ? artist.artisticName : artist.band.name}
+                    avatar={getImage('artist', artist.avatar, 'default/default_avatar.png')}
+                    amountOfFollowers={
+                      artist.artistMetrics?.followers ? artist.artistMetrics.followers : 0
+                    }
                     badge={false}
+                    isFollowed={
+                      artist.interaction.length !== 0 ? artist.interaction[0].value : false
+                    }
                     size="sm"
                   />
                   <Divider width="75%" />
@@ -241,7 +251,7 @@ export function ArtistProfile() {
 
         <Box margin="40px 0">
           <Heading fontSize="xx-large" textAlign="center">
-            Nuevos Albumes, Singles y EPs
+            Albumes, Singles y EPs
           </Heading>
           {albums.length === 0 ? (
             <Text fontSize="large" color="whiteAlpha.700" marginTop="10px" textAlign="center">
@@ -281,7 +291,8 @@ export function ArtistProfile() {
           <Heading fontSize="xx-large" color="white" margin="10px 0">
             Acerca de{' '}
             <Highlight>
-              {getName(artist.artisticName ? artist.artisticName : artist.band?.name)}
+              {artist.artisticName && capitalizeEach(getName(artist.artisticName))}
+              {artist.band?.name && capitalizeEach(getName(artist.band?.name))}
             </Highlight>
           </Heading>
           {artist.artistInformation?.biography ? (

@@ -58,8 +58,7 @@ export function CreateNewRoom({ isOpen, onClose }) {
     if (queue.size === 0) {
       addNotification({
         title: 'Error',
-        message:
-          'Tu cola está vacia, debes tener al menos tres (3) canciones para empezar una sala',
+        message: 'Tu cola está vacia, debes tener al menos una (1) canción para empezar una sala',
         status: 'error',
       });
       return;

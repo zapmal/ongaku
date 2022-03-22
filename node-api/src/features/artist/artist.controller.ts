@@ -66,15 +66,22 @@ export class ArtistController {
   }
 
   @Get('profile/:name')
-  async getProfileData(@Param('name') name: string) {
+  async getProfileData(@Param('name') name: string, @Req() request: RequestWithEntity) {
     const artist = await this.artist.getByName(name);
-    const recommendation = await this.artist.getByGenre(artist.id, 'pop');
-    const popularSongs = await this.artist.getPopularSongs(artist.id);
+    const recommendation = await this.artist.getByGenre(
+      artist.id,
+      artist.genres,
+      Number(request.entity.id),
+    );
+    const latestSongs = await this.artist.getLatestSongs(
+      artist.id,
+      Number(request.entity.id),
+    );
     const albums = await this.artist.getAlbums(artist.id);
 
     return {
       artist,
-      popularSongs,
+      latestSongs,
       recommendation,
       albums,
     };

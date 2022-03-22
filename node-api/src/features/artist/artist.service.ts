@@ -232,14 +232,43 @@ export class ArtistService {
     return artist;
   }
 
-  async getByGenre(artistId: number, genre: string) {
+  async getByGenre(artistId: number, genre, entityId: number) {
     return await this.prisma.artist.findMany({
       where: {
         genres: {
           hasSome: genre,
         },
         NOT: {
-          OR: [{ id: artistId }, { bandId: artistId }],
+          OR: { id: artistId },
+        },
+      },
+      include: {
+        band: true,
+        artistInformation: true,
+        artistMetrics: true,
+        interaction: {
+          where: {
+            songId: undefined,
+            albumId: undefined,
+            userPlaylistId: undefined,
+            userId: entityId,
+          },
+          select: {
+            id: true,
+            value: true,
+          },
+        },
+      },
+      take: 4,
+    });
+  }
+
+  async getByCountry(artistId: number, country) {
+    return await this.prisma.artist.findMany({
+      where: {
+        country: country,
+        NOT: {
+          OR: { id: artistId },
         },
       },
       include: {
@@ -249,15 +278,10 @@ export class ArtistService {
     });
   }
 
-  async getPopularSongs(id: number) {
+  async getLatestSongs(id: number, entityId: number) {
     return await this.prisma.song.findMany({
       where: {
         artistId: id,
-        songMetrics: {
-          playCount: {
-            gt: 50,
-          },
-        },
       },
       include: {
         artist: {
@@ -265,6 +289,17 @@ export class ArtistService {
             band: true,
           },
         },
+        album: true,
+        interaction: {
+          where: { userId: entityId, value: true },
+          select: {
+            id: true,
+            value: true,
+          },
+        },
+      },
+      orderBy: {
+        id: 'desc',
       },
       take: 5,
     });

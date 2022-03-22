@@ -251,7 +251,7 @@ model SongsInPlaylist {
 model Room {
   id        Int      @id @default(autoincrement())
   key       String   @unique
-  createdAt DateTime @default(now()) @map("created_at") @db.Date
+  createdAt DateTime @map("created_at") 
   name      String   @default("My Room")
   limit     Int      @default(0)
   host      Int      @unique

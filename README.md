@@ -37,7 +37,18 @@ JWT_EXPIRY_TIME="90d"
 
 COOKIE_SECRET="Cookie secret"
 
-...
+FRONTEND_URL="http://localhost:3000"
+
+MAIL_HOST="smtp.gmail.com"
+MAIL_PORT=465
+MAIL_USER="you know"
+
+MAIL_PASSWORD="you know"
+MAIL_FROM="noreply@ongaku.com"
+
+MAIL_TRANSPORT="smtp://${MAIL_USER}:${MAIL_PASSWORD}@${MAIL_HOST}"
+
+UPLOADED_FILES_DESTINATION=./assets
 ```
 
 Create the database (`ongaku`) by using pgAdmin or the shell, then:
@@ -45,6 +56,9 @@ Create the database (`ongaku`) by using pgAdmin or the shell, then:
 - `npm install`
 - `npm run migrate`
 - `npm run start:dev`
+- `npm run seed`
+
+The `/demo` folder contains data that can be used safely for tests.
 
 Regarding prisma, some extra scripts are available:
 

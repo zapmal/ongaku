@@ -133,6 +133,11 @@ export function Player() {
 
     if (ended && shouldRepeat) {
       play();
+      setLiked(
+        store.currentlyPlaying.interaction?.length !== 0
+          ? store.currentlyPlaying.interaction[0]?.value
+          : false
+      );
     }
   }, [shouldRepeat, store, ended, play]);
 
@@ -148,11 +153,7 @@ export function Player() {
             <Tooltip label="Haz click para ir a la cola">
               <Box as={RouterLink} to="/queue">
                 <Image
-                  src={getImage(
-                    'album',
-                    store.currentlyPlaying?.album?.cover,
-                    'default/default_album.png'
-                  )}
+                  src={getImage('album', store.currentlyPlaying?.album?.cover, 'default_album.png')}
                   width="100px"
                   height="100px"
                   _hover={{

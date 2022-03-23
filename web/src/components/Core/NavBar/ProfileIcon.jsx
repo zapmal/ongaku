@@ -31,7 +31,7 @@ export function ProfileIcon() {
           src={getImage(
             entity.role !== 'ARTIST' ? 'user' : 'artist',
             entity.avatar,
-            entity.role !== 'ARTIST' ? 'default/default_avatar.svg' : 'default/default_avatar.png'
+            entity.role !== 'ARTIST' ? 'default_avatar.svg' : 'default_avatar.png'
           )}
         >
           <AvatarBadge

@@ -67,7 +67,7 @@ export function LikedSongsPlaylist() {
 
   return (
     <Card
-      cover={getImage('user', entity.avatar, 'default/default_avatar.svg')}
+      cover={getImage('user', entity.avatar, 'default_avatar.svg')}
       type="playlist"
       notLikeable={true}
       isLikedSongsPlaylist={true}

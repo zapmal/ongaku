@@ -170,7 +170,7 @@ export function PublishedWork() {
                   <Td>{album.id}</Td>
                   <Td>
                     <Image
-                      src={getImage('album', album.cover, 'default/default_cover.png')}
+                      src={getImage('album', album.cover, 'default_cover.png')}
                       w="50px"
                       h="50px"
                       borderRadius="5px"

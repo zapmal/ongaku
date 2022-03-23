@@ -139,7 +139,7 @@ export function Entities() {
                     <Td>{user.id}</Td>
                     <Td>
                       <Image
-                        src={getImage('user', user.avatar, 'default/default_avatar.svg')}
+                        src={getImage('user', user.avatar, 'default_avatar.svg')}
                         w="50px"
                         h="50px"
                         borderRadius="5px"
@@ -218,7 +218,7 @@ export function Entities() {
                       src={getImage(
                         'artist',
                         artist?.artistInformation?.avatar,
-                        'default/default_avatar.png'
+                        'default_avatar.png'
                       )}
                       w="50px"
                       h="50px"

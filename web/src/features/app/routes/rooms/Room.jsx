@@ -276,7 +276,7 @@ function User({ avatar, role, name, to, id, hostId, roomKey }) {
       <Avatar
         {...mouseEventsHandlers}
         size="xl"
-        src={getImage('user', avatar, 'default/default_avatar.svg')}
+        src={getImage('user', avatar, 'default_avatar.svg')}
         opacity={isHovered && canBan && 0.6}
         transition="opacity 150ms ease-in"
         _hover={{ cursor: canBan ? 'pointer' : 'auto' }}

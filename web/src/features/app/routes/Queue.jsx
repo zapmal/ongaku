@@ -18,7 +18,7 @@ export function Queue() {
             src={getImage(
               'album',
               store.queue.isEmpty() ? null : store.queue.getHeadNode().getData().album.cover,
-              'default/default_album.png'
+              'default_album.png'
             )}
             width="inherit"
             height="420px"

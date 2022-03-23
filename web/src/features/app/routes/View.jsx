@@ -139,7 +139,7 @@ export function View() {
         image={getImage(
           type === 'playlist' && id ? 'playlist' : 'view',
           type === 'playlist' ? data.background : null,
-          'default/default.svg'
+          'default.svg'
         )}
         backgroundColor={theme.colors.primaryBg.value}
         height="100%"
@@ -159,7 +159,7 @@ export function View() {
                   src={getImage(
                     type === 'playlist' ? 'user' : 'artist',
                     type === 'playlist' ? data?.user?.avatar : data?.artist.avatar,
-                    'default/default_avatar.svg'
+                    'default_avatar.svg'
                   )}
                 />
                 <Link
@@ -272,7 +272,7 @@ export function View() {
                     </Td>
                     <Td>
                       <Image
-                        src={getImage('album', song.album.cover, 'default/default_album.png')}
+                        src={getImage('album', song.album.cover, 'default_album.png')}
                         w="50px"
                         h="50px"
                         borderRadius="5px"

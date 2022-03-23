@@ -15,10 +15,10 @@ const SEED_DATA = {
     },
     iverson: {
       avatar: 's_iverson.jpg',
-      cover: null,
+      cover: 's_iverson_cover.webp',
     },
     bts: {
-      avatar: 's_bts.jpg',
+      avatar: 's_bts.webp',
       cover: 's_bts_cover.webp',
     },
     monsterSiren: {
@@ -31,7 +31,7 @@ const SEED_DATA = {
     },
     demondice: {
       avatar: 's_demondice.jpeg',
-      cover: 's_demondice_cover.webp',
+      cover: 's_demondice_cover.jpeg',
     },
     joji: {
       avatar: 's_joji.jpg',
@@ -57,6 +57,26 @@ const SEED_DATA = {
       avatar: 's_kda.jpg',
       cover: 's_kda_cover.jpg',
     },
+    redVelvet: {
+      avatar: 's_red_velvet.jpg',
+      cover: 's_red_velvet_cover.jpg',
+    },
+    sulli: {
+      avatar: 's_sulli.webp',
+      cover: 's_sulli_cover.jpg',
+    },
+    jonghyun: {
+      avatar: 's_jonghyun.jpg',
+      cover: 's_jonghyun_cover.webp',
+    },
+    olivia: {
+      avatar: 's_olivia.webp',
+      cover: 's_olivia_cover.jpg',
+    },
+    iu: {
+      avatar: 's_iu.jpg',
+      cover: 's_iu_cover.jpg',
+    },
   },
   album: {
     iNeverDie: 's_i_never_die.jpg', // VILLAIN DIES, ALBUM
@@ -65,14 +85,49 @@ const SEED_DATA = {
     kawakiWoAmeku: 's_kawaki_wo_ameku.jpg', // SAME NAME, SINGLE
     speedOfLight: 's_speed_of_light.png', // SAME NAME, SINGLE
     human: 's_human.jpg', // Human, ALBUM
+    theReveFestival2022: 's_the_reve_festival_2022.jpg', // Album
+    goblin: 's_goblin.webp', // Album - 2019
+    storyOp2: 's_story_op_2.jpg', // Album - 2017
+    sour: 's_sour.jpg', // Album - 2021
+    shutupAndGetHappy: 's_shutup_and_get_happy.jpeg', // Album - 2022
+    contingencyContract: 's_contingency_contract.jpg', // Album - 2022
+    manifesto: 's_manifesto.jpg', // EP - 2021
+    radiant: 's_radiant.jpg', // EP - 2021
+    unalive: 's_unalive.jpeg', // Album - 2022
+    palette: 's_palette.jpg',
+    redLofi: 's_red_lofi.png', // Single - 2022
+    iBurn: 's_i_burn.webp',
   },
   song: {
+    moon: 's_moon.mp3',
     villainDies: 's_villain_dies.mp3',
     ohMyGod: 's_oh_my_god.mp3',
     more: 's_more.mp3',
     kawakiWoAmeku: 's_kawaki_wo_ameku.mp3',
     speedOfLight: 's_speed_of_light.mp3',
     human: 's_human.mp3',
+    lonely: 's_lonely.mp3', // collab with taeyeon
+    radiant: 's_radiant.mp3',
+    dawnseeker: 's_dawnseeker.mp3',
+    pineSoot: 's_pine_soot.mp3',
+    wildScales: 's_wild_scales.mp3',
+    leadSeal: 's_lead_seal.mp3',
+    operationBlade: 's_operation_blade.mp3',
+    burnMeToTheGround: 's_burn_me_to_the_ground.mp3',
+    redLofi: 's_red_lofi.mp3',
+    unalive: 's_unalive.mp3',
+    scuffedUpAge: 's_scuffed_up_age.mp3',
+    deadOnArrival: 's_dead_on_arrival.mp3',
+    wantingGettingWanting: 's_wanting_getting_wanting.mp3',
+    takeTheBait: 's_take_the_bait.mp3',
+    darkHour: 's_dark_hour.mp3',
+    manifesto: 's_manifesto.mp3',
+    traitor: 's_traitor.mp3',
+    throughTheNight: 's_through_the_night.mp3',
+    onTheMoon: 's_on_the_moon.mp3',
+    tomboy: 's_tomboy.mp3',
+    already: 's_already.mp3',
+    inMyDreams: 's_in_my_dreams.mp3',
   },
 };
 
@@ -165,6 +220,12 @@ const seed = async () => {
     iversonAvatar = storedAvatar;
   }
 
+  let iversonCover = null;
+  if (!existsSync(`./assets/artist/${SEED_DATA.images.iverson.cover}`)) {
+    const storedAvatar = store('artist', SEED_DATA.images.iverson.cover);
+    iversonCover = storedAvatar;
+  }
+
   // Artist, verified email.
   const iverson = await prisma.artist.upsert({
     where: { email: 'yungiverson@gmail.com' },
@@ -179,9 +240,14 @@ const seed = async () => {
       verifiedEmail: true,
       password: await hash('password', 10),
       avatar: iversonAvatar,
+      artistInformation: {
+        create: {
+          coverImage: iversonCover,
+        },
+      },
       artistMetrics: {
         create: {
-          followers: 0,
+          followers: 1021,
         },
       },
     },
@@ -218,7 +284,7 @@ const seed = async () => {
       },
       artistMetrics: {
         create: {
-          followers: 0,
+          followers: 8591,
         },
       },
       verifiedEmail: true,
@@ -252,7 +318,7 @@ const seed = async () => {
       avatar: btsAvatar,
       artistMetrics: {
         create: {
-          followers: 0,
+          followers: 10200,
         },
       },
       artistInformation: {
@@ -296,7 +362,7 @@ const seed = async () => {
       verifiedEmail: true,
       artistMetrics: {
         create: {
-          followers: 0,
+          followers: 25084,
         },
       },
       artistInformation: {
@@ -334,7 +400,7 @@ const seed = async () => {
       verifiedEmail: true,
       artistMetrics: {
         create: {
-          followers: 0,
+          followers: 12043,
         },
       },
       artistInformation: {
@@ -372,7 +438,7 @@ const seed = async () => {
       verifiedEmail: true,
       artistMetrics: {
         create: {
-          followers: 0,
+          followers: 6102,
         },
       },
       artistInformation: {
@@ -409,7 +475,7 @@ const seed = async () => {
       verifiedEmail: true,
       artistMetrics: {
         create: {
-          followers: 0,
+          followers: 8028,
         },
       },
       band: {
@@ -453,7 +519,7 @@ const seed = async () => {
       verifiedEmail: true,
       artistMetrics: {
         create: {
-          followers: 0,
+          followers: 18012,
         },
       },
       artistInformation: {
@@ -485,7 +551,7 @@ const seed = async () => {
       verifiedEmail: true,
       artistMetrics: {
         create: {
-          followers: 0,
+          followers: 2311,
         },
       },
     },
@@ -517,7 +583,7 @@ const seed = async () => {
       verifiedEmail: true,
       artistMetrics: {
         create: {
-          followers: 0,
+          followers: 14012,
         },
       },
       band: {
@@ -560,7 +626,7 @@ const seed = async () => {
       verifiedEmail: true,
       artistMetrics: {
         create: {
-          followers: 0,
+          followers: 9912,
         },
       },
       band: {
@@ -577,6 +643,202 @@ const seed = async () => {
     },
   });
 
+  let redVelvetAvatar = null;
+  if (!existsSync(`./assets/artist/${SEED_DATA.images.redVelvet.avatar}`)) {
+    const storedAvatar = store('artist', SEED_DATA.images.redVelvet.avatar);
+    redVelvetAvatar = storedAvatar;
+  }
+
+  let redVelvetCover = null;
+  if (!existsSync(`./assets/artist/${SEED_DATA.images.redVelvet.cover}`)) {
+    const storedCover = store('artist', SEED_DATA.images.redVelvet.cover);
+    redVelvetCover = storedCover;
+  }
+
+  const redVelvet = await prisma.artist.upsert({
+    where: { email: 'redvelvet@gmail.com' },
+    update: {},
+    create: {
+      email: 'redvelvet@gmail.com',
+      password: await hash('password', 10),
+      country: 'KR',
+      labels: ['PepeGa Records'],
+      genres: ['Pop', 'Funk'],
+      yearsActive: 6,
+      avatar: redVelvetAvatar,
+      verifiedEmail: true,
+      artistMetrics: {
+        create: {
+          followers: 9000,
+        },
+      },
+      band: {
+        create: {
+          name: 'red-velvet',
+          members: ['Irene', 'Joy', 'Yeri', 'Seulgi', 'Wendy'],
+        },
+      },
+      artistInformation: {
+        create: {
+          coverImage: redVelvetCover,
+        },
+      },
+    },
+  });
+
+  let sulliAvatar = null;
+  if (!existsSync(`./assets/artist/${SEED_DATA.images.sulli.avatar}`)) {
+    const storedAvatar = store('artist', SEED_DATA.images.sulli.avatar);
+    sulliAvatar = storedAvatar;
+  }
+
+  let sulliCover = null;
+  if (!existsSync(`./assets/artist/${SEED_DATA.images.sulli.cover}`)) {
+    const storedCover = store('artist', SEED_DATA.images.sulli.cover);
+    sulliCover = storedCover;
+  }
+
+  const sulli = await prisma.artist.upsert({
+    where: { email: 'sulli@gmail.com' },
+    update: {},
+    create: {
+      email: 'sulli@gmail.com',
+      password: await hash('password', 10),
+      country: 'KR',
+      labels: ['SM Entertainment'],
+      genres: ['Pop', 'Rock'],
+      yearsActive: 4,
+      avatar: sulliAvatar,
+      verifiedEmail: true,
+      artisticName: 'sulli',
+      artistMetrics: {
+        create: {
+          followers: 10000,
+        },
+      },
+      artistInformation: {
+        create: {
+          coverImage: sulliCover,
+        },
+      },
+    },
+  });
+
+  let jonghyunAvatar = null;
+  if (!existsSync(`./assets/artist/${SEED_DATA.images.jonghyun.avatar}`)) {
+    const storedAvatar = store('artist', SEED_DATA.images.jonghyun.avatar);
+    jonghyunAvatar = storedAvatar;
+  }
+
+  let jonghyunCover = null;
+  if (!existsSync(`./assets/artist/${SEED_DATA.images.jonghyun.cover}`)) {
+    const storedCover = store('artist', SEED_DATA.images.jonghyun.cover);
+    jonghyunCover = storedCover;
+  }
+
+  const jonghyun = await prisma.artist.upsert({
+    where: { email: 'jonghyun@gmail.com' },
+    update: {},
+    create: {
+      email: 'jonghyun@gmail.com',
+      password: await hash('password', 10),
+      country: 'KR',
+      labels: ['SM Entertainment'],
+      genres: ['Pop', 'Rap'],
+      yearsActive: 3,
+      avatar: jonghyunAvatar,
+      verifiedEmail: true,
+      artisticName: 'jonghyun',
+      artistMetrics: {
+        create: {
+          followers: 9013,
+        },
+      },
+      artistInformation: {
+        create: {
+          coverImage: jonghyunCover,
+        },
+      },
+    },
+  });
+
+  let oliviaAvatar = null;
+  if (!existsSync(`./assets/artist/${SEED_DATA.images.olivia.avatar}`)) {
+    const storedAvatar = store('artist', SEED_DATA.images.olivia.avatar);
+    oliviaAvatar = storedAvatar;
+  }
+
+  let oliviaCover = null;
+  if (!existsSync(`./assets/artist/${SEED_DATA.images.olivia.cover}`)) {
+    const storedCover = store('artist', SEED_DATA.images.olivia.cover);
+    oliviaCover = storedCover;
+  }
+
+  const olivia = await prisma.artist.upsert({
+    where: { email: 'olivia@gmail.com' },
+    update: {},
+    create: {
+      email: 'olivia@gmail.com',
+      password: await hash('password', 10),
+      country: 'US',
+      labels: ['Billboard'],
+      genres: ['Pop'],
+      yearsActive: 2,
+      avatar: oliviaAvatar,
+      verifiedEmail: true,
+      artisticName: 'olivia-rodrigo',
+      artistMetrics: {
+        create: {
+          followers: 5851,
+        },
+      },
+      artistInformation: {
+        create: {
+          coverImage: oliviaCover,
+        },
+      },
+    },
+  });
+
+  let iuAvatar = null;
+  if (!existsSync(`./assets/artist/${SEED_DATA.images.iu.avatar}`)) {
+    const storedAvatar = store('artist', SEED_DATA.images.iu.avatar);
+    iuAvatar = storedAvatar;
+  }
+
+  let iuCover = null;
+  if (!existsSync(`./assets/artist/${SEED_DATA.images.iu.cover}`)) {
+    const storedCover = store('artist', SEED_DATA.images.iu.cover);
+    iuCover = storedCover;
+  }
+
+  const iu = await prisma.artist.upsert({
+    where: { email: 'iucontact@gmail.com' },
+    update: {},
+    create: {
+      email: 'iucontact@gmail.com',
+      password: await hash('password', 10),
+      country: 'KR',
+      labels: ['Kakao Entertainment', 'Universal Music Japan'],
+      genres: ['Electronic', 'Ballads', 'Pop'],
+      yearsActive: 2,
+      avatar: iuAvatar,
+      verifiedEmail: true,
+      artisticName: 'iu',
+      artistMetrics: {
+        create: {
+          followers: 8930,
+        },
+      },
+      artistInformation: {
+        create: {
+          coverImage: iuCover,
+        },
+      },
+    },
+  });
+
+  // ALBUMS
   let iNeverDieCover = null;
   if (!existsSync(`./assets/album/${SEED_DATA.album.iNeverDie}`)) {
     const storedAvatar = store('album', SEED_DATA.album.iNeverDie);
@@ -626,7 +888,7 @@ const seed = async () => {
       cover: allOutCover,
       name: 'all-out',
       releaseType: 'ALBUM',
-      artistId: gidle.id,
+      artistId: kda.id,
       year: dayjs('2020').toDate(),
     },
   });
@@ -685,6 +947,222 @@ const seed = async () => {
     },
   });
 
+  let theReveFestival2022Cover = null;
+  if (!existsSync(`./assets/album/${SEED_DATA.album.theReveFestival2022}`)) {
+    const storedCover = store('album', SEED_DATA.album.theReveFestival2022);
+    theReveFestival2022Cover = storedCover;
+  }
+
+  const theReveFestival2022 = await prisma.album.upsert({
+    where: { id: 7 },
+    update: {},
+    create: {
+      cover: theReveFestival2022Cover,
+      name: 'the-reve-festival-2022',
+      releaseType: 'ALBUM',
+      artistId: redVelvet.id,
+      year: dayjs('2022').toDate(),
+    },
+  });
+
+  let goblinCover = null;
+  if (!existsSync(`./assets/album/${SEED_DATA.album.goblin}`)) {
+    const storedCover = store('album', SEED_DATA.album.goblin);
+    goblinCover = storedCover;
+  }
+
+  const goblin = await prisma.album.upsert({
+    where: { id: 8 },
+    update: {},
+    create: {
+      cover: goblinCover,
+      name: 'goblin',
+      releaseType: 'ALBUM',
+      artistId: sulli.id,
+      year: dayjs('2019').toDate(),
+    },
+  });
+
+  let storyOp2Cover = null;
+  if (!existsSync(`./assets/album/${SEED_DATA.album.storyOp2}`)) {
+    const storedCover = store('album', SEED_DATA.album.storyOp2);
+    storyOp2Cover = storedCover;
+  }
+
+  const storyOp2 = await prisma.album.upsert({
+    where: { id: 9 },
+    update: {},
+    create: {
+      cover: storyOp2Cover,
+      name: 'story-op-2',
+      releaseType: 'ALBUM',
+      artistId: jonghyun.id,
+      year: dayjs('2017').toDate(),
+    },
+  });
+
+  let sourCover = null;
+  if (!existsSync(`./assets/album/${SEED_DATA.album.sour}`)) {
+    const storedCover = store('album', SEED_DATA.album.sour);
+    sourCover = storedCover;
+  }
+
+  const sour = await prisma.album.upsert({
+    where: { id: 10 },
+    update: {},
+    create: {
+      cover: sourCover,
+      name: 'sour',
+      releaseType: 'ALBUM',
+      artistId: olivia.id,
+      year: dayjs('2021').toDate(),
+    },
+  });
+
+  let shutupAndGetHappyCover = null;
+  if (!existsSync(`./assets/album/${SEED_DATA.album.shutupAndGetHappy}`)) {
+    const storedCover = store('album', SEED_DATA.album.shutupAndGetHappy);
+    shutupAndGetHappyCover = storedCover;
+  }
+
+  const shutupAndGetHappy = await prisma.album.upsert({
+    where: { id: 11 },
+    update: {},
+    create: {
+      cover: shutupAndGetHappyCover,
+      name: 'shutup-and-get-happy',
+      releaseType: 'ALBUM',
+      artistId: demondice.id,
+      year: dayjs('2022').toDate(),
+    },
+  });
+
+  let contingencyContractCover = null;
+  if (!existsSync(`./assets/album/${SEED_DATA.album.contingencyContract}`)) {
+    const storedCover = store('album', SEED_DATA.album.contingencyContract);
+    contingencyContractCover = storedCover;
+  }
+
+  const contingencyContract = await prisma.album.upsert({
+    where: { id: 12 },
+    update: {},
+    create: {
+      cover: contingencyContractCover,
+      name: 'contingency-contract',
+      releaseType: 'ALBUM',
+      artistId: monsterSiren.id,
+      year: dayjs('2022').toDate(),
+    },
+  });
+
+  let manifestoCover = null;
+  if (!existsSync(`./assets/album/${SEED_DATA.album.manifesto}`)) {
+    const storedCover = store('album', SEED_DATA.album.manifesto);
+    manifestoCover = storedCover;
+  }
+
+  const manifesto = await prisma.album.upsert({
+    where: { id: 13 },
+    update: {},
+    create: {
+      cover: manifestoCover,
+      name: 'manifesto',
+      releaseType: 'EP',
+      artistId: monsterSiren.id,
+      year: dayjs('2021').toDate(),
+    },
+  });
+
+  let radiantCover = null;
+  if (!existsSync(`./assets/album/${SEED_DATA.album.radiant}`)) {
+    const storedCover = store('album', SEED_DATA.album.radiant);
+    radiantCover = storedCover;
+  }
+
+  const radiant = await prisma.album.upsert({
+    where: { id: 14 },
+    update: {},
+    create: {
+      cover: radiantCover,
+      name: 'radiant',
+      releaseType: 'EP',
+      artistId: monsterSiren.id,
+      year: dayjs('2021').toDate(),
+    },
+  });
+
+  let unaliveCover = null;
+  if (!existsSync(`./assets/album/${SEED_DATA.album.unalive}`)) {
+    const storedCover = store('album', SEED_DATA.album.unalive);
+    unaliveCover = storedCover;
+  }
+
+  const unalive = await prisma.album.upsert({
+    where: { id: 15 },
+    update: {},
+    create: {
+      cover: unaliveCover,
+      name: 'unalive',
+      releaseType: 'ALBUM',
+      artistId: mori.id,
+      year: dayjs('2022').toDate(),
+    },
+  });
+
+  let redLofiCover = null;
+  if (!existsSync(`./assets/album/${SEED_DATA.album.redLofi}`)) {
+    const storedCover = store('album', SEED_DATA.album.redLofi);
+    redLofiCover = storedCover;
+  }
+
+  const redLofi = await prisma.album.upsert({
+    where: { id: 16 },
+    update: {},
+    create: {
+      cover: redLofiCover,
+      name: 'red-lofi-ver',
+      releaseType: 'SINGLE',
+      artistId: mori.id,
+      year: dayjs('2022').toDate(),
+    },
+  });
+
+  let paletteCover = null;
+  if (!existsSync(`./assets/album/${SEED_DATA.album.palette}`)) {
+    const storedCover = store('album', SEED_DATA.album.palette);
+    paletteCover = storedCover;
+  }
+
+  const palette = await prisma.album.upsert({
+    where: { id: 17 },
+    update: {},
+    create: {
+      cover: paletteCover,
+      name: 'Palette',
+      releaseType: 'SINGLE',
+      artistId: iu.id,
+      year: dayjs('2017').toDate(),
+    },
+  });
+
+  let iBurnCover = null;
+  if (!existsSync(`./assets/album/${SEED_DATA.album.iBurn}`)) {
+    const storedCover = store('album', SEED_DATA.album.iBurn);
+    iBurnCover = storedCover;
+  }
+
+  const iBurn = await prisma.album.upsert({
+    where: { id: 18 },
+    update: {},
+    create: {
+      cover: iBurnCover,
+      name: 'I Burn',
+      releaseType: 'ALBUM',
+      artistId: gidle.id,
+      year: dayjs('2021').toDate(),
+    },
+  });
+
   let villainDiesSong = null;
   if (!existsSync(`./assets/song/${SEED_DATA.song.villainDies}`)) {
     const storedAvatar = store('song', SEED_DATA.song.villainDies);
@@ -695,7 +1173,7 @@ const seed = async () => {
     where: { id: 1 },
     update: {},
     create: {
-      name: 'Villain Dies',
+      name: 'VILLAIN DIES',
       path: villainDiesSong,
       albumId: iNeverDie.id,
       artistId: gidle.id,
@@ -734,7 +1212,7 @@ const seed = async () => {
       name: 'MORE',
       path: moreSong,
       albumId: allOut.id,
-      artistId: gidle.id,
+      artistId: kda.id,
       collaborators: ['kda'],
       isExplicit: false,
     },
@@ -772,7 +1250,7 @@ const seed = async () => {
       path: speedOfLightSong,
       albumId: speedOfLight.id,
       artistId: monsterSiren.id,
-      collaborators: ['Okawari'],
+      collaborators: ['okawari'],
       isExplicit: false,
     },
   });
@@ -792,6 +1270,421 @@ const seed = async () => {
       albumId: human.id,
       artistId: iverson.id,
       isExplicit: true,
+    },
+  });
+
+  let lonelySong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.lonely}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.lonely);
+    lonelySong = storedAvatar;
+  }
+
+  const lonely = await prisma.song.upsert({
+    where: { id: 7 },
+    update: {},
+    create: {
+      name: 'Lonely',
+      collaborators: ['taeyeon'],
+      path: lonelySong,
+      albumId: storyOp2.id,
+      artistId: jonghyun.id,
+      isExplicit: true,
+    },
+  });
+
+  let radiantSong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.radiant}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.radiant);
+    radiantSong = storedAvatar;
+  }
+
+  const radiantEntry = await prisma.song.upsert({
+    where: { id: 8 },
+    update: {},
+    create: {
+      name: 'Radiant',
+      path: radiantSong,
+      albumId: radiant.id,
+      artistId: monsterSiren.id,
+      isExplicit: false,
+    },
+  });
+
+  let dawnseekerSong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.dawnseeker}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.dawnseeker);
+    dawnseekerSong = storedAvatar;
+  }
+
+  const dawnseeker = await prisma.song.upsert({
+    where: { id: 9 },
+    update: {},
+    create: {
+      name: 'Dawnseeker',
+      path: dawnseekerSong,
+      albumId: contingencyContract.id,
+      artistId: monsterSiren.id,
+      isExplicit: false,
+    },
+  });
+
+  let pineSootSong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.pineSoot}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.pineSoot);
+    pineSootSong = storedAvatar;
+  }
+
+  const pineSoot = await prisma.song.upsert({
+    where: { id: 10 },
+    update: {},
+    create: {
+      name: 'Pine Soot',
+      path: pineSootSong,
+      albumId: contingencyContract.id,
+      artistId: monsterSiren.id,
+      isExplicit: true,
+    },
+  });
+
+  let wildScalesSong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.wildScales}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.wildScales);
+    wildScalesSong = storedAvatar;
+  }
+
+  const wildScales = await prisma.song.upsert({
+    where: { id: 11 },
+    update: {},
+    create: {
+      name: 'Wild Scales',
+      path: wildScalesSong,
+      albumId: contingencyContract.id,
+      artistId: monsterSiren.id,
+      isExplicit: false,
+    },
+  });
+
+  let leadSealSong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.leadSeal}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.leadSeal);
+    leadSealSong = storedAvatar;
+  }
+
+  const leadSeal = await prisma.song.upsert({
+    where: { id: 12 },
+    update: {},
+    create: {
+      name: 'Lead Seal',
+      path: leadSealSong,
+      albumId: contingencyContract.id,
+      artistId: monsterSiren.id,
+      isExplicit: false,
+    },
+  });
+
+  let operationBladeSong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.operationBlade}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.operationBlade);
+    operationBladeSong = storedAvatar;
+  }
+
+  const operationBlade = await prisma.song.upsert({
+    where: { id: 13 },
+    update: {},
+    create: {
+      name: 'Operation Blade',
+      path: operationBladeSong,
+      albumId: contingencyContract.id,
+      artistId: monsterSiren.id,
+      isExplicit: false,
+    },
+  });
+
+  let burnMeToTheGroundSong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.burnMeToTheGround}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.burnMeToTheGround);
+    burnMeToTheGroundSong = storedAvatar;
+  }
+
+  const burnMeToTheGround = await prisma.song.upsert({
+    where: { id: 14 },
+    update: {},
+    create: {
+      name: 'Burn me to the Ground',
+      path: burnMeToTheGroundSong,
+      albumId: contingencyContract.id,
+      artistId: monsterSiren.id,
+      isExplicit: true,
+    },
+  });
+
+  let redLofiSong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.redLofi}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.redLofi);
+    redLofiSong = storedAvatar;
+  }
+
+  const redLofiEntry = await prisma.song.upsert({
+    where: { id: 15 },
+    update: {},
+    create: {
+      name: 'Red Lofi Ver',
+      path: redLofiSong,
+      albumId: redLofi.id,
+      artistId: mori.id,
+      isExplicit: false,
+    },
+  });
+
+  let unaliveSong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.unalive}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.unalive);
+    unaliveSong = storedAvatar;
+  }
+
+  const unaliveEntry = await prisma.song.upsert({
+    where: { id: 16 },
+    update: {},
+    create: {
+      name: 'Unalive',
+      path: unaliveSong,
+      albumId: unalive.id,
+      artistId: mori.id,
+      isExplicit: false,
+    },
+  });
+
+  let scuffedUpAgeSong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.scuffedUpAge}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.scuffedUpAge);
+    scuffedUpAgeSong = storedAvatar;
+  }
+
+  const scuffedUpAge = await prisma.song.upsert({
+    where: { id: 17 },
+    update: {},
+    create: {
+      name: 'Scuffed Up Age',
+      path: scuffedUpAgeSong,
+      albumId: unalive.id,
+      artistId: mori.id,
+      isExplicit: false,
+    },
+  });
+
+  let deadOnArrivalSong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.deadOnArrival}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.deadOnArrival);
+    deadOnArrivalSong = storedAvatar;
+  }
+
+  const deadOnArrival = await prisma.song.upsert({
+    where: { id: 18 },
+    update: {},
+    create: {
+      name: 'Dead on Arrival',
+      path: deadOnArrivalSong,
+      albumId: unalive.id,
+      artistId: mori.id,
+      isExplicit: false,
+    },
+  });
+
+  let wantingGettingWantingSong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.wantingGettingWanting}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.wantingGettingWanting);
+    wantingGettingWantingSong = storedAvatar;
+  }
+
+  const wantingGettingWanting = await prisma.song.upsert({
+    where: { id: 19 },
+    update: {},
+    create: {
+      name: 'Wanting Getting Wanting',
+      path: wantingGettingWantingSong,
+      albumId: shutupAndGetHappy.id,
+      artistId: demondice.id,
+      isExplicit: true,
+    },
+  });
+
+  let takeTheBaitSong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.takeTheBait}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.takeTheBait);
+    takeTheBaitSong = storedAvatar;
+  }
+
+  const takeTheBait = await prisma.song.upsert({
+    where: { id: 20 },
+    update: {},
+    create: {
+      name: 'Take the Bait',
+      path: takeTheBaitSong,
+      albumId: shutupAndGetHappy.id,
+      artistId: demondice.id,
+      isExplicit: false,
+    },
+  });
+
+  let darkHourSong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.darkHour}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.darkHour);
+    darkHourSong = storedAvatar;
+  }
+
+  const darkHour = await prisma.song.upsert({
+    where: { id: 21 },
+    update: {},
+    create: {
+      name: 'Dark hour',
+      path: darkHourSong,
+      albumId: shutupAndGetHappy.id,
+      artistId: demondice.id,
+      isExplicit: true,
+    },
+  });
+
+  let manifestoSong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.manifesto}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.manifesto);
+    manifestoSong = storedAvatar;
+  }
+
+  const manifestoEntry = await prisma.song.upsert({
+    where: { id: 22 },
+    update: {},
+    create: {
+      name: 'Manifesto',
+      path: manifestoSong,
+      albumId: manifesto.id,
+      artistId: monsterSiren.id,
+      isExplicit: false,
+    },
+  });
+
+  let traitorSong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.traitor}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.traitor);
+    traitorSong = storedAvatar;
+  }
+
+  const traitor = await prisma.song.upsert({
+    where: { id: 23 },
+    update: {},
+    create: {
+      name: 'Traitor',
+      path: traitorSong,
+      albumId: sour.id,
+      artistId: olivia.id,
+      isExplicit: false,
+    },
+  });
+
+  let throughTheNightSong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.throughTheNight}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.throughTheNight);
+    throughTheNightSong = storedAvatar;
+  }
+
+  const throughTheNight = await prisma.song.upsert({
+    where: { id: 24 },
+    update: {},
+    create: {
+      name: 'Through the Night',
+      path: throughTheNightSong,
+      albumId: palette.id,
+      artistId: iu.id,
+      isExplicit: false,
+    },
+  });
+
+  let onTheMoonSong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.onTheMoon}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.onTheMoon);
+    onTheMoonSong = storedAvatar;
+  }
+
+  const onTheMoon = await prisma.song.upsert({
+    where: { id: 25 },
+    update: {},
+    create: {
+      name: 'On the Moon',
+      path: onTheMoonSong,
+      albumId: goblin.id,
+      artistId: sulli.id,
+      isExplicit: false,
+    },
+  });
+
+  let tomboySong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.tomboy}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.tomboy);
+    tomboySong = storedAvatar;
+  }
+
+  const tomboy = await prisma.song.upsert({
+    where: { id: 26 },
+    update: {},
+    create: {
+      name: 'TOMBOY',
+      path: tomboySong,
+      albumId: iNeverDie.id,
+      artistId: gidle.id,
+      isExplicit: true,
+    },
+  });
+
+  let alreadySong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.already}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.already);
+    alreadySong = storedAvatar;
+  }
+
+  const already = await prisma.song.upsert({
+    where: { id: 27 },
+    update: {},
+    create: {
+      name: 'ALREADY',
+      path: alreadySong,
+      albumId: iNeverDie.id,
+      artistId: gidle.id,
+      isExplicit: false,
+    },
+  });
+
+  let inMyDreamsSong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.inMyDreams}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.inMyDreams);
+    inMyDreamsSong = storedAvatar;
+  }
+
+  const inMyDreams = await prisma.song.upsert({
+    where: { id: 28 },
+    update: {},
+    create: {
+      name: 'In My Dreams',
+      path: inMyDreamsSong,
+      albumId: theReveFestival2022.id,
+      artistId: redVelvet.id,
+      isExplicit: false,
+    },
+  });
+
+  let moonSong = null;
+  if (!existsSync(`./assets/song/${SEED_DATA.song.moon}`)) {
+    const storedAvatar = store('song', SEED_DATA.song.moon);
+    moonSong = storedAvatar;
+  }
+
+  const moon = await prisma.song.upsert({
+    where: { id: 29 },
+    update: {},
+    create: {
+      name: 'MOON',
+      path: moonSong,
+      albumId: iBurn.id,
+      artistId: gidle.id,
+      isExplicit: false,
     },
   });
 

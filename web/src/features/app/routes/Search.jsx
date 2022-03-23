@@ -57,7 +57,7 @@ export function Search() {
                 albumId={song.album.id}
                 song={song}
                 name={song.name}
-                cover={getImage('album', song.album.cover, 'default/default_album.png')}
+                cover={getImage('album', song.album.cover, 'default_album.png')}
                 isExplicit={song.isExplicit}
                 authors={
                   song.artist.artisticName
@@ -80,7 +80,7 @@ export function Search() {
                   key={index}
                   id={artist.id}
                   name={artist.band?.name ? artist.band.name : artist.artisticName}
-                  avatar={getImage('artist', artist.avatar, 'default/default_avatar.png')}
+                  avatar={getImage('artist', artist.avatar, 'default_avatar.png')}
                   amountOfFollowers={artist.artistMetrics?.followers}
                   isFollowed={artist.interaction.length !== 0 ? artist.interaction[0].value : false}
                   badge={false}
@@ -98,7 +98,7 @@ export function Search() {
                 id={album.id}
                 key={index}
                 name={getName(album.name)}
-                cover={getImage('album', album.cover, 'default/default_album.png')}
+                cover={getImage('album', album.cover, 'default_album.png')}
                 authors={
                   album.artist?.artisticName ? album.artist.artisticName : album.artist?.band?.name
                 }
@@ -125,7 +125,7 @@ export function Search() {
                       key={index}
                       id={playlist.id}
                       name={playlist.name}
-                      cover={getImage('playlist', playlist.cover, 'default/default_cover.jpg')}
+                      cover={getImage('playlist', playlist.cover, 'default_cover.jpg')}
                       author={playlist.user.username}
                       amountOfSongs={songs.length}
                       noHeart={playlist.userId === entity.id}

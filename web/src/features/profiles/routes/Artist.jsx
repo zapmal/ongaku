@@ -26,7 +26,7 @@ import { EditArtistProfile } from '../components';
 import { Footer } from '@/components/Core';
 import { Banner } from '@/components/Elements';
 import { Spinner, Highlight } from '@/components/Utils';
-import { SongRow, SongCard, ArtistRow, NEW_ARTISTS, NEW_SONGS } from '@/features/app';
+import { SongRow, SongCard, ArtistRow } from '@/features/app';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useNotificationStore } from '@/stores/useNotificationStore';
@@ -111,11 +111,7 @@ export function ArtistProfile() {
     <>
       <Box>
         <Banner
-          image={getImage(
-            'artist',
-            artist.artistInformation?.coverImage,
-            'default/default_cover.svg'
-          )}
+          image={getImage('artist', artist.artistInformation?.coverImage, 'default_cover.svg')}
           bgRepeat={artist.artistInformation?.coverImage ? 'round' : 'no-repeat'}
           bgPosition="top"
           height="700px"
@@ -208,7 +204,7 @@ export function ArtistProfile() {
                 <Box key={index}>
                   <SongRow
                     name={song.name}
-                    cover={getImage('album', song.album.cover, 'default/default_album.png')}
+                    cover={getImage('album', song.album.cover, 'default_album.png')}
                     isExplicit={song.isExplicit}
                     authors={
                       song.artist.artisticName ? song.artist.artisticName : song.artist.band.name
@@ -232,7 +228,7 @@ export function ArtistProfile() {
                   <ArtistRow
                     id={artist.id}
                     name={artist.artisticName ? artist.artisticName : artist.band.name}
-                    avatar={getImage('artist', artist.avatar, 'default/default_avatar.png')}
+                    avatar={getImage('artist', artist.avatar, 'default_avatar.png')}
                     amountOfFollowers={
                       artist.artistMetrics?.followers ? artist.artistMetrics.followers : 0
                     }
@@ -263,7 +259,7 @@ export function ArtistProfile() {
                 <Box margin="30px 0" key={index}>
                   <SongCard
                     id={entry.id}
-                    cover={getImage('album', entry.cover, 'default/default_album.png')}
+                    cover={getImage('album', entry.cover, 'default_album.png')}
                     name={entry.name}
                     isExplicit={false}
                     type={entry.releaseType}

@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { getLatestArtists } from '../api/artist';
 import { getLatestSongs } from '../api/song';
 import { SongRow, ArtistRow } from '../components';
-import { NEW_ARTISTS, POPULAR_TOPICS } from '../constants';
+import { POPULAR_TOPICS } from '../constants';
 
 import { Footer } from '@/components/Core';
 import { Highlight, Spinner } from '@/components/Utils';
@@ -52,7 +52,7 @@ export function Explore() {
               <Box key={index}>
                 <SongRow
                   name={song.name}
-                  cover={getImage('album', song.album.cover, 'default/default_album.png')}
+                  cover={getImage('album', song.album.cover, 'default_album.png')}
                   isExplicit={song.isExplicit}
                   authors={
                     song.artist.artisticName ? song.artist.artisticName : song.artist.band.name
@@ -86,7 +86,7 @@ export function Explore() {
                 <ArtistRow
                   id={artist.id}
                   name={artist.artisticName ? artist.artisticName : artist.band.name}
-                  avatar={getImage('artist', artist.avatar, 'default/default_avatar.png')}
+                  avatar={getImage('artist', artist.avatar, 'default_avatar.png')}
                   amountOfFollowers={
                     artist.artistMetrics?.followers ? artist.artistMetrics.followers : 0
                   }

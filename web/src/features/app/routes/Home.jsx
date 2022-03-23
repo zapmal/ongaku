@@ -25,7 +25,7 @@ export function Home() {
         image={getImage(
           'artist',
           data.artistOfTheMonth.artistInformation.coverImage,
-          'default/default_cover.svg'
+          'default_cover.svg'
         )}
       >
         <SimpleGrid
@@ -51,7 +51,7 @@ export function Home() {
               {data.artistOfTheMonth.album.map((album, index) => (
                 <SongCard
                   key={index}
-                  cover={getImage('album', album.cover, 'default/default_album.png')}
+                  cover={getImage('album', album.cover, 'default_album.png')}
                   name={album.name}
                   isExplicit={album.isExplicit}
                   type={album.releaseType}
@@ -80,7 +80,7 @@ export function Home() {
           <ArtistCard
             key={index}
             name={artist.artisticName ? artist.artisticName : artist.band?.name}
-            avatar={getImage('artist', artist.avatar, 'default/default_avatar.png')}
+            avatar={getImage('artist', artist.avatar, 'default_avatar.png')}
             amountOfFollowers={artist.artistMetrics.followers}
             isHighlighted={index % 2 === 0}
           />
@@ -107,7 +107,7 @@ export function Home() {
           image={getImage(
             'artist',
             data.perfectForYou.artistInformation.coverImage,
-            'default/default_avatar.png'
+            'default_avatar.png'
           )}
           pageURL={`/artist/${data.perfectForYou.artisticName}`}
           youtubeChannelURL="https://youtube.com/c/DEMONDICE"
@@ -130,7 +130,7 @@ export function Home() {
               key={index}
               id={album.id}
               isLiked={album.interaction.length !== 0 ? album.interaction[0].value : false}
-              cover={getImage('album', album.cover, 'default/default_album.png')}
+              cover={getImage('album', album.cover, 'default_album.png')}
               name={album.name}
               isExplicit={album.isExplicit}
               type={album.releaseType}
@@ -146,7 +146,7 @@ export function Home() {
               artistId={artist.id}
               name={artist.artisticName ? artist.artisticName : artist.band?.name}
               isFollowed={artist.interaction.length !== 0 ? artist.interaction[0].value : false}
-              avatar={getImage('artist', artist.avatar, 'default/default_avatar.png')}
+              avatar={getImage('artist', artist.avatar, 'default_avatar.png')}
               amountOfFollowers={artist.artistMetrics.followers}
               size="sm"
             />

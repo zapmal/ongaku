@@ -51,7 +51,15 @@ MAIL_TRANSPORT="smtp://${MAIL_USER}:${MAIL_PASSWORD}@${MAIL_HOST}"
 UPLOADED_FILES_DESTINATION=./assets
 ```
 
-Create the database (`ongaku`) by using pgAdmin or the shell, then:
+Then, inside `/node-api/assets` create the following folders:
+
+- `artist`
+- `album`
+- `playlist`
+- `song`
+- `user`
+
+Now, create the database (`ongaku`) by using pgAdmin or the shell, then:
 
 - `npm install`
 - `npm run migrate`

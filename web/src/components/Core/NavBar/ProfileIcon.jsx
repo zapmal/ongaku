@@ -41,10 +41,10 @@ export function ProfileIcon() {
             color="whiteAlpha.900"
             height="20px"
             borderColor="transparent"
-            width="50px"
+            width={entity.role === 'USER' ? '60px' : '50px'}
             fontSize={entity.role === 'MANAGER' && 'xx-small'}
           >
-            {ROLES_SPANISH[entity.role]}
+            {entity.role === 'ADMIN' ? entity.role : ROLES_SPANISH[entity.role]}
           </AvatarBadge>
         </Avatar>
       </MenuButton>

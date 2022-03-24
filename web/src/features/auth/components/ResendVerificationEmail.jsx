@@ -22,7 +22,7 @@ import { useRequest } from '@/hooks';
 import { useAuthStore } from '@/stores/useAuthStore';
 
 export function ResendVerificationEmail() {
-  const entity = useAuthStore((s) => s.entity);
+  const [entity, logout] = useAuthStore((s) => [s.entity, s.logout]);
   const [request, setRequestState] = useRequest();
 
   const handleResendClick = async () => {
@@ -37,6 +37,11 @@ export function ResendVerificationEmail() {
         title: '¡Email enviado éxitosamente!',
         message: response.message,
       });
+
+      setTimeout(() => {
+        logout();
+        window.location.assign('/');
+      }, 3000);
     } catch (error) {
       setRequestState({
         status: 'error',

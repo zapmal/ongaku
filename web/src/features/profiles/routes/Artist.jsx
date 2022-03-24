@@ -285,7 +285,7 @@ export function ArtistProfile() {
                         : getName(entry.artist.band.name)
                     }
                     year={dayjs(entry.year).format('YYYY')}
-                    notLikeable={artist.id === entity.id}
+                    notLikeable={artist.id === entity.id || entity.role === 'ARTIST'}
                   />
                 </Box>
               ))}

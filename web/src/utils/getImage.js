@@ -4,5 +4,6 @@ export const getImage = (type, name, defaultImage) => {
   if (!name) {
     return `/assets/default/${type}/${defaultImage}`;
   }
-  return `${path}/${type}/${name || defaultImage}`;
+
+  return `${path}/${type}/${name}`;
 };

@@ -25,6 +25,7 @@ import { TABLE_PROPS, TABLE_ROW_PROPS, SUB_HEADER_MARGIN } from '../constants';
 import { Footer } from '@/components/Core';
 import { Spinner } from '@/components/Utils';
 import { theme } from '@/stitches.config.js';
+import { useAuthStore } from '@/stores/useAuthStore';
 import { getImage } from '@/utils/getImage';
 import { getName } from '@/utils/getName';
 
@@ -42,6 +43,8 @@ export function Entities() {
   const [selectedRole, setRole] = useState('USER');
   const [current, setCurrent] = useState([]);
   const [entityToEdit, setEntity] = useState({});
+
+  const entity = useAuthStore((s) => s.entity);
 
   // king of verbosity
   const {
@@ -150,7 +153,9 @@ export function Entities() {
                     <Td>{user.fullName}</Td>
                     <Td>
                       <Option type="edit" onClick={() => handleEntityEdit(user)} />
-                      <Option type="delete" itemType="user" id={user.id} />
+                      {user.id !== entity.id && (
+                        <Option type="delete" itemType="user" id={user.id} />
+                      )}
                     </Td>
                   </Tr>
                 ))}
@@ -215,11 +220,7 @@ export function Entities() {
                   <Td>{artist.id}</Td>
                   <Td>
                     <Image
-                      src={getImage(
-                        'artist',
-                        artist?.artistInformation?.avatar,
-                        'default_avatar.png'
-                      )}
+                      src={getImage('artist', artist?.avatar, 'default_avatar.png')}
                       w="50px"
                       h="50px"
                       borderRadius="5px"
@@ -244,7 +245,7 @@ export function Entities() {
                       return artist.labels.length !== index + 1 ? `${label}, ` : label;
                     })}
                   </Td>
-                  <Td>
+                  <Td width="20%">
                     <Option type="edit" onClick={() => handleArtistEdit(artist)} />
                     <Option type="delete" itemType="artist" id={artist.id} />
                   </Td>

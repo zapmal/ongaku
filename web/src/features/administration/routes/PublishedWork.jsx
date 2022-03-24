@@ -125,7 +125,7 @@ export function PublishedWork() {
                   <Td>{song.id}</Td>
                   <Td>{song.name}</Td>
                   <Td>
-                    {song?.collaborators[0] !== ''
+                    {song?.collaborators[0] !== '' && song.collaborators.length !== 0
                       ? song?.collaborators.map((collaborator, index) => {
                           return song?.collaborators.length !== index + 1
                             ? `${getName(collaborator)}, `

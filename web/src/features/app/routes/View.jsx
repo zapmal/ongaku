@@ -131,8 +131,6 @@ export function View() {
     return <Spinner paddingBottom="30%" />;
   }
 
-  console.log(data);
-
   return (
     <Box>
       <Banner

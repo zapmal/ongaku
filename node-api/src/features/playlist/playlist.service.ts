@@ -10,8 +10,6 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Role } from '@prisma/client';
 
-import { DEFAULT_PLAYLIST_IMAGES } from './playlist.constants';
-
 @Injectable()
 export class PlaylistService {
   constructor(private prisma: PrismaService, private config: ConfigService) {}
@@ -27,8 +25,8 @@ export class PlaylistService {
 
       const playlist = await this.prisma.userPlaylist.create({
         data: {
-          background: images['background'] || DEFAULT_PLAYLIST_IMAGES['background'],
-          cover: images['cover'] || DEFAULT_PLAYLIST_IMAGES['cover'],
+          background: images['background'] || null,
+          cover: images['cover'] || null,
           name,
           userId: entityId,
         },

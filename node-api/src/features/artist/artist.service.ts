@@ -10,7 +10,6 @@ import { PrismaService } from '@/internal/services';
 import { PrismaError } from '@/internal/constants';
 
 import { ArtistNotFound } from './artist.exceptions';
-import { DEFAULT_ARTIST_IMAGES } from './artist.constants';
 import { storeImages } from '@/internal/helpers';
 
 @Injectable()
@@ -369,7 +368,7 @@ export class ArtistService {
       if (uploadedImages['avatar']) {
         const [image] = storeImages(uploadedImages['avatar'][0], path);
         avatar = {
-          avatar: image || DEFAULT_ARTIST_IMAGES.avatar,
+          avatar: image || null,
         };
       }
 
@@ -377,7 +376,7 @@ export class ArtistService {
         const [image] = storeImages(uploadedImages['cover'][0], path);
         newArtistDataWithCover = {
           ...newArtistData,
-          coverImage: image || DEFAULT_ARTIST_IMAGES.cover,
+          coverImage: image || null,
         };
       }
 

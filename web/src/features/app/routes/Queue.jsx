@@ -17,7 +17,7 @@ export function Queue() {
           <Image
             src={getImage(
               'album',
-              store.queue.isEmpty() ? null : store.queue.getHeadNode().getData().album.cover,
+              store.queue.isEmpty() ? null : store.currentlyPlaying.album.cover,
               'default_album.png'
             )}
             width="inherit"

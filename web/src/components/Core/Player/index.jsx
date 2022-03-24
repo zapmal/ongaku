@@ -361,7 +361,7 @@ export function Player() {
             onClick={handleDownload}
             size="md"
             marginLeft="15px"
-            marginRight={entity.role !== 'USER' ? 0 : '20px'}
+            marginRight={entity.role !== 'ARTIST' ? 0 : '20px'}
           />
           {entity.role !== 'ARTIST' &&
             (room.length === 0 ? (

@@ -75,6 +75,7 @@ export function SongModal({ isOpen, onClose, shouldValidate, song, artistId }) {
               name: data.name,
               collaborators: data.collaborators,
               isExplicit: data.isExplicit,
+              artistId,
             }
       );
       setRequestState({

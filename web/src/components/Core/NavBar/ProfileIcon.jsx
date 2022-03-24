@@ -17,6 +17,7 @@ import { MdGroups, MdMusicNote, MdOutlineWork } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
 import { MENU_ITEM_PROPS } from '@/features/app';
+import { ROLES_SPANISH } from '@/features/profiles';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { getImage } from '@/utils/getImage';
@@ -43,7 +44,7 @@ export function ProfileIcon() {
             width="50px"
             fontSize={entity.role === 'MANAGER' && 'xx-small'}
           >
-            {entity.role === 'MODERATOR' ? 'MOD' : entity.role}
+            {ROLES_SPANISH[entity.role]}
           </AvatarBadge>
         </Avatar>
       </MenuButton>

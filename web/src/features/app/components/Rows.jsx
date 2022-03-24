@@ -28,6 +28,7 @@ import { Options, IconButton as CustomIconButton } from './Song';
 
 import { Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
+import { useAuthStore } from '@/stores/useAuthStore';
 import { useNotificationStore } from '@/stores/useNotificationStore';
 import { useQueueStore } from '@/stores/useQueueStore';
 import { useRoomStore } from '@/stores/useRoomStore';
@@ -109,6 +110,7 @@ export function RoomRow({ name, activeUsers, userLimit, host, startedAt, genres,
 }
 
 export function ArtistRow({ id, name, avatar, amountOfFollowers, isFollowed }) {
+  const entity = useAuthStore((s) => s.entity);
   const [isHovered, mouseEventsHandlers] = useHover();
   const addNotification = useNotificationStore((s) => s.addNotification);
   const [followed, setFollowed] = useState(isFollowed);
@@ -153,7 +155,7 @@ export function ArtistRow({ id, name, avatar, amountOfFollowers, isFollowed }) {
       </Box>
 
       <Spacer />
-      {isHovered && (
+      {isHovered && entity.role !== 'ARTIST' && (
         <Box animation={FADE_OUT_ANIMATION} onClick={handleOnClick}>
           <Tooltip
             label={

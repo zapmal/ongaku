@@ -5,7 +5,7 @@ import { Controller, Get, Query, Req, UseGuards } from '@nestjs/common';
 import { SearchService } from './search.service';
 
 @Controller()
-@UseGuards(RoleGuard([Role.USER, Role.ADMIN]))
+@UseGuards(RoleGuard([Role.USER, Role.ADMIN, Role.ARTIST]))
 export class SearchController {
   constructor(private readonly search: SearchService) {}
 

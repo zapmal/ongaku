@@ -105,8 +105,6 @@ export function ArtistProfile() {
     return <Spinner paddingBottom="30%" />;
   }
 
-  console.log(latestSongs);
-
   return (
     <>
       <Box>
@@ -146,8 +144,8 @@ export function ArtistProfile() {
                 </HStack>
               )}
               <HStack>
-                {(artist.id === entity.id && entity.role === 'ARTIST') ||
-                  (entity.role === 'ADMIN' && (
+                {entity.role === 'ADMIN' ||
+                  (entity.role === 'ARTIST' && entity.id === artist.id && (
                     <ChakraButton
                       {...BUTTON_PROPS}
                       rightIcon={<Icon as={MdEdit} />}
@@ -156,26 +154,38 @@ export function ArtistProfile() {
                       Editar Perfil
                     </ChakraButton>
                   ))}
+                {/* {(artist.id === entity.id && entity.role === 'ARTIST') ||
+                  (entity.role === 'ADMIN' && (
+                    <ChakraButton
+                      {...BUTTON_PROPS}
+                      rightIcon={<Icon as={MdEdit} />}
+                      onClick={onOpen}
+                    >
+                      Editar Perfil
+                    </ChakraButton>
+                  ))} */}
+                {/* {entity.role !== 'ARTIST' && */}
                 {entity.role !== 'ARTIST' &&
-                followedArtists?.filter((followed) => followed.id === artist.id).length === 1 ? (
-                  <ChakraButton
-                    {...BUTTON_PROPS}
-                    rightIcon={<Icon as={MdCheck} w="25px" h="25px" />}
-                    onClick={handleOnClick}
-                    isDisabled={mutation.isLoading}
-                  >
-                    Siguiendo
-                  </ChakraButton>
-                ) : (
-                  <ChakraButton
-                    {...BUTTON_PROPS}
-                    rightIcon={<Icon as={MdAdd} w="25px" h="25px" />}
-                    onClick={handleOnClick}
-                    isDisabled={mutation.isLoading}
-                  >
-                    Seguir
-                  </ChakraButton>
-                )}
+                  (followedArtists?.filter((followed) => followed.id === artist.id).length === 1 ? (
+                    <ChakraButton
+                      {...BUTTON_PROPS}
+                      rightIcon={<Icon as={MdCheck} w="25px" h="25px" />}
+                      onClick={handleOnClick}
+                      isDisabled={mutation.isLoading}
+                    >
+                      Siguiendo
+                    </ChakraButton>
+                  ) : (
+                    <ChakraButton
+                      {...BUTTON_PROPS}
+                      rightIcon={<Icon as={MdAdd} w="25px" h="25px" />}
+                      onClick={handleOnClick}
+                      isDisabled={mutation.isLoading}
+                    >
+                      Seguir
+                    </ChakraButton>
+                  ))}
+
                 <ChakraButton
                   onClick={() =>
                     copyURL(

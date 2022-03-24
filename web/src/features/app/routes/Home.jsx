@@ -10,10 +10,12 @@ import { GRADIENTS, SECTION_MARGIN, SUB_SECTION_MARGIN, GRID_COLUMN_HEIGHT } fro
 import { Footer } from '@/components/Core';
 import { Banner } from '@/components/Elements';
 import { Highlight, Spinner } from '@/components/Utils';
+import { useAuthStore } from '@/stores/useAuthStore';
 import { getImage } from '@/utils/getImage';
 
 export function Home() {
   const { data, isLoading } = useQuery('home', getHomeData, { useErrorBoundary: true });
+  const entity = useAuthStore((s) => s.entity);
 
   if (isLoading) {
     return <Spinner paddingBottom="30%" />;
@@ -59,6 +61,7 @@ export function Home() {
                   isLiked={album.interaction.length !== 0 ? album.interaction[0].value : false}
                   id={album.id}
                   year={dayjs(album.year).format('YYYY')}
+                  notLikeable={entity.role === 'ARTIST'}
                 />
               ))}
             </Flex>

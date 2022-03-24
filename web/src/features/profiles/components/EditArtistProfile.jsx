@@ -147,6 +147,6 @@ export function EditArtistProfile({ isOpen, onClose, id, name, officialWebsite, 
 }
 
 const schema = yup.object({
-  officialWebsite: yup.string().url('Debes proveer una URL válida'),
-  biography: yup.string(),
+  officialWebsite: yup.string().url('Debes proveer una URL válida').nullable(),
+  biography: yup.string().nullable(),
 });

@@ -251,8 +251,7 @@ export class PlaylistService {
       throw new NotFound('La playlist no existe');
     }
 
-    // change this lol
-    if (playlist?.userId === 2 || role === 'ADMIN') {
+    if (playlist?.userId === entityId || role === 'ADMIN') {
       await this.prisma.userPlaylist.delete({
         where: {
           id: playlistId,

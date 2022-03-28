@@ -32,7 +32,7 @@ import { ArtistService } from '../artist/artist.service';
 import { likeSongSchema } from './song.schemas';
 
 @Controller('song')
-@UseGuards(RoleGuard([Role.ADMIN, Role.ARTIST]))
+@UseGuards(RoleGuard([Role.ADMIN, Role.ARTIST, Role.USER]))
 export class SongController {
   constructor(
     private song: SongService,

@@ -33,7 +33,7 @@ export function Search() {
   }, [query, refetch]);
 
   return (
-    <Box width="80%" align="center" margin={entity.role === 'ARTIST' ? '80px auto' : '0 auto'}>
+    <Box width="80%" align="center" margin={entity.role === 'ARTIST' ? '80px auto' : '40px auto'}>
       <Heading fontSize="3xl">
         Mostrando resultados para <Highlight>{`"${query}"`} </Highlight>
         <Text fontSize="sm" margin="10px 0" color="whiteAlpha.700" fontWeight="normal">
@@ -41,7 +41,7 @@ export function Search() {
         </Text>
       </Heading>
       {isLoading ? (
-        <Box height="385px">
+        <Box height="400px">
           <Status status="loading" message="Estamos buscando, espera pacientemente." />
         </Box>
       ) : (

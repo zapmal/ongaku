@@ -1,5 +1,4 @@
 import {
-  NotFoundException as NotFound,
   UploadedFile,
   Body,
   Controller,

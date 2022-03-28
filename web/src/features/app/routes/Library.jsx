@@ -61,7 +61,7 @@ export function Library() {
 
   return (
     <>
-      <Box minHeight="460px" maxHeight="100%" margin="0 20px 0 40px">
+      <Box minHeight="525px" margin="0 20px 0 40px">
         <Flex gap={20} justify="center">
           <LibraryOption onClick={() => setSelected('artist')} selected={selected === 'artist'}>
             Artistas
@@ -168,7 +168,7 @@ function Playlists() {
     return <Status status="error" message={error} />;
   }
 
-  return data.playlists.length === 0 ? (
+  return data.playlists.length === 0 && data.liked.length === 0 ? (
     <EmptySection message="No has creado o marcado como favorita ni una playlist" />
   ) : (
     <>
@@ -181,7 +181,7 @@ function Playlists() {
             likes={playlist.likes}
             author={playlist.username}
             cover={getImage('playlist', playlist.cover, 'default_cover.jpg')}
-            amountOfSongs={playlist.songsInPlaylist.length}
+            amountOfSongs={playlist.songsInPlaylist.length ? playlist.songsInPlaylist.length : 0}
             badge={false}
             notLikeable={true}
           />
@@ -196,7 +196,7 @@ function Playlists() {
             likes={playlist.likes}
             author={playlist.username}
             cover={getImage('playlist', playlist.cover, 'default_cover.jpg')}
-            amountOfSongs={0}
+            amountOfSongs={playlist.songsInPlaylist.length ? playlist.songsInPlaylist.length : 0}
             badge={false}
             notLikeable={playlist.username === entity.username}
           />

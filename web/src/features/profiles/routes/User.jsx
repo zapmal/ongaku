@@ -30,8 +30,6 @@ import { useAuthStore } from '@/stores/useAuthStore';
 import { copyURL } from '@/utils/copyURL';
 import { getImage } from '@/utils/getImage';
 
-const FLEX_PROPS = { margin: '20px 10px', justify: 'center' };
-
 export function UserProfile() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const entity = useAuthStore((s) => s.entity);
@@ -49,6 +47,8 @@ export function UserProfile() {
     },
     onError: () => navigate('/not-found'),
   });
+
+  console.log(followed);
 
   if (isLoading) {
     return <Spinner paddingBottom="30%" />;
@@ -132,11 +132,11 @@ export function UserProfile() {
           <Heading marginTop="10px" id="following">
             Artistas que sigue
           </Heading>
-          <Flex {...FLEX_PROPS}>
-            {followed.length === 0 ? (
-              <Text margin="20px 0">No hay nada aquí aún. ¡Vuelve luego!</Text>
-            ) : (
-              followed.map(({ artist }, index) => (
+          {followed.length === 0 ? (
+            <Text margin="20px 0">No hay nada aquí aún. ¡Vuelve luego!</Text>
+          ) : (
+            <SimpleGrid columns={followed.length === 1 ? 1 : 5} gap="30px" marginTop="20px">
+              {followed.map(({ artist }, index) => (
                 <ArtistCard
                   key={index}
                   artistId={artist.id}
@@ -148,32 +148,37 @@ export function UserProfile() {
                   isFollowed={entity.username === user.username}
                   size="sm"
                 />
-              ))
-            )}
-          </Flex>
+              ))}
+            </SimpleGrid>
+          )}
 
           <Heading marginTop="40px">
             Playlists que le <Highlight>gustaron</Highlight>
           </Heading>
-          <Flex {...FLEX_PROPS}>
-            {playlists.likedPlaylists.length === 0 ? (
-              <Text margin="20px 0">No hay nada aquí aún. ¡Vuelve luego!</Text>
-            ) : (
-              playlists.likedPlaylists.map((playlist, index) => (
+          {playlists.likedPlaylists.length === 0 ? (
+            <Text margin="20px 0">No hay nada aquí aún. ¡Vuelve luego!</Text>
+          ) : (
+            <SimpleGrid columns={5} gap="30px" marginTop="20px">
+              {playlists.likedPlaylists.map((playlist, index) => (
                 <PlaylistCard
                   id={playlist.userPlaylistId}
                   key={index}
                   cover={getImage('playlist', playlist.userPlaylist.cover, 'default_cover.jpg')}
                   name={playlist.userPlaylist.name}
                   likes={playlist.userPlaylist.likes}
-                  amountOfSongs={0}
-                  author={playlist.user.username}
+                  amountOfSongs={
+                    playlist?.songsInPlaylist?.length ? playlist.songsInPlaylist.length : 0
+                  }
+                  author={playlist.userPlaylist.user.username}
                   badge={false}
-                  notLikeable={playlist.user.username === entity.username}
+                  notLikeable={
+                    playlist.userPlaylist.user.username === entity.username ||
+                    entity.role === 'ARTIST'
+                  }
                 />
-              ))
-            )}
-          </Flex>
+              ))}
+            </SimpleGrid>
+          )}
 
           <Heading marginTop="40px" id="playlists">
             <Highlight>Playlists</Highlight> propias
@@ -190,10 +195,12 @@ export function UserProfile() {
                   cover={getImage('playlist', playlist.cover, 'default_cover.jpg')}
                   name={playlist.name}
                   likes={playlist.likes}
-                  amountOfSongs={0}
+                  amountOfSongs={playlist?.songsInPlaylist.length}
                   author={playlist.user.username}
                   badge={false}
-                  notLikeable={playlist.user.username === user.username}
+                  notLikeable={
+                    playlist.user.username === entity.username || entity.role === 'ARTIST'
+                  }
                 />
               ))}
             </SimpleGrid>

@@ -281,7 +281,6 @@ export function View() {
                       {song.artist.artisticName
                         ? getName(song.artist.artisticName)
                         : getName(song.artist.band.name)}
-                      {song?.collaborators[0] !== '' && ', '}
                       {song?.collaborators.map((collaborator, index) => {
                         return song?.collaborators.length !== index + 1
                           ? `${getName(collaborator)}, `

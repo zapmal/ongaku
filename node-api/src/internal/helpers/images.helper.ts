@@ -16,7 +16,7 @@ export const multerImageOptions: MulterImageOptions = {
       !file.mimetype.includes('image') ||
       !file.originalname.match(/\.(jpg|jpeg|png|webp)$/)
     ) {
-      return callback(new BadRequest('You must provide a valid image'), false);
+      return callback(new BadRequest('Debes proveer una imágen válida'), false);
     }
     callback(null, true);
   },

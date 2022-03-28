@@ -111,7 +111,16 @@ export class SongController {
   }
 
   @Post('new')
-  @UseInterceptors(FileInterceptor('song'))
+  @UseInterceptors(
+    FileInterceptor('song', {
+      fileFilter: (request, file, callback) => {
+        if (!file.originalname.match(/\.(mp3)$/)) {
+          return callback(new BadRequest('Debes proveer un archivo válido (MP3)'), false);
+        }
+        callback(null, true);
+      },
+    }),
+  )
   async create(
     @Req() request: RequestWithEntity,
     @Body() newSongData: NewSongDTO,

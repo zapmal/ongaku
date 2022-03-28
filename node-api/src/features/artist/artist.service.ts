@@ -172,6 +172,7 @@ export class ArtistService {
   getByEmail(email: string): Promise<Artist> {
     const artist = this.prisma.artist.findFirst({
       where: { email },
+      include: { band: true },
     });
 
     if (!artist) throw new ArtistNotFound();

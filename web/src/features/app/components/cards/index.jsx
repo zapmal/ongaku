@@ -18,7 +18,7 @@ import { MdPlayArrow, MdMoreVert, MdOpenInNew } from 'react-icons/md';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate, Link } from 'react-router-dom';
 
-import { likeAlbum, isAlbumLiked } from '../../api/album';
+import { likeAlbum, isAlbumLiked, getAlbum } from '../../api/album';
 import {
   likePlaylist,
   isPlaylistLiked,
@@ -109,6 +109,21 @@ export function Card({
           })
           .finally(() => setLoading(false));
       }
+    }
+
+    if (isHovered && id && type !== 'playlist' && entity.role === 'ARTIST') {
+      getAlbum(id)
+        .then((response) => {
+          console.log('Querying songs for ARTISTS');
+          setSongs(response.song);
+        })
+        .catch((error) => {
+          addNotification({
+            title: 'Error',
+            message: error,
+            status: 'error',
+          });
+        });
     }
   }, [entity.role, id, isHovered, isLiked, isLikedSongsPlaylist, notLikeable, type]);
 

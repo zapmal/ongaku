@@ -33,7 +33,7 @@ export function Search() {
   }, [query, refetch]);
 
   return (
-    <Box width="80%" align="center" margin={entity.role === 'ARTIST' ? '80px auto' : '40px auto'}>
+    <Box width="80%" align="center" margin={entity.role === 'ARTIST' ? '110px auto' : '40px auto'}>
       <Heading fontSize="3xl">
         Mostrando resultados para <Highlight>{`"${query}"`} </Highlight>
         <Text fontSize="sm" margin="10px 0" color="whiteAlpha.700" fontWeight="normal">

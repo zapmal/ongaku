@@ -26,7 +26,16 @@ export class AlbumService {
             band: true,
           },
         },
-        song: true,
+        song: {
+          include: {
+            album: true,
+            artist: {
+              include: {
+                band: true,
+              },
+            },
+          },
+        },
       },
     });
 

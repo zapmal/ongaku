@@ -47,10 +47,16 @@ export class UserController {
   }
 
   @Get('profile/:username')
-  async getProfileData(@Param('username') username: string) {
+  async getProfileData(
+    @Param('username') username: string,
+    @Req() request: RequestWithEntity,
+  ) {
     const user = await this.user.getByUsername(username);
     const playlists = await this.playlist.getLiked(user.id);
-    const followedArtists = await this.artist.getFollowed(user.id);
+    const followedArtists = await this.artist.getFollowed(
+      user.id,
+      Number(request.entity.id),
+    );
 
     return { user, playlists, followed: followedArtists };
   }

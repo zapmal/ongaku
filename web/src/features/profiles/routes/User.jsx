@@ -48,8 +48,6 @@ export function UserProfile() {
     onError: () => navigate('/not-found'),
   });
 
-  console.log(followed);
-
   if (isLoading) {
     return <Spinner paddingBottom="30%" />;
   }
@@ -110,7 +108,7 @@ export function UserProfile() {
                   </Text>
                 </Flex>
                 <ButtonGroup gap="5px" margin="20px 0">
-                  {entity.id === user.id && (
+                  {(entity.id === user.id || entity.role === 'ADMIN') && (
                     <Button onClick={onOpen} rightIcon={<Icon as={MdEdit} w="15px" h="15px" />}>
                       Editar Perfil
                     </Button>
@@ -145,7 +143,7 @@ export function UserProfile() {
                   amountOfFollowers={artist.artistMetrics.followers}
                   isHighlighted={index % 2 === 0}
                   badge={false}
-                  isFollowed={entity.username === user.username}
+                  isFollowed={artist.interaction.length !== 0 ? artist.interaction[0].value : false}
                   size="sm"
                 />
               ))}

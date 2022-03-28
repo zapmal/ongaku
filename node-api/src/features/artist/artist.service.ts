@@ -124,7 +124,7 @@ export class ArtistService {
     }
   }
 
-  async getFollowed(entityId: number) {
+  async getFollowed(entityId: number, currentEntityId?: number) {
     const followedArtists = await this.prisma.interaction.findMany({
       where: {
         userId: entityId,
@@ -140,6 +140,17 @@ export class ArtistService {
             id: true,
             avatar: true,
             artisticName: true,
+            interaction: {
+              where: {
+                albumId: undefined,
+                userId: currentEntityId ? currentEntityId : entityId,
+                userPlaylistId: undefined,
+                songId: undefined,
+              },
+              select: {
+                value: true,
+              },
+            },
             band: {
               select: {
                 name: true,

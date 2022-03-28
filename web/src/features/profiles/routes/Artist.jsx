@@ -110,7 +110,12 @@ export function ArtistProfile() {
       <Box>
         <Banner
           image={getImage('artist', artist.artistInformation?.coverImage, 'default_cover.svg')}
-          bgRepeat={artist.artistInformation?.coverImage ? 'round' : 'no-repeat'}
+          bgRepeat={
+            artist.artistInformation?.coverImage &&
+            navigator.userAgent.toLowerCase().indexOf('firefox') > -1
+              ? 'round'
+              : 'no-repeat'
+          }
           bgPosition="top"
           height="700px"
         >
@@ -135,36 +140,23 @@ export function ArtistProfile() {
                 {artist.artistMetrics?.followers}{' '}
                 {artist.artistMetrics?.followers === 1 ? 'seguidor' : 'seguidores'}
               </Text>
-              {artist.artistInformation?.officialWebsite && (
-                <HStack fontWeight="bold" fontSize="lg">
-                  <Link isExternal href={artist.artistInformation.officialWebsite}>
-                    SITIO WEB OFICIAL
-                  </Link>
-                  <Icon as={FiExternalLink} w="20px" h="20px" />
-                </HStack>
-              )}
+              {console.log(artist.artistInformation)}
+              {artist.artistInformation?.officialWebsite &&
+                artist.artistInformation?.officialWebsite !== 'null' && (
+                  <HStack fontWeight="bold" fontSize="lg">
+                    <Link isExternal href={artist.artistInformation.officialWebsite}>
+                      SITIO WEB OFICIAL
+                    </Link>
+                    <Icon as={FiExternalLink} w="20px" h="20px" />
+                  </HStack>
+                )}
               <HStack>
-                {entity.role === 'ADMIN' ||
-                  (entity.role === 'ARTIST' && entity.id === artist.id && (
-                    <ChakraButton
-                      {...BUTTON_PROPS}
-                      rightIcon={<Icon as={MdEdit} />}
-                      onClick={onOpen}
-                    >
-                      Editar Perfil
-                    </ChakraButton>
-                  ))}
-                {/* {(artist.id === entity.id && entity.role === 'ARTIST') ||
-                  (entity.role === 'ADMIN' && (
-                    <ChakraButton
-                      {...BUTTON_PROPS}
-                      rightIcon={<Icon as={MdEdit} />}
-                      onClick={onOpen}
-                    >
-                      Editar Perfil
-                    </ChakraButton>
-                  ))} */}
-                {/* {entity.role !== 'ARTIST' && */}
+                {(entity.role === 'ADMIN' ||
+                  (entity.role === 'ARTIST' && entity.id === artist.id)) && (
+                  <ChakraButton {...BUTTON_PROPS} rightIcon={<Icon as={MdEdit} />} onClick={onOpen}>
+                    Editar Perfil
+                  </ChakraButton>
+                )}
                 {entity.role !== 'ARTIST' &&
                   (followedArtists?.filter((followed) => followed.id === artist.id).length === 1 ? (
                     <ChakraButton

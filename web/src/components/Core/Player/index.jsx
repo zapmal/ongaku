@@ -93,6 +93,7 @@ export function Player() {
           store.queue.getHeadNode().getData() !== currentlyPlayingNode.getData()
         ) {
           store.setCurrentlyPlaying(store.queue.getHeadNode().getData());
+          // remove the currently playing?
         } else {
           store.setCurrentlyPlaying({ artist: {}, album: {}, interaction: [] });
           store.removeHeadNode();
@@ -111,9 +112,27 @@ export function Player() {
   const likeMutation = useMutation(likeSong);
 
   const handleLike = async (songId) => {
+    const newCurrentlyPlaying = {
+      ...store.currentlyPlaying,
+      interaction: [
+        {
+          id:
+            store.currentlyPlaying.interaction && store.currentlyPlaying.interaction.length !== 0
+              ? store.currentlyPlaying.interaction[0].id
+              : undefined,
+          value: !isLiked,
+        },
+      ],
+    };
+
     try {
       await likeMutation.mutateAsync({ songId });
+
       setLiked(!isLiked);
+
+      const index = store.queue.indexOf(store.currentlyPlaying);
+      store.insertAt(index, newCurrentlyPlaying);
+      store.setCurrentlyPlaying(newCurrentlyPlaying);
     } catch (error) {
       addNotification({
         title: 'Error',
@@ -335,8 +354,8 @@ export function Player() {
                   store.queue.removeNode(store.queue.find(store.currentlyPlaying).getData());
 
                   setLiked(
-                    currentlyPlaying.next.data.interaction?.length !== 0 &&
-                      currentlyPlaying.next.data.interaction
+                    currentlyPlaying.next?.data.interaction?.length !== 0 &&
+                      currentlyPlaying.next?.data.interaction
                       ? currentlyPlaying.next.data.inteaction.value
                       : false
                   );

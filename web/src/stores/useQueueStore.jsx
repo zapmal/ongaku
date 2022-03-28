@@ -26,6 +26,13 @@ export const useQueueStore = create(
     setCurrentlyPlaying: (song) => {
       set({ currentlyPlaying: song });
     },
+    insertAt: (index, song) => {
+      const queue = get().queue;
+      queue.insertAt(index, song);
+      queue.removeAt(index + 1);
+
+      set({ queue: queue });
+    },
     remove: (song) => {
       const currentlyPlaying = get().currentlyPlaying;
       get().queue.removeNode(song);

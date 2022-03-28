@@ -53,7 +53,7 @@ export function Queue() {
                       song={data}
                       name={data.name}
                       isExplicit={data.isExplicit}
-                      isPlaying={data === store.currentlyPlaying}
+                      isPlaying={data.id === store.currentlyPlaying.id}
                       authors={`${author}${
                         data.collaborators.filter((v) => v !== '').length !== 0
                           ? `,${data.collaborators.join(',')}`

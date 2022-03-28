@@ -148,6 +148,7 @@ export class ArtistService {
                 songId: undefined,
               },
               select: {
+                id: true,
                 value: true,
               },
             },

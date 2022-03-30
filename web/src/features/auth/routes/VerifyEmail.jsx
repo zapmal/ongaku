@@ -13,7 +13,7 @@ import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
 
 export function VerifyEmail() {
-  const [entity, setEntity] = useAuthStore((s) => [s.entity, s.setEntity]);
+  const [entity, logout] = useAuthStore((s) => [s.entity, s.logout]);
   const [request, setRequestState] = useRequest();
   const { hash } = useParams();
 
@@ -21,20 +21,24 @@ export function VerifyEmail() {
     try {
       setRequestState({ isSubmitting: true });
 
-      const response = await verifyEmail({
+      await verifyEmail({
         id: entity.id,
         hash,
         email: entity.email,
         role: entity.role,
       });
-      setEntity({ ...entity, verifiedEmail: response.verifiedEmail });
 
       setRequestState({
         status: 'success',
         isSubmitting: false,
         title: '¡Éxito!',
-        message: `Te redigiremos pronto`,
+        message: `¡Correo Verificado! Cerraremos tu sesión para que puedas acceder a la aplicación.`,
       });
+
+      setTimeout(() => {
+        logout();
+        window.location.assign('/');
+      }, 3000);
     } catch (error) {
       setRequestState({
         status: 'error',
@@ -60,7 +64,8 @@ export function VerifyEmail() {
           width={['100%', '550px']}
         >
           Este es el último paso para el registro, después de esto, podrás disfrutar Ongaku a su
-          límite.
+          límite. Ten en cuenta que para verificar tu correo{' '}
+          <Highlight>debes tener la sesión iniciada</Highlight>.
         </Text>
 
         {request.isSubmitting ? (

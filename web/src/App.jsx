@@ -6,7 +6,8 @@ import { AppRoutes } from '@/routes';
 import { useAuthStore } from '@/stores/useAuthStore';
 
 function App() {
-  const [csrfToken, setEntity, setCsrfToken] = useAuthStore((s) => [
+  const [entity, csrfToken, setEntity, setCsrfToken] = useAuthStore((s) => [
+    s.entity,
     s.csrfToken,
     s.setEntity,
     s.setCsrfToken,
@@ -37,7 +38,7 @@ function App() {
 
   useEffect(() => {
     handleNoCsrf();
-  }, [handleNoCsrf]);
+  }, [handleNoCsrf, entity]);
 
   return (
     <AppProvider>

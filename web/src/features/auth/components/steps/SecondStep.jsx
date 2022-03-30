@@ -64,14 +64,19 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
         ...conditionalData,
         isBand,
       });
-      setEntity(response.artist);
-
-      setRequestState({
-        status: 'success',
-      });
-
-      localStorage.setItem('isLoggedIn', true);
       nextStep();
+
+      setTimeout(() => {
+        window.location.assign('/');
+
+        setEntity(response.artist);
+
+        setRequestState({
+          status: 'success',
+        });
+
+        localStorage.setItem('isLoggedIn', true);
+      }, 3000);
     } catch (error) {
       setRequestState({
         status: 'error',

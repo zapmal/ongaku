@@ -20,7 +20,7 @@ export class EmailService {
 
     return await this.sendEmail(
       to,
-      'Email Verification',
+      'Verificación de Correo',
       './email-verification',
       context,
     );
@@ -29,7 +29,12 @@ export class EmailService {
   async sendRecoveryCode(to: string, code: number) {
     const context = { context: { code } };
 
-    return await this.sendEmail(to, 'Account Recovery', './account-recovery', context);
+    return await this.sendEmail(
+      to,
+      'Recuperación de Cuenta',
+      './account-recovery',
+      context,
+    );
   }
 
   private async sendEmail(to, subject, template, context) {
@@ -44,7 +49,7 @@ export class EmailService {
       return 'SENT';
     } catch (error) {
       throw new ServiceUnavailable(
-        'We could not send the email right now, please try again later',
+        'No pudimos enviar el correo ahora mismo, revisa tu conexión a internet e intentalo de nuevo',
       );
     }
   }

@@ -5,7 +5,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Prisma, Artist, Band, UserMetadata } from '@prisma/client';
+import { Prisma, Artist, Band, UserMetadata, User } from '@prisma/client';
 import { compare, hash } from 'bcrypt';
 import * as dayjs from 'dayjs';
 
@@ -51,9 +51,11 @@ export class AuthService {
 
       return {
         user: {
+          id: newUser.id,
           email: newUser.email,
           username: newUser.username,
           verifiedEmail: false,
+          avatar: newUser.avatar,
           role: 'USER',
         },
       };
@@ -106,8 +108,10 @@ export class AuthService {
 
       return {
         artist: {
+          id: newArtist.id,
           email: newArtist.email,
-          artisticName: newArtist.artisticName,
+          artisticName: isBand ? bandName : artisticName,
+          avatar: newArtist.avatar,
           verifiedEmail: false,
           role: 'ARTIST',
         },
@@ -128,10 +132,14 @@ export class AuthService {
         target = target.split('_').join(' ');
       }
 
-      throw new Conflict(`The supplied ${target} is already being used`);
+      throw new Conflict(
+        `El ${
+          target === 'username' ? 'nombre de usuario' : 'nombre artístico'
+        } ya está en uso`,
+      );
     } else {
       throw new InternalServerError(
-        'Something went wrong while trying to create your account, try again later',
+        'Ocurrió un error de nuestro lado, intentalo de nuevo luego',
       );
     }
   }
@@ -300,27 +308,39 @@ export class AuthService {
 
   async verifyEmail(data: VerifyEmailDTO) {
     let entity: Artist | UserMetadata;
+    let entityData: Artist | User;
 
     if (data.hash === getHash(data.email)) {
       if (data.role === 'USER') {
-        entity = await this.user.updateMetadata(data.id, { verifiedEmail: true });
+        entityData = await this.prisma.user.findUnique({ where: { email: data.email } });
+
+        entity = await this.user.updateMetadata(data.id ? data.id : entityData.id, {
+          verifiedEmail: true,
+        });
       } else if (data.role === 'ARTIST') {
-        entity = await this.artist.update(data.id, { verifiedEmail: true });
+        entityData = await this.prisma.artist.findUnique({
+          where: { email: data.email },
+        });
+
+        entity = await this.artist.update(data.id ? data.id : entityData.id, {
+          verifiedEmail: true,
+        });
       }
     } else {
       throw new BadRequest(
-        'The link does not correspond the account, please request a new one and try again',
+        'El link no corresponde con la cuenta, porfavor solicita uno nuevo e intantlo otra vez',
       );
     }
 
     if (!entity) {
       throw new InternalServerError(
-        'Something went wrong while trying to verify your account, try again',
+        'Ocurrió un error de nuestro lado, intentalo de nuevo luego',
       );
     }
 
     return {
       isEmailVerified: entity.verifiedEmail,
+      entity: entityData,
     };
   }
 
@@ -328,7 +348,7 @@ export class AuthService {
     const entity: Entity = await this.getEntity(email, isArtist);
 
     if (!entity) {
-      throw new NotFound('This email is not associated to an Ongaku account');
+      throw new NotFound('Este email no está asociado a ninguna cuenta');
     }
 
     const code = Math.floor(Math.random() * 899999 + 100000);

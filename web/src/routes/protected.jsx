@@ -97,6 +97,7 @@ export const protectedRoutes = [
 
 function VerifiedEmailWrapper() {
   const entity = useAuthStore((s) => s.entity);
+
   return (
     <>
       {!entity.verifiedEmail && <ResendVerificationEmail />}

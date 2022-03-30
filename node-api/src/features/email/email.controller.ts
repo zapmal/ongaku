@@ -12,7 +12,7 @@ export class EmailController {
     const status = await this.email.sendVerificationEmail(body.to);
 
     return {
-      message: 'Success! Check your inbox for further instructions',
+      message: 'Revisa tu bandeja de entrada, ahí están las instrucciones para continuar',
       status,
     };
   }

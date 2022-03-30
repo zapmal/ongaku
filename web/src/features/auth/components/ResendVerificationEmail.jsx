@@ -22,7 +22,7 @@ import { useRequest } from '@/hooks';
 import { useAuthStore } from '@/stores/useAuthStore';
 
 export function ResendVerificationEmail() {
-  const [entity, logout] = useAuthStore((s) => [s.entity, s.logout]);
+  const entity = useAuthStore((s) => s.entity);
   const [request, setRequestState] = useRequest();
 
   const handleResendClick = async () => {
@@ -37,11 +37,6 @@ export function ResendVerificationEmail() {
         title: '¡Email enviado éxitosamente!',
         message: response.message,
       });
-
-      setTimeout(() => {
-        logout();
-        window.location.assign('/');
-      }, 3000);
     } catch (error) {
       setRequestState({
         status: 'error',
@@ -87,6 +82,9 @@ export function ResendVerificationEmail() {
             <Text fontSize="sm" color="gray.400">
               Si consideras que esto es un error, contáctanos:
               <Highlight> ongaku.official@gmail.com</Highlight>
+            </Text>
+            <Text fontSize="sm" color="gray.400">
+              Si ya verificaste tu correo, puedes cerrar esta pestaña.
             </Text>
           </ModalFooter>
         </ModalContent>

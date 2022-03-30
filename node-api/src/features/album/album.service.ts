@@ -111,7 +111,7 @@ export class AlbumService {
       return await this.prisma.album.delete({ where: { id } });
     } catch (error) {
       throw new InternalServerError(
-        'Ocurrió un error de nuestro lado, intentao de nuevo luego',
+        'Ocurrió un error de nuestro lado, intentalo de nuevo luego',
       );
     }
   }

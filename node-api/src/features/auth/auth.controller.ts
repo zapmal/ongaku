@@ -84,7 +84,7 @@ export class AuthController {
     await this.email.sendVerificationEmail(artist.email);
 
     return {
-      message: 'Account created successfully',
+      message: 'Cuenta creada exitosamente',
       artist,
     };
   }
@@ -118,11 +118,12 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @UsePipes(new JoiValidationPipe(emailVerificationSchema))
   async verifyEmail(@Body() data: VerifyEmailDTO) {
-    const { isEmailVerified } = await this.auth.verifyEmail(data);
+    const { isEmailVerified, entity } = await this.auth.verifyEmail(data);
 
     return {
-      message: 'Email verified successfully!',
+      message: 'Email verificado exitosamente',
       verifiedEmail: isEmailVerified,
+      entity,
     };
   }
 
@@ -133,7 +134,7 @@ export class AuthController {
     const status = await this.email.sendRecoveryCode(email, code);
 
     return {
-      message: 'Success! Check your inbox for further instructions',
+      message: 'Revisa tu bandeja de entrada, ahí están las instrucciones para continuar',
       status,
       code,
       entityId,
@@ -147,7 +148,7 @@ export class AuthController {
     await this.auth.changePassword(newPassword, entityID, isArtist);
 
     return {
-      message: 'Password updated successfully! You can login now',
+      message: 'Contraseña actualizada exitosamente',
     };
   }
 

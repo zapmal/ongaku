@@ -73,7 +73,7 @@ export class UserService {
   ): Promise<UserMetadata> {
     try {
       return await this.prisma.userMetadata.update({
-        where: { id },
+        where: { userId: id },
         data: newMetadata,
       });
     } catch (error) {

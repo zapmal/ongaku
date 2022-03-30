@@ -58,6 +58,7 @@ export function UserRegister() {
 
     try {
       const response = await registerUser({ ...userData, username: linkUsername });
+      console.log(response);
       setEntity(response.user);
 
       setRequestState({

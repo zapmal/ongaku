@@ -35,7 +35,7 @@ export function Search() {
   return (
     <Box width="80%" align="center" margin={entity.role === 'ARTIST' ? '110px auto' : '40px auto'}>
       <Heading fontSize="3xl">
-        Mostrando resultados para <Highlight>{`"${query}"`} </Highlight>
+        Mostrando resultados para <Highlight>{`"${capitalizeEach(getName(query))}"`} </Highlight>
         <Text fontSize="sm" margin="10px 0" color="whiteAlpha.700" fontWeight="normal">
           Intenta evitar búsquedas ambiguas, así podrás obtener los mejores resultados.
         </Text>

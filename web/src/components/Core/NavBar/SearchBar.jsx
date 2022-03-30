@@ -18,6 +18,8 @@ export function SearchBar({ setClickedSearch }) {
     e.preventDefault();
     navigate(`/search?query=${query}`);
     setSearchHistory(query);
+
+    setClickedSearch(false);
   };
 
   return (
@@ -66,6 +68,7 @@ export function SearchBar({ setClickedSearch }) {
                 <Text
                   color="whiteAlpha.600"
                   as={Link}
+                  onClick={() => setClickedSearch(false)}
                   to={`/search?query=${current}`}
                   underline={false}
                 >

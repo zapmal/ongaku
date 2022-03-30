@@ -206,10 +206,7 @@ export function Login(props) {
 }
 
 const schema = yup.object({
-  email: yup.string().email('You must enter a valid email.').required('This field is required.'),
-  password: yup
-    .string()
-    .min(8, 'Minimum eight (8) characters.')
-    .required('This field is required.'),
+  email: yup.string().email('Debes ingresar un email válido.').required('Este campo es requerido.'),
+  password: yup.string().min(8, 'Mínimo ocho (8) carácteres.').required('Este campo es requerido.'),
   isArtist: yup.boolean(),
 });

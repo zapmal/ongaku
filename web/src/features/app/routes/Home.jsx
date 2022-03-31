@@ -17,8 +17,6 @@ export function Home() {
   const { data, isLoading } = useQuery('home', getHomeData, { useErrorBoundary: true });
   const entity = useAuthStore((s) => s.entity);
 
-  console.log(entity);
-
   if (isLoading) {
     return <Spinner paddingBottom="30%" />;
   }

@@ -104,6 +104,13 @@ export class UserService {
         email: true,
         fullName: true,
         avatar: true,
+        role: true,
+        username: true,
+        userMetadata: {
+          select: {
+            verifiedEmail: true,
+          },
+        },
       },
     });
 

@@ -386,37 +386,41 @@ function OptionsButton({ id, type, to, mouseEventsHandlers }) {
           Abrir
         </MenuItem>
 
-        <MenuDivider />
-        <MenuOptionGroup title="Agregar a Playlist">
-          {isLoading ? (
-            <Box marginTop="10px" textAlign="center">
-              <Spinner />
-            </Box>
-          ) : isError ? (
-            <MenuItem {...MENU_ITEM_PROPS} fontSize="sm" isDisabled={true}>
-              Ha ocurrido un error
-            </MenuItem>
-          ) : data.playlists.length === 0 ? (
-            <MenuItem {...MENU_ITEM_PROPS} fontSize="sm" isDisabled={true}>
-              No tienes playlists
-            </MenuItem>
-          ) : (
-            data.playlists.map((playlist, index) => {
-              if (playlist.id === id) return null;
-
-              return (
-                <MenuItem
-                  key={index}
-                  {...MENU_ITEM_PROPS}
-                  fontSize="sm"
-                  onClick={() => handleClick(playlist.id)}
-                >
-                  {playlist.name}
+        {type === 'song' && (
+          <>
+            <MenuDivider />
+            <MenuOptionGroup title="Agregar a Playlist">
+              {isLoading ? (
+                <Box marginTop="10px" textAlign="center">
+                  <Spinner />
+                </Box>
+              ) : isError ? (
+                <MenuItem {...MENU_ITEM_PROPS} fontSize="sm" isDisabled={true}>
+                  Ha ocurrido un error
                 </MenuItem>
-              );
-            })
-          )}
-        </MenuOptionGroup>
+              ) : data.playlists.length === 0 ? (
+                <MenuItem {...MENU_ITEM_PROPS} fontSize="sm" isDisabled={true}>
+                  No tienes playlists
+                </MenuItem>
+              ) : (
+                data.playlists.map((playlist, index) => {
+                  if (playlist.id === id) return null;
+
+                  return (
+                    <MenuItem
+                      key={index}
+                      {...MENU_ITEM_PROPS}
+                      fontSize="sm"
+                      onClick={() => handleClick(playlist.id)}
+                    >
+                      {playlist.name}
+                    </MenuItem>
+                  );
+                })
+              )}
+            </MenuOptionGroup>
+          </>
+        )}
       </MenuList>
     </Menu>
   );

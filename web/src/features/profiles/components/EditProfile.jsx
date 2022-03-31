@@ -19,6 +19,7 @@ import { updateProfileData } from '../api/user';
 import { Button } from '@/components/Elements';
 import { Field } from '@/components/Form';
 import { useRequest } from '@/hooks';
+import { useAuthStore } from '@/stores/useAuthStore';
 
 export function EditProfile({ isOpen, onClose, id, fullName, email, username }) {
   const {
@@ -32,6 +33,7 @@ export function EditProfile({ isOpen, onClose, id, fullName, email, username }) 
       email: email,
     },
   });
+  const [entity, setEntity] = useAuthStore((s) => [s.entity, s.setEntity]);
   const [request, setRequestState] = useRequest();
   const queryClient = useQueryClient();
   const mutation = useMutation(updateProfileData, {
@@ -49,6 +51,11 @@ export function EditProfile({ isOpen, onClose, id, fullName, email, username }) 
 
     try {
       const response = await mutation.mutateAsync(body);
+
+      if (entity.id === response.user.id) {
+        setEntity(response.user);
+      }
+
       setRequestState({
         status: 'success',
         message: response.message,

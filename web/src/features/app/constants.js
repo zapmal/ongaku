@@ -786,6 +786,5 @@ export const POPULAR_TOPICS = [
   'The Gentlemen',
   'Jonghyun',
   'Olivia Rodrigo',
-  'IU',
   'CHVRCHES',
 ];

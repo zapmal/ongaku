@@ -61,6 +61,7 @@ export class ArtistController {
         bandName: artist.band ? artist.band.name : null,
         avatar: artist.avatar,
         followers: artist.artistMetrics.followers,
+        isFollowed: artist.interaction[0].value,
       };
     });
   }

@@ -14,8 +14,11 @@ import {
   UnauthorizedException as Unauthorized,
   UseInterceptors,
   InternalServerErrorException as InternalServerError,
+  Res,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { sign } from 'jsonwebtoken';
+import { Response } from 'express';
 
 import { RoleGuard } from '@/internal/guards';
 import { Role } from '@/internal/constants';
@@ -27,7 +30,7 @@ import { PlaylistService } from '../playlist/playlist.service';
 import { ArtistService } from '../artist/artist.service';
 
 import { RequestWithEntity } from '@/internal/interfaces';
-import { multerImageOptions } from '@/internal/helpers';
+import { cookieOptions, multerImageOptions } from '@/internal/helpers';
 import { existsSync, unlink } from 'fs';
 import { ConfigService } from '@nestjs/config';
 
@@ -76,6 +79,7 @@ export class UserController {
     @Req() request: RequestWithEntity,
     @UploadedFile()
     newAvatar: Express.Multer.File,
+    @Res({ passthrough: true }) response: Response,
   ) {
     if (
       request.entity.role === Role.USER &&
@@ -113,6 +117,27 @@ export class UserController {
       });
     }
 
-    return { message: 'Actualizado exitosamente' };
+    const updatedUserData = await this.user.getById(Number(newUserData.id));
+    const user = {
+      ...updatedUserData,
+      verifiedEmail: updatedUserData.userMetadata.verifiedEmail,
+    };
+
+    if (request.entity.id === Number(newUserData.id)) {
+      response.clearCookie('token');
+      const token = this.getJwt({ ...user });
+      response.cookie('token', token, cookieOptions);
+    }
+
+    return {
+      message: 'Actualizado exitosamente',
+      user,
+    };
+  }
+
+  getJwt(payload: Record<string, unknown>) {
+    return sign(payload, this.config.get('JWT_SECRET'), {
+      expiresIn: this.config.get('JWT_EXPIRY_TIME'),
+    });
   }
 }

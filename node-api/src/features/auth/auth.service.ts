@@ -132,11 +132,13 @@ export class AuthService {
         target = target.split('_').join(' ');
       }
 
-      throw new Conflict(
-        `El ${
-          target === 'username' ? 'nombre de usuario' : 'nombre artístico'
-        } ya está en uso`,
-      );
+      const targetEspañol = {
+        username: 'nombre de usuario',
+        artistic_name: 'nombre artístico',
+        email: 'correo',
+      };
+
+      throw new Conflict(`El ${targetEspañol[error?.meta['target'][0]]} ya está en uso`);
     } else {
       throw new InternalServerError(
         'Ocurrió un error de nuestro lado, intentalo de nuevo luego',

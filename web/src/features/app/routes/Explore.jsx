@@ -73,7 +73,6 @@ export function Explore() {
             <Highlight>Nuevos</Highlight> Artistas
           </Heading>
 
-          {console.log(latestArtists)}
           {latestArtists.length === 0 ? (
             <Box>
               <Text color="whiteAlpha.700" marginTop="20px">

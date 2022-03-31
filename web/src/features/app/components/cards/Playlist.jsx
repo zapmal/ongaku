@@ -19,6 +19,14 @@ export function PlaylistCard({
   notLikeable = false,
   badge = true,
 }) {
+  const longNameProps =
+    name.split(' ').length >= 5
+      ? {
+          fontSize: 'xs',
+          width: '69%', // ;)
+        }
+      : {};
+
   return (
     <Card
       cover={cover}
@@ -34,7 +42,12 @@ export function PlaylistCard({
         </Badge>
       )}
       <Flex justify="end">
-        <Text fontWeight="bold" marginRight="5px" color={theme.colors.accentText.value}>
+        <Text
+          fontWeight="bold"
+          marginRight="5px"
+          color={theme.colors.accentText.value}
+          {...longNameProps}
+        >
           {name}
         </Text>
         <Spacer />

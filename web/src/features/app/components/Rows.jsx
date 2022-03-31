@@ -15,7 +15,7 @@ import dayjs from 'dayjs';
 // eslint-disable-next-line no-unused-vars
 import { es } from 'dayjs/locale/es';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdShare, MdAdd, MdPlayArrow, MdPause, MdCheck } from 'react-icons/md';
 import { useMutation, useQueryClient } from 'react-query';
 import { useAudioPlayer } from 'react-use-audio-player';
@@ -114,6 +114,10 @@ export function ArtistRow({ id, name, avatar, amountOfFollowers, isFollowed }) {
   const [isHovered, mouseEventsHandlers] = useHover();
   const addNotification = useNotificationStore((s) => s.addNotification);
   const [followed, setFollowed] = useState(isFollowed);
+
+  useEffect(() => {
+    setFollowed(isFollowed);
+  }, [isFollowed]);
 
   const queryClient = useQueryClient();
   const mutation = useMutation(followArtist, {

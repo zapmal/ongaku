@@ -140,7 +140,6 @@ export function ArtistProfile() {
                 {artist.artistMetrics?.followers}{' '}
                 {artist.artistMetrics?.followers === 1 ? 'seguidor' : 'seguidores'}
               </Text>
-              {console.log(artist.artistInformation)}
               {artist.artistInformation?.officialWebsite &&
                 artist.artistInformation?.officialWebsite !== 'null' && (
                   <HStack fontWeight="bold" fontSize="lg">

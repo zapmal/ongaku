@@ -853,7 +853,7 @@ const seed = async () => {
       name: 'i-will-never-die',
       releaseType: 'ALBUM',
       artistId: gidle.id,
-      year: dayjs('2022').toDate(),
+      year: dayjs('2023').toDate(),
     },
   });
 
@@ -871,7 +871,7 @@ const seed = async () => {
       name: 'i-trust',
       releaseType: 'ALBUM',
       artistId: gidle.id,
-      year: dayjs('2020').toDate(),
+      year: dayjs('2021').toDate(),
     },
   });
 
@@ -889,7 +889,7 @@ const seed = async () => {
       name: 'all-out',
       releaseType: 'ALBUM',
       artistId: kda.id,
-      year: dayjs('2020').toDate(),
+      year: dayjs('2021').toDate(),
     },
   });
 
@@ -907,7 +907,7 @@ const seed = async () => {
       name: 'kawaki-wo-ameku',
       releaseType: 'SINGLE',
       artistId: pvris.id,
-      year: dayjs('2018').toDate(),
+      year: dayjs('2019').toDate(),
     },
   });
 
@@ -925,7 +925,7 @@ const seed = async () => {
       name: 'speed-of-light',
       releaseType: 'SINGLE',
       artistId: monsterSiren.id,
-      year: dayjs('2019').toDate(),
+      year: dayjs('2020').toDate(),
     },
   });
 
@@ -943,7 +943,7 @@ const seed = async () => {
       name: 'human',
       releaseType: 'SINGLE',
       artistId: iverson.id,
-      year: dayjs('2020').toDate(),
+      year: dayjs('2021').toDate(),
     },
   });
 
@@ -961,7 +961,7 @@ const seed = async () => {
       name: 'the-reve-festival-2022',
       releaseType: 'ALBUM',
       artistId: redVelvet.id,
-      year: dayjs('2022').toDate(),
+      year: dayjs('2023').toDate(),
     },
   });
 
@@ -979,7 +979,7 @@ const seed = async () => {
       name: 'goblin',
       releaseType: 'ALBUM',
       artistId: sulli.id,
-      year: dayjs('2019').toDate(),
+      year: dayjs('2020').toDate(),
     },
   });
 
@@ -997,7 +997,7 @@ const seed = async () => {
       name: 'story-op-2',
       releaseType: 'ALBUM',
       artistId: jonghyun.id,
-      year: dayjs('2017').toDate(),
+      year: dayjs('2018').toDate(),
     },
   });
 
@@ -1015,7 +1015,7 @@ const seed = async () => {
       name: 'sour',
       releaseType: 'ALBUM',
       artistId: olivia.id,
-      year: dayjs('2021').toDate(),
+      year: dayjs('2022').toDate(),
     },
   });
 
@@ -1033,7 +1033,7 @@ const seed = async () => {
       name: 'shutup-and-get-happy',
       releaseType: 'ALBUM',
       artistId: demondice.id,
-      year: dayjs('2022').toDate(),
+      year: dayjs('2023').toDate(),
     },
   });
 
@@ -1051,7 +1051,7 @@ const seed = async () => {
       name: 'contingency-contract',
       releaseType: 'ALBUM',
       artistId: monsterSiren.id,
-      year: dayjs('2022').toDate(),
+      year: dayjs('2023').toDate(),
     },
   });
 
@@ -1069,7 +1069,7 @@ const seed = async () => {
       name: 'manifesto',
       releaseType: 'EP',
       artistId: monsterSiren.id,
-      year: dayjs('2021').toDate(),
+      year: dayjs('2022').toDate(),
     },
   });
 
@@ -1087,7 +1087,7 @@ const seed = async () => {
       name: 'radiant',
       releaseType: 'EP',
       artistId: monsterSiren.id,
-      year: dayjs('2021').toDate(),
+      year: dayjs('2022').toDate(),
     },
   });
 
@@ -1105,7 +1105,7 @@ const seed = async () => {
       name: 'unalive',
       releaseType: 'ALBUM',
       artistId: mori.id,
-      year: dayjs('2022').toDate(),
+      year: dayjs('2023').toDate(),
     },
   });
 
@@ -1123,7 +1123,7 @@ const seed = async () => {
       name: 'red-lofi-ver',
       releaseType: 'SINGLE',
       artistId: mori.id,
-      year: dayjs('2022').toDate(),
+      year: dayjs('2023').toDate(),
     },
   });
 
@@ -1141,7 +1141,7 @@ const seed = async () => {
       name: 'Palette',
       releaseType: 'SINGLE',
       artistId: iu.id,
-      year: dayjs('2017').toDate(),
+      year: dayjs('2018').toDate(),
     },
   });
 
@@ -1159,7 +1159,7 @@ const seed = async () => {
       name: 'I Burn',
       releaseType: 'ALBUM',
       artistId: gidle.id,
-      year: dayjs('2021').toDate(),
+      year: dayjs('2022').toDate(),
     },
   });
 

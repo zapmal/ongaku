@@ -63,7 +63,14 @@ export const useQueueStore = create(
       set({ queue: newQueue });
     },
     clearQueue: () => {
-      set({ queue: new LinkedList() });
+      set({
+        queue: new LinkedList(),
+        currentlyPlaying: {
+          artist: {},
+          album: {},
+          interaction: [],
+        },
+      });
     },
   }))
 );

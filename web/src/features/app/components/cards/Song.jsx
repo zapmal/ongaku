@@ -19,10 +19,18 @@ export function SongCard({
   notLikeable = false,
   year,
 }) {
+  const longNameProps =
+    name.split(' ').length >= 4
+      ? {
+          fontSize: 'xs',
+          width: '69%', // ;)
+        }
+      : {};
+
   return (
     <Card cover={cover} type="song" id={id} isLiked={isLiked} to={name} notLikeable={notLikeable}>
       <Flex justify="end">
-        <Text fontWeight="bold" wordBreak="break-word">
+        <Text fontWeight="bold" wordBreak="break-word" {...longNameProps}>
           {capitalizeEach(getName(name))}
         </Text>
         <Spacer />

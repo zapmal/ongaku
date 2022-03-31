@@ -11,12 +11,12 @@ import {
   Tooltip,
   Badge,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { HiOutlineExternalLink } from 'react-icons/hi';
 import { IoMdCheckmark } from 'react-icons/io';
 import { MdAdd } from 'react-icons/md';
 import { useMutation, useQueryClient } from 'react-query';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { followArtist } from '../../api/artist';
 import { FADE_OUT_ANIMATION } from '../../constants';
@@ -58,9 +58,16 @@ export function ArtistCard({
   badge = true,
 }) {
   const entity = useAuthStore((s) => s.entity);
+  const { pathname } = useLocation();
 
   const [isHovered, mouseEventsHandlers] = useHover();
   const [followed, setFollowed] = useState(isFollowed);
+
+  useEffect(() => {
+    if (pathname.includes('/library')) {
+      setFollowed(true);
+    }
+  }, [isFollowed, followed, pathname]);
 
   return (
     <Box
@@ -84,6 +91,10 @@ export function ArtistCard({
         <Box animation={FADE_OUT_ANIMATION}>
           {hoverButtons.map((button, index) => {
             if (button.text === 'Seguir' && entity.role === 'ARTIST') {
+              return null;
+            }
+
+            if (pathname === `/user/${entity.username}`) {
               return null;
             }
 
@@ -171,19 +182,21 @@ function HoverButton({
   const icon = button.altIcon && isFollowed ? button.altIcon : button.icon;
   const text = button.altText && isFollowed ? button.altText : button.text;
 
+  const entity = useAuthStore((s) => s.entity);
   const addNotification = useNotificationStore((s) => s.addNotification);
 
   const queryClient = useQueryClient();
   const mutation = useMutation(followArtist, {
     onSuccess: () => {
       queryClient.invalidateQueries('library-artists');
+      queryClient.invalidateQueries('latest-artists');
       queryClient.invalidateQueries('home');
     },
   });
 
   const handleOnClick = async () => {
     try {
-      if (entityId === artistId) {
+      if (entity.role === 'ARTIST' && entityId === artistId) {
         addNotification({
           title: 'Error',
           status: 'error',

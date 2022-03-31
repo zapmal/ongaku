@@ -21,6 +21,7 @@ import { saveAs } from 'file-saver';
 import React, { useEffect, useState } from 'react';
 import { AiOutlineHeart, AiFillHeart, AiOutlineDownload } from 'react-icons/ai';
 import { FiChevronsUp } from 'react-icons/fi';
+import { IoMdTrash } from 'react-icons/io';
 import {
   MdPlayArrow,
   MdPause,
@@ -172,7 +173,11 @@ export function Player() {
             <Tooltip label="Haz click para ir a la cola">
               <Box as={RouterLink} to="/queue">
                 <Image
-                  src={getImage('album', store.currentlyPlaying?.album?.cover, 'default_album.png')}
+                  src={getImage(
+                    'album',
+                    store.currentlyPlaying?.album?.cover || null,
+                    'default_album.png'
+                  )}
                   width="100px"
                   height="100px"
                   _hover={{
@@ -378,12 +383,23 @@ export function Player() {
         </SimpleGrid>
 
         <Flex margin="0 auto" align="center" width="320px">
+          <Tooltip label="Limpiar la cola">
+            <span>
+              <IconButton
+                icon={IoMdTrash}
+                size="md"
+                marginLeft="15px"
+                onClick={store.clearQueue}
+                isDisabled={controlsEnabled}
+              />
+            </span>
+          </Tooltip>
           <IconButton
             icon={AiOutlineDownload}
             isDisabled={controlsEnabled}
             onClick={handleDownload}
             size="md"
-            marginLeft="15px"
+            marginLeft={0}
             marginRight={entity.role !== 'ARTIST' ? 0 : '20px'}
           />
           {entity.role !== 'ARTIST' &&

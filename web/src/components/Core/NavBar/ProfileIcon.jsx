@@ -87,7 +87,7 @@ function MenuItems({ group, entity }) {
                   : m.to
               }
               icon={<Icon as={m.icon} w="20px" h="20px" marginTop="5px" />}
-              onClick={!m.to && handleLogout}
+              onClick={!m.to ? handleLogout : () => {}}
               {...MENU_ITEM_PROPS}
             >
               {m.text}

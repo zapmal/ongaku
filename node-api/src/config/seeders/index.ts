@@ -186,11 +186,11 @@ const seed = async () => {
     adminAvatar = storedAvatar;
   }
 
-  let adminBackground = null;
-  if (!existsSync(`./assets/user/${SEED_DATA.images.admin.cover}`)) {
-    const storedBackground = store('user', SEED_DATA.images.admin.cover);
-    adminBackground = storedBackground;
-  }
+  // let adminBackground = null;
+  // if (!existsSync(`./assets/user/${SEED_DATA.images.admin.cover}`)) {
+  //   const storedBackground = store('user', SEED_DATA.images.admin.cover);
+  //   adminBackground = storedBackground;
+  // }
 
   // Administrator, verified email.
   const admin = await prisma.user.upsert({
@@ -204,7 +204,7 @@ const seed = async () => {
       role: 'ADMIN',
       password: await hash('password', 10),
       avatar: adminAvatar,
-      background: adminBackground,
+      // background: adminBackground,
       userMetadata: {
         create: {
           verifiedEmail: true,

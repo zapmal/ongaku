@@ -89,7 +89,7 @@ export function View() {
   const mutation = useMutation(type === 'playlist' ? deletePlaylist : deleteAlbum, {
     onSuccess: () => {
       queryClient.invalidateQueries(`view-${type}-${id}`);
-      navigate('/library');
+      navigate('/home');
     },
   });
 

@@ -54,7 +54,7 @@ model UserPlaylist {
 
 model UserMetadata {
   id            Int      @id @default(autoincrement())
-  createdAt     DateTime @default(now()) @map("created_at") @db.Date
+  createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at") @db.Date
   active        Boolean  @default(true)
   ipAddress     String   @map("ip_address") @db.VarChar(50)
@@ -251,7 +251,7 @@ model SongsInPlaylist {
 model Room {
   id        Int      @id @default(autoincrement())
   key       String   @unique
-  createdAt DateTime @map("created_at") 
+  createdAt DateTime @map("created_at")
   name      String   @default("My Room")
   limit     Int      @default(0)
   host      Int      @unique

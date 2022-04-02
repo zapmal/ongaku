@@ -383,17 +383,19 @@ export function Player() {
         </SimpleGrid>
 
         <Flex margin="0 auto" align="center" width="320px">
-          <Tooltip label="Limpiar la cola">
-            <span>
-              <IconButton
-                icon={IoMdTrash}
-                size="md"
-                marginLeft="15px"
-                onClick={store.clearQueue}
-                isDisabled={controlsEnabled}
-              />
-            </span>
-          </Tooltip>
+          {room.length === 0 && (
+            <Tooltip label="Limpiar la cola">
+              <span>
+                <IconButton
+                  icon={IoMdTrash}
+                  size="md"
+                  marginLeft="15px"
+                  onClick={store.clearQueue}
+                  isDisabled={controlsEnabled}
+                />
+              </span>
+            </Tooltip>
+          )}
           <IconButton
             icon={AiOutlineDownload}
             isDisabled={controlsEnabled}

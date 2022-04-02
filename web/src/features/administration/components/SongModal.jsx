@@ -37,6 +37,7 @@ export function SongModal({ isOpen, onClose, shouldValidate, song, artistId }) {
     },
   });
   const [request, setRequestState] = useRequest();
+  console.log(errors);
 
   const [isExplicit, setExplicit] = useState(song.isExplicit);
 
@@ -75,7 +76,7 @@ export function SongModal({ isOpen, onClose, shouldValidate, song, artistId }) {
               name: data.name,
               collaborators: data.collaborators,
               isExplicit: data.isExplicit,
-              artistId,
+              artistId: artistId ? artistId : song.artistId ? song.artistId : data.artistId,
             }
       );
       setRequestState({
@@ -130,17 +131,6 @@ export function SongModal({ isOpen, onClose, shouldValidate, song, artistId }) {
               <>
                 <Field
                   type="number"
-                  name="albumId"
-                  label="ID del Album"
-                  placeholder="13, 15, 1"
-                  helperText="La ID del album, visible en la tabla inferior"
-                  css={{ marginBottom: '10px' }}
-                  isDisabled={request.status !== ''}
-                  error={errors.albumId}
-                  register={register}
-                />
-                <Field
-                  type="number"
                   name="artistId"
                   label="ID del Artista"
                   placeholder="13, 15, 1"
@@ -148,6 +138,21 @@ export function SongModal({ isOpen, onClose, shouldValidate, song, artistId }) {
                   css={{ marginBottom: '10px' }}
                   isDisabled={request.status !== ''}
                   error={errors.artistId}
+                  register={register}
+                />
+              </>
+            )}
+            {shouldValidate && (
+              <>
+                <Field
+                  type="number"
+                  name="albumId"
+                  label="ID del Album"
+                  placeholder="13, 15, 1"
+                  helperText="La ID del album, visible en la tabla inferior"
+                  css={{ marginBottom: '10px' }}
+                  isDisabled={request.status !== ''}
+                  error={errors.albumId}
                   register={register}
                 />
                 <Field

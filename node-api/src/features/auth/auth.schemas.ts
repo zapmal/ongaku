@@ -55,6 +55,6 @@ export const recoveryCodeSchema = Joi.object({
 
 export const changePasswordSchema = Joi.object({
   newPassword: Joi.string().min(8).required(),
-  entityID: Joi.number().required(),
+  entityId: Joi.number().required(),
   isArtist: Joi.boolean().required(),
 });

@@ -141,7 +141,7 @@ export function Home() {
                 album.artist.artisticName ? album.artist.artisticName : album.artist?.band?.name
               }
               year={dayjs(album.year).format('YYYY')}
-              notLikeable={entity.id === album.artistId || entity.role === 'ARTIST'}
+              notLikeable={entity.role === 'ARTIST'}
             />
           ))}
           {data.trending.artists.map((artist, index) => (

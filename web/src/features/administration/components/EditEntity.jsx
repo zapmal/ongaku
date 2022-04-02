@@ -20,6 +20,7 @@ import { Button } from '@/components/Elements';
 import { Field } from '@/components/Form';
 import { useRequest } from '@/hooks';
 import { getLink } from '@/utils/getLink';
+import { getName } from '@/utils/getName';
 
 export function EditEntity({ isOpen, onClose, entity }) {
   const {
@@ -30,7 +31,7 @@ export function EditEntity({ isOpen, onClose, entity }) {
     resolver: yupResolver(schema),
     defaultValues: {
       email: entity.email,
-      username: entity.username,
+      username: getName(entity.username),
       fullName: entity.fullName,
     },
   });

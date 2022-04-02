@@ -358,13 +358,13 @@ export class AuthService {
     return { code, entityId: entity.id };
   }
 
-  async changePassword(newPassword: string, entityID: number, isArtist: boolean) {
+  async changePassword(newPassword: string, entityId: number, isArtist: boolean) {
     const hashedPassword = await hash(newPassword, 10);
 
     if (isArtist) {
-      await this.artist.update(entityID, { password: hashedPassword });
+      await this.artist.update(entityId, { password: hashedPassword });
     } else {
-      await this.user.update(entityID, { password: hashedPassword });
+      await this.user.update(entityId, { password: hashedPassword });
     }
   }
 

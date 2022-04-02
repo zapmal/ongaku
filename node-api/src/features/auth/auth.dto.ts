@@ -42,6 +42,6 @@ export class SendRecoveryCodeDTO {
 
 export class ChangePasswordDTO {
   newPassword: string;
-  entityID: number;
+  entityId: number;
   isArtist: boolean;
 }

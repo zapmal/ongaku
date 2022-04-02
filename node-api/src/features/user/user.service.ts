@@ -50,7 +50,7 @@ export class UserService {
     let avatarUpdate = {};
 
     try {
-      if (avatar.file) {
+      if (avatar?.file) {
         const [image] = storeImages(avatar.file, avatar.path);
         avatarUpdate = { avatar: image };
       }

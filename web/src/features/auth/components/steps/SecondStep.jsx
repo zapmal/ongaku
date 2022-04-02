@@ -67,7 +67,7 @@ export function SecondStep({ nextStep, prevStep, setStepState, basicData }) {
       nextStep();
 
       setTimeout(() => {
-        window.location.assign('/');
+        window.location.assign('/welcome?type=artist');
 
         setEntity(response.artist);
 

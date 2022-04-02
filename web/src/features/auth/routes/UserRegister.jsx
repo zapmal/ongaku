@@ -67,7 +67,7 @@ export function UserRegister() {
       });
 
       localStorage.setItem('isLoggedIn', true);
-      navigate('/');
+      navigate('/welcome?type=user');
     } catch (error) {
       setRequestState({
         status: 'error',

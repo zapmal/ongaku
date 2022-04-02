@@ -144,8 +144,8 @@ export class AuthController {
   @Put('change-password')
   @HttpCode(HttpStatus.ACCEPTED)
   @UsePipes(new JoiValidationPipe(changePasswordSchema))
-  async changePassword(@Body() { newPassword, entityID, isArtist }: ChangePasswordDTO) {
-    await this.auth.changePassword(newPassword, entityID, isArtist);
+  async changePassword(@Body() { newPassword, entityId, isArtist }: ChangePasswordDTO) {
+    await this.auth.changePassword(newPassword, entityId, isArtist);
 
     return {
       message: 'Contraseña actualizada exitosamente',

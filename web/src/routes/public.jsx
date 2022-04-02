@@ -2,6 +2,7 @@ import React from 'react';
 
 import { lazyImport } from '@/utils/lazyImport';
 
+const { Welcome } = lazyImport(() => import('@/features/misc'), 'Welcome');
 const { NotFound } = lazyImport(() => import('@/features/misc'), 'NotFound');
 const { Landing } = lazyImport(() => import('@/features/misc'), 'Landing');
 const { UserRegister } = lazyImport(() => import('@/features/auth'), 'UserRegister');
@@ -36,5 +37,9 @@ export const sharedRoutes = [
   {
     path: '*',
     element: <NotFound />,
+  },
+  {
+    path: '/welcome',
+    element: <Welcome />,
   },
 ];

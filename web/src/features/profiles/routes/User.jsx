@@ -185,7 +185,7 @@ export function UserProfile() {
           {playlists.playlists.length === 0 ? (
             <Text margin="20px 0">No hay nada aquí aún. ¡Vuelve luego!</Text>
           ) : (
-            <SimpleGrid columns={5} gap="30px" marginTop="20px">
+            <SimpleGrid columns={5} gap="30px" marginTop="20px" textAlign="left">
               {playlists.playlists.map((playlist, index) => (
                 <PlaylistCard
                   key={index}

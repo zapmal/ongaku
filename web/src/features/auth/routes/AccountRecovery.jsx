@@ -109,7 +109,7 @@ export function AccountRecovery() {
             <SecondStep nextStep={nextStep} verificationCode={verificationCode} />
           </Box>
         </Step>
-        <Step label="Cambiar Contraseña" description="Usa un gestor de contraseñas!">
+        <Step label="Cambiar Contraseña" description="¡Usa un gestor de contraseñas!">
           <Box {...BOX_PROPS}>
             <ThirdStep nextStep={nextStep} isArtist={isArtist} entityId={entityId} />
           </Box>
@@ -294,7 +294,7 @@ function ThirdStep({ nextStep, isArtist, entityId }) {
         <form onSubmit={handleSubmit(onSubmit)}>
           <VStack>
             <Field
-              type="text"
+              type="password"
               name="newPassword"
               label="Contraseña"
               placeholder="************"
@@ -303,7 +303,7 @@ function ThirdStep({ nextStep, isArtist, entityId }) {
               isDisabled={submission.status != ''}
             />
             <Field
-              type="text"
+              type="password"
               name="newPasswordConfirmation"
               label="Nueva Contraseña"
               placeholder="************"

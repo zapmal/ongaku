@@ -7,6 +7,7 @@ import { Link } from '@/components/Elements';
 import { theme } from '@/stitches.config.js';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { getImage } from '@/utils/getImage';
+import { getName } from '@/utils/getName';
 
 export function PlaylistCard({
   id,
@@ -58,12 +59,8 @@ export function PlaylistCard({
 
       <Flex justify="end">
         <Text color="whiteAlpha.700" fontSize="sm" maxWidth="60%">
-          <Link
-            underline={false}
-            variant="gray"
-            to={`/user/${author.split(' ').join('-').toLowerCase()}`}
-          >
-            {author}
+          <Link underline={false} variant="gray" to={`/user/${author}`}>
+            {getName(author)}
           </Link>
         </Text>
         <Spacer />

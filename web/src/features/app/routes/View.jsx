@@ -293,7 +293,7 @@ export function View() {
                         underline={false}
                         variant="gray"
                       >
-                        {getName(song.album.name)}
+                        {capitalizeEach(getName(song.album.name))}
                       </Link>
                     </Td>
                     <Td>{song.isExplicit ? 'Sí' : 'No'}</Td>

@@ -5,7 +5,6 @@ import { Layout } from '@/components/Core';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { lazyImport } from '@/utils/lazyImport';
 
-const { Welcome } = lazyImport(() => import('@/features/misc'), 'Welcome');
 const { VerifyEmail } = lazyImport(() => import('@/features/auth'), 'VerifyEmail');
 const { ResendVerificationEmail } = lazyImport(
   () => import('@/features/auth'),
@@ -30,10 +29,6 @@ export const protectedRoutes = [
   {
     element: <VerifiedEmailWrapper />,
     children: [
-      {
-        path: '/welcome',
-        element: <Welcome />,
-      },
       {
         element: <Layout />,
         children: [

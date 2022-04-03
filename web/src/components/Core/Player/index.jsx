@@ -343,28 +343,42 @@ export function Player() {
                 shouldRepeat
               }
               onClick={() => {
-                if (store.currentlyPlaying === store.queue.getHeadNode().getData()) {
-                  store.removeHeadNode();
+                const currentlyPlayingNode = store.queue.find(store.currentlyPlaying);
+
+                if (currentlyPlayingNode.next) {
+                  store.setCurrentlyPlaying(currentlyPlayingNode.next.data);
+                } else if (
+                  store.queue.getHeadNode() &&
+                  store.queue.getHeadNode().getData() !== currentlyPlayingNode.getData()
+                ) {
                   store.setCurrentlyPlaying(store.queue.getHeadNode().getData());
-
-                  setLiked(
-                    store.queue.getHeadNode().getData().interaction?.length !== 0 &&
-                      store.queue.getHeadNode().getData().interaction
-                      ? store.queue.getHeadNode().getData().interaction[0].value
-                      : false
-                  );
                 } else {
-                  const currentlyPlaying = store.queue.find(store.currentlyPlaying);
-                  store.setCurrentlyPlaying(currentlyPlaying.next.data);
-                  store.queue.removeNode(store.queue.find(store.currentlyPlaying).getData());
-
-                  setLiked(
-                    currentlyPlaying.next?.data.interaction?.length !== 0 &&
-                      currentlyPlaying.next?.data.interaction
-                      ? currentlyPlaying.next.data.inteaction.value
-                      : false
-                  );
+                  store.setCurrentlyPlaying({ artist: {}, album: {}, interaction: [] });
+                  store.removeHeadNode();
+                  setLiked(false);
                 }
+                // if (store.currentlyPlaying === store.queue.getHeadNode().getData()) {
+                //   store.removeHeadNode();
+                //   store.setCurrentlyPlaying(store.queue.getHeadNode().getData());
+
+                //   setLiked(
+                //     store.queue.getHeadNode().getData().interaction?.length !== 0 &&
+                //       store.queue.getHeadNode().getData().interaction
+                //       ? store.queue.getHeadNode().getData().interaction[0].value
+                //       : false
+                //   );
+                // } else {
+                //   const currentlyPlaying = store.queue.find(store.currentlyPlaying);
+                //   store.setCurrentlyPlaying(currentlyPlaying.next.data);
+                //   store.queue.removeNode(store.queue.find(store.currentlyPlaying).getData());
+
+                //   setLiked(
+                //     currentlyPlaying.next?.data.interaction?.length !== 0 &&
+                //       currentlyPlaying.next?.data.interaction
+                //       ? currentlyPlaying.next.data.inteaction.value
+                //       : false
+                //   );
+                // }
               }}
               size="md"
               marginRight="5px"

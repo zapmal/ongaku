@@ -400,7 +400,7 @@ const seed = async () => {
       verifiedEmail: true,
       artistMetrics: {
         create: {
-          followers: 12043,
+          followers: 42043,
         },
       },
       artistInformation: {

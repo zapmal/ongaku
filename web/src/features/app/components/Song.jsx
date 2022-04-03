@@ -396,7 +396,6 @@ export function OptionMenu({ song, isLarge = false, ...styles }) {
               {...MENU_ITEM_PROPS}
               icon={<Icon as={IoMdRemoveCircleOutline} w="15px" h="15px" marginTop="5px" />}
               onClick={() => {
-                store.remove(song);
                 if (room.length !== 0 && room.host === entity.id) {
                   if (room.queue.length === 1) {
                     addNotification({
@@ -406,8 +405,11 @@ export function OptionMenu({ song, isLarge = false, ...styles }) {
                         'No puedes eliminar la última canción en la sala, agrega más canciones o cierra la sala',
                     });
                   } else {
+                    store.remove(song);
                     handleUpdateQueue();
                   }
+                } else {
+                  store.remove(song);
                 }
               }}
               fontSize="sm"

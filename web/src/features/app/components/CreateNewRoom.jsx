@@ -14,6 +14,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { createNewRoom } from '../api/rooms';
@@ -41,6 +42,7 @@ export function CreateNewRoom({ isOpen, onClose }) {
       genres: [],
     },
   });
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const mutation = useMutation(createNewRoom, {
     onSuccess: () => {
@@ -81,6 +83,10 @@ export function CreateNewRoom({ isOpen, onClose }) {
       });
 
       onClose();
+
+      setTimeout(() => {
+        navigate(`/room/${response.room.key}`);
+      }, 1000);
     } catch (error) {
       setRequestState({
         status: 'error',

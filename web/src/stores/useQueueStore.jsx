@@ -21,6 +21,15 @@ export const useQueueStore = create(
 
       set({ queue: newQueue, currentlyPlaying: newQueue.getHeadNode().getData() });
     },
+    addOnlyQueue: (songs) => {
+      const newQueue = new LinkedList();
+
+      songs.map((song) => {
+        newQueue.insert(song);
+      });
+
+      set({ queue: newQueue });
+    },
     setCurrentlyPlaying: (song) => {
       set({ currentlyPlaying: song });
     },

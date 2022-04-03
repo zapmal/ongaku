@@ -53,9 +53,10 @@ export function Room() {
     `room-${params.key}`,
     () => getRoom(params.key),
     {
-      refetchInterval: 10000,
+      refetchInterval: 5000,
       onError: () => {
         // create a custom not found page
+        setRoom([]);
         navigate('/room-error');
       },
       onSuccess: async (response) => {
@@ -65,6 +66,7 @@ export function Room() {
           !response.users.includes(entity.id) &&
           room.length !== 0
         ) {
+          setRoom([]);
           navigate('/room-error');
         }
 
@@ -72,6 +74,7 @@ export function Room() {
           navigate('/rooms');
         } else if (response.host !== entity.id && !response.users.includes(entity.id)) {
           try {
+            store.clearQueue();
             await addUserMutation.mutateAsync({ key: params.key, userId: entity.id });
           } catch (error) {
             addNotification({
@@ -83,7 +86,16 @@ export function Room() {
         }
 
         setRoom(response);
-        store.add(response.queue);
+
+        if (store.queue.isEmpty()) {
+          store.add(response.queue);
+        } else {
+          store.addOnlyQueue(response.queue);
+
+          if (!response.queue.find((song) => song.id === store.currentlyPlaying.id)) {
+            store.setCurrentlyPlaying(response.queue[0]);
+          }
+        }
       },
     }
   );
@@ -162,7 +174,7 @@ export function Room() {
                   song={current}
                   name={current.name}
                   isExplicit={current.isExplicit}
-                  isPlaying={current === store.currentlyPlaying}
+                  isPlaying={current.id === store.currentlyPlaying.id}
                   authors={`${author}${
                     current.collaborators.filter((v) => v !== '').length !== 0
                       ? `,${current.collaborators.join(',')}`

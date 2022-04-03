@@ -157,6 +157,7 @@ export function UserProfile() {
             <Text margin="20px 0">No hay nada aquí aún. ¡Vuelve luego!</Text>
           ) : (
             <SimpleGrid columns={5} gap="30px" marginTop="20px">
+              {console.log(playlists.likedPlaylists)}
               {playlists.likedPlaylists.map((playlist, index) => (
                 <PlaylistCard
                   id={playlist.userPlaylistId}
@@ -165,7 +166,9 @@ export function UserProfile() {
                   name={playlist.userPlaylist.name}
                   likes={playlist.userPlaylist.likes}
                   amountOfSongs={
-                    playlist?.songsInPlaylist?.length ? playlist.songsInPlaylist.length : 0
+                    playlist?.userPlaylist?.songsInPlaylist?.length
+                      ? playlist.userPlaylist.songsInPlaylist.length
+                      : 0
                   }
                   author={playlist.userPlaylist.user.username}
                   badge={false}
@@ -193,7 +196,9 @@ export function UserProfile() {
                   cover={getImage('playlist', playlist.cover, 'default_cover.jpg')}
                   name={playlist.name}
                   likes={playlist.likes}
-                  amountOfSongs={playlist?.songsInPlaylist.length}
+                  amountOfSongs={
+                    playlist?.songsInPlaylist.length ? playlist.songsInPlaylist.length : 0
+                  }
                   author={playlist.user.username}
                   badge={false}
                   notLikeable={

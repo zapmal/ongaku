@@ -198,7 +198,7 @@ export function ArtistProfile() {
             <Heading fontSize="xx-large">Canciones Nuevas</Heading>
             {latestSongs.length === 0 ? (
               <Text fontSize="large" color="whiteAlpha.700" marginTop="10px">
-                Este artista no tiene canciones populares, por ahora.
+                Este artista no tiene canciones nuevas, por ahora.
               </Text>
             ) : (
               latestSongs.map((song, index) => (

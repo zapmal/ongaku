@@ -244,7 +244,7 @@ export function View() {
             <Th>{type === 'playlist' ? 'Autor(es)' : 'Colaboradores'}</Th>
             {type === 'playlist' && <Th>Album</Th>}
             <Th>¿Es Explicito?</Th>
-            {type !== 'album' && <Th>Opciones</Th>}
+            {type !== 'album' && data.userId === entity.id && <Th>Opciones</Th>}
           </Tr>
         </Thead>
         <Tbody>
@@ -297,16 +297,18 @@ export function View() {
                       </Link>
                     </Td>
                     <Td>{song.isExplicit ? 'Sí' : 'No'}</Td>
-                    <Td color="white">
-                      <IconButton
-                        icon={<Icon as={MdRemoveCircle} w="25px" h="25px" />}
-                        onClick={() => handleRemove(song.id)}
-                        variant="ghost"
-                        color={theme.colors.dangerSolid.value}
-                        _hover={{ backgroundColor: 'transparent' }}
-                        _active={{ color: theme.colors.accentSolid.value }}
-                      />
-                    </Td>
+                    {entity.id === data.userId && (
+                      <Td color="white">
+                        <IconButton
+                          icon={<Icon as={MdRemoveCircle} w="25px" h="25px" />}
+                          onClick={() => handleRemove(song.id)}
+                          variant="ghost"
+                          color={theme.colors.dangerSolid.value}
+                          _hover={{ backgroundColor: 'transparent' }}
+                          _active={{ color: theme.colors.accentSolid.value }}
+                        />
+                      </Td>
+                    )}
                   </Tr>
                 );
               })

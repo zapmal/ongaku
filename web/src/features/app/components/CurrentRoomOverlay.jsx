@@ -63,7 +63,7 @@ export function CurrentRoomOverlay({ name, host, activeUsers, userLimit, roomId 
             backgroundColor: theme.colors.accentSolidActive.value,
           }}
         />
-        <IconButton
+        {/* <IconButton
           icon={<Icon as={MdClose} />}
           variant="outline"
           _hover={{
@@ -72,7 +72,7 @@ export function CurrentRoomOverlay({ name, host, activeUsers, userLimit, roomId 
           _active={{
             backgroundColor: theme.colors.dangerSolidActive.value,
           }}
-        />
+        /> */}
       </Box>
     </Box>
   );

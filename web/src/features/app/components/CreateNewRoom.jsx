@@ -15,6 +15,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
+import { useAudioPlayer } from 'react-use-audio-player';
 import * as yup from 'yup';
 
 import { createNewRoom } from '../api/rooms';
@@ -49,6 +50,9 @@ export function CreateNewRoom({ isOpen, onClose }) {
       queryClient.invalidateQueries('all-rooms');
     },
   });
+  const { pause } = useAudioPlayer();
+
+  pause();
 
   const [request, setRequestState] = useRequest();
 

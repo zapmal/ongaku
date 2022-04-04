@@ -137,28 +137,32 @@ export function Entities() {
                 </Tr>
               </Thead>
               <Tbody>
-                {current?.map((user, index) => (
-                  <Tr key={index} {...TABLE_ROW_PROPS}>
-                    <Td>{user.id}</Td>
-                    <Td>
-                      <Image
-                        src={getImage('user', user.avatar, 'default_avatar.svg')}
-                        w="50px"
-                        h="50px"
-                        borderRadius="5px"
-                      />
-                    </Td>
-                    <Td>{user.email}</Td>
-                    <Td>{user.username}</Td>
-                    <Td>{user.fullName}</Td>
-                    <Td>
-                      <Option type="edit" onClick={() => handleEntityEdit(user)} />
-                      {user.id !== entity.id && (
-                        <Option type="delete" itemType="user" id={user.id} />
-                      )}
-                    </Td>
-                  </Tr>
-                ))}
+                {current?.map((user, index) => {
+                  if (user.id === entity.id) return null;
+
+                  return (
+                    <Tr key={index} {...TABLE_ROW_PROPS}>
+                      <Td>{user.id}</Td>
+                      <Td>
+                        <Image
+                          src={getImage('user', user.avatar, 'default_avatar.svg')}
+                          w="50px"
+                          h="50px"
+                          borderRadius="5px"
+                        />
+                      </Td>
+                      <Td>{user.email}</Td>
+                      <Td>{user.username}</Td>
+                      <Td>{user.fullName}</Td>
+                      <Td>
+                        <Option type="edit" onClick={() => handleEntityEdit(user)} />
+                        {user.id !== entity.id && (
+                          <Option type="delete" itemType="user" id={user.id} />
+                        )}
+                      </Td>
+                    </Tr>
+                  );
+                })}
               </Tbody>
             </Table>
             <Heading margin={SUB_HEADER_MARGIN} textAlign="center">
